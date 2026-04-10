@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroClub MX — Iniciar sesión</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #0d2b09 0%, #1a6b2f 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .login-card {
+      background: #fff; border-radius: 20px; padding: 40px;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.25);
+    }
+    .login-logo {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    }
+    .logo-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: #1a6b2f; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem;
+    }
+    .logo-text h2 { font-size: 1.2rem; font-weight: 800; color: #1a1f18; }
+    .logo-text p { font-size: .78rem; color: #6b7a65; }
+    h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; color: #1a1f18; }
+    .sub { font-size: .88rem; color: #6b7a65; margin-bottom: 28px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: .78rem; font-weight: 600; color: #6b7a65; margin-bottom: 6px; }
+    input {
+      width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8dc;
+      border-radius: 10px; font-size: .9rem; font-family: inherit; outline: none;
+      transition: border-color .2s;
+    }
+    input:focus { border-color: #52c97a; }
+    .btn-login {
+      width: 100%; padding: 14px; background: #1a6b2f; color: #fff;
+      border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; margin-top: 8px; transition: background .2s;
+    }
+    .btn-login:hover { background: #2d9e4f; }
+    .error-msg {
+      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.2);
+      color: #dc2626; font-size: .82rem; padding: 10px 14px;
+      border-radius: 10px; margin-bottom: 16px; display: none;
+    }
+    .loading { opacity: .6; pointer-events: none; }
+    .divider { text-align: center; color: #6b7a65; font-size: .78rem; margin: 20px 0; }
+    .btn-wa {
+      width: 100%; padding: 12px; background: #25D366; color: #fff;
+      border: none; border-radius: 12px; font-size: .9rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">AC</div>
+      <div class="logo-text">
+        <h2>AgroClub MX</h2>
+        <p>Portal de miembros VIP</p>
+      </div>
+    </div>
+    <h3>Bienvenido 🌱</h3>
+    <p class="sub">Inicia sesión para acceder a tu contenido exclusivo</p>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="form-group">
+      <label>Correo electrónico</label>
+      <input type="email" id="email" placeholder="tu@correo.com">
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')iniciarSesion()">
+    </div>
+    <button class="btn-login" id="btnLogin" onclick="iniciarSesion()">Iniciar sesión →</button>
+    <div class="divider">¿No tienes acceso?</div>
+    <button class="btn-wa" onclick="window.open('https://wa.me/5212361066811?text=Hola!%20Quiero%20suscribirme%20a%20AgroClub%20MX%20VIP','_blank')">
+      💬 Suscribirme por WhatsApp
+    </button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCa6zt7YD3QUzGxyPky0zPPfjQwhtYMeTw",
+      authDomain: "agroclub-mx.firebaseapp.com",
+      projectId: "agroclub-mx",
+      storageBucket: "agroclub-mx.firebasestorage.app",
+      messagingSenderId: "231737548143",
+      appId: "1:231737548143:web:6651621c2cbad8a31a9c9a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Si ya está logueado, redirigir
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = "vip.html";
+    });
+
+    window.iniciarSesion = async function() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const btn = document.getElementById("btnLogin");
+      const err = document.getElementById("errorMsg");
+
+      if (!email || !password) {
+        err.textContent = "Por favor llena todos los campos.";
+        err.style.display = "block"; return;
+      }
+
+      btn.textContent = "Entrando...";
+      btn.classList.add("loading");
+      err.style.display = "none";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "vip.html";
+      } catch (e) {
+        btn.textContent = "Iniciar sesión →";
+        btn.classList.remove("loading");
+        err.textContent = "Correo o contraseña incorrectos. Intenta de nuevo.";
+        err.style.display = "block";
+      }
+    };
+  </script>
+</body>
+</html>
