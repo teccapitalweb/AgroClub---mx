@@ -322,6 +322,13 @@
       <div class="video-player-wrap" id="video-player">
         <div class="video-placeholder"><span>▶️</span><p>Selecciona una clase para reproducir</p></div>
       </div>
+      <!-- BOTÓN MARCAR COMPLETADA -->
+      <div id="btn-completar-wrap" style="display:none;margin:12px 0;">
+        <button id="btn-completar" onclick="marcarClaseActual()"
+          style="width:100%;padding:13px;border-radius:12px;border:none;font-size:.92rem;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,color .2s;">
+          ✅ Marcar clase como completada
+        </button>
+      </div>
       <div class="clases-list">
         <div class="clases-header">📋 Clases del curso</div>
         <div id="lista-clases"></div>
@@ -567,26 +574,63 @@ window.reproducirClase = function(cursoId, numClase) {
   document.getElementById("video-player").innerHTML = `
     <iframe src="${embedUrl}" allow="autoplay" allowfullscreen></iframe>
   `;
+
+  // Mostrar botón marcar completada con estado actual
+  const wrap = document.getElementById("btn-completar-wrap");
+  const btn  = document.getElementById("btn-completar");
+  if (wrap && btn) {
+    wrap.style.display = "block";
+    const yaVista = (progreso[cursoId] || []).includes(numClase);
+    actualizarBtnCompletar(cursoId, numClase, yaVista);
+    // Guardar referencia para marcarClaseActual
+    btn.dataset.cursoId  = cursoId;
+    btn.dataset.numClase = numClase;
+  }
 };
 
 // ── MARCAR CLASE COMPLETADA (manual con checkbox) ──
+// ── MARCAR CLASE COMPLETADA ──
+function actualizarBtnCompletar(cursoId, numClase, completada) {
+  const btn = document.getElementById("btn-completar");
+  if (!btn) return;
+  if (completada) {
+    btn.style.background = "#f0fdf4";
+    btn.style.color = "#16a34a";
+    btn.style.border = "2px solid #86efac";
+    btn.textContent = "✅ Clase completada — clic para desmarcar";
+  } else {
+    btn.style.background = "var(--verde)";
+    btn.style.color = "#fff";
+    btn.style.border = "none";
+    btn.textContent = "✅ Marcar clase como completada";
+  }
+  btn.dataset.cursoId  = cursoId;
+  btn.dataset.numClase = numClase;
+}
+
+window.marcarClaseActual = function() {
+  const btn = document.getElementById("btn-completar");
+  if (!btn || !currentUser) return;
+  const cursoId  = btn.dataset.cursoId;
+  const numClase = parseInt(btn.dataset.numClase);
+  marcarClase(cursoId, numClase);
+};
+
 window.marcarClase = function(cursoId, numClase) {
   if (!currentUser) return;
   if (!progreso[cursoId]) progreso[cursoId] = [];
   const idx = progreso[cursoId].indexOf(numClase);
-  if (idx === -1) {
-    progreso[cursoId].push(numClase); // marcar
-  } else {
-    progreso[cursoId].splice(idx, 1); // desmarcar
-  }
+  const completada = idx === -1;
+  if (completada) progreso[cursoId].push(numClase);
+  else progreso[cursoId].splice(idx, 1);
   setDoc(doc(db, "progreso", currentUser.uid), progreso);
   updateProgreso();
-  // Actualizar visual del checkbox sin re-renderizar todo
+  actualizarBtnCompletar(cursoId, numClase, completada);
+  // Actualizar visual en la lista
+  const row = document.getElementById(`clase-${numClase}`);
   const check = document.getElementById(`check-${numClase}`);
-  const row   = document.getElementById(`clase-${numClase}`);
-  const visto = progreso[cursoId].includes(numClase);
-  if (check) { check.classList.toggle("completada", visto); check.textContent = visto ? "✓" : ""; check.title = visto ? "Marcar como no completada" : "Marcar como completada"; }
-  if (row)   { row.classList.toggle("completada-row", visto); row.querySelector(".clase-titulo").style.textDecoration = visto ? "line-through" : ""; }
+  if (row)   { row.classList.toggle("completada-row", completada); }
+  if (check) { check.classList.toggle("completada", completada); check.textContent = completada ? "✓" : ""; }
 };
 
 // ── PROGRESO (dinámico desde cursos reales) ──
