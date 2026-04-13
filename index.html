@@ -588,7 +588,6 @@ window.reproducirClase = function(cursoId, numClase) {
   }
 };
 
-// ── MARCAR CLASE COMPLETADA (manual con checkbox) ──
 // ── MARCAR CLASE COMPLETADA ──
 function actualizarBtnCompletar(cursoId, numClase, completada) {
   const btn = document.getElementById("btn-completar");
@@ -608,15 +607,7 @@ function actualizarBtnCompletar(cursoId, numClase, completada) {
   btn.dataset.numClase = numClase;
 }
 
-window.marcarClaseActual = function() {
-  const btn = document.getElementById("btn-completar");
-  if (!btn || !currentUser) return;
-  const cursoId  = btn.dataset.cursoId;
-  const numClase = parseInt(btn.dataset.numClase);
-  marcarClase(cursoId, numClase);
-};
-
-window.marcarClase = function(cursoId, numClase) {
+function marcarClase(cursoId, numClase) {
   if (!currentUser) return;
   if (!progreso[cursoId]) progreso[cursoId] = [];
   const idx = progreso[cursoId].indexOf(numClase);
@@ -626,12 +617,21 @@ window.marcarClase = function(cursoId, numClase) {
   setDoc(doc(db, "progreso", currentUser.uid), progreso);
   updateProgreso();
   actualizarBtnCompletar(cursoId, numClase, completada);
-  // Actualizar visual en la lista
-  const row = document.getElementById(`clase-${numClase}`);
+  const row   = document.getElementById(`clase-${numClase}`);
   const check = document.getElementById(`check-${numClase}`);
-  if (row)   { row.classList.toggle("completada-row", completada); }
+  if (row)   row.classList.toggle("completada-row", completada);
   if (check) { check.classList.toggle("completada", completada); check.textContent = completada ? "✓" : ""; }
-};
+}
+
+function marcarClaseActual() {
+  const btn = document.getElementById("btn-completar");
+  if (!btn || !currentUser) return;
+  marcarClase(btn.dataset.cursoId, parseInt(btn.dataset.numClase));
+}
+
+// Exponer al scope global para los onclick del HTML
+window.marcarClase       = marcarClase;
+window.marcarClaseActual = marcarClaseActual;
 
 // ── PROGRESO (dinámico desde cursos reales) ──
 function updateProgreso() {
