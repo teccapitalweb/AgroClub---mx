@@ -208,7 +208,39 @@
     .actividad-count { font-size: .75rem; font-weight: 600; color: var(--muted); flex-shrink: 0; width: 30px; text-align: right; }
 
     @media (max-width: 1100px) { .right-panel { display: none; } .main { margin-right: 0; } }
-    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; } .hero-stats { display: none; } }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 16px 14px 80px; }
+      .hero-stats { display: none; }
+    }
+
+    /* ── BOTTOM NAV (móvil) ─────────────────────────────────────── */
+    .bottom-nav {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      background: var(--sidebar-bg);
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 6px 0 env(safe-area-inset-bottom, 6px);
+    }
+    .bottom-nav-inner {
+      display: flex; justify-content: space-around; align-items: center;
+    }
+    .bn-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 6px 12px; cursor: pointer; border-radius: 10px;
+      transition: background .15s; flex: 1;
+      position: relative;
+    }
+    .bn-item:active { background: rgba(255,255,255,.06); }
+    .bn-icon { font-size: 1.3rem; line-height: 1; }
+    .bn-label { font-size: .6rem; font-weight: 600; color: rgba(255,255,255,.45); letter-spacing: .02em; }
+    .bn-item.active .bn-label { color: var(--verde-claro); }
+    .bn-item.active .bn-icon { filter: drop-shadow(0 0 4px rgba(82,201,122,.5)); }
+    .bn-dot { position: absolute; top: 4px; right: calc(50% - 14px); width: 7px; height: 7px; background: var(--naranja); border-radius: 50%; border: 1.5px solid var(--sidebar-bg); }
+
+    @media (max-width: 768px) {
+      .bottom-nav { display: block; }
+    }
   </style>
 </head>
 <body>
@@ -697,16 +729,49 @@ function loadMateriales() {
 
 
 // ── NAVIGATION ──
-window.showPage = function(id, el) {
+window.showPage = function(id, el, bnId) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".sidebar-item").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".bn-item").forEach(b => b.classList.remove("active"));
   document.getElementById("page-" + id)?.classList.add("active");
   if (el) el.classList.add("active");
+  // Sincronizar bottom nav
+  var bnTarget = bnId ? document.getElementById(bnId) : document.getElementById("bn-" + id);
+  if (bnTarget) bnTarget.classList.add("active");
+  // Scroll al top en móvil
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 window.cerrarSesion = function() {
   if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
 };
 </script>
+  <!-- BOTTOM NAV (móvil) -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <div class="bn-item active" id="bn-inicio" onclick="showPage('inicio', this, 'bn-inicio')">
+        <span class="bn-icon">🏠</span>
+        <span class="bn-label">Inicio</span>
+      </div>
+      <div class="bn-item" id="bn-cursos" onclick="showPage('cursos', this, 'bn-cursos')">
+        <span class="bn-icon">🎬</span>
+        <span class="bn-label">Cursos</span>
+      </div>
+      <div class="bn-item" id="bn-sesiones" onclick="showPage('sesiones', this, 'bn-sesiones')">
+        <span class="bn-icon">🔴</span>
+        <span class="bn-label">En vivo</span>
+        <span class="bn-dot"></span>
+      </div>
+      <div class="bn-item" id="bn-materiales" onclick="showPage('materiales', this, 'bn-materiales')">
+        <span class="bn-icon">📄</span>
+        <span class="bn-label">Materiales</span>
+      </div>
+      <div class="bn-item" id="bn-perfil" onclick="showPage('perfil', this, 'bn-perfil')">
+        <span class="bn-icon">👤</span>
+        <span class="bn-label">Perfil</span>
+      </div>
+    </div>
+  </nav>
+
 </body>
 </html>
