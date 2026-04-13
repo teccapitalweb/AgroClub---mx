@@ -852,5 +852,81 @@
   updateCountdown();
   setInterval(updateCountdown, 60000);
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCa6zt7YD3QUzGxyPky0zPPfjQwhtYMeTw",
+  authDomain: "agroclub-mx.firebaseapp.com",
+  projectId: "agroclub-mx",
+  storageBucket: "agroclub-mx.firebasestorage.app",
+  messagingSenderId: "231737548143",
+  appId: "1:231737548143:web:6651621c2cbad8a31a9c9a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = "login.html"; return; }
+  const userDoc = await getDoc(doc(db, "miembros", user.uid));
+  if (userDoc.exists()) {
+    const data = userDoc.data();
+    if (data.estado !== "activo") {
+      alert("Tu membresía no está activa. Contacta al administrador por WhatsApp.");
+      signOut(auth); return;
+    }
+    document.getElementById("userName").textContent = data.nombre || user.email;
+    document.getElementById("userAvatar").textContent = (data.nombre || "U")[0].toUpperCase();
+    if(document.getElementById("perfilNombre")) document.getElementById("perfilNombre").textContent = data.nombre || "";
+  }
+  loadContent();
+});
+
+function loadContent() {
+  onSnapshot(collection(db, "videos"), (snap) => {
+    const videos = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    const list = document.querySelector("#page-videos .content-list");
+    if (!list || videos.length === 0) return;
+    list.innerHTML = videos.map(v => `
+      <div class="content-item">
+        <div class="content-thumb thumb-video">🎬</div>
+        <div class="content-info">
+          <div class="content-title">${v.titulo}</div>
+          <div class="content-meta">${v.instructor||''} · ${v.categoria||''} · ${v.duracion||''}</div>
+        </div>
+        <div class="content-actions">
+          <a href="${v.url}" target="_blank" class="content-btn btn-ver">▶ Ver</a>
+          <span class="content-tag tag-nuevo">Nuevo</span>
+        </div>
+      </div>`).join("");
+  });
+  onSnapshot(collection(db, "pdfs"), (snap) => {
+    const pdfs = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    const list = document.querySelector("#page-pdfs .content-list");
+    if (!list || pdfs.length === 0) return;
+    list.innerHTML = pdfs.map(p => `
+      <div class="content-item">
+        <div class="content-thumb thumb-pdf">📄</div>
+        <div class="content-info">
+          <div class="content-title">${p.titulo}</div>
+          <div class="content-meta">PDF · ${p.paginas||''} páginas</div>
+        </div>
+        <div class="content-actions">
+          <a href="${p.url}" target="_blank" class="content-btn btn-abrir">↓ Abrir</a>
+        </div>
+      </div>`).join("");
+  });
+}
+
+window.cerrarSesion = function() {
+  if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
+};
+</script>
+
 </body>
 </html>
