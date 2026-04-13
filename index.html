@@ -299,14 +299,7 @@
     <div class="page" id="page-sesiones">
       <div class="section-header" style="margin-bottom:20px"><h3>🔴 Sesiones en vivo</h3></div>
       <div id="lista-sesiones">
-        <div class="session-card">
-          <div class="session-dot proxima"></div>
-          <div class="session-info">
-            <div class="session-titulo">Q&A Bioinsumos con Ing. García</div>
-            <div class="session-meta">📅 Próxima sesión · Jue 24 · 8:00 PM</div>
-          </div>
-          <button class="btn-proxima">📅 Agendar</button>
-        </div>
+        <p style="color:var(--muted);font-size:.88rem;padding:20px;">Cargando sesiones...</p>
       </div>
     </div>
 
@@ -340,15 +333,18 @@
   <!-- RIGHT PANEL -->
   <div class="right-panel">
     <div class="panel-card panel-card-dark">
-      <div class="pc-label">Próxima sesión en vivo</div>
-      <h4>Q&A Bioinsumos</h4>
-      <div class="pc-sub">Ing. García · Jue 24 · 8PM</div>
-      <div class="countdown">
-        <div class="countdown-item"><div class="countdown-num" id="cd-d">03</div><div class="countdown-label">días</div></div>
-        <div class="countdown-item"><div class="countdown-num" id="cd-h">14</div><div class="countdown-label">hrs</div></div>
-        <div class="countdown-item"><div class="countdown-num" id="cd-m">22</div><div class="countdown-label">min</div></div>
+      <div class="pc-label" id="pc-estado-label">PRÓXIMA SESIÓN EN VIVO</div>
+      <h4 id="pc-sesion-titulo">Sin sesiones</h4>
+      <div class="pc-sub" id="pc-sesion-meta">—</div>
+      <div class="countdown" id="pc-countdown" style="display:none">
+        <div class="countdown-item"><div class="countdown-num" id="cd-d">--</div><div class="countdown-label">días</div></div>
+        <div class="countdown-item"><div class="countdown-num" id="cd-h">--</div><div class="countdown-label">hrs</div></div>
+        <div class="countdown-item"><div class="countdown-num" id="cd-m">--</div><div class="countdown-label">min</div></div>
       </div>
-      <button class="btn-calendario">📅 Agregar al calendario</button>
+      <a id="pc-link-wrapper" href="#" target="_blank" style="display:none">
+        <button class="btn-calendario" style="background:#ef4444;color:#fff;">🔴 Unirse ahora</button>
+      </a>
+      <button class="btn-calendario" id="btn-agendar-pc" style="display:none" onclick="agendarCalendario()">📅 Agregar al calendario</button>
     </div>
     <div class="panel-card panel-card-green">
       <div style="font-size:1.2rem;margin-bottom:6px">💬</div>
@@ -424,7 +420,7 @@ onAuthStateChanged(auth, async (user) => {
   loadCursosFirebase();
   loadSesiones();
   loadMateriales();
-  updateCountdown();
+
 });
 
 // ── CARGAR CURSOS DESDE FIREBASE ──
@@ -563,32 +559,122 @@ function updateProgreso() {
 }
 
 // ── SESIONES EN VIVO (desde Firebase) ──
+var _countdownInterval = null;
+var _proximaSesion = null;
+
 function loadSesiones() {
   onSnapshot(collection(db, "sesiones"), (snap) => {
-    if (snap.empty) return;
-    const sesiones = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    var ahora = new Date();
+    var sesiones = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => s.fechaHora)
+      .sort((a, b) => new Date(a.fechaHora) - new Date(b.fechaHora));
+
     const lista = document.getElementById("lista-sesiones");
     if (!lista) return;
+
+    if (sesiones.length === 0) {
+      lista.innerHTML = '<p style="color:var(--muted);font-size:.88rem;padding:20px;">No hay sesiones programadas aún.</p>';
+      actualizarWidget(null);
+      return;
+    }
+
     lista.innerHTML = sesiones.map(s => {
-      const esVivo = s.estado === "vivo";
+      const dt = new Date(s.fechaHora);
+      const pasada = dt < ahora;
+      const esVivo = !pasada && (dt - ahora) < 15 * 60 * 1000; // 15 min antes = "en vivo"
+      const fechaStr = dt.toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' })
+                     + ' · ' + dt.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
+      let dotClass = pasada ? 'proxima' : esVivo ? '' : 'proxima';
+      let metaIcon = pasada ? '✅' : esVivo ? '🔴' : '📅';
+      let metaTxt  = pasada ? 'Finalizada' : esVivo ? 'En vivo ahora' : 'Próxima · ' + fechaStr;
+      let accion = pasada
+        ? `<span style="font-size:.78rem;color:var(--muted);">Finalizada</span>`
+        : esVivo
+          ? `<a href="${s.link||'#'}" target="_blank"><button class="btn-unirse">🔴 Unirse</button></a>`
+          : `<button class="btn-proxima" onclick="agendarCalendario('${s.titulo}','${s.fechaHora}','${s.instructor||''}','${s.link||''}')">📅 Agendar</button>`;
       return `
-        <div class="session-card">
-          <div class="session-dot ${esVivo ? '' : 'proxima'}"></div>
+        <div class="session-card" style="${pasada ? 'opacity:.55;' : ''}">
+          <div class="session-dot ${dotClass}"></div>
           <div class="session-info">
             <div class="session-titulo">${s.titulo}</div>
-            <div class="session-meta">${esVivo ? '🔴 En vivo ahora' : `📅 ${s.fecha} · ${s.hora}`}</div>
+            <div class="session-meta">${metaIcon} ${metaTxt}${s.instructor ? ' · '+s.instructor : ''}</div>
           </div>
-          ${esVivo 
-            ? `<a href="${s.link}" target="_blank"><button class="btn-unirse">🔴 Unirse</button></a>`
-            : `<button class="btn-proxima">📅 Agendar</button>`
-          }
-        </div>
-      `;
+          ${accion}
+        </div>`;
     }).join("");
+
+    // Próxima sesión futura para el widget
+    const proxima = sesiones.find(s => new Date(s.fechaHora) >= ahora);
+    actualizarWidget(proxima || null);
   });
 }
 
-// ── MATERIALES GLOBALES (desde Firebase) ──
+function actualizarWidget(s) {
+  _proximaSesion = s;
+  const tituloEl = document.getElementById('pc-sesion-titulo');
+  const metaEl   = document.getElementById('pc-sesion-meta');
+  const estadoEl = document.getElementById('pc-estado-label');
+  const cdWrap   = document.getElementById('pc-countdown');
+  const linkWrap = document.getElementById('pc-link-wrapper');
+  const btnAg    = document.getElementById('btn-agendar-pc');
+  if (!tituloEl) return;
+
+  if (!s) {
+    tituloEl.textContent = 'Sin sesiones próximas';
+    metaEl.textContent = '—';
+    estadoEl.textContent = 'SESIONES EN VIVO';
+    cdWrap.style.display = 'none'; linkWrap.style.display = 'none'; btnAg.style.display = 'none';
+    if (_countdownInterval) { clearInterval(_countdownInterval); _countdownInterval = null; }
+    return;
+  }
+
+  const dt = new Date(s.fechaHora);
+  const ahora = new Date();
+  const esVivo = (dt - ahora) < 15 * 60 * 1000 && dt > ahora;
+  const fechaStr = dt.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'})
+                 + ' · ' + dt.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+
+  tituloEl.textContent = s.titulo;
+  metaEl.textContent   = (s.instructor ? s.instructor + ' · ' : '') + fechaStr;
+  estadoEl.textContent = esVivo ? '🔴 EN VIVO AHORA' : 'PRÓXIMA SESIÓN EN VIVO';
+
+  if (esVivo && s.link) {
+    cdWrap.style.display = 'none';
+    btnAg.style.display  = 'none';
+    linkWrap.style.display = 'block';
+    linkWrap.href = s.link;
+  } else {
+    linkWrap.style.display = 'none';
+    cdWrap.style.display   = 'flex';
+    btnAg.style.display    = 'block';
+    if (_countdownInterval) clearInterval(_countdownInterval);
+    _countdownInterval = setInterval(function() { tickCountdown(dt); }, 1000);
+    tickCountdown(dt);
+  }
+}
+
+function tickCountdown(target) {
+  const diff = target - new Date();
+  if (diff <= 0) { clearInterval(_countdownInterval); return; }
+  document.getElementById('cd-d').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+}
+
+function agendarCalendario(titulo, fechaHora, instructor, link) {
+  // Si se llama desde el widget sin args, usa _proximaSesion
+  if (!titulo && _proximaSesion) {
+    titulo = _proximaSesion.titulo; fechaHora = _proximaSesion.fechaHora;
+    instructor = _proximaSesion.instructor || ''; link = _proximaSesion.link || '';
+  }
+  if (!fechaHora) return;
+  const dt = new Date(fechaHora);
+  const dtEnd = new Date(dt.getTime() + 90 * 60000); // 1.5 horas
+  const fmt = d => d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+  const desc = (instructor ? 'Instructor: ' + instructor + '%0A' : '') + (link ? 'Link: ' + link : '');
+  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titulo)}&dates=${fmt(dt)}/${fmt(dtEnd)}&details=${desc}&location=${encodeURIComponent(link||'')}`;
+  window.open(url, '_blank');
+}
 function loadMateriales() {
   onSnapshot(collection(db, "pdfs"), (snap) => {
     const pdfs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -609,20 +695,6 @@ function loadMateriales() {
   });
 }
 
-// ── COUNTDOWN ──
-function updateCountdown() {
-  const target = new Date();
-  target.setDate(target.getDate() + 3);
-  target.setHours(20, 0, 0, 0);
-  const now = new Date();
-  const diff = target - now;
-  if (diff > 0) {
-    document.getElementById("cd-d").textContent = String(Math.floor(diff/86400000)).padStart(2,"0");
-    document.getElementById("cd-h").textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,"0");
-    document.getElementById("cd-m").textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
-  }
-}
-setInterval(updateCountdown, 60000);
 
 // ── NAVIGATION ──
 window.showPage = function(id, el) {
