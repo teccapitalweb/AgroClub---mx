@@ -390,39 +390,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// ── CURSOS DATA (con tus links reales de Drive) ──
-const CURSOS = [
-  {
-    id: "maiz",
-    titulo: "Producción de Maíz",
-    descripcion: "Aprende las técnicas más avanzadas para la producción comercial de maíz, desde la preparación del suelo hasta la cosecha.",
-    categoria: "Producción",
-    emoji: "🌽",
-    color: "#f59e0b",
-    clases: [
-      { num: 1, titulo: "Introducción y preparación del suelo", driveId: "1-saukc1o1XYKd1GmBpTLMpJaI1o7zkLh" },
-      { num: 2, titulo: "Selección de semilla y siembra", driveId: "1mUoxT4Vu253XDf-lWYtLpSFjlBX6F9x9" },
-      { num: 3, titulo: "Nutrición y fertilización", driveId: "1siLGDCezkvHsG62VyrpPtqqaP5RCIBFD" },
-      { num: 4, titulo: "Control de plagas y enfermedades", driveId: "1xTdvDQkj2k7lp2GP6kZO9-vD5EtpDNgu" },
-      { num: 5, titulo: "Cosecha y postcosecha", driveId: "1DDIKfu4T9DBFEZrGonUqE5j9sA8IVUme" }
-    ],
-    materiales: []
-  },
-  {
-    id: "suelo-agua",
-    titulo: "Análisis de Suelo y Agua",
-    descripcion: "Domina las técnicas de análisis de suelo y agua para optimizar tus cultivos y tomar decisiones basadas en datos reales.",
-    categoria: "Agronomía",
-    emoji: "🧪",
-    color: "#3b82f6",
-    clases: [
-      { num: 1, titulo: "Fundamentos del análisis de suelo", driveId: "1mIrHyIjsrWY2XOjCqgUGiHwSzbsPO24K" },
-      { num: 2, titulo: "Técnicas de muestreo y análisis", driveId: "14lc4n-6b8chxA1lEoAaVhsIwFFp1g09m" },
-      { num: 3, titulo: "Interpretación y aplicación de resultados", driveId: "1CZXVD8zdZdjm1JbPLUMRoiRpqcrEQMC5" }
-    ],
-    materiales: []
-  }
-];
+// ── CURSOS DATA — se carga de Firebase ──
+let CURSOS = [];
 
 let currentUser = null;
 let progreso = {};
@@ -452,12 +421,29 @@ onAuthStateChanged(auth, async (user) => {
     if (progDoc.exists()) progreso = progDoc.data();
   }
   
-  renderCursos();
+  loadCursosFirebase();
   loadSesiones();
   loadMateriales();
-  updateProgreso();
   updateCountdown();
 });
+
+// ── CARGAR CURSOS DESDE FIREBASE ──
+function loadCursosFirebase() {
+  onSnapshot(collection(db, "cursos"), (snap) => {
+    CURSOS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    
+    // Update stats
+    const heroStat = document.querySelector(".hero-stat-num");
+    if (heroStat) heroStat.textContent = CURSOS.length;
+    const totalClases = CURSOS.reduce((acc, c) => acc + (c.clases?.length || 0), 0);
+    const heroStats = document.querySelectorAll(".hero-stat-num");
+    if (heroStats[0]) heroStats[0].textContent = CURSOS.length;
+    if (heroStats[1]) heroStats[1].textContent = totalClases;
+
+    renderCursos();
+    updateProgreso();
+  });
+}
 
 // ── RENDER CURSOS ──
 function renderCursos() {
