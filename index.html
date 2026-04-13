@@ -140,6 +140,11 @@
       font-size: .8rem; font-weight: 800; flex-shrink: 0;
     }
     .clase-item.active .clase-num { background: var(--verde); color: #fff; }
+    .clase-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .2s, border-color .2s; font-size: .8rem; }
+    .clase-check:hover { border-color: var(--verde-claro); background: rgba(82,201,122,.1); }
+    .clase-check.completada { background: var(--verde); border-color: var(--verde); color: #fff; }
+    .clase-item.completada-row { background: #f6fdf8; }
+    .clase-item.completada-row .clase-titulo { color: var(--muted); text-decoration: line-through; }
     .clase-info { flex: 1; }
     .clase-titulo { font-size: .88rem; font-weight: 600; margin-bottom: 2px; }
     .clase-meta { font-size: .75rem; color: var(--muted); }
@@ -506,16 +511,23 @@ window.verCurso = function(cursoId) {
   `;
 
   // Clases
-  document.getElementById("lista-clases").innerHTML = curso.clases.map(cl => `
-    <div class="clase-item" id="clase-${cl.num}" onclick="reproducirClase('${cursoId}', ${cl.num})">
+  const clasesVistas = progreso[cursoId] || [];
+  document.getElementById("lista-clases").innerHTML = curso.clases.map(cl => {
+    const visto = clasesVistas.includes(cl.num);
+    return `
+    <div class="clase-item ${visto ? 'completada-row' : ''}" id="clase-${cl.num}" onclick="reproducirClase('${cursoId}', ${cl.num})">
       <div class="clase-num">${cl.num}</div>
       <div class="clase-info">
         <div class="clase-titulo">${cl.titulo}</div>
         <div class="clase-meta">Clase ${cl.num} de ${curso.clases.length}</div>
       </div>
-      <span class="clase-play">▶</span>
-    </div>
-  `).join("");
+      <div class="clase-check ${visto ? 'completada' : ''}" id="check-${cl.num}"
+           onclick="event.stopPropagation(); marcarClase('${cursoId}', ${cl.num})"
+           title="${visto ? 'Marcar como no completada' : 'Marcar como completada'}">
+        ${visto ? '✓' : ''}
+      </div>
+    </div>`;
+  }).join("");
 
   // Materiales del curso
   if (curso.materiales && curso.materiales.length > 0) {
@@ -555,16 +567,26 @@ window.reproducirClase = function(cursoId, numClase) {
   document.getElementById("video-player").innerHTML = `
     <iframe src="${embedUrl}" allow="autoplay" allowfullscreen></iframe>
   `;
+};
 
-  // Save progress
-  if (currentUser) {
-    if (!progreso[cursoId]) progreso[cursoId] = [];
-    if (!progreso[cursoId].includes(numClase)) {
-      progreso[cursoId].push(numClase);
-      setDoc(doc(db, "progreso", currentUser.uid), progreso);
-      updateProgreso();
-    }
+// ── MARCAR CLASE COMPLETADA (manual con checkbox) ──
+window.marcarClase = function(cursoId, numClase) {
+  if (!currentUser) return;
+  if (!progreso[cursoId]) progreso[cursoId] = [];
+  const idx = progreso[cursoId].indexOf(numClase);
+  if (idx === -1) {
+    progreso[cursoId].push(numClase); // marcar
+  } else {
+    progreso[cursoId].splice(idx, 1); // desmarcar
   }
+  setDoc(doc(db, "progreso", currentUser.uid), progreso);
+  updateProgreso();
+  // Actualizar visual del checkbox sin re-renderizar todo
+  const check = document.getElementById(`check-${numClase}`);
+  const row   = document.getElementById(`clase-${numClase}`);
+  const visto = progreso[cursoId].includes(numClase);
+  if (check) { check.classList.toggle("completada", visto); check.textContent = visto ? "✓" : ""; check.title = visto ? "Marcar como no completada" : "Marcar como completada"; }
+  if (row)   { row.classList.toggle("completada-row", visto); row.querySelector(".clase-titulo").style.textDecoration = visto ? "line-through" : ""; }
 };
 
 // ── PROGRESO (dinámico desde cursos reales) ──
