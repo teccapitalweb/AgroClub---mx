@@ -164,6 +164,13 @@
     .material-tipo { font-size: .75rem; color: var(--muted); }
     .btn-descargar { background: rgba(26,107,47,.1); color: var(--verde); border: none; border-radius: 8px; padding: 6px 14px; font-size: .78rem; font-weight: 700; cursor: pointer; font-family: var(--font); }
     .btn-descargar:hover { background: var(--verde); color: #fff; }
+    .temario-card { display:flex; align-items:center; gap:14px; padding:16px 18px; background:linear-gradient(135deg,#f0fdf4,#dcfce7); border:1.5px solid #86efac; border-radius:12px; margin:8px 0; }
+    .temario-card-icon { width:42px; height:42px; background:var(--verde); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
+    .temario-card-info { flex:1; }
+    .temario-card-titulo { font-size:.9rem; font-weight:700; color:var(--text); }
+    .temario-card-sub { font-size:.75rem; color:var(--muted); margin-top:2px; }
+    .btn-ver-temario { background:var(--verde); color:#fff; border:none; border-radius:8px; padding:9px 18px; font-size:.82rem; font-weight:700; cursor:pointer; font-family:var(--font); white-space:nowrap; transition:background .2s; }
+    .btn-ver-temario:hover { background:var(--verde-medio); }
 
     /* ── SESIONES VIVO ── */
     .session-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -332,6 +339,11 @@
       <div class="clases-list">
         <div class="clases-header">📋 Clases del curso</div>
         <div id="lista-clases"></div>
+      </div>
+      <!-- TEMARIO PDF DESTACADO -->
+      <div id="temario-curso" style="display:none;margin-top:16px;">
+        <div class="clases-header">📄 Temario del curso</div>
+        <div id="lista-temario-curso"></div>
       </div>
       <div class="materiales-list" id="materiales-curso" style="display:none">
         <div class="clases-header">📁 Material de apoyo</div>
@@ -561,10 +573,30 @@ window.verCurso = function(cursoId) {
     </div>`;
   }).join("");
 
-  // Materiales del curso
-  if (curso.materiales && curso.materiales.length > 0) {
+  // Materiales del curso — separar temario de otros
+  const temarios   = (curso.materiales || []).filter(m => m.tipo === "Temario");
+  const otrosMats  = (curso.materiales || []).filter(m => m.tipo !== "Temario");
+
+  // — Temario destacado —
+  if (temarios.length > 0) {
+    document.getElementById("temario-curso").style.display = "block";
+    document.getElementById("lista-temario-curso").innerHTML = temarios.map(m => `
+      <div class="temario-card">
+        <div class="temario-card-icon">📋</div>
+        <div class="temario-card-info">
+          <div class="temario-card-titulo">${m.titulo}</div>
+          <div class="temario-card-sub">Descarga el temario completo del curso</div>
+        </div>
+        <a href="${m.url}" target="_blank"><button class="btn-ver-temario">↓ Ver temario</button></a>
+      </div>`).join("");
+  } else {
+    document.getElementById("temario-curso").style.display = "none";
+  }
+
+  // — Otros materiales —
+  if (otrosMats.length > 0) {
     document.getElementById("materiales-curso").style.display = "block";
-    document.getElementById("lista-materiales-curso").innerHTML = curso.materiales.map(m => `
+    document.getElementById("lista-materiales-curso").innerHTML = otrosMats.map(m => `
       <div class="material-item">
         <div class="material-icon icon-pdf">📄</div>
         <div class="material-info">
@@ -572,8 +604,7 @@ window.verCurso = function(cursoId) {
           <div class="material-tipo">${m.tipo}</div>
         </div>
         <a href="${m.url}" target="_blank"><button class="btn-descargar">↓ Descargar</button></a>
-      </div>
-    `).join("");
+      </div>`).join("");
   } else {
     document.getElementById("materiales-curso").style.display = "none";
   }
