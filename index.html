@@ -297,7 +297,7 @@
         <div class="hero-inner">
           <div class="hero-text">
             <h2 id="hero-greeting">¡Bienvenido! 🌱</h2>
-            <p>Tienes acceso completo a todos los cursos y materiales</p>
+            <p id="hero-bienvenida">Tienes acceso completo a todos los cursos y materiales</p>
           </div>
           <div class="hero-stats">
             <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-label">Cursos</div></div>
@@ -406,7 +406,7 @@
       <div style="font-size:1.2rem;margin-bottom:6px">💬</div>
       <h4>Grupo WhatsApp VIP</h4>
       <div class="pc-sub2">Comunidad de productores activos</div>
-      <button class="btn-wa" onclick="window.open('https://wa.me/5212361066811','_blank')">Abrir grupo</button>
+      <button class="btn-wa" id="btn-grupo-wa" onclick="window.open('https://wa.me/5212361066811','_blank')">Abrir grupo</button>
     </div>
 
     <!-- DESCUENTO VIP -->
@@ -494,6 +494,7 @@ onAuthStateChanged(auth, async (user) => {
   loadCursosFirebase();
   loadSesiones();
   loadMateriales();
+  loadConfig();
 
 });
 
@@ -858,6 +859,27 @@ function loadMateriales() {
 
 
 // ── NAVIGATION ──
+// ── CONFIG DEL CLUB (desde Firebase) ─────────────────────────────────────────
+function loadConfig() {
+  db.collection('config').doc('club').onSnapshot(function(snap) {
+    if (!snap.exists) return;
+    var c = snap.data();
+
+    // Mensaje de bienvenida
+    if (c.bienvenida) {
+      var el = document.getElementById('hero-bienvenida');
+      if (el) el.textContent = c.bienvenida;
+    }
+
+    // Link del grupo WhatsApp VIP
+    if (c.grupoWa) {
+      var btn = document.getElementById('btn-grupo-wa');
+      if (btn) btn.onclick = function() { window.open(c.grupoWa, '_blank'); };
+    }
+  });
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 window.showPage = function(id, el, bnId) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".sidebar-item").forEach(s => s.classList.remove("active"));
