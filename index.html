@@ -861,9 +861,9 @@ function loadMateriales() {
 // ── NAVIGATION ──
 // ── CONFIG DEL CLUB (desde Firebase) ─────────────────────────────────────────
 function loadConfig() {
-  db.collection('config').doc('club').get().then(function(snap) {
+  getDoc(doc(db, 'config', 'club')).then(function(snap) {
     var grupoWa = null;
-    if (snap.exists) {
+    if (snap.exists()) {
       var c = snap.data();
       if (c.grupoWa && c.grupoWa.trim()) grupoWa = c.grupoWa.trim();
       if (c.bienvenida) {
