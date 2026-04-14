@@ -407,7 +407,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -432,10 +432,16 @@ let progreso = {};
 // ── AUTH ──
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = "login.html"; return; }
-  
-  const userDoc = await getDoc(doc(db, "miembros", user.uid));
-  if (userDoc.exists()) {
-    const data = userDoc.data();
+
+  // Setear currentUser inmediatamente con el UID de auth
+  currentUser = { uid: user.uid, email: user.email };
+
+  // Buscar miembro por EMAIL (el admin usa add() con ID aleatorio, no el UID)
+  const q = query(collection(db, "miembros"), where("email", "==", user.email));
+  const snap = await getDocs(q);
+
+  if (!snap.empty) {
+    const data = snap.docs[0].data();
     if (data.estado !== "activo") {
       alert("Tu membresía no está activa. Contacta al administrador.");
       signOut(auth); return;
@@ -448,12 +454,19 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("perfil-nombre").textContent = data.nombre || "—";
     document.getElementById("perfil-email").textContent = user.email;
     document.getElementById("perfil-fecha").textContent = data.fechaRegistro ? new Date(data.fechaRegistro).toLocaleDateString("es-MX", {day:"numeric",month:"long",year:"numeric"}) : "—";
-    
-    // Load progreso
-    const progDoc = await getDoc(doc(db, "progreso", user.uid));
-    if (progDoc.exists()) progreso = progDoc.data();
+  } else {
+    // Usuario autenticado pero sin doc en miembros — mostrar nombre del email
+    const nombre = user.email.split("@")[0];
+    document.getElementById("userName").textContent = nombre;
+    document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
+    document.getElementById("hero-greeting").textContent = `¡Hola, ${nombre}! 🌱`;
+    document.getElementById("perfil-email").textContent = user.email;
   }
-  
+
+  // Cargar progreso por UID
+  const progDoc = await getDoc(doc(db, "progreso", user.uid));
+  if (progDoc.exists()) progreso = progDoc.data();
+
   loadCursosFirebase();
   loadSesiones();
   loadMateriales();
