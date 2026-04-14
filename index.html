@@ -861,24 +861,22 @@ function loadMateriales() {
 // ── NAVIGATION ──
 // ── CONFIG DEL CLUB (desde Firebase) ─────────────────────────────────────────
 function loadConfig() {
-  var btn = document.getElementById('btn-grupo-wa');
-  // Fallback mientras carga Firebase
-  if (btn) btn.onclick = function() { window.open('https://wa.me/5212361066811', '_blank'); };
-
-  db.collection('config').doc('club').onSnapshot(function(snap) {
-    if (!snap.exists) return;
-    var c = snap.data();
-
-    // Mensaje de bienvenida
-    if (c.bienvenida) {
-      var el = document.getElementById('hero-bienvenida');
-      if (el) el.textContent = c.bienvenida;
+  db.collection('config').doc('club').get().then(function(snap) {
+    var grupoWa = null;
+    if (snap.exists) {
+      var c = snap.data();
+      if (c.grupoWa && c.grupoWa.trim()) grupoWa = c.grupoWa.trim();
+      if (c.bienvenida) {
+        var el = document.getElementById('hero-bienvenida');
+        if (el) el.textContent = c.bienvenida;
+      }
     }
-
-    // Link del grupo WhatsApp VIP — sobreescribe el fallback
-    var grupoWa = c.grupoWa || 'https://wa.me/5212361066811';
-    var btnWa = document.getElementById('btn-grupo-wa');
-    if (btnWa) btnWa.onclick = function() { window.open(grupoWa, '_blank'); };
+    var btn = document.getElementById('btn-grupo-wa');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        window.open(grupoWa || 'https://wa.me/5212361066811', '_blank');
+      });
+    }
   });
 }
 // ─────────────────────────────────────────────────────────────────────────────
