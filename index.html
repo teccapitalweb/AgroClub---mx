@@ -399,6 +399,15 @@
     .sus-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
     .sus-item-text { font-size: .88rem; font-weight: 600; }
     .sus-item-sub { font-size: .76rem; color: var(--muted); }
+    .sus-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .sus-info-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
+    .sus-info-label { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+    .sus-info-val { font-size: 1rem; font-weight: 800; color: var(--text); font-family: var(--font-display); }
+    .sus-pagos-list { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+    .sus-pago-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: .86rem; }
+    .sus-pago-row:last-child { border-bottom: none; }
+    .sus-cancelar-card { background: #fff8f8; border: 1.5px solid #fecaca; border-radius: 16px; padding: 22px; margin-bottom: 20px; }
+    .sus-privacidad { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; font-size: .8rem; color: var(--muted); line-height: 1.7; }
 
     /* ══ RIGHT PANEL ══════════════════════════════════════════════════ */
     .right-panel {
@@ -695,12 +704,28 @@
 
     <!-- SUSCRIPCION -->
     <div class="page" id="page-suscripcion">
+
+      <!-- HERO -->
       <div class="sus-hero">
         <h3>⭐ Membresía VIP Activa</h3>
         <p>Tienes acceso completo a todo el contenido de AgroClub MX</p>
         <div class="sus-badge">✅ Activa · Vence: <span id="sus-vence">—</span></div>
       </div>
-      <div class="sus-beneficios">
+
+      <!-- INFO RÁPIDA -->
+      <div class="sus-info-grid">
+        <div class="sus-info-card">
+          <div class="sus-info-label">📅 Próximo cobro</div>
+          <div class="sus-info-val" id="sus-proximo-cobro">—</div>
+        </div>
+        <div class="sus-info-card">
+          <div class="sus-info-label">💳 Plan activo</div>
+          <div class="sus-info-val" id="sus-plan-info">VIP Mensual</div>
+        </div>
+      </div>
+
+      <!-- BENEFICIOS -->
+      <div class="sus-beneficios" style="margin-bottom:20px;">
         <h4>Tus beneficios incluyen</h4>
         <div class="sus-item">
           <div class="sus-icon" style="background:rgba(82,201,122,.1)">🎬</div>
@@ -723,6 +748,39 @@
           <div><div class="sus-item-text">20% descuento en cursos</div><div class="sus-item-sub">En todos los próximos cursos de la plataforma</div></div>
         </div>
       </div>
+
+      <!-- HISTORIAL DE PAGOS -->
+      <div class="sus-pagos-list">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:.88rem;font-weight:800;font-family:var(--font-display);">💰 Historial de pagos</div>
+        <div id="sus-historial-pagos">
+          <div class="sus-pago-row" style="color:var(--muted);">Cargando historial...</div>
+        </div>
+      </div>
+
+      <!-- CANCELAR SUSCRIPCIÓN -->
+      <div class="sus-cancelar-card">
+        <div style="font-size:.9rem;font-weight:800;color:#b91c1c;margin-bottom:6px;font-family:var(--font-display);">⚠️ Cancelar membresía</div>
+        <p style="font-size:.82rem;color:#7f1d1d;line-height:1.6;margin-bottom:16px;">Si deseas cancelar tu suscripción, contáctanos por WhatsApp. Tu acceso se mantendrá activo hasta la fecha de vencimiento actual.</p>
+        <button onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20quiero%20cancelar%20mi%20membresía%20VIP%20de%20AgroClub%20MX.%20Mi%20email%20es%3A%20' + encodeURIComponent(currentUser ? currentUser.email : ''), '_blank')"
+          style="background:#ef4444;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;">
+          💬 Solicitar cancelación por WhatsApp
+        </button>
+      </div>
+
+      <!-- POLÍTICA DE PRIVACIDAD -->
+      <div class="sus-privacidad">
+        <div style="font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:10px;font-family:var(--font-display);">🔒 Política de privacidad y términos</div>
+        <p><strong>Datos personales:</strong> AgroClub MX recopila únicamente tu nombre, email y WhatsApp para gestionar tu membresía y enviarte información relevante del club. No compartimos tus datos con terceros.</p>
+        <br>
+        <p><strong>Pagos:</strong> Los pagos se procesan de forma segura a través de Shopify. AgroClub MX no almacena datos de tarjetas de crédito.</p>
+        <br>
+        <p><strong>Cancelación:</strong> Puedes cancelar tu membresía en cualquier momento. El acceso se mantiene activo hasta el final del período pagado. No se realizan reembolsos parciales.</p>
+        <br>
+        <p><strong>Contenido:</strong> Todo el material disponible en AgroClub MX es exclusivo para miembros activos. Queda prohibida su distribución o reproducción sin autorización.</p>
+        <br>
+        <p style="font-size:.75rem;">Para dudas o aclaraciones escríbenos a <strong>agrotecamerica480@gmail.com</strong> · AgroClub MX © 2026</p>
+      </div>
+
     </div>
 
   </div><!-- /main -->
@@ -848,7 +906,10 @@ onAuthStateChanged(auth, async (user) => {
     if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = data.whatsapp || "—";
     if (document.getElementById("perfil-vence")) document.getElementById("perfil-vence").textContent = data.vence || "—";
     if (document.getElementById("sus-vence")) document.getElementById("sus-vence").textContent = data.vence || "—";
+    if (document.getElementById("sus-plan-info")) document.getElementById("sus-plan-info").textContent = data.plan || "VIP Mensual";
+    if (document.getElementById("sus-proximo-cobro")) document.getElementById("sus-proximo-cobro").textContent = data.vence || "—";
     actualizarEstadisticasPerfil();
+    cargarHistorialPagos(user.email);
   } else {
     // Usuario autenticado pero sin doc en miembros — mostrar nombre del email
     const nombre = user.email.split("@")[0];
@@ -1275,6 +1336,40 @@ function loadConfig() {
 
 // ── PERFIL EDITABLE ───────────────────────────────────────────────────────────
 // ── Toast ────────────────────────────────────────────────────────────────────
+// ── SUSCRIPCIÓN ───────────────────────────────────────────────────────────────
+function cargarHistorialPagos(email) {
+  if (!email) return;
+  getDoc(doc(db, 'config', 'club')); // warm up
+  // Buscar pagos por email
+  getDocs(query(collection(db, 'pagos'), where('email', '==', email))).then(function(snap) {
+    const histEl = document.getElementById('sus-historial-pagos');
+    if (!histEl) return;
+    if (snap.empty) {
+      histEl.innerHTML = '<div class="sus-pago-row" style="color:var(--muted);font-size:.82rem;">Sin pagos registrados aún</div>';
+      return;
+    }
+    // Ordenar por fecha desc
+    const pagos = snap.docs.map(d => d.data()).sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+    histEl.innerHTML = pagos.map(p => {
+      const fecha = p.fecha ? new Date(p.fecha).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'}) : '—';
+      return `<div class="sus-pago-row">
+        <div>
+          <div style="font-weight:600;font-size:.86rem;">${p.plan || 'VIP Mensual'}</div>
+          <div style="font-size:.75rem;color:var(--muted);">${fecha}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-weight:700;font-size:.9rem;">${p.monto || '—'}</span>
+          <span style="background:#dcfce7;color:#16a34a;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:100px;">✅ Confirmado</span>
+        </div>
+      </div>`;
+    }).join('');
+  }).catch(function() {
+    const histEl = document.getElementById('sus-historial-pagos');
+    if (histEl) histEl.innerHTML = '<div class="sus-pago-row" style="color:var(--muted);font-size:.82rem;">Sin pagos registrados aún</div>';
+  });
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 window.showToast = function(msg, tipo) {
   tipo = tipo || 'success';
   const old = document.getElementById('_toast');
