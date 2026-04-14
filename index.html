@@ -1274,6 +1274,26 @@ function loadConfig() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── PERFIL EDITABLE ───────────────────────────────────────────────────────────
+// ── Toast ────────────────────────────────────────────────────────────────────
+window.showToast = function(msg, tipo) {
+  tipo = tipo || 'success';
+  const old = document.getElementById('_toast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.id = '_toast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:9999;padding:12px 22px;border-radius:12px;font-size:.88rem;font-weight:700;color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.2);background:' + (tipo==='error'?'#ef4444':'#16a34a') + ';pointer-events:none;animation:_tf .25s ease;font-family:var(--font);';
+  if (!document.getElementById('_toastStyle')) {
+    const s = document.createElement('style');
+    s.id = '_toastStyle';
+    s.textContent = '@keyframes _tf{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}';
+    document.head.appendChild(s);
+  }
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 3000);
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
 window.editarCampo = function(campo) {
   const mapas = { nombre: 'nombre', wa: 'wa' };
   document.getElementById('row-' + campo + '-ver').style.display = 'none';
@@ -1292,14 +1312,13 @@ window.guardarCampo = async function(campo) {
   if (!currentUser) return;
   const input = document.getElementById('input-' + campo);
   const val   = input ? input.value.trim() : '';
-  if (!val) { showToast('⚠️ El campo no puede estar vacío', 'error'); return; }
+  if (!val) { window.showToast('⚠️ El campo no puede estar vacío', 'error'); return; }
 
-  const fieldMap = { nombre: 'nombre', wa: 'whatsapp' };
+  const fieldMap   = { nombre: 'nombre', wa: 'whatsapp' };
   const displayMap = { nombre: 'perfil-nombre', wa: 'perfil-wa' };
 
   try {
-    // Buscar el doc del miembro por email
-    const q = query(collection(db, 'miembros'), where('email', '==', currentUser.email));
+    const q    = query(collection(db, 'miembros'), where('email', '==', currentUser.email));
     const snap = await getDocs(q);
     if (!snap.empty) {
       await setDoc(doc(db, 'miembros', snap.docs[0].id), { [fieldMap[campo]]: val }, { merge: true });
@@ -1307,14 +1326,15 @@ window.guardarCampo = async function(campo) {
     document.getElementById(displayMap[campo]).textContent = val;
     if (campo === 'nombre') {
       document.getElementById('perfil-nombre-hero').textContent = val;
-      document.getElementById('userAvatar').textContent = val[0].toUpperCase();
+      document.getElementById('userAvatar').textContent        = val[0].toUpperCase();
       document.getElementById('perfil-avatar-big').textContent = val[0].toUpperCase();
-      document.getElementById('userName').textContent = val.split(' ')[0];
+      document.getElementById('userName').textContent          = val.split(' ')[0];
     }
-    cancelarEdicion(campo);
-    showToast('✅ ' + (campo === 'nombre' ? 'Nombre' : 'WhatsApp') + ' actualizado');
+    window.cancelarEdicion(campo);
+    window.showToast('✅ ' + (campo === 'nombre' ? 'Nombre' : 'WhatsApp') + ' actualizado');
   } catch(e) {
-    showToast('⚠️ Error al guardar', 'error');
+    console.error('Error guardarCampo:', e);
+    window.showToast('⚠️ Error al guardar: ' + e.message, 'error');
   }
 };
 
