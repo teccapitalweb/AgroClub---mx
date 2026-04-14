@@ -367,11 +367,17 @@
     .perfil-hero-info h3 { font-size: 1.4rem; font-weight: 900; font-family: var(--font-display); margin-bottom: 6px; }
     .perfil-hero-info p { color: rgba(255,255,255,.6); font-size: .88rem; }
     .perfil-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(82,201,122,.2); border: 1px solid rgba(82,201,122,.3); color: var(--verde-claro); border-radius: 100px; padding: 4px 14px; font-size: .78rem; font-weight: 700; }
-    .perfil-datos { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm); }
-    .perfil-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+    .perfil-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .perfil-row:last-child { border-bottom: none; }
-    .perfil-label { width: 160px; font-size: .8rem; color: var(--muted); font-weight: 600; flex-shrink: 0; }
+    .perfil-label { font-size: .8rem; color: var(--muted); font-weight: 600; flex-shrink: 0; }
     .perfil-val { font-size: .9rem; font-weight: 600; }
+    .perfil-edit-input { font-size: .9rem; font-weight: 600; border: 1.5px solid var(--verde-claro); border-radius: 8px; padding: 6px 12px; font-family: var(--font); outline: none; width: 220px; }
+    .btn-editar { font-size: .75rem; font-weight: 700; color: var(--verde-medio); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background .15s; }
+    .btn-editar:hover { background: rgba(82,201,122,.1); }
+    .perfil-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .perfil-stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 14px; text-align: center; box-shadow: var(--shadow-sm); }
+    .perfil-stat-num { font-size: 1.8rem; font-weight: 900; color: var(--verde); font-family: var(--font-display); line-height: 1; }
+    .perfil-stat-label { font-size: .72rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
 
     /* ══ SUSCRIPCIÓN ══════════════════════════════════════════════════ */
     .sus-hero {
@@ -619,6 +625,7 @@
 
     <!-- PERFIL -->
     <div class="page" id="page-perfil">
+      <!-- HERO -->
       <div class="perfil-hero">
         <div class="perfil-avatar-big" id="perfil-avatar-big">M</div>
         <div class="perfil-hero-info">
@@ -627,11 +634,62 @@
           <div class="perfil-badge">⭐ Miembro VIP Activo</div>
         </div>
       </div>
+
+      <!-- ESTADÍSTICAS PERSONALES -->
+      <div class="perfil-stats-grid">
+        <div class="perfil-stat-card">
+          <div class="perfil-stat-num" id="pstat-cursos">0</div>
+          <div class="perfil-stat-label">Cursos</div>
+        </div>
+        <div class="perfil-stat-card">
+          <div class="perfil-stat-num" id="pstat-clases">0</div>
+          <div class="perfil-stat-label">Clases vistas</div>
+        </div>
+        <div class="perfil-stat-card">
+          <div class="perfil-stat-num" id="pstat-dias">0</div>
+          <div class="perfil-stat-label">Días en el club</div>
+        </div>
+      </div>
+
+      <!-- DATOS EDITABLES -->
       <div class="perfil-datos">
-        <div class="perfil-row"><span class="perfil-label">Nombre completo</span><span class="perfil-val" id="perfil-nombre">—</span></div>
+        <!-- Nombre -->
+        <div class="perfil-row" id="row-nombre-ver">
+          <span class="perfil-label">Nombre completo</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="perfil-val" id="perfil-nombre">—</span>
+            <button class="btn-editar" onclick="editarCampo('nombre')">✏️ Editar</button>
+          </div>
+        </div>
+        <div class="perfil-row" id="row-nombre-edit" style="display:none;">
+          <span class="perfil-label">Nombre completo</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="perfil-edit-input" id="input-nombre" type="text" placeholder="Tu nombre">
+            <button class="btn-ver-curso" style="padding:7px 14px;font-size:.78rem;" onclick="guardarCampo('nombre')">Guardar</button>
+            <button class="btn-editar" onclick="cancelarEdicion('nombre')">✕</button>
+          </div>
+        </div>
+        <!-- WhatsApp -->
+        <div class="perfil-row" id="row-wa-ver">
+          <span class="perfil-label">WhatsApp</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="perfil-val" id="perfil-wa">—</span>
+            <button class="btn-editar" onclick="editarCampo('wa')">✏️ Editar</button>
+          </div>
+        </div>
+        <div class="perfil-row" id="row-wa-edit" style="display:none;">
+          <span class="perfil-label">WhatsApp</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="perfil-edit-input" id="input-wa" type="tel" placeholder="+52 xxx xxx xxxx">
+            <button class="btn-ver-curso" style="padding:7px 14px;font-size:.78rem;" onclick="guardarCampo('wa')">Guardar</button>
+            <button class="btn-editar" onclick="cancelarEdicion('wa')">✕</button>
+          </div>
+        </div>
+        <!-- Solo lectura -->
         <div class="perfil-row"><span class="perfil-label">Email</span><span class="perfil-val" id="perfil-email">—</span></div>
         <div class="perfil-row"><span class="perfil-label">Miembro desde</span><span class="perfil-val" id="perfil-fecha">—</span></div>
         <div class="perfil-row"><span class="perfil-label">Plan activo</span><span class="perfil-val" id="perfil-plan">VIP</span></div>
+        <div class="perfil-row"><span class="perfil-label">Vence</span><span class="perfil-val" id="perfil-vence">—</span></div>
       </div>
     </div>
 
@@ -783,12 +841,14 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("perfil-nombre").textContent = data.nombre || "—";
     document.getElementById("perfil-email").textContent = user.email;
     document.getElementById("perfil-fecha").textContent = data.fechaRegistro ? new Date(data.fechaRegistro).toLocaleDateString("es-MX", {day:"numeric",month:"long",year:"numeric"}) : "—";
-    // Nuevos elementos
     if (document.getElementById("perfil-nombre-hero")) document.getElementById("perfil-nombre-hero").textContent = data.nombre || user.email;
     if (document.getElementById("perfil-email-hero")) document.getElementById("perfil-email-hero").textContent = user.email;
     if (document.getElementById("perfil-avatar-big")) document.getElementById("perfil-avatar-big").textContent = nombre[0].toUpperCase();
     if (document.getElementById("perfil-plan")) document.getElementById("perfil-plan").textContent = data.plan || "VIP";
+    if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = data.whatsapp || "—";
+    if (document.getElementById("perfil-vence")) document.getElementById("perfil-vence").textContent = data.vence || "—";
     if (document.getElementById("sus-vence")) document.getElementById("sus-vence").textContent = data.vence || "—";
+    actualizarEstadisticasPerfil();
   } else {
     // Usuario autenticado pero sin doc en miembros — mostrar nombre del email
     const nombre = user.email.split("@")[0];
@@ -824,6 +884,7 @@ function loadCursosFirebase() {
 
     renderCursos();
     updateProgreso();
+  actualizarEstadisticasPerfil();
   });
 }
 
@@ -998,6 +1059,7 @@ function marcarClase(cursoId, numClase) {
   else progreso[cursoId].splice(idx, 1);
   setDoc(doc(db, "progreso", currentUser.uid), progreso);
   updateProgreso();
+  actualizarEstadisticasPerfil();
   actualizarBtnCompletar(cursoId, numClase, completada);
   const row   = document.getElementById(`clase-${numClase}`);
   const check = document.getElementById(`check-${numClase}`);
@@ -1208,6 +1270,69 @@ function loadConfig() {
       });
     }
   });
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── PERFIL EDITABLE ───────────────────────────────────────────────────────────
+window.editarCampo = function(campo) {
+  const mapas = { nombre: 'nombre', wa: 'wa' };
+  document.getElementById('row-' + campo + '-ver').style.display = 'none';
+  document.getElementById('row-' + campo + '-edit').style.display = 'flex';
+  const input = document.getElementById('input-' + campo);
+  const val   = document.getElementById('perfil-' + mapas[campo]).textContent;
+  if (input) { input.value = val === '—' ? '' : val; input.focus(); }
+};
+
+window.cancelarEdicion = function(campo) {
+  document.getElementById('row-' + campo + '-ver').style.display = 'flex';
+  document.getElementById('row-' + campo + '-edit').style.display = 'none';
+};
+
+window.guardarCampo = async function(campo) {
+  if (!currentUser) return;
+  const input = document.getElementById('input-' + campo);
+  const val   = input ? input.value.trim() : '';
+  if (!val) { showToast('⚠️ El campo no puede estar vacío', 'error'); return; }
+
+  const fieldMap = { nombre: 'nombre', wa: 'whatsapp' };
+  const displayMap = { nombre: 'perfil-nombre', wa: 'perfil-wa' };
+
+  try {
+    // Buscar el doc del miembro por email
+    const q = query(collection(db, 'miembros'), where('email', '==', currentUser.email));
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      await setDoc(doc(db, 'miembros', snap.docs[0].id), { [fieldMap[campo]]: val }, { merge: true });
+    }
+    document.getElementById(displayMap[campo]).textContent = val;
+    if (campo === 'nombre') {
+      document.getElementById('perfil-nombre-hero').textContent = val;
+      document.getElementById('userAvatar').textContent = val[0].toUpperCase();
+      document.getElementById('perfil-avatar-big').textContent = val[0].toUpperCase();
+      document.getElementById('userName').textContent = val.split(' ')[0];
+    }
+    cancelarEdicion(campo);
+    showToast('✅ ' + (campo === 'nombre' ? 'Nombre' : 'WhatsApp') + ' actualizado');
+  } catch(e) {
+    showToast('⚠️ Error al guardar', 'error');
+  }
+};
+
+function actualizarEstadisticasPerfil() {
+  const totalClasesVistas = Object.values(progreso).reduce((acc, arr) => acc + (Array.isArray(arr) ? arr.length : 0), 0);
+  const cursosConAvance   = Object.keys(progreso).filter(k => Array.isArray(progreso[k]) && progreso[k].length > 0).length;
+
+  const elC = document.getElementById('pstat-cursos');
+  const elV = document.getElementById('pstat-clases');
+  if (elC) elC.textContent = cursosConAvance;
+  if (elV) elV.textContent = totalClasesVistas;
+
+  // Días en el club
+  if (currentUser && currentUser.fechaRegistro) {
+    const dias = Math.floor((new Date() - new Date(currentUser.fechaRegistro)) / 86400000);
+    const elD = document.getElementById('pstat-dias');
+    if (elD) elD.textContent = dias;
+  }
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
