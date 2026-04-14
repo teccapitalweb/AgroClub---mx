@@ -406,7 +406,7 @@
       <div style="font-size:1.2rem;margin-bottom:6px">💬</div>
       <h4>Grupo WhatsApp VIP</h4>
       <div class="pc-sub2">Comunidad de productores activos</div>
-      <button class="btn-wa" id="btn-grupo-wa" onclick="window.open('https://wa.me/5212361066811','_blank')">Abrir grupo</button>
+      <button class="btn-wa" id="btn-grupo-wa">Abrir grupo</button>
     </div>
 
     <!-- DESCUENTO VIP -->
@@ -861,6 +861,10 @@ function loadMateriales() {
 // ── NAVIGATION ──
 // ── CONFIG DEL CLUB (desde Firebase) ─────────────────────────────────────────
 function loadConfig() {
+  var btn = document.getElementById('btn-grupo-wa');
+  // Fallback mientras carga Firebase
+  if (btn) btn.onclick = function() { window.open('https://wa.me/5212361066811', '_blank'); };
+
   db.collection('config').doc('club').onSnapshot(function(snap) {
     if (!snap.exists) return;
     var c = snap.data();
@@ -871,11 +875,10 @@ function loadConfig() {
       if (el) el.textContent = c.bienvenida;
     }
 
-    // Link del grupo WhatsApp VIP
-    if (c.grupoWa) {
-      var btn = document.getElementById('btn-grupo-wa');
-      if (btn) btn.onclick = function() { window.open(c.grupoWa, '_blank'); };
-    }
+    // Link del grupo WhatsApp VIP — sobreescribe el fallback
+    var grupoWa = c.grupoWa || 'https://wa.me/5212361066811';
+    var btnWa = document.getElementById('btn-grupo-wa');
+    if (btnWa) btnWa.onclick = function() { window.open(grupoWa, '_blank'); };
   });
 }
 // ─────────────────────────────────────────────────────────────────────────────
