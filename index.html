@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AgroClub MX — Portal VIP</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -441,6 +440,8 @@
 
     /* ══ RESPONSIVE ══════════════════════════════════════════════════ */
     @media (max-width: 1100px) { .right-panel { display: none; } .main { margin-right: 0; } }
+    .mobile-widgets { display: none; margin-top: 8px; }
+    @media (max-width: 1100px) { .mobile-widgets { display: block; } }
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .main { margin-left: 0; padding: 16px 14px 86px; }
@@ -525,6 +526,45 @@
         <span class="section-header-tag" onclick="showPage('cursos', document.querySelector('[onclick*=cursos]'))">Ver todos →</span>
       </div>
       <div class="courses-grid" id="inicio-cursos"></div>
+
+      <!-- WIDGETS MÓVIL (solo visibles en pantallas pequeñas) -->
+      <div class="mobile-widgets">
+        <div class="panel-card panel-card-dark">
+          <div class="pc-label" id="pc-estado-label-m">PRÓXIMA SESIÓN EN VIVO</div>
+          <h4 id="pc-sesion-titulo-m">Sin sesiones</h4>
+          <div class="pc-sub" id="pc-sesion-meta-m">—</div>
+          <div class="countdown" id="pc-countdown-m" style="display:none">
+            <div class="countdown-item"><div class="countdown-num" id="cd-d-m">--</div><div class="countdown-label">días</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-h-m">--</div><div class="countdown-label">hrs</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-m-m">--</div><div class="countdown-label">min</div></div>
+          </div>
+          <a id="pc-link-wrapper-m" href="#" target="_blank" style="display:none">
+            <button class="btn-calendario" style="background:#ef4444;">🔴 Unirse ahora</button>
+          </a>
+          <button class="btn-calendario" id="btn-agendar-pc-m" style="display:none" onclick="agendarCalendario()">📅 Agregar al calendario</button>
+        </div>
+        <div class="panel-card panel-card-green">
+          <div style="font-size:1.3rem;margin-bottom:6px">💬</div>
+          <h4>Grupo WhatsApp VIP</h4>
+          <div class="pc-sub2">Comunidad de productores activos</div>
+          <button class="btn-wa" id="btn-grupo-wa-m">Abrir grupo</button>
+        </div>
+        <div class="panel-card" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a;">
+          <div style="font-size:.68rem;font-weight:800;color:#92400e;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">🎁 Tu descuento VIP</div>
+          <div style="font-size:2rem;font-weight:900;color:#d97706;line-height:1;font-family:var(--font-display);">20%</div>
+          <div style="font-size:.78rem;color:#92400e;margin-bottom:12px;margin-top:4px;">En todos los próximos cursos</div>
+          <button onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank')"
+            style="width:100%;padding:11px;border-radius:12px;background:#d97706;color:#fff;border:none;font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px;">
+            💬 Canjear por WhatsApp
+          </button>
+        </div>
+        <div class="panel-card">
+          <div class="actividad-label">📊 Mi progreso</div>
+          <div id="progreso-widget-m">
+            <p style="color:var(--muted);font-size:.8rem;padding:4px 0;">Cargando...</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- CURSOS -->
@@ -977,31 +1017,31 @@ window.agendarCalendario = agendarCalendario;
 
 // ── PROGRESO (dinámico desde cursos reales) ──
 function updateProgreso() {
-  const widget = document.getElementById("progreso-widget");
-  if (!widget) return;
-
-  if (!CURSOS || CURSOS.length === 0) {
-    widget.innerHTML = '<p style="color:var(--muted);font-size:.8rem;">Sin cursos aún.</p>';
-    return;
-  }
-
-  const colores = ["#3b82f6","#f97316","#8b5cf6","#52c97a","#fbbf24","#ef4444"];
-  
-  widget.innerHTML = CURSOS.map((c, i) => {
-    const total    = (c.clases || []).length;
-    const vistas   = (progreso[c.id] || []).length;
-    const pct      = total > 0 ? Math.round(vistas / total * 100) : 0;
-    const color    = c.color || colores[i % colores.length];
-    const nombre   = c.titulo.length > 16 ? c.titulo.substring(0, 14) + "…" : c.titulo;
-    return `
-      <div class="actividad-row">
-        <span class="actividad-name" title="${c.titulo}">${c.emoji || "🎓"} ${nombre}</span>
-        <div class="actividad-bar-wrap">
-          <div class="actividad-bar" style="width:${pct}%;background:${color};transition:width .6s ease;"></div>
-        </div>
-        <span class="actividad-count">${vistas}/${total}</span>
-      </div>`;
-  }).join("");
+  const html = function(widget) {
+    if (!widget) return;
+    if (!CURSOS || CURSOS.length === 0) {
+      widget.innerHTML = '<p style="color:var(--muted);font-size:.8rem;">Sin cursos aún.</p>';
+      return;
+    }
+    const colores = ["#3b82f6","#f97316","#8b5cf6","#52c97a","#fbbf24","#ef4444"];
+    widget.innerHTML = CURSOS.map((c, i) => {
+      const total  = (c.clases || []).length;
+      const vistas = (progreso[c.id] || []).length;
+      const pct    = total > 0 ? Math.round(vistas / total * 100) : 0;
+      const color  = c.color || colores[i % colores.length];
+      const nombre = c.titulo.length > 16 ? c.titulo.substring(0, 14) + "…" : c.titulo;
+      return `
+        <div class="actividad-row">
+          <span class="actividad-name" title="${c.titulo}">${c.emoji || "🎓"} ${nombre}</span>
+          <div class="actividad-bar-wrap">
+            <div class="actividad-bar" style="width:${pct}%;background:${color};transition:width .6s ease;"></div>
+          </div>
+          <span class="actividad-count">${vistas}/${total}</span>
+        </div>`;
+    }).join("");
+  };
+  html(document.getElementById("progreso-widget"));
+  html(document.getElementById("progreso-widget-m"));
 }
 
 // ── SESIONES EN VIVO (desde Firebase) ──
@@ -1057,19 +1097,19 @@ function loadSesiones() {
 
 function actualizarWidget(s) {
   _proximaSesion = s;
-  const tituloEl = document.getElementById('pc-sesion-titulo');
-  const metaEl   = document.getElementById('pc-sesion-meta');
-  const estadoEl = document.getElementById('pc-estado-label');
-  const cdWrap   = document.getElementById('pc-countdown');
-  const linkWrap = document.getElementById('pc-link-wrapper');
-  const btnAg    = document.getElementById('btn-agendar-pc');
-  if (!tituloEl) return;
+
+  // Helper para actualizar ambos widgets (desktop y móvil)
+  function setW(id, val) {
+    var el = document.getElementById(id);
+    if (el) { if (typeof val === 'string') el.textContent = val; else el.style.display = val; }
+  }
+  function setWHref(id, val) { var el = document.getElementById(id); if (el) el.href = val; }
 
   if (!s) {
-    tituloEl.textContent = 'Sin sesiones próximas';
-    metaEl.textContent = '—';
-    estadoEl.textContent = 'SESIONES EN VIVO';
-    cdWrap.style.display = 'none'; linkWrap.style.display = 'none'; btnAg.style.display = 'none';
+    ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, 'Sin sesiones próximas'));
+    ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, '—'));
+    ['pc-estado-label','pc-estado-label-m'].forEach(id => setW(id, 'SESIONES EN VIVO'));
+    ['pc-countdown','pc-countdown-m','pc-link-wrapper','pc-link-wrapper-m','btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setW(id, 'none'));
     if (_countdownInterval) { clearInterval(_countdownInterval); _countdownInterval = null; }
     return;
   }
@@ -1080,19 +1120,18 @@ function actualizarWidget(s) {
   const fechaStr = dt.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'})
                  + ' · ' + dt.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 
-  tituloEl.textContent = s.titulo;
-  metaEl.textContent   = (s.instructor ? s.instructor + ' · ' : '') + fechaStr;
-  estadoEl.textContent = esVivo ? '🔴 EN VIVO AHORA' : 'PRÓXIMA SESIÓN EN VIVO';
+  ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, s.titulo));
+  ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, (s.instructor ? s.instructor + ' · ' : '') + fechaStr));
+  ['pc-estado-label','pc-estado-label-m'].forEach(id => setW(id, esVivo ? '🔴 EN VIVO AHORA' : 'PRÓXIMA SESIÓN EN VIVO'));
 
   if (esVivo && s.link) {
-    cdWrap.style.display = 'none';
-    btnAg.style.display  = 'none';
-    linkWrap.style.display = 'block';
-    linkWrap.href = s.link;
+    ['pc-countdown','pc-countdown-m'].forEach(id => setW(id, 'none'));
+    ['btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setW(id, 'none'));
+    ['pc-link-wrapper','pc-link-wrapper-m'].forEach(id => { setW(id, 'block'); setWHref(id, s.link); });
   } else {
-    linkWrap.style.display = 'none';
-    cdWrap.style.display   = 'flex';
-    btnAg.style.display    = 'block';
+    ['pc-link-wrapper','pc-link-wrapper-m'].forEach(id => setW(id, 'none'));
+    ['pc-countdown','pc-countdown-m'].forEach(id => setW(id, 'flex'));
+    ['btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setW(id, 'block'));
     if (_countdownInterval) clearInterval(_countdownInterval);
     _countdownInterval = setInterval(function() { tickCountdown(dt); }, 1000);
     tickCountdown(dt);
@@ -1102,9 +1141,12 @@ function actualizarWidget(s) {
 function tickCountdown(target) {
   const diff = target - new Date();
   if (diff <= 0) { clearInterval(_countdownInterval); return; }
-  document.getElementById('cd-d').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
-  document.getElementById('cd-h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
-  document.getElementById('cd-m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  const d = String(Math.floor(diff/86400000)).padStart(2,'0');
+  const h = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  ['cd-d','cd-d-m'].forEach(id => { var el = document.getElementById(id); if(el) el.textContent = d; });
+  ['cd-h','cd-h-m'].forEach(id => { var el = document.getElementById(id); if(el) el.textContent = h; });
+  ['cd-m','cd-m-m'].forEach(id => { var el = document.getElementById(id); if(el) el.textContent = m; });
 }
 
 function agendarCalendario(titulo, fechaHora, instructor, link) {
@@ -1156,6 +1198,9 @@ function loadConfig() {
       }
     }
     var btn = document.getElementById('btn-grupo-wa');
+    var btnM = document.getElementById('btn-grupo-wa-m');
+    if (btn) btn.addEventListener('click', function() { window.open(grupoWa || 'https://wa.me/5212361066811', '_blank'); });
+    if (btnM) btnM.addEventListener('click', function() { window.open(grupoWa || 'https://wa.me/5212361066811', '_blank'); });
     if (btn) {
       btn.addEventListener('click', function() {
         window.open(grupoWa || 'https://wa.me/5212361066811', '_blank');
