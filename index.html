@@ -1129,8 +1129,8 @@ function loadSesiones() {
 
     lista.innerHTML = sesiones.map(s => {
       const dt = new Date(s.fechaHora);
-      const pasada = dt < ahora;
-      const esVivo = !pasada && (dt - ahora) < 15 * 60 * 1000; // 15 min antes = "en vivo"
+      const pasada = ahora > new Date(dt.getTime() + 60 * 60 * 1000); // pasada = 1 hora después
+      const esVivo = !pasada && (dt - ahora) < 15 * 60 * 1000; // en vivo: 15 min antes hasta 1h después
       const fechaStr = dt.toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' })
                      + ' · ' + dt.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
       let dotClass = pasada ? 'proxima' : esVivo ? '' : 'proxima';
@@ -1179,7 +1179,7 @@ function actualizarWidget(s) {
 
   const dt = new Date(s.fechaHora);
   const ahora = new Date();
-  const esVivo = (dt - ahora) < 15 * 60 * 1000 && dt > ahora;
+  const esVivo = (ahora >= new Date(dt.getTime() - 15*60*1000)) && (ahora <= new Date(dt.getTime() + 60*60*1000));
   const fechaStr = dt.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'})
                  + ' · ' + dt.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 
