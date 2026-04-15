@@ -1426,22 +1426,24 @@ window.solicitarCancelacion = function() {
 
       if (res.ok) {
         status.style.color = '#16a34a';
-        status.textContent = '✅ Membresía cancelada correctamente.';
+        status.textContent = '✅ Membresía cancelada. Tu acceso continúa hasta la fecha de vencimiento.';
+        btnSi.style.display = 'none';
+        btnNo.textContent = 'Cerrar';
+        btnNo.disabled = false;
       } else {
-        status.style.color = '#f59e0b';
-        status.textContent = '⚠️ Solicitud enviada. Confirmaremos por WhatsApp.';
+        status.style.color = '#dc2626';
+        status.textContent = '❌ Error al cancelar. Intenta de nuevo o contacta soporte.';
+        btnSi.disabled = false;
+        btnNo.disabled = false;
+        btnSi.textContent = 'Reintentar';
       }
     } catch (e) {
-      status.style.color = '#f59e0b';
-      status.textContent = '⚠️ Sin conexión. Confirmaremos por WhatsApp.';
+      status.style.color = '#dc2626';
+      status.textContent = '❌ Sin conexión. Verifica tu internet e intenta de nuevo.';
+      btnSi.disabled = false;
+      btnNo.disabled = false;
+      btnSi.textContent = 'Reintentar';
     }
-
-    // Abrir WhatsApp después de 1.5s
-    setTimeout(() => {
-      const msg = `Hola, acabo de solicitar la cancelación de mi membresía VIP de AgroClub MX.\n\nEmail: ${email}\n\nPor favor confirmen mi cancelación. Gracias.`;
-      window.open('https://wa.me/522381228511?text=' + encodeURIComponent(msg), '_blank');
-      modal.remove();
-    }, 1500);
   };
 };
 
