@@ -194,6 +194,9 @@
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Contenido</div>
+      <div class="sidebar-item" onclick="showPage('cursos-admin', this)">
+        <div class="sidebar-item-left"><span class="sidebar-item-icon">📚</span> Cursos</div>
+      </div>
       <div class="sidebar-item" onclick="showPage('videos-admin', this)">
         <div class="sidebar-item-left"><span class="sidebar-item-icon">🎬</span> Videos</div>
       </div>
@@ -382,6 +385,19 @@
     </div>
 
     <!-- VIDEOS ADMIN -->
+    <!-- ══ CURSOS ADMIN ══ -->
+    <div class="page" id="page-cursos-admin">
+      <div class="table-card">
+        <div class="table-header">
+          <h3>📚 Cursos</h3>
+          <button class="btn-add" onclick="abrirModalCurso()">+ Nuevo curso</button>
+        </div>
+        <div id="lista-cursos-admin" style="padding:16px;">
+          <p style="color:var(--muted);font-size:.88rem;">Cargando cursos...</p>
+        </div>
+      </div>
+    </div>
+
     <div class="page" id="page-videos-admin">
       <div class="page-header"><h2>🎬 Gestión de Videos</h2></div>
       <div class="content-form">
@@ -657,6 +673,160 @@ window.cambiarEstado = async function(id, estado) {
 window.cerrarSesion = function() {
   if (confirm("¿Cerrar sesión de admin?")) signOut(auth).then(() => window.location.href = "login.html");
 };
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CURSOS ADMIN
+// ══════════════════════════════════════════════════════════════════════════════
+let _cursoEditId = null;
+
+// Cargar y renderizar cursos en admin
+onSnapshot(collection(db, "cursos"), (snap) => {
+  const cursos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const lista = document.getElementById("lista-cursos-admin");
+  if (!lista) return;
+
+  if (cursos.length === 0) {
+    lista.innerHTML = '<p style="color:var(--muted);font-size:.88rem;padding:8px;">Sin cursos aún. Crea el primero.</p>';
+    return;
+  }
+
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+
+  lista.innerHTML = cursos.map(c => {
+    let estado = '✅ Disponible';
+    let estadoColor = 'var(--verde)';
+    if (c.fechaDesbloqueo) {
+      const fd = new Date(c.fechaDesbloqueo + 'T00:00:00');
+      if (fd > hoy) {
+        estado = '🔒 Bloqueado hasta ' + fd.toLocaleDateString('es-MX', {day:'numeric',month:'short',year:'numeric'});
+        estadoColor = '#b91c1c';
+      }
+    }
+    return `
+    <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);">
+      <div style="width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">
+        ${c.foto ? `<img src="${c.foto}" style="width:100%;height:100%;object-fit:cover;">` : (c.emoji || '📚')}
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:.9rem;margin-bottom:2px;">${c.titulo}</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;">${c.categoria || ''} · ${(c.clases||[]).length} clases</div>
+        <div style="font-size:.75rem;font-weight:700;color:${estadoColor};">${estado}</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <button onclick="editarCurso('${c.id}')" style="background:rgba(26,107,47,.1);color:var(--verde);border:none;border-radius:8px;padding:6px 12px;font-size:.75rem;font-weight:700;cursor:pointer;">✏️ Editar</button>
+        <button onclick="eliminarCurso('${c.id}','${c.titulo}')" style="background:rgba(239,68,68,.1);color:#dc2626;border:none;border-radius:8px;padding:6px 12px;font-size:.75rem;font-weight:700;cursor:pointer;">🗑️ Borrar</button>
+      </div>
+    </div>`;
+  }).join('');
+});
+
+window.abrirModalCurso = function(curso = null) {
+  _cursoEditId = curso ? curso.id : null;
+  const modal = document.createElement('div');
+  modal.id = '_modal-curso';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:20px;padding:28px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h3 style="font-size:1.1rem;font-weight:800;">${curso ? '✏️ Editar curso' : '📚 Nuevo curso'}</h3>
+        <button onclick="document.getElementById('_modal-curso').remove()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Título del curso *</label>
+          <input id="_c-titulo" type="text" value="${curso?.titulo||''}" placeholder="Ej: Producción de Biofertilizantes" style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Categoría</label>
+          <input id="_c-categoria" type="text" value="${curso?.categoria||''}" placeholder="Ej: BIOINSUMOS" style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Emoji (opcional)</label>
+          <input id="_c-emoji" type="text" value="${curso?.emoji||''}" placeholder="🌱" style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;">
+        </div>
+        <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">URL de la foto promocional</label>
+          <input id="_c-foto" type="text" value="${curso?.foto||''}" placeholder="https://i.imgur.com/... o Google Drive directo" style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;">
+          <span style="font-size:.72rem;color:#9aaa94;">Tip: sube la imagen a Imgur.com y pega el link directo</span>
+        </div>
+        <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Descripción corta</label>
+          <textarea id="_c-desc" placeholder="Aprende a producir biofertilizantes de alta calidad..." style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;resize:vertical;min-height:70px;">${curso?.descripcion||''}</textarea>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">🔒 Fecha de desbloqueo</label>
+          <input id="_c-fecha" type="date" value="${curso?.fechaDesbloqueo||''}" style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;">
+          <span style="font-size:.72rem;color:#9aaa94;">Dejar vacío = disponible ya</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Color de fondo (si no hay foto)</label>
+          <input id="_c-color" type="color" value="${curso?.color||'#1a6b2f'}" style="padding:4px 8px;border:1.5px solid #e2e8dc;border-radius:10px;height:42px;cursor:pointer;width:100%;">
+        </div>
+      </div>
+      <div id="_c-err" style="color:#dc2626;font-size:.82rem;margin-top:12px;display:none;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <button onclick="document.getElementById('_modal-curso').remove()" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid #ddd;background:#f9f9f9;font-weight:700;cursor:pointer;">Cancelar</button>
+        <button onclick="guardarCurso()" style="flex:2;padding:12px;border-radius:10px;border:none;background:#255000;color:#fff;font-weight:700;cursor:pointer;">💾 Guardar curso</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+};
+
+window.editarCurso = async function(id) {
+  const snap = await getDocs(collection(db, "cursos"));
+  const curso = snap.docs.find(d => d.id === id);
+  if (curso) window.abrirModalCurso({ id: curso.id, ...curso.data() });
+};
+
+window.guardarCurso = async function() {
+  const titulo = document.getElementById('_c-titulo').value.trim();
+  const err = document.getElementById('_c-err');
+  if (!titulo) { err.textContent = 'El título es obligatorio'; err.style.display='block'; return; }
+
+  const datos = {
+    titulo,
+    categoria:       document.getElementById('_c-categoria').value.trim().toUpperCase(),
+    emoji:           document.getElementById('_c-emoji').value.trim(),
+    foto:            document.getElementById('_c-foto').value.trim(),
+    descripcion:     document.getElementById('_c-desc').value.trim(),
+    fechaDesbloqueo: document.getElementById('_c-fecha').value || null,
+    color:           document.getElementById('_c-color').value,
+    clases:          _cursoEditId ? undefined : [],
+    updatedAt:       new Date().toISOString()
+  };
+  // Limpiar undefined
+  Object.keys(datos).forEach(k => datos[k] === undefined && delete datos[k]);
+
+  try {
+    if (_cursoEditId) {
+      await updateDoc(doc(db, "cursos", _cursoEditId), datos);
+    } else {
+      datos.clases = [];
+      datos.createdAt = new Date().toISOString();
+      await addDoc(collection(db, "cursos"), datos);
+    }
+    document.getElementById('_modal-curso').remove();
+    showToastAdmin('✅ Curso guardado correctamente');
+  } catch(e) {
+    err.textContent = 'Error: ' + e.message;
+    err.style.display = 'block';
+  }
+};
+
+window.eliminarCurso = async function(id, titulo) {
+  if (!confirm('¿Eliminar el curso "' + titulo + '"? Esta acción no se puede deshacer.')) return;
+  await deleteDoc(doc(db, "cursos", id));
+  showToastAdmin('🗑️ Curso eliminado');
+};
+
+function showToastAdmin(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a6b2f;color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;font-size:.88rem;z-index:99999;animation:_tf .25s ease;';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
 </script>
 
 </body>

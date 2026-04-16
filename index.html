@@ -169,12 +169,27 @@
     @keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
     .course-thumb {
-      height: 170px; display: flex; align-items: center; justify-content: center;
-      font-size: 4.5rem; position: relative; overflow: hidden;
+      height: 190px; display: flex; align-items: center; justify-content: center;
+      font-size: 4.5rem; position: relative; overflow: hidden; background: #e8f5e9;
+    }
+    .course-thumb img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
     }
     .course-thumb::after {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.25));
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.35)); z-index:1;
+    }
+    .course-thumb .course-badge, .course-thumb .course-progress-bar { z-index: 2; }
+    .course-locked-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,.55);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 3; gap: 8px;
+    }
+    .course-locked-overlay .lock-icon { font-size: 2.2rem; }
+    .course-locked-overlay .lock-date {
+      font-size: .75rem; font-weight: 700; color: #fff;
+      background: rgba(255,255,255,.15); padding: 5px 14px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(4px);
     }
     .course-badge {
       position: absolute; bottom: 12px; right: 12px; z-index: 1;
@@ -1009,26 +1024,58 @@ function loadCursosFirebase() {
 
 // ── RENDER CURSOS ──
 function renderCursos() {
+  const hoy = new Date();
+  hoy.setHours(0,0,0,0);
+
   const html = CURSOS.map(c => {
     const clasesVistas = (progreso[c.id] || []).length;
     const totalClases  = (c.clases || []).length;
     const pct = totalClases > 0 ? Math.round(clasesVistas / totalClases * 100) : 0;
+
+    // Verificar si está bloqueado por fecha
+    let bloqueado = false;
+    let fechaTexto = '';
+    if (c.fechaDesbloqueo) {
+      const fechaD = new Date(c.fechaDesbloqueo + 'T00:00:00');
+      if (fechaD > hoy) {
+        bloqueado = true;
+        fechaTexto = fechaD.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+    }
+
+    const imgTag = c.foto
+      ? `<img src="${c.foto}" alt="${c.titulo}" loading="lazy">`
+      : `<span style="position:relative;z-index:1;">${c.emoji || '📚'}</span>`;
+
+    const thumbBg = c.foto ? '' : `background:linear-gradient(135deg,${c.color||'#1a6b2f'}33,${c.color||'#1a6b2f'}66);`;
+
     return `
-    <div class="course-card" onclick="verCurso('${c.id}')">
-      <div class="course-thumb" style="background:linear-gradient(135deg,${c.color}33,${c.color}66)">
-        <span>${c.emoji}</span>
-        <span class="course-badge">${c.clases.length} clases</span>
-        <div class="course-progress-bar">
-          <div class="course-progress-fill" style="width:${pct}%"></div>
-        </div>
+    <div class="course-card" onclick="${bloqueado ? '' : `verCurso('${c.id}')`}" style="${bloqueado ? 'cursor:default;' : ''}">
+      <div class="course-thumb" style="${thumbBg}">
+        ${imgTag}
+        ${bloqueado ? `
+          <div class="course-locked-overlay">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-date">Disponible el ${fechaTexto}</span>
+          </div>
+        ` : `
+          <span class="course-badge">${totalClases} clases</span>
+          <div class="course-progress-bar">
+            <div class="course-progress-fill" style="width:${pct}%"></div>
+          </div>
+        `}
       </div>
       <div class="course-info">
-        <div class="course-category">${c.categoria}</div>
+        <div class="course-category">${c.categoria || ''}</div>
         <div class="course-title">${c.titulo}</div>
-        <div class="course-desc">${c.descripcion}</div>
+        <div class="course-desc">${c.descripcion || ''}</div>
         <div class="course-meta">
-          <span class="course-clases">📹 ${c.clases.length} clases${pct > 0 ? ' · '+pct+'% completado' : ''}</span>
-          <button class="btn-ver-curso">▶ Ver curso</button>
+          ${bloqueado
+            ? `<span class="course-clases" style="color:#b91c1c;">🔒 Próximamente</span>
+               <button class="btn-ver-curso" style="background:#9ca3af;cursor:default;" disabled>Bloqueado</button>`
+            : `<span class="course-clases">📹 ${totalClases} clases${pct > 0 ? ' · '+pct+'% completado' : ''}</span>
+               <button class="btn-ver-curso">▶ Ver curso</button>`
+          }
         </div>
       </div>
     </div>`;
