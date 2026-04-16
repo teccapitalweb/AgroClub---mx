@@ -875,8 +875,66 @@ let currentUser = null;
 let progreso = {};
 
 // ── AUTH ──
+// ── POST-PAGO: detectar redirect desde Shopify ──────────────────────────────
+const _urlParams = new URLSearchParams(window.location.search);
+const _paidEmail = _urlParams.get('email');
+const _paid      = _urlParams.get('paid');
+
+if (_paid === 'true' && _paidEmail) {
+  // Mostrar modal de bienvenida con contraseña para auto-login
+  const _modal = document.createElement('div');
+  _modal.id = '_modal-postpago';
+  _modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  _modal.innerHTML = `
+    <div style="background:#fff;border-radius:20px;padding:32px 28px;max-width:380px;width:100%;text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:8px;">🎉</div>
+      <div style="font-size:1.1rem;font-weight:800;color:#1a6b2f;margin-bottom:8px;font-family:var(--font-display, sans-serif);">¡Pago exitoso!</div>
+      <p style="font-size:.85rem;color:#555;margin-bottom:20px;">Ingresa tu contraseña para acceder a tu panel VIP</p>
+      <div style="text-align:left;margin-bottom:14px;">
+        <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Correo</label>
+        <div style="padding:10px 14px;background:#f4f6f3;border-radius:10px;font-size:.9rem;color:#333;margin-top:4px;">${_paidEmail}</div>
+      </div>
+      <div style="text-align:left;margin-bottom:20px;">
+        <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Contraseña</label>
+        <input type="password" id="_postpago-pass" placeholder="Tu contraseña" style="width:100%;padding:11px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;margin-top:4px;outline:none;box-sizing:border-box;">
+      </div>
+      <div id="_postpago-err" style="color:#dc2626;font-size:.82rem;margin-bottom:10px;display:none;"></div>
+      <button id="_postpago-btn" style="width:100%;padding:13px;background:#255000;color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;">Entrar a mi panel VIP →</button>
+    </div>
+  `;
+  document.body.appendChild(_modal);
+
+  document.getElementById('_postpago-btn').onclick = async () => {
+    const pass = document.getElementById('_postpago-pass').value;
+    const errEl = document.getElementById('_postpago-err');
+    const btn = document.getElementById('_postpago-btn');
+    if (!pass) { errEl.textContent = 'Ingresa tu contraseña'; errEl.style.display = 'block'; return; }
+    btn.textContent = 'Entrando...'; btn.disabled = true;
+    try {
+      const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
+      await signInWithEmailAndPassword(auth, _paidEmail, pass);
+      _modal.remove();
+      // Limpiar URL
+      window.history.replaceState({}, '', window.location.pathname);
+    } catch(e) {
+      errEl.textContent = 'Contraseña incorrecta. Intenta de nuevo.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Entrar a mi panel VIP →'; btn.disabled = false;
+    }
+  };
+
+  // Enter key
+  document.getElementById('_postpago-pass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('_postpago-btn').click();
+  });
+}
+
 onAuthStateChanged(auth, async (user) => {
-  if (!user) { window.location.href = "login.html"; return; }
+  if (!user) {
+    // Si viene de pago, esperar el login del modal
+    if (_paid === 'true' && _paidEmail) return;
+    window.location.href = "login.html"; return;
+  }
 
   // Setear currentUser inmediatamente con el UID de auth
   currentUser = { uid: user.uid, email: user.email };
