@@ -1844,17 +1844,27 @@ function actualizarBadgeSesiones(sesiones) {
 
 
 // ==========================================================
-// ===== FEED DE NOTICIAS AGRO (vía rss2json)
+// ===== FEED DE NOTICIAS AGRO
+// Estrategia multi-proxy con fallback + parseo nativo XML
 // ==========================================================
 
 const FUENTES_NOTICIAS = [
-  { id: 'agronoticias', nombre: '📰 Agronoticias',  rss: 'https://agronoticias.com.mx/feed/' },
-  { id: 'inforural',    nombre: '🌾 InfoRural',     rss: 'https://inforural.com.mx/feed/' },
-  { id: 'mexicampo',    nombre: '🇲🇽 Mexicampo',    rss: 'https://www.mexicampo.com.mx/feed/' },
-  { id: 'intagri',      nombre: '🔬 Intagri',       rss: 'https://www.intagri.com/rss/noticias' }
+  { id: 'gnews-mx',    nombre: '🌽 Agro México',       rss: 'https://news.google.com/rss/search?q=agricultura+mexico+when:7d&hl=es-419&gl=MX&ceid=MX:es-419' },
+  { id: 'gnews-maiz',  nombre: '🌾 Cultivos',          rss: 'https://news.google.com/rss/search?q=(cultivo+OR+cosecha+OR+siembra)+mexico+when:14d&hl=es-419&gl=MX&ceid=MX:es-419' },
+  { id: 'gnews-gana',  nombre: '🐄 Ganadería',         rss: 'https://news.google.com/rss/search?q=ganaderia+mexico+when:14d&hl=es-419&gl=MX&ceid=MX:es-419' },
+  { id: 'gnews-tec',   nombre: '🔬 Agro-tech',         rss: 'https://news.google.com/rss/search?q=(agricultura+sostenible+OR+regenerativa+OR+precision)+when:14d&hl=es-419&gl=MX&ceid=MX:es-419' },
+  { id: 'gnews-fao',   nombre: '🌍 FAO / Internacional', rss: 'https://news.google.com/rss/search?q=FAO+agricultura+when:14d&hl=es-419&gl=MX&ceid=MX:es-419' },
+  { id: 'inforural',   nombre: '🇲🇽 InfoRural',         rss: 'https://inforural.com.mx/feed/' }
 ];
 
-let NOTICIAS_CACHE = {};        // { sourceId: [items] }
+// Proxies CORS en orden de prioridad; si uno falla, prueba el siguiente
+const CORS_PROXIES = [
+  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+  u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+  u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u)
+];
+
+let NOTICIAS_CACHE = {};
 let NOTICIAS_FUENTE_ACTIVA = 'todas';
 
 function extraerPrimeraImagen(html) {
@@ -1885,24 +1895,73 @@ function formatearFechaNoticia(pubDate) {
   return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+function parsearXmlRss(xmlText, fuente) {
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlText, 'text/xml');
+  if (xml.querySelector('parsererror')) {
+    console.warn(`[Noticias] XML inválido de ${fuente.id}`);
+    return [];
+  }
+  const items = Array.from(xml.querySelectorAll('item, entry')).slice(0, 8);
+  return items.map(it => {
+    const getText = (sel) => {
+      const el = it.querySelector(sel);
+      return el ? (el.textContent || '').trim() : '';
+    };
+    const titulo  = getText('title');
+    let link      = getText('link');
+    if (!link) {
+      const linkEl = it.querySelector('link');
+      if (linkEl) link = linkEl.getAttribute('href') || '';
+    }
+    const pubDate = getText('pubDate') || getText('published') || getText('updated');
+    const descrip = getText('description') || getText('summary') || getText('content');
+
+    // Buscar imagen en media:thumbnail, media:content, enclosure o dentro del HTML
+    let imagen = null;
+    const mediaTh = it.getElementsByTagNameNS('*', 'thumbnail')[0];
+    const mediaCt = it.getElementsByTagNameNS('*', 'content')[0];
+    const enclos  = it.querySelector('enclosure');
+    if (mediaTh) imagen = mediaTh.getAttribute('url');
+    else if (mediaCt && mediaCt.getAttribute('url')) imagen = mediaCt.getAttribute('url');
+    else if (enclos) imagen = enclos.getAttribute('url');
+    else imagen = extraerPrimeraImagen(descrip);
+
+    return {
+      titulo: titulo || '(Sin título)',
+      link,
+      pubDate,
+      imagen,
+      excerpt: limpiarHtml(descrip, 180),
+      fuente: fuente.nombre,
+      fuenteId: fuente.id
+    };
+  }).filter(n => n.titulo && n.link);
+}
+
+async function fetchConProxy(url, proxyIndex = 0) {
+  if (proxyIndex >= CORS_PROXIES.length) throw new Error('Todos los proxies fallaron');
+  try {
+    const proxyUrl = CORS_PROXIES[proxyIndex](url);
+    const resp = await fetch(proxyUrl, { headers: { 'Accept': 'application/rss+xml, application/xml, text/xml' } });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    if (!text || text.length < 50) throw new Error('Respuesta vacía');
+    return text;
+  } catch (e) {
+    console.warn(`[Noticias] Proxy ${proxyIndex} falló:`, e.message, '→ probando siguiente');
+    return fetchConProxy(url, proxyIndex + 1);
+  }
+}
+
 async function fetchFeed(fuente) {
   try {
-    const url = 'https://api.rss2json.com/v1/api.json?count=6&rss_url=' + encodeURIComponent(fuente.rss);
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const data = await resp.json();
-    if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
-    return data.items.map(it => ({
-      titulo:   it.title || '(Sin título)',
-      link:     it.link,
-      pubDate:  it.pubDate,
-      imagen:   it.thumbnail || it.enclosure?.link || extraerPrimeraImagen(it.description || it.content),
-      excerpt:  limpiarHtml(it.description || it.content, 180),
-      fuente:   fuente.nombre,
-      fuenteId: fuente.id
-    }));
+    const xmlText = await fetchConProxy(fuente.rss);
+    const items = parsearXmlRss(xmlText, fuente);
+    console.log(`[Noticias] ${fuente.id}: ${items.length} notas ✓`);
+    return items;
   } catch (e) {
-    console.warn('Feed falló:', fuente.id, e.message);
+    console.warn(`[Noticias] ${fuente.id} falló completamente:`, e.message);
     return [];
   }
 }
@@ -1912,18 +1971,21 @@ async function cargarNoticiasAgro() {
   const btns = document.getElementById('noticias-source-btns');
   if (!grid) return;
 
-  // Cargar todas en paralelo
+  console.log('[Noticias] Iniciando carga de', FUENTES_NOTICIAS.length, 'fuentes...');
+
   const resultados = await Promise.all(FUENTES_NOTICIAS.map(f =>
     fetchFeed(f).then(items => ({ id: f.id, items }))
   ));
 
   resultados.forEach(r => { NOTICIAS_CACHE[r.id] = r.items; });
 
-  // Construir botones de filtro (solo fuentes que sí respondieron)
+  const totalItems = Object.values(NOTICIAS_CACHE).reduce((a, arr) => a + arr.length, 0);
+  console.log(`[Noticias] Total cargadas: ${totalItems}`);
+
   const fuentesActivas = FUENTES_NOTICIAS.filter(f => (NOTICIAS_CACHE[f.id] || []).length > 0);
   if (btns) {
     if (fuentesActivas.length === 0) {
-      btns.innerHTML = '';
+      btns.innerHTML = '<button class="noticias-source-btn" onclick="cargarNoticiasAgro()">🔄 Reintentar</button>';
     } else {
       const html = ['<button class="noticias-source-btn active" onclick="filtrarNoticias(\'todas\', this)">Todas</button>']
         .concat(fuentesActivas.map(f =>
@@ -1952,8 +2014,15 @@ function renderNoticias(fuenteId) {
   let items = [];
   if (fuenteId === 'todas') {
     Object.values(NOTICIAS_CACHE).forEach(arr => items = items.concat(arr));
-    // Ordenar por fecha desc
     items.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+    // Dedup por título
+    const vistos = new Set();
+    items = items.filter(n => {
+      const key = n.titulo.substring(0, 60).toLowerCase();
+      if (vistos.has(key)) return false;
+      vistos.add(key);
+      return true;
+    });
     items = items.slice(0, 8);
   } else {
     items = (NOTICIAS_CACHE[fuenteId] || []).slice(0, 8);
@@ -1963,7 +2032,7 @@ function renderNoticias(fuenteId) {
     grid.innerHTML = `
       <div class="noticias-empty">
         <strong>🌱 Sin noticias disponibles ahora</strong>
-        Intenta más tarde o elige otra fuente arriba.
+        Intenta más tarde o <a href="#" onclick="cargarNoticiasAgro();return false;" style="color:var(--verde);font-weight:600;">recarga</a>.
       </div>`;
     return;
   }
@@ -1993,6 +2062,7 @@ function renderNoticias(fuenteId) {
 
 // Exponer para onclick inline
 window.filtrarNoticias = filtrarNoticias;
+window.cargarNoticiasAgro = cargarNoticiasAgro;
 
 // Disparar carga de noticias al iniciar
 document.addEventListener('DOMContentLoaded', () => {
