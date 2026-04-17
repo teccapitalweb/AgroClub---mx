@@ -480,6 +480,50 @@
       .hero-banner { padding: 24px 20px; border-radius: 16px; }
       .hero-text h2 { font-size: 1.3rem; }
       .courses-grid { grid-template-columns: 1fr; gap: 14px; }
+
+      /* Fondo con tinte agro — solo móvil */
+      body {
+        background:
+          radial-gradient(circle at 0% 0%, rgba(82,201,122,0.12) 0%, transparent 45%),
+          radial-gradient(circle at 100% 100%, rgba(26,107,47,0.10) 0%, transparent 50%),
+          radial-gradient(circle at 50% 50%, rgba(163,230,53,0.06) 0%, transparent 60%),
+          linear-gradient(180deg, #e8f1e4 0%, #dbe9d5 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+      }
+      /* Textura sutil de puntos orgánicos sobre el fondo */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 20% 15%, rgba(26,107,47,0.05) 1.5px, transparent 2px),
+          radial-gradient(circle at 70% 40%, rgba(26,107,47,0.04) 1px, transparent 1.5px),
+          radial-gradient(circle at 45% 75%, rgba(26,107,47,0.05) 1.5px, transparent 2px),
+          radial-gradient(circle at 85% 85%, rgba(26,107,47,0.04) 1px, transparent 1.5px);
+        background-size: 180px 180px, 120px 120px, 200px 200px, 140px 140px;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .topbar, .layout, .mobile-drawer, .mobile-drawer-overlay { position: relative; z-index: 10; }
+
+      /* Topbar con tinte verde suave en móvil */
+      .topbar {
+        background: linear-gradient(135deg, #0e1a0b 0%, #1a3a1f 100%);
+        border-bottom: 1px solid rgba(82,201,122,0.2);
+      }
+      .topbar .topbar-name { color: #fff; }
+      .topbar .topbar-badge {
+        color: #a3e635;
+        background: rgba(163,230,53,0.15);
+        border-color: rgba(163,230,53,0.3);
+      }
+      /* Botón hamburguesa mejor contraste sobre verde oscuro */
+      .mobile-menu-btn {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.15);
+      }
+      .mobile-menu-btn:active { background: rgba(255,255,255,0.18); }
     }
 
     /* ══ BOTTOM NAV (ahora deshabilitado, reemplazado por drawer) ══ */
