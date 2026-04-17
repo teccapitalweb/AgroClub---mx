@@ -950,6 +950,241 @@
       .curso-completo-trophy { font-size: 4rem; }
       .curso-completo-title { font-size: 1.5rem; }
     }
+
+    /* ===== MEDALLAS DE LOGROS ===== */
+    .logros-section {
+      background: var(--card, #fff);
+      border: 1px solid var(--border, #e8ede5);
+      border-radius: 18px;
+      padding: 24px;
+      margin-top: 20px;
+    }
+    .logros-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .logros-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logros-counter {
+      background: linear-gradient(135deg, #eaf3ec, #d5e8d9);
+      border: 1px solid #a7d0ae;
+      color: var(--verde, #1a6b2f);
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+    .logros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 14px;
+    }
+    .logro-medalla {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 14px 8px;
+      border-radius: 14px;
+      background: var(--bg, #f4f6f3);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .logro-medalla:hover {
+      transform: translateY(-3px);
+      border-color: var(--border, #dfe5dc);
+      box-shadow: 0 8px 20px -8px rgba(0,0,0,0.12);
+    }
+    .logro-medalla__icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.9rem;
+      margin-bottom: 10px;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+    .logro-medalla:hover .logro-medalla__icon { transform: scale(1.08); }
+
+    /* Logro desbloqueado */
+    .logro-medalla.unlocked .logro-medalla__icon {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      box-shadow:
+        inset 0 -3px 6px rgba(180, 83, 9, 0.15),
+        0 4px 12px rgba(249, 168, 37, 0.25);
+      border: 2px solid #f9a825;
+    }
+    .logro-medalla.unlocked .logro-medalla__icon::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(249, 168, 37, 0.2) 0%, transparent 70%);
+      z-index: -1;
+    }
+
+    /* Logro bloqueado (silueta misteriosa) */
+    .logro-medalla.locked .logro-medalla__icon {
+      background: #e5ebe6;
+      border: 2px dashed #c7d0c9;
+      color: #9aa69e;
+      filter: grayscale(1);
+    }
+    .logro-medalla.locked {
+      opacity: 0.65;
+    }
+    .logro-medalla.locked .logro-medalla__title,
+    .logro-medalla.locked .logro-medalla__desc {
+      color: #9aa69e;
+    }
+
+    .logro-medalla__title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .logro-medalla__desc {
+      font-size: 0.68rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    /* Badge de "nuevo" */
+    .logro-medalla.just-unlocked::before {
+      content: '✨';
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      font-size: 1.1rem;
+      animation: logroSparkle 1.5s ease-in-out infinite;
+    }
+    @keyframes logroSparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50%      { transform: scale(1.3) rotate(15deg); }
+    }
+
+    /* Modal detalle de logro */
+    .logro-detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 20, 10, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 100000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .logro-detail-overlay.is-open { display: flex; }
+    .logro-detail-modal {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 360px;
+      width: 100%;
+      padding: 30px 26px;
+      text-align: center;
+      animation: cursoCompletoScaleIn 0.4s cubic-bezier(0.2, 1.2, 0.4, 1);
+      position: relative;
+    }
+    .logro-detail-modal__close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #f4f6f3;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #6b7867;
+    }
+    .logro-detail-modal__icon-big {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 2.8rem;
+      margin: 0 auto 16px;
+    }
+    .logro-detail-modal__icon-big.unlocked {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 3px solid #f9a825;
+      box-shadow: 0 8px 24px rgba(249, 168, 37, 0.3);
+    }
+    .logro-detail-modal__icon-big.locked {
+      background: #e5ebe6;
+      border: 3px dashed #c7d0c9;
+      color: #9aa69e;
+      filter: grayscale(1);
+    }
+    .logro-detail-modal__status {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .logro-detail-modal__status.unlocked { color: #f9a825; }
+    .logro-detail-modal__status.locked { color: #9aa69e; }
+    .logro-detail-modal__title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .logro-detail-modal__desc {
+      color: #5a6758;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .logro-detail-modal__progress {
+      background: #f4f6f3;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 4px;
+    }
+    .logro-detail-modal__progress-bar {
+      height: 8px;
+      background: #e5ebe6;
+      border-radius: 100px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .logro-detail-modal__progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--verde, #1a6b2f), #52c97a);
+      border-radius: 100px;
+      transition: width 0.6s ease;
+    }
+
+    @media (max-width: 480px) {
+      .logros-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
+      .logro-medalla__icon { width: 50px; height: 50px; font-size: 1.6rem; }
+      .logro-medalla__title { font-size: 0.72rem; }
+      .logro-medalla__desc { font-size: 0.64rem; }
+    }
   </style>
     <!-- Canvas-confetti para celebración al 100% -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -1248,6 +1483,17 @@
         <div class="perfil-row"><span class="perfil-label">Plan activo</span><span class="perfil-val" id="perfil-plan">VIP</span></div>
         <div class="perfil-row"><span class="perfil-label">Vence</span><span class="perfil-val" id="perfil-vence">—</span></div>
       </div>
+
+      <!-- ===== LOGROS ===== -->
+      <div class="logros-section">
+        <div class="logros-header">
+          <h3>🏅 Mis logros</h3>
+          <span class="logros-counter" id="logros-counter">0 / 0 desbloqueados</span>
+        </div>
+        <div class="logros-grid" id="logros-grid">
+          <!-- Se renderizan dinámicamente -->
+        </div>
+      </div>
     </div>
 
     <!-- SUSCRIPCION -->
@@ -1391,6 +1637,23 @@
       <button class="curso-completo-btn curso-completo-btn--ghost" onclick="compartirLogro()">
         📲 Compartir mi logro
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALLE LOGRO -->
+<div class="logro-detail-overlay" id="logroDetailOverlay" onclick="if(event.target===this)cerrarLogroDetail()">
+  <div class="logro-detail-modal">
+    <button class="logro-detail-modal__close" onclick="cerrarLogroDetail()" aria-label="Cerrar">✕</button>
+    <div class="logro-detail-modal__icon-big" id="logroDetailIcon">🏅</div>
+    <div class="logro-detail-modal__status" id="logroDetailStatus">DESBLOQUEADO</div>
+    <h3 class="logro-detail-modal__title" id="logroDetailTitle">—</h3>
+    <p class="logro-detail-modal__desc" id="logroDetailDesc">—</p>
+    <div class="logro-detail-modal__progress" id="logroDetailProgress" style="display:none;">
+      <div id="logroDetailProgressTxt" style="font-size:.8rem;color:#5a6758;font-weight:600;">Progreso</div>
+      <div class="logro-detail-modal__progress-bar">
+        <div class="logro-detail-modal__progress-fill" id="logroDetailProgressFill" style="width:0%;"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1899,6 +2162,10 @@ function marcarClase(cursoId, numClase) {
 
   if (completada) progreso[cursoId].push(numClase);
   else progreso[cursoId].splice(idx, 1);
+
+  // Detectar logros por horario al marcar
+  if (completada && typeof detectarLogrosHorario === 'function') detectarLogrosHorario();
+
   setDoc(doc(db, "progreso", currentUser.uid), progreso);
   updateProgreso();
   actualizarEstadisticasPerfil();
@@ -2331,6 +2598,9 @@ function actualizarEstadisticasPerfil() {
     const elD = document.getElementById('pstat-dias');
     if (elD) elD.textContent = dias;
   }
+
+  // Refrescar medallas de logros
+  if (typeof renderLogros === 'function') renderLogros();
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -2350,6 +2620,203 @@ window.showPage = function(id, el, bnId) {
 window.cerrarSesion = function() {
   if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
 };
+
+
+// ==========================================================
+// ===== SISTEMA DE LOGROS (medallas del perfil)
+// ==========================================================
+// Cada logro define: icono, título, descripción, y un checker(ctx) que
+// retorna { unlocked, current, target } donde current/target son opcionales
+// (si existen, se muestra barra de progreso en el modal detalle).
+
+const CATALOGO_LOGROS = [
+  // — Progreso general (clases vistas)
+  {
+    id: 'primer-paso', icon: '🌱', titulo: 'Primer paso',
+    desc: 'Viste tu primera clase',
+    check: ctx => ({ unlocked: ctx.totalClases >= 1, current: Math.min(ctx.totalClases, 1), target: 1 })
+  },
+  {
+    id: 'curioso', icon: '📚', titulo: 'Curioso',
+    desc: 'Completa 5 clases',
+    check: ctx => ({ unlocked: ctx.totalClases >= 5, current: Math.min(ctx.totalClases, 5), target: 5 })
+  },
+  {
+    id: 'constante', icon: '🌾', titulo: 'Constante',
+    desc: 'Completa 15 clases',
+    check: ctx => ({ unlocked: ctx.totalClases >= 15, current: Math.min(ctx.totalClases, 15), target: 15 })
+  },
+  {
+    id: 'dedicado', icon: '🚜', titulo: 'Dedicado',
+    desc: 'Completa 30 clases',
+    check: ctx => ({ unlocked: ctx.totalClases >= 30, current: Math.min(ctx.totalClases, 30), target: 30 })
+  },
+  {
+    id: 'del-campo', icon: '🎓', titulo: 'Del campo',
+    desc: 'Completa 50 clases',
+    check: ctx => ({ unlocked: ctx.totalClases >= 50, current: Math.min(ctx.totalClases, 50), target: 50 })
+  },
+
+  // — Cursos completos
+  {
+    id: 'primer-curso', icon: '✅', titulo: 'Curso completo',
+    desc: 'Termina tu primer curso al 100%',
+    check: ctx => ({ unlocked: ctx.cursosCompletos >= 1, current: Math.min(ctx.cursosCompletos, 1), target: 1 })
+  },
+  {
+    id: 'dos-cursos', icon: '🎯', titulo: 'Dos en la bolsa',
+    desc: 'Termina 2 cursos completos',
+    check: ctx => ({ unlocked: ctx.cursosCompletos >= 2, current: Math.min(ctx.cursosCompletos, 2), target: 2 })
+  },
+  {
+    id: 'tres-cursos', icon: '🌟', titulo: 'Tres bien hechos',
+    desc: 'Termina 3 cursos completos',
+    check: ctx => ({ unlocked: ctx.cursosCompletos >= 3, current: Math.min(ctx.cursosCompletos, 3), target: 3 })
+  },
+  {
+    id: 'cinco-cursos', icon: '👨‍🌾', titulo: 'El de a deveras',
+    desc: 'Termina 5 cursos completos',
+    check: ctx => ({ unlocked: ctx.cursosCompletos >= 5, current: Math.min(ctx.cursosCompletos, 5), target: 5 })
+  },
+
+  // — Tiempo en el club
+  {
+    id: 'una-semana', icon: '📅', titulo: 'Una semana',
+    desc: 'Llevas 7 días en el club',
+    check: ctx => ({ unlocked: ctx.diasClub >= 7, current: Math.min(ctx.diasClub, 7), target: 7 })
+  },
+  {
+    id: 'un-mes', icon: '🗓️', titulo: 'Un mes contigo',
+    desc: 'Llevas 30 días en el club',
+    check: ctx => ({ unlocked: ctx.diasClub >= 30, current: Math.min(ctx.diasClub, 30), target: 30 })
+  },
+  {
+    id: 'socio-ciclo', icon: '🍃', titulo: 'Socio del ciclo',
+    desc: 'Un año completo en AgroClub',
+    check: ctx => ({ unlocked: ctx.diasClub >= 365, current: Math.min(ctx.diasClub, 365), target: 365 })
+  },
+
+  // — Misceláneos (se guardan en localStorage cuando se detectan)
+  {
+    id: 'madrugador', icon: '🌅', titulo: 'Madrugador',
+    desc: 'Viste una clase antes de las 7am',
+    check: ctx => ({ unlocked: localStorage.getItem('logro_madrugador') === '1' })
+  },
+  {
+    id: 'nocturno', icon: '🌙', titulo: 'Nocturno',
+    desc: 'Viste una clase después de las 10pm',
+    check: ctx => ({ unlocked: localStorage.getItem('logro_nocturno') === '1' })
+  }
+];
+
+function calcularContextoLogros() {
+  const totalClases = Object.values(progreso || {}).reduce((acc, arr) => acc + (Array.isArray(arr) ? arr.length : 0), 0);
+  // Cursos completos = todas sus clases vistas
+  let cursosCompletos = 0;
+  (CURSOS || []).forEach(c => {
+    const vistas = (progreso[c.id] || []).length;
+    const total  = (c.clases || []).length;
+    if (total > 0 && vistas >= total) cursosCompletos++;
+  });
+  // Días en el club
+  let diasClub = 0;
+  if (window.currentUser && window.currentUser.fechaRegistro) {
+    diasClub = Math.floor((new Date() - new Date(window.currentUser.fechaRegistro)) / 86400000);
+  }
+  return { totalClases, cursosCompletos, diasClub };
+}
+
+// Guardar logros misceláneos al marcar una clase (horario)
+function detectarLogrosHorario() {
+  const h = new Date().getHours();
+  if (h < 7)  localStorage.setItem('logro_madrugador', '1');
+  if (h >= 22) localStorage.setItem('logro_nocturno', '1');
+}
+
+function renderLogros() {
+  const grid = document.getElementById('logros-grid');
+  const counter = document.getElementById('logros-counter');
+  if (!grid) return;
+
+  const ctx = calcularContextoLogros();
+  let desbloqueados = 0;
+
+  // Para detectar "recién desbloqueado" (✨)
+  const yaVistos = JSON.parse(localStorage.getItem('logros_vistos') || '[]');
+  const nuevosVistos = [...yaVistos];
+
+  const html = CATALOGO_LOGROS.map(logro => {
+    const r = logro.check(ctx);
+    const unlocked = !!r.unlocked;
+    if (unlocked) desbloqueados++;
+
+    const recien = unlocked && !yaVistos.includes(logro.id);
+    if (unlocked && !yaVistos.includes(logro.id)) nuevosVistos.push(logro.id);
+
+    const iconHtml = unlocked ? logro.icon : '❓';
+    const tituloHtml = unlocked ? logro.titulo : '???';
+    const descHtml = unlocked ? logro.desc : 'Sigue avanzando para desbloquear';
+
+    return `
+      <div class="logro-medalla ${unlocked ? 'unlocked' : 'locked'} ${recien ? 'just-unlocked' : ''}"
+           onclick="abrirLogroDetail('${logro.id}')">
+        <div class="logro-medalla__icon">${iconHtml}</div>
+        <div class="logro-medalla__title">${tituloHtml}</div>
+        <div class="logro-medalla__desc">${descHtml}</div>
+      </div>`;
+  }).join('');
+
+  grid.innerHTML = html;
+  if (counter) counter.textContent = `${desbloqueados} / ${CATALOGO_LOGROS.length} desbloqueados`;
+
+  // Guardar los nuevos vistos (para quitar el ✨ la próxima vez)
+  // Solo guardamos si cambió, para dar unos segundos de brillo antes de "marcarlos" como vistos
+  if (nuevosVistos.length !== yaVistos.length) {
+    setTimeout(() => {
+      localStorage.setItem('logros_vistos', JSON.stringify(nuevosVistos));
+    }, 6000);
+  }
+}
+
+function abrirLogroDetail(logroId) {
+  const logro = CATALOGO_LOGROS.find(l => l.id === logroId);
+  if (!logro) return;
+  const ctx = calcularContextoLogros();
+  const r = logro.check(ctx);
+  const unlocked = !!r.unlocked;
+
+  document.getElementById('logroDetailIcon').textContent = unlocked ? logro.icon : '❓';
+  document.getElementById('logroDetailIcon').className = 'logro-detail-modal__icon-big ' + (unlocked ? 'unlocked' : 'locked');
+  document.getElementById('logroDetailStatus').textContent = unlocked ? '🏅 Desbloqueado' : '🔒 Por desbloquear';
+  document.getElementById('logroDetailStatus').className = 'logro-detail-modal__status ' + (unlocked ? 'unlocked' : 'locked');
+  document.getElementById('logroDetailTitle').textContent = logro.titulo;
+  document.getElementById('logroDetailDesc').textContent = logro.desc;
+
+  // Progreso si aplica y aún no está desbloqueado
+  const progWrap = document.getElementById('logroDetailProgress');
+  if (!unlocked && typeof r.current === 'number' && typeof r.target === 'number') {
+    document.getElementById('logroDetailProgressTxt').textContent = `Progreso: ${r.current} / ${r.target}`;
+    document.getElementById('logroDetailProgressFill').style.width = ((r.current / r.target) * 100) + '%';
+    progWrap.style.display = 'block';
+  } else {
+    progWrap.style.display = 'none';
+  }
+
+  document.getElementById('logroDetailOverlay').classList.add('is-open');
+}
+
+function cerrarLogroDetail() {
+  document.getElementById('logroDetailOverlay').classList.remove('is-open');
+}
+
+window.abrirLogroDetail = abrirLogroDetail;
+window.cerrarLogroDetail = cerrarLogroDetail;
+window.renderLogros = renderLogros;
+
+// Cerrar con ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') cerrarLogroDetail();
+});
 
 
 // ==========================================================
