@@ -1783,7 +1783,7 @@ onAuthStateChanged(auth, async (user) => {
     const nombre = data.nombre || user.email;
     document.getElementById("userName").textContent = nombre.split(" ")[0];
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
-    document.getElementById("hero-greeting").textContent = `¡Hola, ${nombre.split(" ")[0]}! 🌱`;
+    document.getElementById("hero-greeting").textContent = saludoPorHora(nombre.split(" ")[0]);
     document.getElementById("perfil-nombre").textContent = data.nombre || "—";
     document.getElementById("perfil-email").textContent = user.email;
     document.getElementById("perfil-fecha").textContent = data.fechaRegistro ? new Date(data.fechaRegistro).toLocaleDateString("es-MX", {day:"numeric",month:"long",year:"numeric"}) : "—";
@@ -1803,7 +1803,7 @@ onAuthStateChanged(auth, async (user) => {
     const nombre = user.email.split("@")[0];
     document.getElementById("userName").textContent = nombre;
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
-    document.getElementById("hero-greeting").textContent = `¡Hola, ${nombre}! 🌱`;
+    document.getElementById("hero-greeting").textContent = saludoPorHora(nombre);
     document.getElementById("perfil-email").textContent = user.email;
   }
 
@@ -2620,6 +2620,39 @@ window.showPage = function(id, el, bnId) {
 window.cerrarSesion = function() {
   if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
 };
+
+
+// ==========================================================
+// ===== SALUDO DINÁMICO POR HORA DEL DÍA
+// ==========================================================
+function saludoPorHora(nombre) {
+  const h = new Date().getHours();
+  const primerNombre = (nombre || '').split(' ')[0] || '';
+
+  // Mañana: 5am - 11:59am
+  if (h >= 5 && h < 12) {
+    return `Buenos días, ${primerNombre}, futuro del agro mexicano 🌅`;
+  }
+  // Tarde: 12pm - 6:59pm
+  if (h >= 12 && h < 19) {
+    return `Buenas tardes, ${primerNombre}, futuro del agro mexicano ☀️`;
+  }
+  // Noche: 7pm - 11:59pm
+  if (h >= 19 && h < 24) {
+    return `Buenas noches, ${primerNombre}, futuro del agro mexicano 🌙`;
+  }
+  // Madrugada: 12am - 4:59am (para los que trabajan bien temprano en el campo)
+  return `A estas horas, ${primerNombre}? ¡El campo te lo agradece! 🌾`;
+}
+window.saludoPorHora = saludoPorHora;
+
+// Refrescar el saludo cada 30 minutos por si el usuario dejó la pestaña abierta
+setInterval(() => {
+  const el = document.getElementById('hero-greeting');
+  if (!el || !window.currentUser) return;
+  const nombre = window.currentUser.nombre || window.currentUser.email?.split('@')[0] || '';
+  el.textContent = saludoPorHora(nombre);
+}, 30 * 60 * 1000);
 
 
 // ==========================================================
