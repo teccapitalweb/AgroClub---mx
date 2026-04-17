@@ -499,6 +499,69 @@
     .bn-item.active .bn-icon { filter: drop-shadow(0 0 6px rgba(82,201,122,.6)); }
     .bn-dot { position: absolute; top: 4px; right: calc(50% - 16px); width: 7px; height: 7px; background: var(--naranja); border-radius: 50%; border: 1.5px solid var(--sidebar-bg); }
     @media (max-width: 768px) { .bottom-nav { display: block; } }
+
+    /* ===== NOTICIAS AGRO ===== */
+    .noticias-header { display: flex; align-items: center; justify-content: space-between; margin-top: 32px; margin-bottom: 16px; }
+    .noticias-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .noticias-header .pulse-live { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; animation: noticiasPulse 1.8s infinite; }
+    @keyframes noticiasPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(1.25); } }
+    .noticias-source-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .noticias-source-btn { background: var(--surface,#f4f6f3); border: 1px solid var(--border,#dfe5dc); color: var(--muted); font-size: .7rem; font-weight: 600; padding: 5px 10px; border-radius: 100px; cursor: pointer; font-family: var(--font); transition: all .15s ease; }
+    .noticias-source-btn:hover { background: #eaf3ec; color: var(--text); }
+    .noticias-source-btn.active { background: var(--verde,#1a6b2f); color: #fff; border-color: var(--verde,#1a6b2f); }
+
+    .noticias-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .noticia-card {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 16px;
+      background: var(--card, #fff);
+      border: 1px solid var(--border, #e8ede5);
+      border-radius: 14px;
+      padding: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .noticia-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -12px rgba(26,107,47,.25); border-color: var(--verde,#1a6b2f); }
+    .noticia-thumb {
+      width: 180px; height: 120px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a6b2f22, #1a6b2f55);
+      position: relative;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+    }
+    .noticia-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .noticia-thumb-fallback { font-size: 2.2rem; opacity: .55; }
+    .noticia-body { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+    .noticia-source-row { display: flex; align-items: center; gap: 8px; font-size: .72rem; font-weight: 700; color: var(--verde,#1a6b2f); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+    .noticia-source-row .noticia-fecha { color: var(--muted); font-weight: 500; letter-spacing: 0; text-transform: none; }
+    .noticia-title { font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .noticia-excerpt { font-size: .85rem; color: var(--muted); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .noticia-card .noticia-cta { font-size: .8rem; color: var(--verde,#1a6b2f); font-weight: 600; margin-top: 8px; display: inline-flex; align-items: center; gap: 4px; }
+    .noticias-skeleton {
+      background: linear-gradient(90deg, var(--surface,#f4f6f3) 0%, #eaeee8 50%, var(--surface,#f4f6f3) 100%);
+      background-size: 200% 100%;
+      animation: noticiasSkel 1.3s ease-in-out infinite;
+      border-radius: 14px;
+      height: 148px;
+    }
+    @keyframes noticiasSkel { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .noticias-empty { text-align: center; padding: 30px 20px; background: var(--surface,#f4f6f3); border-radius: 14px; color: var(--muted); font-size: .9rem; }
+    .noticias-empty strong { display: block; color: var(--text); margin-bottom: 6px; font-size: 1rem; }
+
+    @media (max-width: 640px) {
+      .noticia-card { grid-template-columns: 110px 1fr; gap: 12px; padding: 10px; }
+      .noticia-thumb { width: 110px; height: 90px; }
+      .noticia-title { font-size: .92rem; }
+      .noticia-excerpt { display: none; }
+      .noticias-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -523,8 +586,8 @@
     <div class="sidebar-section">
       <div class="sidebar-label">Principal</div>
       <div class="sidebar-item active" onclick="showPage('inicio',this)"><div class="sidebar-item-left"><span>🏠</span> Inicio</div></div>
-      <div class="sidebar-item" onclick="showPage('cursos',this)"><div class="sidebar-item-left"><span>🎬</span> Biblioteca de cursos</div><span class="sidebar-badge" id="badge-cursos">2</span></div>
-      <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🔴</span> Sesiones en vivo</div><span class="sidebar-badge" style="background:var(--naranja);color:#fff">1</span></div>
+      <div class="sidebar-item" onclick="showPage('cursos',this)"><div class="sidebar-item-left"><span>🎬</span> Biblioteca de cursos</div><span class="sidebar-badge" id="badge-cursos" style="display:none;">0</span></div>
+      <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🔴</span> Sesiones en vivo</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>📄</span> Materiales</div></div>
     </div>
     <div class="sidebar-section">
@@ -557,6 +620,17 @@
         <span class="section-header-tag" onclick="showPage('cursos', document.querySelector('[onclick*=cursos]'))">Ver todos →</span>
       </div>
       <div class="courses-grid" id="inicio-cursos"></div>
+
+      <!-- ===== NOTICIAS AGRO ===== -->
+      <div class="noticias-header">
+        <h3><span class="pulse-live"></span> 📰 Noticias del agro</h3>
+        <div class="noticias-source-btns" id="noticias-source-btns"></div>
+      </div>
+      <div class="noticias-grid" id="noticias-grid">
+        <div class="noticias-skeleton"></div>
+        <div class="noticias-skeleton"></div>
+        <div class="noticias-skeleton"></div>
+      </div>
 
       <!-- WIDGETS MÓVIL (solo visibles en pantallas pequeñas) -->
       <div class="mobile-widgets">
@@ -1019,6 +1093,7 @@ function loadCursosFirebase() {
     renderCursos();
     updateProgreso();
   actualizarEstadisticasPerfil();
+  if (typeof actualizarBadgeCursos === 'function') actualizarBadgeCursos();
   });
 }
 
@@ -1314,6 +1389,9 @@ function loadSesiones() {
     var sesiones = snap.docs.map(d => ({ id: d.id, ...d.data() }))
       .filter(s => s.fechaHora)
       .sort((a, b) => new Date(a.fechaHora) - new Date(b.fechaHora));
+
+    // Badge dinámico de sesiones (nuevas desde última visita)
+    if (typeof actualizarBadgeSesiones === 'function') actualizarBadgeSesiones(sesiones);
 
     const lista = document.getElementById("lista-sesiones");
     if (!lista) return;
@@ -1680,6 +1758,251 @@ window.showPage = function(id, el, bnId) {
 window.cerrarSesion = function() {
   if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
 };
+
+
+// ==========================================================
+// ===== BADGES DINÁMICOS (contenido nuevo desde última visita)
+// ==========================================================
+
+const LS_VISITA_CURSOS   = 'agroclub_ult_visita_cursos';
+const LS_VISITA_SESIONES = 'agroclub_ult_visita_sesiones';
+
+function getUltimaVisita(key) {
+  const v = localStorage.getItem(key);
+  // Si nunca ha visitado, consideramos "desde hace 30 días" para no inundarlo
+  return v ? parseInt(v, 10) : (Date.now() - 30 * 24 * 60 * 60 * 1000);
+}
+
+function marcarVisita(key) {
+  localStorage.setItem(key, Date.now().toString());
+}
+
+function actualizarBadgeCursos() {
+  const badge = document.getElementById('badge-cursos');
+  if (!badge) return;
+  const ultVisita = getUltimaVisita(LS_VISITA_CURSOS);
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const nuevos = (CURSOS || []).filter(c => {
+    // Bloqueado = aún no cuenta como "nuevo"
+    if (c.fechaDesbloqueo) {
+      const fd = new Date(c.fechaDesbloqueo + 'T00:00:00');
+      if (fd > hoy) return false;
+    }
+    if (!c.fecha) return false;
+    return new Date(c.fecha).getTime() > ultVisita;
+  }).length;
+  if (nuevos > 0) {
+    badge.textContent = nuevos;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function actualizarBadgeSesiones(sesiones) {
+  const badge    = document.getElementById('badge-sesiones');
+  const bnDot    = document.getElementById('bn-dot-sesiones');
+  if (!badge) return;
+  const ultVisita = getUltimaVisita(LS_VISITA_SESIONES);
+  const ahora = Date.now();
+  // "Nuevo" = sesión futura creada/modificada desde la última visita
+  const nuevas = (sesiones || []).filter(s => {
+    if (!s.fechaHora) return false;
+    const fhSesion = new Date(s.fechaHora).getTime();
+    if (fhSesion < ahora) return false; // ya pasó
+    // Si no hay timestamp de creación, contar como nueva si no la ha visto
+    const creadaTs = s.fechaCreacion ? new Date(s.fechaCreacion).getTime() : fhSesion;
+    return creadaTs > ultVisita;
+  }).length;
+  if (nuevas > 0) {
+    badge.textContent = nuevas;
+    badge.style.display = '';
+    if (bnDot) bnDot.style.display = '';
+  } else {
+    badge.style.display = 'none';
+    if (bnDot) bnDot.style.display = 'none';
+  }
+}
+
+// Interceptar showPage para resetear badges al entrar a cada sección
+(function() {
+  const originalShowPage = window.showPage;
+  window.showPage = function(id, el, bnId) {
+    if (id === 'cursos') {
+      marcarVisita(LS_VISITA_CURSOS);
+      setTimeout(actualizarBadgeCursos, 50);
+    } else if (id === 'sesiones') {
+      marcarVisita(LS_VISITA_SESIONES);
+      const badge = document.getElementById('badge-sesiones');
+      const bnDot = document.getElementById('bn-dot-sesiones');
+      if (badge) badge.style.display = 'none';
+      if (bnDot) bnDot.style.display = 'none';
+    }
+    return originalShowPage.apply(this, arguments);
+  };
+})();
+
+
+// ==========================================================
+// ===== FEED DE NOTICIAS AGRO (vía rss2json)
+// ==========================================================
+
+const FUENTES_NOTICIAS = [
+  { id: 'agronoticias', nombre: '📰 Agronoticias',  rss: 'https://agronoticias.com.mx/feed/' },
+  { id: 'inforural',    nombre: '🌾 InfoRural',     rss: 'https://inforural.com.mx/feed/' },
+  { id: 'mexicampo',    nombre: '🇲🇽 Mexicampo',    rss: 'https://www.mexicampo.com.mx/feed/' },
+  { id: 'intagri',      nombre: '🔬 Intagri',       rss: 'https://www.intagri.com/rss/noticias' }
+];
+
+let NOTICIAS_CACHE = {};        // { sourceId: [items] }
+let NOTICIAS_FUENTE_ACTIVA = 'todas';
+
+function extraerPrimeraImagen(html) {
+  if (!html) return null;
+  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return m ? m[1] : null;
+}
+
+function limpiarHtml(html, maxLen = 200) {
+  if (!html) return '';
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  let texto = (tmp.textContent || tmp.innerText || '').trim().replace(/\s+/g, ' ');
+  if (texto.length > maxLen) texto = texto.substring(0, maxLen).trim() + '…';
+  return texto;
+}
+
+function formatearFechaNoticia(pubDate) {
+  if (!pubDate) return '';
+  const d = new Date(pubDate);
+  if (isNaN(d)) return '';
+  const diffMs = Date.now() - d.getTime();
+  const diffH  = diffMs / (1000 * 60 * 60);
+  if (diffH < 1)  return 'Hace unos minutos';
+  if (diffH < 24) return `Hace ${Math.floor(diffH)}h`;
+  const diffD = Math.floor(diffH / 24);
+  if (diffD < 7) return `Hace ${diffD}d`;
+  return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+async function fetchFeed(fuente) {
+  try {
+    const url = 'https://api.rss2json.com/v1/api.json?count=6&rss_url=' + encodeURIComponent(fuente.rss);
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (data.status !== 'ok' || !Array.isArray(data.items)) return [];
+    return data.items.map(it => ({
+      titulo:   it.title || '(Sin título)',
+      link:     it.link,
+      pubDate:  it.pubDate,
+      imagen:   it.thumbnail || it.enclosure?.link || extraerPrimeraImagen(it.description || it.content),
+      excerpt:  limpiarHtml(it.description || it.content, 180),
+      fuente:   fuente.nombre,
+      fuenteId: fuente.id
+    }));
+  } catch (e) {
+    console.warn('Feed falló:', fuente.id, e.message);
+    return [];
+  }
+}
+
+async function cargarNoticiasAgro() {
+  const grid = document.getElementById('noticias-grid');
+  const btns = document.getElementById('noticias-source-btns');
+  if (!grid) return;
+
+  // Cargar todas en paralelo
+  const resultados = await Promise.all(FUENTES_NOTICIAS.map(f =>
+    fetchFeed(f).then(items => ({ id: f.id, items }))
+  ));
+
+  resultados.forEach(r => { NOTICIAS_CACHE[r.id] = r.items; });
+
+  // Construir botones de filtro (solo fuentes que sí respondieron)
+  const fuentesActivas = FUENTES_NOTICIAS.filter(f => (NOTICIAS_CACHE[f.id] || []).length > 0);
+  if (btns) {
+    if (fuentesActivas.length === 0) {
+      btns.innerHTML = '';
+    } else {
+      const html = ['<button class="noticias-source-btn active" onclick="filtrarNoticias(\'todas\', this)">Todas</button>']
+        .concat(fuentesActivas.map(f =>
+          `<button class="noticias-source-btn" onclick="filtrarNoticias('${f.id}', this)">${f.nombre}</button>`
+        ))
+        .join('');
+      btns.innerHTML = html;
+    }
+  }
+
+  renderNoticias('todas');
+}
+
+function filtrarNoticias(fuenteId, btn) {
+  NOTICIAS_FUENTE_ACTIVA = fuenteId;
+  const btns = document.querySelectorAll('.noticias-source-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderNoticias(fuenteId);
+}
+
+function renderNoticias(fuenteId) {
+  const grid = document.getElementById('noticias-grid');
+  if (!grid) return;
+
+  let items = [];
+  if (fuenteId === 'todas') {
+    Object.values(NOTICIAS_CACHE).forEach(arr => items = items.concat(arr));
+    // Ordenar por fecha desc
+    items.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+    items = items.slice(0, 8);
+  } else {
+    items = (NOTICIAS_CACHE[fuenteId] || []).slice(0, 8);
+  }
+
+  if (items.length === 0) {
+    grid.innerHTML = `
+      <div class="noticias-empty">
+        <strong>🌱 Sin noticias disponibles ahora</strong>
+        Intenta más tarde o elige otra fuente arriba.
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map(n => {
+    const thumb = n.imagen
+      ? `<img src="${n.imagen}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=&quot;noticia-thumb-fallback&quot;>📰</span>'">`
+      : `<span class="noticia-thumb-fallback">📰</span>`;
+    const link = n.link ? n.link.replace(/"/g, '&quot;') : '#';
+    return `
+      <a class="noticia-card" href="${link}" target="_blank" rel="noopener noreferrer">
+        <div class="noticia-thumb">${thumb}</div>
+        <div class="noticia-body">
+          <div>
+            <div class="noticia-source-row">
+              <span>${n.fuente}</span>
+              <span class="noticia-fecha">· ${formatearFechaNoticia(n.pubDate)}</span>
+            </div>
+            <div class="noticia-title">${n.titulo}</div>
+            <div class="noticia-excerpt">${n.excerpt}</div>
+          </div>
+          <span class="noticia-cta">Leer nota completa →</span>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+// Exponer para onclick inline
+window.filtrarNoticias = filtrarNoticias;
+
+// Disparar carga de noticias al iniciar
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(cargarNoticiasAgro, 100);
+});
+
+// Re-cargar noticias cada 30 min si la pestaña sigue abierta
+setInterval(() => {
+  if (document.visibilityState === 'visible') cargarNoticiasAgro();
+}, 30 * 60 * 1000);
 </script>
   <!-- BOTTOM NAV (móvil) -->
   <nav class="bottom-nav">
@@ -1695,7 +2018,7 @@ window.cerrarSesion = function() {
       <div class="bn-item" id="bn-sesiones" onclick="showPage('sesiones', this, 'bn-sesiones')">
         <span class="bn-icon">🔴</span>
         <span class="bn-label">En vivo</span>
-        <span class="bn-dot"></span>
+        <span class="bn-dot" id="bn-dot-sesiones" style="display:none;"></span>
       </div>
       <div class="bn-item" id="bn-materiales" onclick="showPage('materiales', this, 'bn-materiales')">
         <span class="bn-icon">📄</span>
