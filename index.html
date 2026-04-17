@@ -475,30 +475,222 @@
     @media (max-width: 1100px) { .mobile-widgets { display: block; } }
     @media (max-width: 768px) {
       .sidebar { display: none; }
-      .main { margin-left: 0; padding: 16px 14px 86px; }
+      .main { margin-left: 0; padding: 16px 14px 24px; }
       .hero-stats { display: none; }
       .hero-banner { padding: 24px 20px; border-radius: 16px; }
       .hero-text h2 { font-size: 1.3rem; }
       .courses-grid { grid-template-columns: 1fr; gap: 14px; }
     }
 
-    /* ══ BOTTOM NAV ══════════════════════════════════════════════════ */
-    .bottom-nav {
-      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-      background: var(--sidebar-bg);
-      border-top: 1px solid rgba(255,255,255,.06);
-      padding: 6px 0 env(safe-area-inset-bottom, 8px);
-      box-shadow: 0 -8px 24px rgba(0,0,0,.3);
+    /* ══ BOTTOM NAV (ahora deshabilitado, reemplazado por drawer) ══ */
+    .bottom-nav { display: none !important; }
+
+    /* ══ BOTÓN HAMBURGUESA (solo móvil) ══════════════════════════ */
+    .mobile-menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-direction: column;
+      transition: background 0.15s ease, transform 0.2s ease;
     }
-    .bottom-nav-inner { display: flex; justify-content: space-around; align-items: center; }
-    .bn-item { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 12px; cursor: pointer; border-radius: 10px; transition: background .15s; flex: 1; position: relative; }
-    .bn-item:active { background: rgba(255,255,255,.06); }
-    .bn-icon { font-size: 1.3rem; line-height: 1; }
-    .bn-label { font-size: .58rem; font-weight: 700; color: rgba(255,255,255,.4); letter-spacing: .02em; text-transform: uppercase; }
-    .bn-item.active .bn-label { color: var(--verde-claro); }
-    .bn-item.active .bn-icon { filter: drop-shadow(0 0 6px rgba(82,201,122,.6)); }
-    .bn-dot { position: absolute; top: 4px; right: calc(50% - 16px); width: 7px; height: 7px; background: var(--naranja); border-radius: 50%; border: 1.5px solid var(--sidebar-bg); }
-    @media (max-width: 768px) { .bottom-nav { display: block; } }
+    .mobile-menu-btn:active { transform: scale(0.94); background: rgba(255,255,255,0.12); }
+    .mobile-menu-btn span {
+      width: 18px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.2s ease;
+    }
+    .mobile-menu-btn.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .mobile-menu-btn.is-open span:nth-child(2) { opacity: 0; }
+    .mobile-menu-btn.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    @media (max-width: 768px) { .mobile-menu-btn { display: flex; } }
+
+    /* ══ DRAWER LATERAL MÓVIL ══════════════════════════════════════ */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 15, 8, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 9998;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .mobile-drawer-overlay.is-open { opacity: 1; visibility: visible; }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 280px;
+      max-width: 85vw;
+      background: var(--sidebar-bg);
+      z-index: 9999;
+      transform: translateX(-100%);
+      transition: transform 0.32s cubic-bezier(0.22, 0.9, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 8px 0 40px rgba(0,0,0,0.4);
+      padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+    }
+    .mobile-drawer.is-open { transform: translateX(0); }
+
+    .mobile-drawer__header {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-drawer__avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--verde-claro, #52c97a), var(--verde, #1a6b2f));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+    .mobile-drawer__user-info { min-width: 0; flex: 1; }
+    .mobile-drawer__user-name {
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mobile-drawer__user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(163, 230, 53, 0.15);
+      border: 1px solid rgba(163, 230, 53, 0.25);
+      color: #a3e635;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .mobile-drawer__nav {
+      padding: 16px 12px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .mobile-drawer__section-label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 10px 10px;
+    }
+    .mobile-drawer__item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 12px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      margin-bottom: 4px;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+    .mobile-drawer__item:hover, .mobile-drawer__item:active {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+    }
+    .mobile-drawer__item.active {
+      background: linear-gradient(135deg, rgba(82,201,122,0.18), rgba(26,107,47,0.12));
+      color: var(--verde-claro, #a3e635);
+      border: 1px solid rgba(82,201,122,0.25);
+    }
+    .mobile-drawer__icon {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+    }
+    .mobile-drawer__icon svg { width: 22px; height: 22px; }
+    .mobile-drawer__item-label { flex: 1; min-width: 0; }
+    .mobile-drawer__item-badge {
+      background: var(--verde-claro, #52c97a);
+      color: #0d3d19;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 100px;
+      min-width: 22px;
+      text-align: center;
+    }
+    .mobile-drawer__item-badge.naranja {
+      background: var(--naranja, #ef6c00);
+      color: #fff;
+    }
+
+    /* Separador entre secciones */
+    .mobile-drawer__divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 14px 8px 10px;
+    }
+
+    /* Footer del drawer (Salir) */
+    .mobile-drawer__footer {
+      padding: 14px 12px 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .mobile-drawer__salir {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 12px;
+      border-radius: 12px;
+      color: #ef4444;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+    .mobile-drawer__salir:hover, .mobile-drawer__salir:active {
+      background: rgba(239,68,68,0.1);
+    }
+    .mobile-drawer__salir svg { width: 22px; height: 22px; }
+
+    /* En desktop ocultar el topbar-right del móvil y botón Salir más simple */
+    @media (max-width: 768px) {
+      .topbar-right .user-name { display: none; }
+      .topbar-right .btn-salir { display: none; }
+    }
 
     /* ===== NOTICIAS AGRO ===== */
     .noticias-header { display: flex; align-items: center; justify-content: space-between; margin-top: 32px; margin-bottom: 16px; }
@@ -1192,8 +1384,104 @@
 <body>
 
 <!-- TOPBAR -->
+<!-- OVERLAY + DRAWER MÓVIL -->
+<div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="cerrarDrawer()"></div>
+<aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+  <div class="mobile-drawer__header">
+    <div class="mobile-drawer__avatar" id="drawer-avatar">M</div>
+    <div class="mobile-drawer__user-info">
+      <div class="mobile-drawer__user-name" id="drawer-user-name">Miembro</div>
+      <span class="mobile-drawer__user-badge">⭐ VIP Activo</span>
+    </div>
+  </div>
+  <nav class="mobile-drawer__nav">
+    <div class="mobile-drawer__section-label">Principal</div>
+
+    <button class="mobile-drawer__item" data-page="inicio" onclick="drawerIr('inicio')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-7h6v7h3a1 1 0 001-1V10"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Inicio</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="cursos" onclick="drawerIr('cursos')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="6" width="20" height="14" rx="2"/>
+          <polygon points="10 10 16 13 10 16 10 10" fill="currentColor" stroke="none"/>
+          <line x1="7" y1="2" x2="7" y2="6"/><line x1="17" y1="2" x2="17" y2="6"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Biblioteca</span>
+      <span class="mobile-drawer__item-badge" id="drawer-badge-cursos" style="display:none;">0</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="sesiones" onclick="drawerIr('sesiones')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Sesiones en vivo</span>
+      <span class="mobile-drawer__item-badge naranja" id="drawer-badge-sesiones" style="display:none;">0</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="materiales" onclick="drawerIr('materiales')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="13" y2="17"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Materiales</span>
+    </button>
+
+    <div class="mobile-drawer__divider"></div>
+
+    <div class="mobile-drawer__section-label">Mi cuenta</div>
+
+    <button class="mobile-drawer__item" data-page="perfil" onclick="drawerIr('perfil')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Mi perfil</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="suscripcion" onclick="drawerIr('suscripcion')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Suscripción</span>
+    </button>
+  </nav>
+  <div class="mobile-drawer__footer">
+    <button class="mobile-drawer__salir" onclick="cerrarDrawer();cerrarSesion();">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      Cerrar sesión
+    </button>
+  </div>
+</aside>
+
 <div class="topbar">
   <div class="topbar-left">
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="abrirDrawer()" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
     <div class="topbar-logo">AC</div>
     <span class="topbar-name">AgroClub MX</span>
     <span class="topbar-badge">⭐ VIP</span>
@@ -2620,6 +2908,94 @@ window.showPage = function(id, el, bnId) {
 window.cerrarSesion = function() {
   if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
 };
+
+
+// ==========================================================
+// ===== DRAWER MÓVIL (menú hamburguesa)
+// ==========================================================
+function abrirDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  const btn = document.getElementById('mobileMenuBtn');
+  if (!drawer || !overlay) return;
+  drawer.classList.add('is-open');
+  overlay.classList.add('is-open');
+  if (btn) btn.classList.add('is-open');
+  drawer.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  sincronizarDrawer();
+}
+
+function cerrarDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const overlay = document.getElementById('mobileDrawerOverlay');
+  const btn = document.getElementById('mobileMenuBtn');
+  if (!drawer || !overlay) return;
+  drawer.classList.remove('is-open');
+  overlay.classList.remove('is-open');
+  if (btn) btn.classList.remove('is-open');
+  drawer.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+// Navegar a una página desde el drawer y cerrarlo
+function drawerIr(pageId) {
+  // Encontrar el sidebar item desktop equivalente para mantener sincronía
+  const sidebarEl = document.querySelector(`.sidebar-item[onclick*="${pageId}"]`);
+  if (typeof window.showPage === 'function') {
+    window.showPage(pageId, sidebarEl);
+  }
+  cerrarDrawer();
+}
+
+// Sincronizar estado activo, avatar, nombre y badges del drawer con el resto de la UI
+function sincronizarDrawer() {
+  // Avatar + nombre (leer de los elementos existentes)
+  const userName = document.getElementById('userName');
+  const userAvatar = document.getElementById('userAvatar');
+  const drawerName = document.getElementById('drawer-user-name');
+  const drawerAvatar = document.getElementById('drawer-avatar');
+  if (drawerName && userName) drawerName.textContent = userName.textContent;
+  if (drawerAvatar && userAvatar) drawerAvatar.textContent = userAvatar.textContent;
+
+  // Marcar item activo según la página activa
+  const activePage = document.querySelector('.page.active');
+  if (activePage) {
+    const activeId = activePage.id.replace('page-', '');
+    document.querySelectorAll('.mobile-drawer__item').forEach(it => {
+      it.classList.toggle('active', it.dataset.page === activeId);
+    });
+  }
+
+  // Sincronizar badges (biblioteca + sesiones)
+  const badgeCursosDesk   = document.getElementById('badge-cursos');
+  const badgeSesionesDesk = document.getElementById('badge-sesiones');
+  const badgeCursosDrawer   = document.getElementById('drawer-badge-cursos');
+  const badgeSesionesDrawer = document.getElementById('drawer-badge-sesiones');
+  if (badgeCursosDesk && badgeCursosDrawer) {
+    badgeCursosDrawer.textContent = badgeCursosDesk.textContent;
+    badgeCursosDrawer.style.display = badgeCursosDesk.style.display === 'none' ? 'none' : '';
+  }
+  if (badgeSesionesDesk && badgeSesionesDrawer) {
+    badgeSesionesDrawer.textContent = badgeSesionesDesk.textContent;
+    badgeSesionesDrawer.style.display = badgeSesionesDesk.style.display === 'none' ? 'none' : '';
+  }
+}
+
+// Cerrar drawer con ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') cerrarDrawer();
+});
+
+// Si redimensiona a desktop, cerrar drawer automáticamente
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) cerrarDrawer();
+});
+
+window.abrirDrawer = abrirDrawer;
+window.cerrarDrawer = cerrarDrawer;
+window.drawerIr = drawerIr;
+window.sincronizarDrawer = sincronizarDrawer;
 
 
 // ==========================================================
