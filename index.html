@@ -526,6 +526,397 @@
       .mobile-menu-btn:active { background: rgba(255,255,255,0.18); }
     }
 
+    /* ══ WIDGETS LATERALES PREMIUM (rediseñados) ══════════════════════ */
+    /* Widget Webinars */
+    .widget-pro {
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .widget-pro:hover { transform: translateY(-2px); }
+
+    .widget-webinar {
+      background: linear-gradient(135deg, #0e1a0b 0%, #1a3a1f 50%, #0d3d19 100%);
+      color: #fff;
+      box-shadow: 0 8px 24px -8px rgba(14, 26, 11, 0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .widget-webinar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(82,201,122,0.25) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(163,230,53,0.15) 0%, transparent 45%);
+      pointer-events: none;
+    }
+    .widget-webinar__tag {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(82,201,122,0.15);
+      border: 1px solid rgba(82,201,122,0.3);
+      color: #a3e635;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+    .widget-webinar__tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #a3e635;
+      box-shadow: 0 0 8px #a3e635;
+      animation: widgetPulse 1.8s infinite;
+    }
+    @keyframes widgetPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .widget-webinar__title {
+      position: relative;
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .widget-webinar__meta {
+      position: relative;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.82rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .widget-webinar__countdown {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .widget-webinar__cd-item {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 10px 4px;
+      text-align: center;
+    }
+    .widget-webinar__cd-num {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .widget-webinar__cd-label {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .widget-webinar__btn {
+      position: relative;
+      width: 100%;
+      padding: 12px;
+      border-radius: 100px;
+      border: none;
+      font-family: var(--font), sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .widget-webinar__btn--live {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(239,68,68,0.4);
+      animation: widgetBtnPulse 2s infinite;
+    }
+    @keyframes widgetBtnPulse { 0%,100% { box-shadow: 0 6px 16px rgba(239,68,68,0.4); } 50% { box-shadow: 0 8px 24px rgba(239,68,68,0.7); } }
+    .widget-webinar__btn--calendar {
+      background: linear-gradient(135deg, #52c97a, #1a6b2f);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(82,201,122,0.3);
+    }
+    .widget-webinar__btn:hover { transform: translateY(-2px); }
+    .widget-webinar__empty {
+      position: relative;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.85rem;
+      padding: 4px 0;
+    }
+
+    /* Widget WhatsApp */
+    .widget-whatsapp {
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #fff;
+      box-shadow: 0 8px 22px -6px rgba(37, 211, 102, 0.45);
+    }
+    .widget-whatsapp::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .widget-whatsapp__icon {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+    .widget-whatsapp__title {
+      position: relative;
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .widget-whatsapp__sub {
+      position: relative;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+    }
+    .widget-whatsapp__btn {
+      position: relative;
+      width: 100%;
+      background: #fff;
+      color: #128C7E;
+      border: none;
+      padding: 11px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    .widget-whatsapp__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.18); }
+
+    /* Widget Descuento VIP */
+    .widget-descuento {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 60%, #fcd34d 100%);
+      border: 1px solid #f59e0b;
+      box-shadow: 0 8px 20px -6px rgba(245, 158, 11, 0.3);
+    }
+    .widget-descuento::before {
+      content: '🎁';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 6rem;
+      opacity: 0.08;
+      transform: rotate(-15deg);
+    }
+    .widget-descuento__tag {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(146, 64, 14, 0.1);
+      border: 1px solid rgba(146, 64, 14, 0.2);
+      color: #92400e;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 8px;
+    }
+    .widget-descuento__pct {
+      position: relative;
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #b45309;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 2px;
+      text-shadow: 0 2px 4px rgba(180, 83, 9, 0.1);
+    }
+    .widget-descuento__sub {
+      position: relative;
+      color: #92400e;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .widget-descuento__btn {
+      position: relative;
+      width: 100%;
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+    }
+    .widget-descuento__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(217, 119, 6, 0.5); }
+
+    /* Widget Mi Progreso */
+    .widget-progreso {
+      background: #fff;
+      border: 1px solid var(--border, #e8ede5);
+      box-shadow: 0 4px 14px -6px rgba(20, 37, 26, 0.08);
+    }
+    .widget-progreso__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .widget-progreso__title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text, #14251a);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .widget-progreso__count {
+      background: var(--bg, #f4f6f3);
+      color: var(--verde, #1a6b2f);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .widget-progreso__empty {
+      color: var(--muted, #6b7867);
+      font-size: 0.82rem;
+      padding: 8px 0;
+      text-align: center;
+    }
+    .widget-progreso__list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .progreso-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .progreso-row__emoji {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--bg, #f4f6f3);
+      display: grid;
+      place-items: center;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+    .progreso-row__body { flex: 1; min-width: 0; }
+    .progreso-row__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+    .progreso-row__name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text, #14251a);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+    .progreso-row__count {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted, #6b7867);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .progreso-row__bar-wrap {
+      height: 6px;
+      background: var(--bg, #f0f4ee);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .progreso-row__bar {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: linear-gradient(90deg, var(--verde, #1a6b2f), var(--verde-claro, #52c97a));
+    }
+    .progreso-row__bar.completo {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+    }
+
+    /* Botón "leer más noticias" */
+    .noticias-ver-mas {
+      margin-top: 16px;
+      width: 100%;
+      padding: 13px;
+      background: var(--card, #fff);
+      border: 1.5px solid var(--verde, #1a6b2f);
+      color: var(--verde, #1a6b2f);
+      border-radius: 14px;
+      font-family: var(--font), sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .noticias-ver-mas:hover {
+      background: var(--verde, #1a6b2f);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -6px rgba(26,107,47,0.3);
+    }
+    .noticias-ver-mas__arrow { transition: transform 0.25s ease; }
+    .noticias-ver-mas.expandido .noticias-ver-mas__arrow { transform: rotate(180deg); }
+
     /* ══ BOTTOM NAV (ahora deshabilitado, reemplazado por drawer) ══ */
     .bottom-nav { display: none !important; }
 
@@ -1469,7 +1860,7 @@
           <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
         </svg>
       </span>
-      <span class="mobile-drawer__item-label">Sesiones en vivo</span>
+      <span class="mobile-drawer__item-label">Webinars</span>
       <span class="mobile-drawer__item-badge naranja" id="drawer-badge-sesiones" style="display:none;">0</span>
     </button>
 
@@ -1544,7 +1935,7 @@
       <div class="sidebar-label">Principal</div>
       <div class="sidebar-item active" onclick="showPage('inicio',this)"><div class="sidebar-item-left"><span>🏠</span> Inicio</div></div>
       <div class="sidebar-item" onclick="showPage('cursos',this)"><div class="sidebar-item-left"><span>🎬</span> Biblioteca de cursos</div><span class="sidebar-badge" id="badge-cursos" style="display:none;">0</span></div>
-      <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🔴</span> Sesiones en vivo</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
+      <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🎥</span> Webinars</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>📄</span> Materiales</div></div>
     </div>
     <div class="sidebar-section">
@@ -1600,7 +1991,57 @@
       </div>
       <div class="courses-grid" id="inicio-cursos"></div>
 
-      <!-- ===== NOTICIAS AGRO ===== -->
+      <!-- WIDGETS MÓVIL (solo visibles en pantallas chicas) — orden: webinar, whatsapp, descuento, progreso -->
+      <div class="mobile-widgets">
+        <div class="widget-pro widget-webinar" id="widget-webinar-m">
+          <span class="widget-webinar__tag">
+            <span class="widget-webinar__tag-dot"></span> Próximo Webinar
+          </span>
+          <h4 class="widget-webinar__title" id="pc-sesion-titulo-m">Sin webinars próximos</h4>
+          <div class="widget-webinar__meta" id="pc-sesion-meta-m">—</div>
+          <div class="widget-webinar__countdown" id="pc-countdown-m" style="display:none">
+            <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-d-m">--</div><div class="widget-webinar__cd-label">Días</div></div>
+            <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-h-m">--</div><div class="widget-webinar__cd-label">Horas</div></div>
+            <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-m-m">--</div><div class="widget-webinar__cd-label">Min</div></div>
+          </div>
+          <a id="pc-link-wrapper-m" href="#" target="_blank" style="display:none">
+            <button class="widget-webinar__btn widget-webinar__btn--live">🔴 Unirse ahora</button>
+          </a>
+          <button class="widget-webinar__btn widget-webinar__btn--calendar" id="btn-agendar-pc-m" style="display:none" onclick="agendarCalendario()">📅 Agendar en calendario</button>
+          <div class="widget-webinar__empty" id="pc-empty-msg-m" style="display:none;">Todavía no hay webinars programados. Te avisaremos pronto 📣</div>
+        </div>
+
+        <div class="widget-pro widget-whatsapp">
+          <div class="widget-whatsapp__icon">💬</div>
+          <h4 class="widget-whatsapp__title">Grupo WhatsApp VIP</h4>
+          <div class="widget-whatsapp__sub">Comunidad de productores activos</div>
+          <button class="widget-whatsapp__btn" id="btn-grupo-wa-m">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Abrir grupo
+          </button>
+        </div>
+
+        <div class="widget-pro widget-descuento">
+          <span class="widget-descuento__tag">🎁 Tu descuento VIP</span>
+          <div class="widget-descuento__pct">20%</div>
+          <div class="widget-descuento__sub">En todos los próximos cursos</div>
+          <button class="widget-descuento__btn" onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank')">
+            💬 Canjear por WhatsApp
+          </button>
+        </div>
+
+        <div class="widget-pro widget-progreso">
+          <div class="widget-progreso__header">
+            <div class="widget-progreso__title">📊 Mi progreso</div>
+            <span class="widget-progreso__count" id="widget-progreso-count-m">0 cursos</span>
+          </div>
+          <div id="progreso-widget-m">
+            <p class="widget-progreso__empty">Cargando...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NOTICIAS AGRO (debajo de widgets) ===== -->
       <div class="noticias-header">
         <h3><span class="pulse-live"></span> 📰 Noticias del agro</h3>
         <div class="noticias-source-btns" id="noticias-source-btns"></div>
@@ -1610,45 +2051,11 @@
         <div class="noticias-skeleton"></div>
         <div class="noticias-skeleton"></div>
       </div>
+      <button class="noticias-ver-mas" id="noticias-ver-mas-btn" style="display:none;" onclick="toggleVerMasNoticias(this)">
+        <span id="noticias-ver-mas-txt">📰 Leer más noticias del día</span>
+        <span class="noticias-ver-mas__arrow">▼</span>
+      </button>
 
-      <!-- WIDGETS MÓVIL (solo visibles en pantallas pequeñas) -->
-      <div class="mobile-widgets">
-        <div class="panel-card panel-card-dark">
-          <div class="pc-label" id="pc-estado-label-m">PRÓXIMA SESIÓN EN VIVO</div>
-          <h4 id="pc-sesion-titulo-m">Sin sesiones</h4>
-          <div class="pc-sub" id="pc-sesion-meta-m">—</div>
-          <div class="countdown" id="pc-countdown-m" style="display:none">
-            <div class="countdown-item"><div class="countdown-num" id="cd-d-m">--</div><div class="countdown-label">días</div></div>
-            <div class="countdown-item"><div class="countdown-num" id="cd-h-m">--</div><div class="countdown-label">hrs</div></div>
-            <div class="countdown-item"><div class="countdown-num" id="cd-m-m">--</div><div class="countdown-label">min</div></div>
-          </div>
-          <a id="pc-link-wrapper-m" href="#" target="_blank" style="display:none">
-            <button class="btn-calendario" style="background:#ef4444;">🔴 Unirse ahora</button>
-          </a>
-          <button class="btn-calendario" id="btn-agendar-pc-m" style="display:none" onclick="agendarCalendario()">📅 Agregar al calendario</button>
-        </div>
-        <div class="panel-card panel-card-green">
-          <div style="font-size:1.3rem;margin-bottom:6px">💬</div>
-          <h4>Grupo WhatsApp VIP</h4>
-          <div class="pc-sub2">Comunidad de productores activos</div>
-          <button class="btn-wa" id="btn-grupo-wa-m">Abrir grupo</button>
-        </div>
-        <div class="panel-card" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a;">
-          <div style="font-size:.68rem;font-weight:800;color:#92400e;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">🎁 Tu descuento VIP</div>
-          <div style="font-size:2rem;font-weight:900;color:#d97706;line-height:1;font-family:var(--font-display);">20%</div>
-          <div style="font-size:.78rem;color:#92400e;margin-bottom:12px;margin-top:4px;">En todos los próximos cursos</div>
-          <button onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank')"
-            style="width:100%;padding:11px;border-radius:12px;background:#d97706;color:#fff;border:none;font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px;">
-            💬 Canjear por WhatsApp
-          </button>
-        </div>
-        <div class="panel-card">
-          <div class="actividad-label">📊 Mi progreso</div>
-          <div id="progreso-widget-m">
-            <p style="color:var(--muted);font-size:.8rem;padding:4px 0;">Cargando...</p>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- CURSOS -->
@@ -1735,7 +2142,7 @@
 
     <!-- SESIONES EN VIVO -->
     <div class="page" id="page-sesiones">
-      <div class="section-header" style="margin-bottom:20px"><h3>🔴 Sesiones en vivo</h3></div>
+      <div class="section-header" style="margin-bottom:20px"><h3>🎥 Webinars</h3></div>
       <div id="lista-sesiones">
         <p style="color:var(--muted);font-size:.88rem;padding:20px;">Cargando sesiones...</p>
       </div>
@@ -1913,42 +2320,54 @@
 
   <!-- RIGHT PANEL -->
   <div class="right-panel">
-    <div class="panel-card panel-card-dark">
-      <div class="pc-label" id="pc-estado-label">PRÓXIMA SESIÓN EN VIVO</div>
-      <h4 id="pc-sesion-titulo">Sin sesiones</h4>
-      <div class="pc-sub" id="pc-sesion-meta">—</div>
-      <div class="countdown" id="pc-countdown" style="display:none">
-        <div class="countdown-item"><div class="countdown-num" id="cd-d">--</div><div class="countdown-label">días</div></div>
-        <div class="countdown-item"><div class="countdown-num" id="cd-h">--</div><div class="countdown-label">hrs</div></div>
-        <div class="countdown-item"><div class="countdown-num" id="cd-m">--</div><div class="countdown-label">min</div></div>
+    <!-- WEBINAR -->
+    <div class="widget-pro widget-webinar" id="widget-webinar">
+      <span class="widget-webinar__tag">
+        <span class="widget-webinar__tag-dot"></span> Próximo Webinar
+      </span>
+      <h4 class="widget-webinar__title" id="pc-sesion-titulo">Sin webinars próximos</h4>
+      <div class="widget-webinar__meta" id="pc-sesion-meta">—</div>
+      <div class="widget-webinar__countdown" id="pc-countdown" style="display:none">
+        <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-d">--</div><div class="widget-webinar__cd-label">Días</div></div>
+        <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-h">--</div><div class="widget-webinar__cd-label">Horas</div></div>
+        <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-m">--</div><div class="widget-webinar__cd-label">Min</div></div>
       </div>
       <a id="pc-link-wrapper" href="#" target="_blank" style="display:none">
-        <button class="btn-calendario" style="background:#ef4444;">🔴 Unirse ahora</button>
+        <button class="widget-webinar__btn widget-webinar__btn--live">🔴 Unirse ahora</button>
       </a>
-      <button class="btn-calendario" id="btn-agendar-pc" style="display:none" onclick="agendarCalendario()">📅 Agregar al calendario</button>
+      <button class="widget-webinar__btn widget-webinar__btn--calendar" id="btn-agendar-pc" style="display:none" onclick="agendarCalendario()">📅 Agendar en calendario</button>
+      <div class="widget-webinar__empty" id="pc-empty-msg" style="display:none;">Todavía no hay webinars programados. Te avisaremos pronto 📣</div>
     </div>
 
-    <div class="panel-card panel-card-green">
-      <div style="font-size:1.3rem;margin-bottom:6px">💬</div>
-      <h4>Grupo WhatsApp VIP</h4>
-      <div class="pc-sub2">Comunidad de productores activos</div>
-      <button class="btn-wa" id="btn-grupo-wa">Abrir grupo</button>
+    <!-- WHATSAPP VIP -->
+    <div class="widget-pro widget-whatsapp">
+      <div class="widget-whatsapp__icon">💬</div>
+      <h4 class="widget-whatsapp__title">Grupo WhatsApp VIP</h4>
+      <div class="widget-whatsapp__sub">Comunidad de productores activos</div>
+      <button class="widget-whatsapp__btn" id="btn-grupo-wa">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Abrir grupo
+      </button>
     </div>
 
-    <div class="panel-card" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a;">
-      <div style="font-size:.68rem;font-weight:800;color:#92400e;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;">🎁 Tu descuento VIP</div>
-      <div style="font-size:2.2rem;font-weight:900;color:#d97706;line-height:1;font-family:var(--font-display);">20%</div>
-      <div style="font-size:.78rem;color:#92400e;margin-bottom:14px;margin-top:4px;">En todos los próximos cursos</div>
-      <button onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank')"
-        style="width:100%;padding:11px;border-radius:12px;background:#d97706;color:#fff;border:none;font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 12px rgba(217,119,6,.3);transition:transform .15s;">
+    <!-- DESCUENTO VIP -->
+    <div class="widget-pro widget-descuento">
+      <span class="widget-descuento__tag">🎁 Tu descuento VIP</span>
+      <div class="widget-descuento__pct">20%</div>
+      <div class="widget-descuento__sub">En todos los próximos cursos</div>
+      <button class="widget-descuento__btn" onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank')">
         💬 Canjear por WhatsApp
       </button>
     </div>
 
-    <div class="panel-card">
-      <div class="actividad-label">📊 Mi progreso</div>
+    <!-- MI PROGRESO -->
+    <div class="widget-pro widget-progreso">
+      <div class="widget-progreso__header">
+        <div class="widget-progreso__title">📊 Mi progreso</div>
+        <span class="widget-progreso__count" id="widget-progreso-count">0 cursos</span>
+      </div>
       <div id="progreso-widget">
-        <p style="color:var(--muted);font-size:.8rem;padding:4px 0;">Cargando...</p>
+        <p class="widget-progreso__empty">Cargando...</p>
       </div>
     </div>
   </div>
@@ -2539,28 +2958,39 @@ function updateProgreso() {
     return fd <= hoyProg;
   });
 
+  // Actualizar contador
+  const countTxt = cursosDisponibles.length === 1 ? '1 curso' : `${cursosDisponibles.length} cursos`;
+  const elCount1 = document.getElementById('widget-progreso-count');
+  const elCount2 = document.getElementById('widget-progreso-count-m');
+  if (elCount1) elCount1.textContent = countTxt;
+  if (elCount2) elCount2.textContent = countTxt;
+
   const html = function(widget) {
     if (!widget) return;
     if (cursosDisponibles.length === 0) {
-      widget.innerHTML = '<p style="color:var(--muted);font-size:.8rem;">Aún no hay cursos disponibles.</p>';
+      widget.innerHTML = '<p class="widget-progreso__empty">Aún no hay cursos disponibles.</p>';
       return;
     }
-    const colores = ["#3b82f6","#f97316","#8b5cf6","#52c97a","#fbbf24","#ef4444"];
-    widget.innerHTML = cursosDisponibles.map((c, i) => {
+    widget.innerHTML = '<div class="widget-progreso__list">' + cursosDisponibles.map(c => {
       const total  = (c.clases || []).length;
       const vistas = (progreso[c.id] || []).length;
       const pct    = total > 0 ? Math.round(vistas / total * 100) : 0;
-      const color  = c.color || colores[i % colores.length];
-      const nombre = c.titulo.length > 16 ? c.titulo.substring(0, 14) + "…" : c.titulo;
+      const completo = pct >= 100;
+      // Mostrar nombre completo sin truncar (el CSS hace text-overflow)
       return `
-        <div class="actividad-row">
-          <span class="actividad-name" title="${c.titulo}">${c.emoji || "🎓"} ${nombre}</span>
-          <div class="actividad-bar-wrap">
-            <div class="actividad-bar" style="width:${pct}%;background:${color};transition:width .6s ease;"></div>
+        <div class="progreso-row">
+          <div class="progreso-row__emoji">${c.emoji || "🎓"}</div>
+          <div class="progreso-row__body">
+            <div class="progreso-row__top">
+              <span class="progreso-row__name" title="${c.titulo}">${c.titulo}</span>
+              <span class="progreso-row__count">${vistas}/${total}${completo ? ' 🏆' : ''}</span>
+            </div>
+            <div class="progreso-row__bar-wrap">
+              <div class="progreso-row__bar ${completo ? 'completo' : ''}" style="width:${pct}%;"></div>
+            </div>
           </div>
-          <span class="actividad-count">${vistas}/${total}</span>
         </div>`;
-    }).join("");
+    }).join("") + '</div>';
   };
   html(document.getElementById("progreso-widget"));
   html(document.getElementById("progreso-widget-m"));
@@ -2632,16 +3062,22 @@ function actualizarWidget(s) {
     var el = document.getElementById(id);
     if (el) { if (typeof val === 'string') el.textContent = val; else el.style.display = val; }
   }
+  function setWStyle(id, prop, val) {
+    var el = document.getElementById(id); if (el) el.style[prop] = val;
+  }
   function setWHref(id, val) { var el = document.getElementById(id); if (el) el.href = val; }
 
   if (!s) {
-    ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, 'Sin sesiones próximas'));
-    ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, '—'));
-    ['pc-estado-label','pc-estado-label-m'].forEach(id => setW(id, 'SESIONES EN VIVO'));
+    ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, 'Sin webinars próximos'));
+    ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, 'Te avisaremos apenas se agende uno 🌱'));
     ['pc-countdown','pc-countdown-m','pc-link-wrapper','pc-link-wrapper-m','btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setW(id, 'none'));
+    ['pc-empty-msg','pc-empty-msg-m'].forEach(id => setW(id, 'block'));
     if (_countdownInterval) { clearInterval(_countdownInterval); _countdownInterval = null; }
     return;
   }
+
+  // Hay sesión: ocultar mensaje empty
+  ['pc-empty-msg','pc-empty-msg-m'].forEach(id => setW(id, 'none'));
 
   const dt = new Date(s.fechaHora);
   const ahora = new Date();
@@ -2650,8 +3086,7 @@ function actualizarWidget(s) {
                  + ' · ' + dt.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 
   ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, s.titulo));
-  ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, (s.instructor ? s.instructor + ' · ' : '') + fechaStr));
-  ['pc-estado-label','pc-estado-label-m'].forEach(id => setW(id, esVivo ? '🔴 EN VIVO AHORA' : 'PRÓXIMA SESIÓN EN VIVO'));
+  ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, (s.instructor ? '👤 ' + s.instructor + ' · ' : '📅 ') + fechaStr));
 
   if (esVivo && s.link) {
     ['pc-countdown','pc-countdown-m'].forEach(id => setW(id, 'none'));
@@ -2659,8 +3094,8 @@ function actualizarWidget(s) {
     ['pc-link-wrapper','pc-link-wrapper-m'].forEach(id => { setW(id, 'block'); setWHref(id, s.link); });
   } else {
     ['pc-link-wrapper','pc-link-wrapper-m'].forEach(id => setW(id, 'none'));
-    ['pc-countdown','pc-countdown-m'].forEach(id => setW(id, 'flex'));
-    ['btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setW(id, 'block'));
+    ['pc-countdown','pc-countdown-m'].forEach(id => setWStyle(id, 'display', 'grid'));
+    ['btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setWStyle(id, 'display', 'flex'));
     if (_countdownInterval) clearInterval(_countdownInterval);
     _countdownInterval = setInterval(function() { tickCountdown(dt); }, 1000);
     tickCountdown(dt);
@@ -3356,7 +3791,7 @@ function cerrarCursoCompleto() {
 function compartirLogro() {
   const curso = window._ultimoCursoCompletado;
   if (!curso) { cerrarCursoCompleto(); return; }
-  const msg = `🏆 ¡Acabo de completar el curso "${curso.titulo}" en AgroClub MX! 🌾\n\nSi te interesa, es un club VIP de AgroTec America con cursos, sesiones en vivo y más 👉 agrotecamerican.com`;
+  const msg = `🏆 ¡Acabo de completar el curso "${curso.titulo}" en AgroClub MX! 🌾\n\nSi te interesa, es un club VIP de AgroTec America con cursos, webinars y más 👉 agrotecamerican.com`;
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 }
 
@@ -3667,14 +4102,20 @@ async function cargarNoticiasAgro() {
 
 function filtrarNoticias(fuenteId, btn) {
   NOTICIAS_FUENTE_ACTIVA = fuenteId;
+  NOTICIAS_EXPANDIDAS = false; // resetear al cambiar de fuente
   const btns = document.querySelectorAll('.noticias-source-btn');
   btns.forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   renderNoticias(fuenteId);
 }
 
+let NOTICIAS_EXPANDIDAS = false;
+const NOTICIAS_INICIALES = 4;
+const NOTICIAS_TOTAL_MAX = 12;
+
 function renderNoticias(fuenteId) {
   const grid = document.getElementById('noticias-grid');
+  const btnVerMas = document.getElementById('noticias-ver-mas-btn');
   if (!grid) return;
 
   let items = [];
@@ -3689,9 +4130,9 @@ function renderNoticias(fuenteId) {
       vistos.add(key);
       return true;
     });
-    items = items.slice(0, 8);
+    items = items.slice(0, NOTICIAS_TOTAL_MAX);
   } else {
-    items = (NOTICIAS_CACHE[fuenteId] || []).slice(0, 8);
+    items = (NOTICIAS_CACHE[fuenteId] || []).slice(0, NOTICIAS_TOTAL_MAX);
   }
 
   if (items.length === 0) {
@@ -3700,10 +4141,15 @@ function renderNoticias(fuenteId) {
         <strong>🌱 Sin noticias disponibles ahora</strong>
         Intenta más tarde o <a href="#" onclick="cargarNoticiasAgro();return false;" style="color:var(--verde);font-weight:600;">recarga</a>.
       </div>`;
+    if (btnVerMas) btnVerMas.style.display = 'none';
     return;
   }
 
-  grid.innerHTML = items.map(n => {
+  // Mostrar solo las primeras N si no está expandido
+  const mostrarCuantas = NOTICIAS_EXPANDIDAS ? items.length : Math.min(NOTICIAS_INICIALES, items.length);
+  const itemsMostrar = items.slice(0, mostrarCuantas);
+
+  grid.innerHTML = itemsMostrar.map(n => {
     const thumb = n.imagen
       ? `<img src="${n.imagen}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=&quot;noticia-thumb-fallback&quot;>📰</span>'">`
       : `<span class="noticia-thumb-fallback">📰</span>`;
@@ -3724,7 +4170,38 @@ function renderNoticias(fuenteId) {
         </div>
       </a>`;
   }).join('');
+
+  // Mostrar/ocultar botón según si hay más noticias
+  if (btnVerMas) {
+    if (items.length > NOTICIAS_INICIALES) {
+      btnVerMas.style.display = 'flex';
+      const txt = document.getElementById('noticias-ver-mas-txt');
+      if (txt) {
+        if (NOTICIAS_EXPANDIDAS) {
+          txt.textContent = '⬆ Mostrar menos';
+          btnVerMas.classList.add('expandido');
+        } else {
+          txt.textContent = `📰 Leer más noticias del día (${items.length - NOTICIAS_INICIALES})`;
+          btnVerMas.classList.remove('expandido');
+        }
+      }
+    } else {
+      btnVerMas.style.display = 'none';
+    }
+  }
 }
+
+function toggleVerMasNoticias(btn) {
+  NOTICIAS_EXPANDIDAS = !NOTICIAS_EXPANDIDAS;
+  renderNoticias(NOTICIAS_FUENTE_ACTIVA || 'todas');
+  // Si contrae, scrollear arriba del grid para que no se pierda
+  if (!NOTICIAS_EXPANDIDAS) {
+    const grid = document.getElementById('noticias-grid');
+    if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+window.toggleVerMasNoticias = toggleVerMasNoticias;
 
 // Exponer para onclick inline
 window.filtrarNoticias = filtrarNoticias;
