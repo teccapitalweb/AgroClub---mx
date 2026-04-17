@@ -814,7 +814,145 @@
       .course-stat-card { padding: 10px; }
       .course-stat-card__value { font-size: 1.25rem; }
     }
+
+    /* ===== MODAL CURSO COMPLETADO (100%) ===== */
+    .curso-completo-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 20, 10, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: cursoCompletoFadeIn 0.3s ease;
+    }
+    .curso-completo-overlay.is-open { display: flex; }
+    @keyframes cursoCompletoFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .curso-completo-modal {
+      background: linear-gradient(145deg, #ffffff 0%, #fefce8 100%);
+      border-radius: 24px;
+      max-width: 440px;
+      width: 100%;
+      padding: 40px 32px 32px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+      animation: cursoCompletoScaleIn 0.55s cubic-bezier(0.2, 1.3, 0.4, 1);
+      overflow: hidden;
+    }
+    @keyframes cursoCompletoScaleIn {
+      from { opacity: 0; transform: scale(0.7) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .curso-completo-modal::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, #f9a825, #52c97a, #f9a825);
+      background-size: 200% 200%;
+      animation: cursoCompletoBorder 3s linear infinite;
+      border-radius: 24px;
+      z-index: -1;
+    }
+    @keyframes cursoCompletoBorder {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .curso-completo-trophy {
+      font-size: 5rem;
+      line-height: 1;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: cursoCompletoTrophyBounce 1.2s ease-in-out infinite;
+      filter: drop-shadow(0 6px 20px rgba(249, 168, 37, 0.5));
+    }
+    @keyframes cursoCompletoTrophyBounce {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    .curso-completo-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #f9a825, #ef6c00);
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(249, 168, 37, 0.35);
+    }
+    .curso-completo-title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #1a2010;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .curso-completo-subtitle {
+      color: #5a6758;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .curso-completo-curso-nombre {
+      background: rgba(26, 107, 47, 0.08);
+      border: 1px solid rgba(26, 107, 47, 0.2);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      color: var(--verde, #1a6b2f);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .curso-completo-actions {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
+    .curso-completo-btn {
+      padding: 14px 20px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .curso-completo-btn--primary {
+      background: linear-gradient(135deg, var(--verde, #1a6b2f), #0d3d19);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(26, 107, 47, 0.35);
+    }
+    .curso-completo-btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(26, 107, 47, 0.45);
+    }
+    .curso-completo-btn--ghost {
+      background: transparent;
+      color: #5a6758;
+      border: 1.5px solid #dfe5dc;
+    }
+    .curso-completo-btn--ghost:hover { background: #f4f6f3; color: #1a2010; }
+
+    @media (max-width: 480px) {
+      .curso-completo-modal { padding: 30px 22px 22px; }
+      .curso-completo-trophy { font-size: 4rem; }
+      .curso-completo-title { font-size: 1.5rem; }
+    }
   </style>
+    <!-- Canvas-confetti para celebración al 100% -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
@@ -1234,6 +1372,25 @@
       <div id="progreso-widget">
         <p style="color:var(--muted);font-size:.8rem;padding:4px 0;">Cargando...</p>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CURSO COMPLETADO (100%) -->
+<div class="curso-completo-overlay" id="cursoCompletoOverlay" onclick="if(event.target===this)cerrarCursoCompleto()">
+  <div class="curso-completo-modal">
+    <div class="curso-completo-trophy">🏆</div>
+    <div class="curso-completo-badge">🎓 Nuevo Logro</div>
+    <h2 class="curso-completo-title">¡Felicidades, Maestro!</h2>
+    <p class="curso-completo-subtitle">Has completado el 100% de este curso. Ya eres oficialmente un experto en el tema 🌾</p>
+    <div class="curso-completo-curso-nombre" id="cursoCompletoNombre">—</div>
+    <div class="curso-completo-actions">
+      <button class="curso-completo-btn curso-completo-btn--primary" onclick="cerrarCursoCompleto()">
+        🎉 ¡Seguir aprendiendo!
+      </button>
+      <button class="curso-completo-btn curso-completo-btn--ghost" onclick="compartirLogro()">
+        📲 Compartir mi logro
+      </button>
     </div>
   </div>
 </div>
@@ -1733,6 +1890,13 @@ function marcarClase(cursoId, numClase) {
   if (!progreso[cursoId]) progreso[cursoId] = [];
   const idx = progreso[cursoId].indexOf(numClase);
   const completada = idx === -1;
+
+  // Detectar si con esta acción llega al 100% (y no estaba al 100% antes)
+  const curso = CURSOS.find(c => c.id === cursoId);
+  const totalClases = curso ? (curso.clases || []).length : 0;
+  const vistasAntes = progreso[cursoId].length;
+  const llegaAl100 = completada && totalClases > 0 && (vistasAntes + 1) === totalClases;
+
   if (completada) progreso[cursoId].push(numClase);
   else progreso[cursoId].splice(idx, 1);
   setDoc(doc(db, "progreso", currentUser.uid), progreso);
@@ -1744,6 +1908,14 @@ function marcarClase(cursoId, numClase) {
   const check = document.getElementById(`check-${numClase}`);
   if (row)   row.classList.toggle("completada-row", completada);
   if (check) { check.classList.toggle("completada", completada); check.textContent = completada ? "✓" : ""; }
+
+  // 🎉 FIESTA si llegó al 100%
+  if (llegaAl100) {
+    setTimeout(() => celebrarCurso100(cursoId), 300);
+  } else if (completada) {
+    // Mini confetti al marcar cualquier clase
+    miniConfetti();
+  }
 }
 
 function marcarClaseActual() {
@@ -2178,6 +2350,101 @@ window.showPage = function(id, el, bnId) {
 window.cerrarSesion = function() {
   if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
 };
+
+
+// ==========================================================
+// ===== CONFETTI DE CELEBRACIÓN (canvas-confetti)
+// ==========================================================
+
+// Colores AgroTec: verde campo, lima, dorado cosecha, naranja, amarillo maíz
+const CONFETTI_COLORS = ['#1a6b2f', '#52c97a', '#8bc34a', '#f9a825', '#ef6c00', '#ffd54f'];
+
+// Pequeño confetti al marcar cualquier clase (1 ráfaga ligera desde el centro bajo)
+function miniConfetti() {
+  if (typeof confetti !== 'function') return;
+  confetti({
+    particleCount: 45,
+    spread: 65,
+    startVelocity: 35,
+    origin: { x: 0.5, y: 0.85 },
+    colors: CONFETTI_COLORS,
+    scalar: 0.85,
+    ticks: 160
+  });
+}
+
+// Fiesta completa al llegar al 100% (varias oleadas desde ambas esquinas)
+function fiestaConfetti() {
+  if (typeof confetti !== 'function') return;
+  const duracion = 3500;
+  const finTs = Date.now() + duracion;
+  const defaults = { startVelocity: 32, spread: 360, ticks: 80, zIndex: 100001, colors: CONFETTI_COLORS };
+
+  // Explosión inicial gorda desde el centro
+  confetti({
+    ...defaults,
+    particleCount: 160,
+    spread: 100,
+    origin: { y: 0.6 },
+    startVelocity: 45
+  });
+
+  // Lluvia continua de los costados
+  const intervalo = setInterval(() => {
+    const tiempoRestante = finTs - Date.now();
+    if (tiempoRestante <= 0) return clearInterval(intervalo);
+    const particulas = 50 * (tiempoRestante / duracion);
+    // Desde la izquierda
+    confetti({ ...defaults, particleCount: particulas, origin: { x: Math.random() * 0.25, y: Math.random() - 0.2 } });
+    // Desde la derecha
+    confetti({ ...defaults, particleCount: particulas, origin: { x: 0.75 + Math.random() * 0.25, y: Math.random() - 0.2 } });
+  }, 250);
+
+  // Disparo final al medio segundo
+  setTimeout(() => {
+    confetti({ ...defaults, particleCount: 80, spread: 120, origin: { x: 0.2, y: 0.7 }, startVelocity: 55 });
+    confetti({ ...defaults, particleCount: 80, spread: 120, origin: { x: 0.8, y: 0.7 }, startVelocity: 55 });
+  }, 500);
+}
+
+// Mostrar modal "¡Curso completado!" + fiesta de confetti
+function celebrarCurso100(cursoId) {
+  const curso = CURSOS.find(c => c.id === cursoId);
+  if (!curso) return;
+
+  // Guardar para el botón de compartir
+  window._ultimoCursoCompletado = curso;
+
+  // Llenar datos del modal
+  const nombreEl = document.getElementById('cursoCompletoNombre');
+  if (nombreEl) nombreEl.textContent = `${curso.emoji || '🎓'} ${curso.titulo}`;
+
+  // Abrir modal
+  const overlay = document.getElementById('cursoCompletoOverlay');
+  if (overlay) overlay.classList.add('is-open');
+
+  // ¡FIESTA!
+  fiestaConfetti();
+}
+
+function cerrarCursoCompleto() {
+  const overlay = document.getElementById('cursoCompletoOverlay');
+  if (overlay) overlay.classList.remove('is-open');
+}
+
+// Compartir logro por WhatsApp
+function compartirLogro() {
+  const curso = window._ultimoCursoCompletado;
+  if (!curso) { cerrarCursoCompleto(); return; }
+  const msg = `🏆 ¡Acabo de completar el curso "${curso.titulo}" en AgroClub MX! 🌾\n\nSi te interesa, es un club VIP de AgroTec America con cursos, sesiones en vivo y más 👉 agrotecamerican.com`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// Exponer al scope global para los onclick
+window.celebrarCurso100  = celebrarCurso100;
+window.cerrarCursoCompleto = cerrarCursoCompleto;
+window.compartirLogro    = compartirLogro;
+window.miniConfetti      = miniConfetti;
 
 
 // ==========================================================
