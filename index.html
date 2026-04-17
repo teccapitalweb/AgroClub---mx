@@ -562,6 +562,258 @@
       .noticia-excerpt { display: none; }
       .noticias-header { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
+
+    /* ===== BANNER SESIÓN EN VIVO ===== */
+    .live-banner {
+      display: none;
+      position: relative;
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px -10px rgba(220, 38, 38, 0.45);
+      animation: liveBannerPulse 3s ease-in-out infinite;
+    }
+    .live-banner.is-visible { display: block; }
+    @keyframes liveBannerPulse {
+      0%, 100% { box-shadow: 0 12px 32px -10px rgba(220, 38, 38, 0.45); }
+      50%      { box-shadow: 0 12px 44px -6px rgba(220, 38, 38, 0.7); }
+    }
+    .live-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 30%, rgba(255,255,255,0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 70%, rgba(255,255,255,0.08) 0%, transparent 45%);
+      pointer-events: none;
+    }
+    .live-banner__inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+    .live-banner__left { min-width: 0; }
+    .live-banner__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .live-banner__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 0 0 rgba(255,255,255,0.7);
+      animation: liveDotPulse 1.2s infinite;
+    }
+    @keyframes liveDotPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.8); transform: scale(1); }
+      70%  { box-shadow: 0 0 0 8px rgba(255,255,255,0);  transform: scale(1.15); }
+      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0);    transform: scale(1); }
+    }
+    .live-banner__title {
+      color: #fff;
+      font-family: var(--font-display), var(--font), Georgia, serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .live-banner__meta {
+      color: rgba(255,255,255,0.9);
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .live-banner__meta strong { color: #fff; font-weight: 700; }
+    .live-banner__sep { opacity: 0.5; }
+    .live-banner__btn {
+      background: #fff;
+      color: #991b1b;
+      padding: 14px 26px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px -2px rgba(0,0,0,0.25);
+    }
+    .live-banner__btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 24px -4px rgba(0,0,0,0.35);
+    }
+    .live-banner__btn:active { transform: translateY(0) scale(1); }
+    .live-banner__btn-icon { font-size: 1.1rem; }
+    @media (max-width: 640px) {
+      .live-banner { padding: 16px; border-radius: 14px; }
+      .live-banner__inner { grid-template-columns: 1fr; gap: 12px; }
+      .live-banner__btn { width: 100%; justify-content: center; padding: 13px; }
+    }
+
+    /* ===== STATS DEL CURSO (dashboard visual) ===== */
+    .course-stats {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 20px;
+      background: var(--card, #fff);
+      border: 1px solid var(--border, #e8ede5);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 24px;
+      animation: statsIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes statsIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Donut de progreso */
+    .course-stats__donut-wrap {
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .course-stats__donut {
+      width: 180px;
+      height: 180px;
+      transform: rotate(-90deg);
+    }
+    .course-stats__donut-bg { stroke: var(--bg, #eef2ea); }
+    .course-stats__donut-fg {
+      transition: stroke-dashoffset 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .course-stats__donut-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+    .course-stats__pct {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .course-stats__pct-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Grid de métricas */
+    .course-stats__metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      align-content: center;
+    }
+    .course-stat-card {
+      background: var(--bg, #f4f6f3);
+      border-radius: 12px;
+      padding: 14px;
+      border: 1px solid transparent;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .course-stat-card:hover { border-color: var(--border, #dfe5dc); transform: translateY(-2px); }
+    .course-stat-card__icon {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+    .course-stat-card__value {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+    .course-stat-card__value small {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-left: 4px;
+    }
+    .course-stat-card__label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+    .course-stat-card--highlight {
+      background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+      border-color: #fde68a;
+    }
+    .course-stat-card--highlight .course-stat-card__value { color: #92400e; }
+    .course-stat-card--highlight .course-stat-card__label { color: #b45309; }
+
+    .course-stat-card--success {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-color: #a7f3d0;
+    }
+    .course-stat-card--success .course-stat-card__value { color: #065f46; }
+    .course-stat-card--success .course-stat-card__label { color: #047857; }
+
+    /* Motivación / racha */
+    .course-stats__motiv {
+      grid-column: 1 / -1;
+      margin-top: 6px;
+      background: linear-gradient(135deg, rgba(26,107,47,0.08), rgba(82,201,122,0.12));
+      border-left: 3px solid var(--verde, #1a6b2f);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .course-stats__motiv-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .course-stats__motiv strong { color: var(--verde-oscuro, #0d3d19); font-weight: 700; }
+
+    @media (max-width: 640px) {
+      .course-stats {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 16px;
+      }
+      .course-stats__donut { width: 140px; height: 140px; }
+      .course-stats__pct { font-size: 1.9rem; }
+      .course-stat-card { padding: 10px; }
+      .course-stat-card__value { font-size: 1.25rem; }
+    }
   </style>
 </head>
 <body>
@@ -602,6 +854,28 @@
 
     <!-- INICIO -->
     <div class="page active" id="page-inicio">
+
+      <!-- BANNER SESIÓN EN VIVO -->
+      <div class="live-banner" id="live-banner">
+        <div class="live-banner__inner">
+          <div class="live-banner__left">
+            <span class="live-banner__tag">
+              <span class="live-banner__dot"></span> EN VIVO AHORA
+            </span>
+            <div class="live-banner__title" id="live-banner-titulo">Sesión en vivo</div>
+            <div class="live-banner__meta">
+              <span id="live-banner-instructor"></span>
+              <span class="live-banner__sep" id="live-banner-sep" style="display:none;">·</span>
+              <span id="live-banner-tiempo"></span>
+            </div>
+          </div>
+          <a class="live-banner__btn" id="live-banner-btn" href="#" target="_blank" rel="noopener">
+            <span class="live-banner__btn-icon">🔴</span>
+            <span>Unirme ahora</span>
+          </a>
+        </div>
+      </div>
+
       <div class="hero-banner">
         <div class="hero-inner">
           <div class="hero-text">
@@ -684,6 +958,53 @@
     <div class="page" id="page-detalle-curso">
       <button class="btn-back" onclick="showPage('cursos', document.querySelector('[onclick*=cursos]'))">← Volver a cursos</button>
       <div class="course-detail-header" id="detalle-header"></div>
+
+      <!-- Dashboard de stats del curso -->
+      <div class="course-stats" id="course-stats" style="display:none;">
+        <div class="course-stats__donut-wrap">
+          <svg class="course-stats__donut" viewBox="0 0 120 120">
+            <circle class="course-stats__donut-bg" cx="60" cy="60" r="50" fill="none" stroke-width="12"/>
+            <circle class="course-stats__donut-fg" id="donut-fg" cx="60" cy="60" r="50" fill="none" stroke-width="12"
+                    stroke-linecap="round"
+                    stroke-dasharray="314.159"
+                    stroke-dashoffset="314.159"
+                    stroke="#1a6b2f"/>
+          </svg>
+          <div class="course-stats__donut-center">
+            <div>
+              <div class="course-stats__pct" id="stats-pct">0%</div>
+              <div class="course-stats__pct-label">Completado</div>
+            </div>
+          </div>
+        </div>
+        <div class="course-stats__metrics">
+          <div class="course-stat-card course-stat-card--success">
+            <span class="course-stat-card__icon">✅</span>
+            <div class="course-stat-card__value"><span id="stats-vistas">0</span><small id="stats-total">/0</small></div>
+            <div class="course-stat-card__label">Clases vistas</div>
+          </div>
+          <div class="course-stat-card">
+            <span class="course-stat-card__icon">⏱️</span>
+            <div class="course-stat-card__value"><span id="stats-tiempo">0</span><small>min</small></div>
+            <div class="course-stat-card__label">Tiempo aprox.</div>
+          </div>
+          <div class="course-stat-card">
+            <span class="course-stat-card__icon">📅</span>
+            <div class="course-stat-card__value" style="font-size:.98rem;" id="stats-ultima">—</div>
+            <div class="course-stat-card__label">Última clase</div>
+          </div>
+          <div class="course-stat-card course-stat-card--highlight">
+            <span class="course-stat-card__icon">🏆</span>
+            <div class="course-stat-card__value" id="stats-rango">Novato</div>
+            <div class="course-stat-card__label">Tu nivel</div>
+          </div>
+          <div class="course-stats__motiv" id="stats-motiv">
+            <span class="course-stats__motiv-icon">🌱</span>
+            <span id="stats-motiv-txt">Comienza tu primera clase para arrancar el curso</span>
+          </div>
+        </div>
+      </div>
+
       <div class="video-player-wrap" id="video-player">
         <div class="video-placeholder"><span>▶️</span><p>Selecciona una clase para reproducir</p></div>
       </div>
@@ -1261,8 +1582,102 @@ window.verCurso = function(cursoId) {
 
   // Auto-play primera clase
   reproducirClase(cursoId, 1);
+  actualizarStatsCurso(cursoId);
   showPage("detalle-curso", null);
 };
+
+// Dashboard de stats del curso
+function actualizarStatsCurso(cursoId) {
+  const curso = CURSOS.find(c => c.id === cursoId);
+  const wrap = document.getElementById('course-stats');
+  if (!curso || !wrap) return;
+
+  wrap.style.display = 'grid';
+
+  const total = (curso.clases || []).length;
+  const clasesVistas = progreso[cursoId] || [];
+  const vistas = clasesVistas.length;
+  const pct = total > 0 ? Math.round(vistas / total * 100) : 0;
+
+  // Donut: circumferencia 2πr = 2π·50 ≈ 314.159
+  const circunferencia = 2 * Math.PI * 50;
+  const offset = circunferencia - (pct / 100) * circunferencia;
+  const donutFg = document.getElementById('donut-fg');
+  if (donutFg) {
+    donutFg.style.stroke = curso.color || '#1a6b2f';
+    donutFg.style.strokeDashoffset = offset;
+  }
+
+  // Porcentaje central
+  document.getElementById('stats-pct').textContent = pct + '%';
+
+  // Clases vistas / total
+  document.getElementById('stats-vistas').textContent = vistas;
+  document.getElementById('stats-total').textContent = '/' + total;
+
+  // Tiempo aproximado (estimamos 12 min por clase si no hay duración)
+  const tiempoTotalMin = total * 12;
+  const tiempoVistasMin = vistas * 12;
+  const elTiempo = document.getElementById('stats-tiempo');
+  if (elTiempo) {
+    if (tiempoTotalMin >= 60) {
+      const h = Math.floor(tiempoTotalMin / 60);
+      const m = tiempoTotalMin % 60;
+      elTiempo.textContent = m > 0 ? `${h}h ${m}` : `${h}h`;
+      elTiempo.nextElementSibling.textContent = m > 0 ? 'min total' : ' total';
+    } else {
+      elTiempo.textContent = tiempoTotalMin;
+      elTiempo.nextElementSibling.textContent = 'min total';
+    }
+  }
+
+  // Última clase vista
+  const ultEl = document.getElementById('stats-ultima');
+  if (ultEl) {
+    if (vistas === 0) {
+      ultEl.textContent = 'Sin iniciar';
+    } else {
+      const maxNum = Math.max.apply(null, clasesVistas);
+      const claseObj = (curso.clases || []).find(c => c.num === maxNum);
+      const titClase = claseObj ? claseObj.titulo : ('Clase ' + maxNum);
+      ultEl.textContent = titClase.length > 18 ? titClase.substring(0, 16) + '…' : titClase;
+      ultEl.title = titClase;
+    }
+  }
+
+  // Rango (según % completado)
+  const rangoEl = document.getElementById('stats-rango');
+  let rango = 'Novato';
+  if (pct >= 100) rango = '🥇 Maestro';
+  else if (pct >= 75) rango = '🌟 Avanzado';
+  else if (pct >= 50) rango = '💪 Intermedio';
+  else if (pct >= 25) rango = '🌱 Aprendiz';
+  else if (pct > 0)   rango = '🚀 Iniciado';
+  if (rangoEl) rangoEl.textContent = rango;
+
+  // Mensaje motivacional dinámico
+  const motivEl = document.getElementById('stats-motiv-txt');
+  const motivIcon = document.querySelector('.course-stats__motiv-icon');
+  let motivTxt, motivIconTxt;
+  if (pct === 0) {
+    motivIconTxt = '🌱'; motivTxt = 'Comienza tu primera clase para arrancar el curso';
+  } else if (pct === 100) {
+    motivIconTxt = '🏆'; motivTxt = '<strong>¡Felicidades!</strong> Completaste el curso al 100%. Revisa los materiales para repasar.';
+  } else if (pct >= 75) {
+    motivIconTxt = '🔥'; motivTxt = `<strong>Vas al 75%+</strong> — solo ${total - vistas} clase${total - vistas === 1 ? '' : 's'} para terminar el curso`;
+  } else if (pct >= 50) {
+    motivIconTxt = '💪'; motivTxt = `<strong>¡Ya pasaste la mitad!</strong> Te faltan ${total - vistas} de ${total} clases`;
+  } else if (pct >= 25) {
+    motivIconTxt = '🌿'; motivTxt = `<strong>Buen ritmo.</strong> Has visto ${vistas} de ${total} clases. Sigue así.`;
+  } else {
+    motivIconTxt = '🚜'; motivTxt = `<strong>Ya diste el primer paso.</strong> Te faltan ${total - vistas} clases para dominar este tema`;
+  }
+  if (motivEl)   motivEl.innerHTML = motivTxt;
+  if (motivIcon) motivIcon.textContent = motivIconTxt;
+}
+
+// Exponer para llamadas desde otros puntos (marcar clase, etc.)
+window.actualizarStatsCurso = actualizarStatsCurso;
 
 // ── REPRODUCIR CLASE ──
 window.reproducirClase = function(cursoId, numClase) {
@@ -1324,6 +1739,7 @@ function marcarClase(cursoId, numClase) {
   updateProgreso();
   actualizarEstadisticasPerfil();
   actualizarBtnCompletar(cursoId, numClase, completada);
+  if (typeof actualizarStatsCurso === 'function') actualizarStatsCurso(cursoId);
   const row   = document.getElementById(`clase-${numClase}`);
   const check = document.getElementById(`check-${numClase}`);
   if (row)   row.classList.toggle("completada-row", completada);
@@ -1389,6 +1805,10 @@ function loadSesiones() {
     var sesiones = snap.docs.map(d => ({ id: d.id, ...d.data() }))
       .filter(s => s.fechaHora)
       .sort((a, b) => new Date(a.fechaHora) - new Date(b.fechaHora));
+
+    // Guardar sesiones globalmente para el banner de en vivo
+    window._TODAS_SESIONES = sesiones;
+    if (typeof actualizarBannerEnVivo === 'function') actualizarBannerEnVivo();
 
     // Badge dinámico de sesiones (nuevas desde última visita)
     if (typeof actualizarBadgeSesiones === 'function') actualizarBadgeSesiones(sesiones);
@@ -1841,6 +2261,65 @@ function actualizarBadgeSesiones(sesiones) {
     return originalShowPage.apply(this, arguments);
   };
 })();
+
+
+// ==========================================================
+// ===== BANNER DE SESIÓN EN VIVO
+// ==========================================================
+
+function actualizarBannerEnVivo() {
+  const banner = document.getElementById('live-banner');
+  if (!banner) return;
+
+  const sesiones = window._TODAS_SESIONES || [];
+  const ahora = Date.now();
+
+  // Una sesión está "en vivo" si faltan ≤15 min para empezar o lleva ≤60 min desde su inicio
+  const enVivo = sesiones.find(s => {
+    if (!s.fechaHora) return false;
+    const inicio = new Date(s.fechaHora).getTime();
+    return (inicio - ahora <= 15 * 60 * 1000) && (ahora - inicio <= 60 * 60 * 1000);
+  });
+
+  if (!enVivo) {
+    banner.classList.remove('is-visible');
+    return;
+  }
+
+  // Rellenar datos
+  const titEl    = document.getElementById('live-banner-titulo');
+  const instEl   = document.getElementById('live-banner-instructor');
+  const sepEl    = document.getElementById('live-banner-sep');
+  const tiempoEl = document.getElementById('live-banner-tiempo');
+  const btnEl    = document.getElementById('live-banner-btn');
+
+  if (titEl) titEl.textContent = enVivo.titulo || 'Sesión en vivo';
+  const conInstructor = !!enVivo.instructor;
+  if (instEl) instEl.textContent = conInstructor ? ('👤 ' + enVivo.instructor) : '';
+  if (sepEl)  sepEl.style.display = conInstructor ? '' : 'none';
+
+  // Calcular texto de tiempo (faltan X min / empezó hace Y min)
+  const inicio = new Date(enVivo.fechaHora).getTime();
+  const diffMin = Math.round((inicio - ahora) / 60000);
+  let tiempoTxt;
+  if (diffMin > 0)       tiempoTxt = `⏱ Comienza en ${diffMin} min`;
+  else if (diffMin === 0) tiempoTxt = `⏱ Comenzando ahora`;
+  else                    tiempoTxt = `⏱ Transmitiendo hace ${Math.abs(diffMin)} min`;
+  if (tiempoEl) tiempoEl.textContent = tiempoTxt;
+
+  if (btnEl) {
+    btnEl.href = enVivo.link || '#';
+    btnEl.style.pointerEvents = enVivo.link ? '' : 'none';
+    btnEl.style.opacity = enVivo.link ? '' : '0.7';
+  }
+
+  banner.classList.add('is-visible');
+}
+
+// Refrescar banner cada 30 segundos (el texto del tiempo cambia solo)
+setInterval(() => {
+  if (document.visibilityState === 'visible') actualizarBannerEnVivo();
+}, 30 * 1000);
 
 
 // ==========================================================
