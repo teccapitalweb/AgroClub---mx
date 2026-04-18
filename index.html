@@ -3641,31 +3641,34 @@ function renderNotificaciones(items) {
   const btnLeidas = document.getElementById('btn-marcar-leidas');
   if (!lista) return;
 
-  if (!items || items.length === 0) {
+  // Filtrar: solo mostrar no-leídas (las leídas se ocultan de su vista)
+  const lastRead = getLastReadTs();
+  const noLeidas = (items || []).filter(n => {
+    const fechaTs = n.fecha ? new Date(n.fecha).getTime() : 0;
+    return fechaTs > lastRead;
+  });
+
+  if (noLeidas.length === 0) {
     lista.innerHTML = `
       <div class="notif-empty">
         <div class="notif-empty__icon">🔕</div>
         <strong>Todo al día</strong>
-        <p>No hay notificaciones todavía. Te avisaremos cuando subamos algo nuevo al club 🌱</p>
+        <p>No tienes notificaciones nuevas. Cuando subamos un curso, clase, webinar o aviso, lo verás aquí 🌱</p>
       </div>`;
-    if (btnLeidas) btnLeidas.disabled = true;
+    if (btnLeidas) { btnLeidas.disabled = true; btnLeidas.style.display = 'none'; }
     return;
   }
 
-  const lastRead = getLastReadTs();
-  const hayNoLeidas = items.some(n => new Date(n.fecha || 0).getTime() > lastRead);
-  if (btnLeidas) btnLeidas.disabled = !hayNoLeidas;
+  if (btnLeidas) { btnLeidas.disabled = false; btnLeidas.style.display = ''; }
 
-  lista.innerHTML = items.map(n => {
+  lista.innerHTML = noLeidas.map(n => {
     const info = iconoPorTipo(n.tipo);
-    const fechaTs = n.fecha ? new Date(n.fecha).getTime() : 0;
-    const noLeida = fechaTs > lastRead;
     const fechaTxt = formatearFechaNotif(n.fecha);
     const clickHandler = n.link
       ? `onclick="window.open('${(n.link || '').replace(/'/g, "\\'")}','_blank')"`
       : '';
     return `
-      <div class="notif-item ${noLeida ? 'no-leida' : ''}" ${clickHandler}>
+      <div class="notif-item no-leida" ${clickHandler}>
         <div class="notif-icon ${info.cls}">${n.emoji || info.emoji}</div>
         <div class="notif-body">
           <div class="notif-tipo">${info.label}</div>
@@ -3702,15 +3705,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Interceptar showPage: al entrar a notificaciones, marcar como leídas
+// después de un delay razonable (el socio las lee → se desvanecen elegante)
 (function() {
   const origShowPage = window.showPage;
   window.showPage = function(id, el, bnId) {
     const ret = origShowPage ? origShowPage.apply(this, arguments) : undefined;
     if (id === 'notificaciones') {
-      // Delay pequeño para que el usuario alcance a ver el dot rojo de la no-leída
+      // 3 segundos: suficiente para leer lo nuevo antes de que desaparezcan
       setTimeout(() => {
-        marcarTodasLeidas();
-      }, 1500);
+        // Animar fade-out antes de re-renderizar vacío
+        const items = document.querySelectorAll('#notif-lista .notif-item');
+        items.forEach((el, i) => {
+          el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          setTimeout(() => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateX(30px)';
+          }, i * 80); // cascada de 80ms entre cada una
+        });
+        // Después del fade, marcar leídas → re-renderiza con empty state
+        setTimeout(() => {
+          marcarTodasLeidas();
+        }, 700 + items.length * 80);
+      }, 3000);
     }
     return ret;
   };
