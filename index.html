@@ -168,6 +168,213 @@
     .course-card:nth-child(4) { animation-delay: .2s; }
     @keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+
+    /* ══ 🏆 CERTIFICADOS — HERO + CARDS PREMIUM ══════════════════════════ */
+    .cert-hero {
+      position: relative; overflow: hidden; margin-bottom: 24px;
+      background: linear-gradient(135deg, #0a3d1a 0%, #1a6b2f 50%, #2d8f42 100%);
+      border-radius: 24px; padding: 28px 26px 0;
+      box-shadow: 0 20px 50px rgba(10,61,26,.25);
+      color: #fff; animation: cardIn .4s ease both;
+    }
+    .cert-hero__bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(251,191,36,.18), transparent 50%),
+        radial-gradient(circle at 15% 80%, rgba(255,255,255,.06), transparent 40%);
+      pointer-events: none;
+    }
+    .cert-hero__content {
+      position: relative; z-index: 2; display: flex; align-items: center; gap: 22px;
+    }
+    .cert-hero__trophy {
+      position: relative; width: 110px; height: 110px; flex-shrink: 0;
+      filter: drop-shadow(0 8px 16px rgba(251,191,36,.4));
+    }
+    .cert-hero__trophy-glow {
+      position: absolute; inset: -20px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(251,191,36,.35) 0%, transparent 60%);
+      animation: trophyPulse 3s ease-in-out infinite;
+    }
+    @keyframes trophyPulse {
+      0%,100% { opacity: .6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+    .cert-hero__trophy-svg {
+      width: 100%; height: 100%; position: relative; z-index: 1;
+      animation: trophyFloat 3.5s ease-in-out infinite;
+    }
+    @keyframes trophyFloat {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-4px) rotate(2deg); }
+    }
+    .cert-hero__text { flex: 1; min-width: 0; }
+    .cert-hero__kicker {
+      font-size: .68rem; text-transform: uppercase; letter-spacing: .18em;
+      color: #fbbf24; font-weight: 800; margin-bottom: 6px;
+    }
+    .cert-hero__title {
+      font-size: 1.6rem; font-weight: 800; line-height: 1.1;
+      margin-bottom: 6px; color: #fff;
+    }
+    .cert-hero__desc { font-size: .84rem; line-height: 1.5; opacity: .85; max-width: 440px; }
+    .cert-hero__stats {
+      position: relative; z-index: 2; margin-top: 22px;
+      background: rgba(0,0,0,.2); backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(251,191,36,.3);
+      margin-left: -26px; margin-right: -26px;
+      padding: 14px 26px;
+      display: flex; align-items: center; justify-content: space-around;
+    }
+    .cert-hero__stat { text-align: center; flex: 1; }
+    .cert-hero__stat-num {
+      font-size: 1.4rem; font-weight: 800; color: #fbbf24;
+      font-family: 'Playfair Display', Georgia, serif;
+      line-height: 1;
+    }
+    .cert-hero__stat-lbl {
+      font-size: .62rem; text-transform: uppercase; letter-spacing: .15em;
+      opacity: .75; margin-top: 4px; font-weight: 700;
+    }
+    .cert-hero__stat-sep {
+      width: 1px; height: 28px; background: rgba(251,191,36,.3);
+    }
+
+    /* Grid de certificados */
+    .cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+
+    /* Cada tarjeta = MEDALLA/TROFEO */
+    .cert-card {
+      position: relative; background: var(--card); border-radius: 18px;
+      overflow: hidden; border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
+      animation: cardIn .4s ease both;
+    }
+    .cert-card:nth-child(1) { animation-delay: .05s; }
+    .cert-card:nth-child(2) { animation-delay: .1s; }
+    .cert-card:nth-child(3) { animation-delay: .15s; }
+    .cert-card:nth-child(4) { animation-delay: .2s; }
+    .cert-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+    .cert-card__top {
+      position: relative; padding: 24px 20px 18px;
+      background:
+        linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+      display: flex; align-items: center; gap: 16px;
+      border-bottom: 3px solid #d97706;
+    }
+    .cert-card__top::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 90% 30%, rgba(255,255,255,.5), transparent 50%),
+        radial-gradient(circle at 10% 80%, rgba(217,119,6,.15), transparent 50%);
+      pointer-events: none;
+    }
+    /* Cinta/listón lateral */
+    .cert-card__ribbon {
+      position: absolute; top: -2px; right: 16px; width: 22px; height: 52px;
+      background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+      box-shadow: 0 4px 10px rgba(220,38,38,.3);
+      z-index: 2;
+    }
+
+    .cert-card__medal {
+      position: relative; width: 64px; height: 64px; flex-shrink: 0;
+      z-index: 1;
+    }
+    .cert-card__medal-svg {
+      width: 100%; height: 100%;
+      filter: drop-shadow(0 4px 10px rgba(217,119,6,.35));
+    }
+
+    .cert-card__info { position: relative; flex: 1; z-index: 1; min-width: 0; }
+    .cert-card__badge-cat {
+      display: inline-block;
+      background: rgba(217,119,6,.2); color: #78350f;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: .64rem; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .cert-card__title {
+      font-size: 1rem; font-weight: 800; line-height: 1.25;
+      color: #451a03;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .cert-card__body {
+      padding: 16px 20px;
+    }
+    .cert-card__folio-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 12px; border-bottom: 1px dashed var(--border);
+      margin-bottom: 12px;
+    }
+    .cert-card__folio-lbl {
+      font-size: .62rem; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--muted); font-weight: 700;
+    }
+    .cert-card__folio-val {
+      font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+      font-size: .82rem; font-weight: 800; color: #1a6b2f;
+      letter-spacing: .05em;
+    }
+    .cert-card__date {
+      font-size: .78rem; color: var(--muted); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .cert-card__date strong { color: var(--text); font-weight: 700; }
+
+    .cert-card__actions { display: flex; gap: 8px; }
+    .cert-btn {
+      flex: 1; border: none; border-radius: 10px;
+      padding: 11px 10px; font-size: .78rem; font-weight: 800;
+      font-family: var(--font); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      transition: transform .15s, box-shadow .15s, background .15s;
+    }
+    .cert-btn--primary {
+      background: linear-gradient(135deg, #1a6b2f, #2d8f42); color: #fff;
+      box-shadow: 0 4px 12px rgba(26,107,47,.3);
+    }
+    .cert-btn--primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(26,107,47,.4); }
+    .cert-btn--ghost {
+      background: var(--bg); color: var(--verde);
+      border: 1.5px solid rgba(26,107,47,.2);
+    }
+    .cert-btn--ghost:hover { background: rgba(26,107,47,.06); }
+
+    /* Empty state */
+    .cert-empty {
+      grid-column: 1 / -1;
+      background: var(--surface); border: 1.5px dashed var(--border);
+      border-radius: 18px; padding: 40px 24px; text-align: center;
+    }
+    .cert-empty__icon {
+      font-size: 3rem; margin-bottom: 12px; opacity: .45;
+      filter: grayscale(.3);
+    }
+    .cert-empty__title { font-weight: 800; color: var(--text); margin-bottom: 6px; font-size: 1rem; }
+    .cert-empty__desc { color: var(--muted); font-size: .88rem; line-height: 1.5; max-width: 360px; margin: 0 auto; }
+
+    @media (max-width: 640px) {
+      .cert-hero { padding: 22px 20px 0; border-radius: 20px; }
+      .cert-hero__content { gap: 14px; }
+      .cert-hero__trophy { width: 80px; height: 80px; }
+      .cert-hero__title { font-size: 1.25rem; }
+      .cert-hero__desc { font-size: .78rem; }
+      .cert-hero__stats { margin-left: -20px; margin-right: -20px; padding: 12px 20px; }
+      .cert-hero__stat-num { font-size: 1.2rem; }
+      .cert-grid { grid-template-columns: 1fr; gap: 14px; }
+      .cert-card__top { padding: 20px 16px 16px; gap: 12px; }
+      .cert-card__medal { width: 54px; height: 54px; }
+      .cert-card__title { font-size: .92rem; }
+    }
+    /* ══ FIN CERTIFICADOS ═══════════════════════════════════════════════ */
     .course-thumb {
       height: 190px; display: flex; align-items: center; justify-content: center;
       font-size: 4.5rem; position: relative; overflow: hidden; background: #e8f5e9;
@@ -2356,18 +2563,65 @@
     </div>
 
     <div class="page" id="page-certificados">
-      <div style="margin-bottom:20px;">
-        <h3 style="font-size:1.15rem;font-weight:800;margin-bottom:4px;">🎓 Mis Certificados</h3>
-        <p style="color:var(--muted);font-size:.88rem;">Completa un curso al 100% para generar tu certificado oficial con folio único y verificación QR.</p>
-      </div>
-      <div id="certificados-stats" style="background:linear-gradient(135deg,#1a6b2f,#2d8f42);color:#fff;border-radius:16px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
-        <div>
-          <div style="font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;">Certificados obtenidos</div>
-          <div style="font-size:2.4rem;font-weight:800;line-height:1.1;margin-top:4px;" id="cert-count">0</div>
+      <!-- HERO PREMIUM con trofeo dorado -->
+      <div class="cert-hero">
+        <div class="cert-hero__bg"></div>
+        <div class="cert-hero__content">
+          <div class="cert-hero__trophy">
+            <div class="cert-hero__trophy-glow"></div>
+            <svg viewBox="0 0 100 100" class="cert-hero__trophy-svg">
+              <defs>
+                <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fde68a"/>
+                  <stop offset="40%" stop-color="#fbbf24"/>
+                  <stop offset="80%" stop-color="#d97706"/>
+                  <stop offset="100%" stop-color="#92400e"/>
+                </linearGradient>
+                <linearGradient id="gold-shine" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#fff" stop-opacity=".8"/>
+                  <stop offset="50%" stop-color="#fff" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Base -->
+              <rect x="30" y="82" width="40" height="6" rx="1" fill="url(#gold-grad)"/>
+              <rect x="36" y="72" width="28" height="12" rx="2" fill="url(#gold-grad)"/>
+              <!-- Copa -->
+              <path d="M25 22 Q25 50 50 62 Q75 50 75 22 Z" fill="url(#gold-grad)"/>
+              <path d="M28 24 Q28 48 50 58 Q72 48 72 24 Z" fill="url(#gold-shine)" opacity=".6"/>
+              <!-- Asas -->
+              <path d="M25 28 Q12 30 14 44 Q16 50 25 48" fill="none" stroke="url(#gold-grad)" stroke-width="4" stroke-linecap="round"/>
+              <path d="M75 28 Q88 30 86 44 Q84 50 75 48" fill="none" stroke="url(#gold-grad)" stroke-width="4" stroke-linecap="round"/>
+              <!-- Borde superior -->
+              <rect x="22" y="18" width="56" height="6" rx="2" fill="url(#gold-grad)"/>
+              <!-- Estrella -->
+              <text x="50" y="46" font-size="20" text-anchor="middle" fill="#fff" opacity=".95" font-weight="bold">★</text>
+            </svg>
+          </div>
+          <div class="cert-hero__text">
+            <div class="cert-hero__kicker">Logros oficiales</div>
+            <h3 class="cert-hero__title">Mis Certificados</h3>
+            <p class="cert-hero__desc">Tus constancias oficiales con folio único, firma digital y verificación pública QR.</p>
+          </div>
         </div>
-        <div style="font-size:3rem;opacity:.35;">🎓</div>
+        <div class="cert-hero__stats">
+          <div class="cert-hero__stat">
+            <div class="cert-hero__stat-num" id="cert-count">0</div>
+            <div class="cert-hero__stat-lbl">Obtenidos</div>
+          </div>
+          <div class="cert-hero__stat-sep"></div>
+          <div class="cert-hero__stat">
+            <div class="cert-hero__stat-num" id="cert-year">2026</div>
+            <div class="cert-hero__stat-lbl">Año</div>
+          </div>
+          <div class="cert-hero__stat-sep"></div>
+          <div class="cert-hero__stat">
+            <div class="cert-hero__stat-num" id="cert-ultimo" style="font-size:.92rem;">—</div>
+            <div class="cert-hero__stat-lbl">Último</div>
+          </div>
+        </div>
       </div>
-      <div id="lista-certificados" class="cursos-grid"></div>
+
+      <div id="lista-certificados" class="cert-grid"></div>
     </div>
 
     <div class="page" id="page-perfil">
@@ -3255,17 +3509,21 @@ window.generarOVerCertificado = async function() {
 function renderCertificadosLista() {
   const cont = document.getElementById('lista-certificados');
   const count = document.getElementById('cert-count');
+  const ultimoEl = document.getElementById('cert-ultimo');
+  const yearEl = document.getElementById('cert-year');
   if (!cont) return;
 
   const certs = Object.values(CERTIFICADOS_USUARIO);
   if (count) count.textContent = certs.length;
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   if (certs.length === 0) {
+    if (ultimoEl) ultimoEl.textContent = '—';
     cont.innerHTML = `
-      <div style="grid-column:1/-1;background:var(--surface);border:1px dashed var(--border);border-radius:16px;padding:32px 24px;text-align:center;">
-        <div style="font-size:2.6rem;margin-bottom:8px;">🎓</div>
-        <div style="font-weight:700;color:var(--text);margin-bottom:4px;">Aún no tienes certificados</div>
-        <div style="color:var(--muted);font-size:.88rem;">Completa un curso al 100% para generar tu primer certificado oficial.</div>
+      <div class="cert-empty">
+        <div class="cert-empty__icon">🏆</div>
+        <div class="cert-empty__title">Aún no tienes certificados</div>
+        <div class="cert-empty__desc">Completa cualquier curso al 100% y obtén tu primera constancia oficial con folio único.</div>
       </div>`;
     return;
   }
@@ -3273,25 +3531,64 @@ function renderCertificadosLista() {
   // Ordenar por fecha descendente
   certs.sort((a, b) => new Date(b.fechaEmision) - new Date(a.fechaEmision));
 
+  // Stat: último certificado obtenido (fecha corta)
+  if (ultimoEl && certs[0]) {
+    const fUlt = new Date(certs[0].fechaEmision);
+    ultimoEl.textContent = fUlt.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
+  }
+
   cont.innerHTML = certs.map(c => {
     const fecha = new Date(c.fechaEmision).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+    const tituloSafe = (c.cursoTitulo || '—').replace(/[<>]/g, '');
+    const catSafe = (c.categoria || 'General').replace(/[<>]/g, '');
     return `
-    <div class="course-card" style="cursor:default;">
-      <div class="course-thumb" style="background:linear-gradient(135deg,#1a6b2f,#2d8f42);display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:3.2rem;position:relative;z-index:1;">🎓</span>
-        <div style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,.95);color:#1a6b2f;padding:4px 10px;border-radius:100px;font-size:.7rem;font-weight:800;z-index:2;">${c.folio}</div>
+    <div class="cert-card">
+      <div class="cert-card__ribbon"></div>
+      <div class="cert-card__top">
+        <div class="cert-card__medal">
+          <svg viewBox="0 0 80 100" class="cert-card__medal-svg">
+            <defs>
+              <linearGradient id="medal-g-${c.folio}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fef3c7"/>
+                <stop offset="40%" stop-color="#fbbf24"/>
+                <stop offset="100%" stop-color="#b45309"/>
+              </linearGradient>
+              <linearGradient id="ribbon-g-${c.folio}" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#1a6b2f"/>
+                <stop offset="50%" stop-color="#2d8f42"/>
+                <stop offset="100%" stop-color="#1a6b2f"/>
+              </linearGradient>
+            </defs>
+            <!-- Listón verde arriba -->
+            <path d="M20 0 L60 0 L52 32 L28 32 Z" fill="url(#ribbon-g-${c.folio})"/>
+            <path d="M22 0 L30 0 L30 34 Z" fill="#0a3d1a" opacity=".3"/>
+            <path d="M58 0 L50 0 L50 34 Z" fill="#0a3d1a" opacity=".3"/>
+            <!-- Medalla circular -->
+            <circle cx="40" cy="62" r="28" fill="url(#medal-g-${c.folio})" stroke="#92400e" stroke-width="1.5"/>
+            <circle cx="40" cy="62" r="22" fill="none" stroke="#92400e" stroke-width=".8" opacity=".5"/>
+            <!-- Estrella/laurel central -->
+            <text x="40" y="70" font-size="22" text-anchor="middle" fill="#78350f" font-weight="bold">★</text>
+            <!-- Brillo -->
+            <ellipse cx="32" cy="52" rx="8" ry="4" fill="#fff" opacity=".4"/>
+          </svg>
+        </div>
+        <div class="cert-card__info">
+          <span class="cert-card__badge-cat">${catSafe}</span>
+          <div class="cert-card__title">${tituloSafe}</div>
+        </div>
       </div>
-      <div class="course-info">
-        <div class="course-category">${c.categoria}</div>
-        <div class="course-title">${c.cursoTitulo}</div>
-        <div class="course-desc">Emitido el ${fecha}</div>
-        <div class="course-meta" style="flex-direction:column;align-items:stretch;gap:8px;">
-          <button class="btn-ver-curso" onclick="window.open('ver-certificado.html?folio=${encodeURIComponent(c.folio)}','_blank')">
+      <div class="cert-card__body">
+        <div class="cert-card__folio-row">
+          <span class="cert-card__folio-lbl">Folio oficial</span>
+          <span class="cert-card__folio-val">${c.folio}</span>
+        </div>
+        <div class="cert-card__date">📅 Emitido el <strong>${fecha}</strong></div>
+        <div class="cert-card__actions">
+          <button class="cert-btn cert-btn--primary" onclick="window.open('ver-certificado.html?folio=${encodeURIComponent(c.folio)}','_blank')">
             📄 Ver / Descargar
           </button>
-          <button onclick="copiarLinkVerificacion('${c.folio}')"
-            style="background:rgba(26,107,47,.08);color:var(--verde);border:1px solid rgba(26,107,47,.2);border-radius:10px;padding:8px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--font);">
-            🔗 Copiar link público
+          <button class="cert-btn cert-btn--ghost" onclick="copiarLinkVerificacion('${c.folio}')">
+            🔗 Link público
           </button>
         </div>
       </div>
