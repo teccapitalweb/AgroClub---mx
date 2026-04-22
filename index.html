@@ -2701,6 +2701,7 @@ onAuthStateChanged(auth, async (user) => {
 
   // Setear currentUser inmediatamente con el UID de auth
   currentUser = { uid: user.uid, email: user.email };
+  window.currentUser = currentUser;
 
   // Buscar miembro por EMAIL (el admin usa add() con ID aleatorio, no el UID)
   const q = query(collection(db, "miembros"), where("email", "==", user.email));
@@ -2713,6 +2714,7 @@ onAuthStateChanged(auth, async (user) => {
       signOut(auth); return;
     }
     currentUser = { uid: user.uid, ...data };
+    window.currentUser = currentUser;
     const nombre = data.nombre || user.email;
     document.getElementById("userName").textContent = nombre.split(" ")[0];
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
@@ -2772,16 +2774,52 @@ function loadCursosFirebase() {
 }
 
 // ── RENDER CURSOS ──
+
+// ═══════════════════════════════════════════════════════════════════════
+// SISTEMA DE DESBLOQUEO ESCALONADO POR USUARIO
+// ═══════════════════════════════════════════════════════════════════════
+// Cada curso se desbloquea individualmente según la fechaRegistro del socio.
+// - Curso con orden 1 → disponible desde día 0 (día que pagó)
+// - Curso con orden 2 → +15 días desde fechaRegistro
+// - Curso con orden N → +(N-1)*15 días desde fechaRegistro
+// - Si el curso tiene fechaDesbloqueo (fecha manual global), esa prevalece.
+// ═══════════════════════════════════════════════════════════════════════
+const DIAS_ENTRE_CURSOS = 15;
+
+// Calcula la fecha de desbloqueo de un curso para el usuario actual
+// Retorna: Date | null  (null = disponible desde siempre)
+function calcularFechaDesbloqueo(curso) {
+  // Prioridad 1: fecha manual global (override para casos especiales)
+  if (curso.fechaDesbloqueo) {
+    return new Date(curso.fechaDesbloqueo + 'T00:00:00');
+  }
+  // Prioridad 2: orden + fechaRegistro del usuario
+  const usuario = window.currentUser;
+  if (!usuario || !usuario.fechaRegistro) return null; // sin usuario → no bloquear
+  if (!curso.orden || curso.orden <= 1) return null;   // orden 1 o sin orden → disponible ya
+
+  const base = new Date(usuario.fechaRegistro);
+  base.setHours(0,0,0,0);
+  const diasAEsperar = (curso.orden - 1) * DIAS_ENTRE_CURSOS;
+  const fechaDesbloqueo = new Date(base);
+  fechaDesbloqueo.setDate(fechaDesbloqueo.getDate() + diasAEsperar);
+  return fechaDesbloqueo;
+}
+
+// ¿El curso está bloqueado para el usuario actual HOY?
+function estaCursoBloqueadoParaUsuario(curso) {
+  const fd = calcularFechaDesbloqueo(curso);
+  if (!fd) return false;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  return fd > hoy;
+}
+
 function renderCursos() {
   const hoy = new Date();
   hoy.setHours(0,0,0,0);
 
-  // Helper: ¿está bloqueado por fecha?
-  const estaBloqueado = (c) => {
-    if (!c.fechaDesbloqueo) return false;
-    const fechaD = new Date(c.fechaDesbloqueo + 'T00:00:00');
-    return fechaD > hoy;
-  };
+  // Helper: ¿está bloqueado por fecha? (ahora usa el sistema personalizado)
+  const estaBloqueado = (c) => estaCursoBloqueadoParaUsuario(c);
 
   // Genera la card HTML de un curso (con overlay de bloqueo si aplica)
   const renderCard = (c) => {
@@ -2791,11 +2829,11 @@ function renderCursos() {
 
     let bloqueado = false;
     let fechaTexto = '';
-    if (c.fechaDesbloqueo) {
-      const fechaD = new Date(c.fechaDesbloqueo + 'T00:00:00');
-      if (fechaD > hoy) {
+    const fdPersonal = calcularFechaDesbloqueo(c);
+    if (fdPersonal) {
+      if (fdPersonal > hoy) {
         bloqueado = true;
-        fechaTexto = fechaD.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+        fechaTexto = fdPersonal.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
       }
     }
 
@@ -3134,11 +3172,7 @@ function updateProgreso() {
   // Filtrar solo cursos desbloqueados
   const hoyProg = new Date();
   hoyProg.setHours(0,0,0,0);
-  const cursosDisponibles = (CURSOS || []).filter(c => {
-    if (!c.fechaDesbloqueo) return true;
-    const fd = new Date(c.fechaDesbloqueo + 'T00:00:00');
-    return fd <= hoyProg;
-  });
+  const cursosDisponibles = (CURSOS || []).filter(c => !estaCursoBloqueadoParaUsuario(c));
 
   // Actualizar contador
   const countTxt = cursosDisponibles.length === 1 ? '1 curso' : `${cursosDisponibles.length} cursos`;
@@ -4177,10 +4211,7 @@ function actualizarBadgeCursos() {
   const hoy = new Date(); hoy.setHours(0,0,0,0);
   const nuevos = (CURSOS || []).filter(c => {
     // Bloqueado = aún no cuenta como "nuevo"
-    if (c.fechaDesbloqueo) {
-      const fd = new Date(c.fechaDesbloqueo + 'T00:00:00');
-      if (fd > hoy) return false;
-    }
+    if (estaCursoBloqueadoParaUsuario(c)) return false;
     if (!c.fecha) return false;
     return new Date(c.fecha).getTime() > ultVisita;
   }).length;
