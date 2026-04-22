@@ -2106,6 +2106,7 @@
       <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🎥</span> Webinars</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>📄</span> Materiales</div></div>
       <div class="sidebar-item" onclick="showPage('notificaciones',this)"><div class="sidebar-item-left"><span>🔔</span> Notificaciones</div><span class="sidebar-badge" id="badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span></div>
+      <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mi cuenta</div>
@@ -2289,6 +2290,23 @@
       <div class="video-player-wrap" id="video-player">
         <div class="video-placeholder"><span>▶️</span><p>Selecciona una clase para reproducir</p></div>
       </div>
+
+      <!-- 🎓 BANNER DE CERTIFICADO (aparece cuando se completa el curso al 100%) -->
+      <div id="cert-banner" style="display:none;margin:16px 0;background:linear-gradient(135deg,#1a6b2f,#2d8f42);color:#fff;border-radius:16px;padding:22px;box-shadow:0 10px 30px rgba(26,107,47,.3);">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
+          <div style="font-size:2.6rem;">🎓</div>
+          <div style="flex:1;">
+            <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;opacity:.85;">¡Felicidades!</div>
+            <div style="font-size:1.15rem;font-weight:800;margin-top:2px;">Completaste el curso al 100%</div>
+            <div style="font-size:.85rem;opacity:.9;margin-top:2px;" id="cert-banner-sub">Tu certificado oficial está listo</div>
+          </div>
+        </div>
+        <button id="btn-generar-cert" onclick="generarOVerCertificado()"
+          style="width:100%;padding:14px;border-radius:12px;border:none;background:#fff;color:#1a6b2f;font-size:.92rem;font-weight:800;font-family:var(--font);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);">
+          🎓 Generar mi certificado
+        </button>
+      </div>
+
       <div id="btn-completar-wrap" style="display:none;margin:14px 0;">
         <button id="btn-completar" onclick="marcarClaseActual()"
           style="width:100%;padding:14px;border-radius:14px;border:none;font-size:.92rem;font-weight:700;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,color .2s;">
@@ -2335,6 +2353,21 @@
           <strong>Cargando notificaciones...</strong>
         </div>
       </div>
+    </div>
+
+    <div class="page" id="page-certificados">
+      <div style="margin-bottom:20px;">
+        <h3 style="font-size:1.15rem;font-weight:800;margin-bottom:4px;">🎓 Mis Certificados</h3>
+        <p style="color:var(--muted);font-size:.88rem;">Completa un curso al 100% para generar tu certificado oficial con folio único y verificación QR.</p>
+      </div>
+      <div id="certificados-stats" style="background:linear-gradient(135deg,#1a6b2f,#2d8f42);color:#fff;border-radius:16px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+        <div>
+          <div style="font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;">Certificados obtenidos</div>
+          <div style="font-size:2.4rem;font-weight:800;line-height:1.1;margin-top:4px;" id="cert-count">0</div>
+        </div>
+        <div style="font-size:3rem;opacity:.35;">🎓</div>
+      </div>
+      <div id="lista-certificados" class="cursos-grid"></div>
     </div>
 
     <div class="page" id="page-perfil">
@@ -2615,7 +2648,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, addDoc, query, where, orderBy, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -2715,6 +2748,8 @@ onAuthStateChanged(auth, async (user) => {
     }
     currentUser = { uid: user.uid, ...data };
     window.currentUser = currentUser;
+    // Cargar certificados del usuario
+    if (typeof cargarCertificadosUsuario === 'function') cargarCertificadosUsuario();
     const nombre = data.nombre || user.email;
     document.getElementById("userName").textContent = nombre.split(" ")[0];
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
@@ -3065,6 +3100,11 @@ function actualizarStatsCurso(cursoId) {
   }
   if (motivEl)   motivEl.innerHTML = motivTxt;
   if (motivIcon) motivIcon.textContent = motivIconTxt;
+
+  // 🎓 Banner de certificado (aparece solo si 100%)
+  if (typeof actualizarBannerCertificado === 'function') {
+    actualizarBannerCertificado(cursoId, pct);
+  }
 }
 
 // Exponer para llamadas desde otros puntos (marcar clase, etc.)
@@ -3099,6 +3139,181 @@ window.reproducirClase = function(cursoId, numClase) {
     btn.dataset.numClase = numClase;
   }
 };
+
+// ═══════════════════════════════════════════════════════════════════════
+// 🎓 SISTEMA DE CERTIFICADOS
+// ═══════════════════════════════════════════════════════════════════════
+// Estado: mapa {cursoId: folio} de los certificados ya emitidos del socio
+let CERTIFICADOS_USUARIO = {};
+let currentCursoIdDetalle = null;
+
+// Cargar certificados del usuario al inicializar
+async function cargarCertificadosUsuario() {
+  if (!currentUser || !currentUser.uid) return;
+  try {
+    const q = query(collection(db, 'certificados'), where('miembroUid', '==', currentUser.uid));
+    const snap = await getDocs(q);
+    CERTIFICADOS_USUARIO = {};
+    snap.forEach(d => {
+      const data = d.data();
+      CERTIFICADOS_USUARIO[data.cursoId] = { folio: d.id, ...data };
+    });
+    // Refrescar vista si estamos en página certificados
+    const pageCert = document.getElementById('page-certificados');
+    if (pageCert && pageCert.classList.contains('active')) renderCertificadosLista();
+  } catch (e) {
+    console.warn('No se pudieron cargar certificados:', e.message);
+  }
+}
+
+// Actualizar banner de certificado según progreso
+function actualizarBannerCertificado(cursoId, pct) {
+  currentCursoIdDetalle = cursoId;
+  const banner = document.getElementById('cert-banner');
+  if (!banner) return;
+  if (pct < 100) {
+    banner.style.display = 'none';
+    return;
+  }
+  banner.style.display = 'block';
+  const btn = document.getElementById('btn-generar-cert');
+  const sub = document.getElementById('cert-banner-sub');
+  if (CERTIFICADOS_USUARIO[cursoId]) {
+    if (btn) btn.textContent = '📄 Ver mi certificado';
+    if (sub) sub.textContent = 'Certificado folio ' + CERTIFICADOS_USUARIO[cursoId].folio;
+  } else {
+    if (btn) btn.textContent = '🎓 Generar mi certificado';
+    if (sub) sub.textContent = 'Tu certificado oficial está listo';
+  }
+}
+
+// Generar folio único AGC-2026-00001
+async function generarFolioUnico() {
+  const year = new Date().getFullYear();
+  // Contar certificados del año actual para obtener el siguiente número
+  const q = query(collection(db, 'certificados'), where('year', '==', year));
+  const snap = await getDocs(q);
+  const siguiente = snap.size + 1;
+  return `AGC-${year}-${String(siguiente).padStart(5, '0')}`;
+}
+
+// Generar o abrir certificado
+window.generarOVerCertificado = async function() {
+  if (!currentCursoIdDetalle) return;
+  const cursoId = currentCursoIdDetalle;
+
+  // Si ya tiene certificado, solo abrirlo
+  if (CERTIFICADOS_USUARIO[cursoId]) {
+    const folio = CERTIFICADOS_USUARIO[cursoId].folio;
+    window.open('ver-certificado.html?folio=' + encodeURIComponent(folio), '_blank');
+    return;
+  }
+
+  const btn = document.getElementById('btn-generar-cert');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generando...'; }
+
+  try {
+    const curso = CURSOS.find(c => c.id === cursoId);
+    if (!curso) throw new Error('Curso no encontrado');
+    if (!currentUser || !currentUser.uid) throw new Error('Sesión no válida');
+
+    const folio = await generarFolioUnico();
+    const year  = new Date().getFullYear();
+    const totalClases = (curso.clases || []).length;
+
+    const datos = {
+      miembroUid:     currentUser.uid,
+      miembroNombre:  currentUser.nombre || currentUser.email || 'Socio AgroClub',
+      miembroEmail:   currentUser.email || '',
+      cursoId:        cursoId,
+      cursoTitulo:    curso.titulo,
+      categoria:      curso.categoria || 'General',
+      totalClases:    totalClases,
+      fechaEmision:   new Date().toISOString(),
+      year:           year,
+      createdAt:      serverTimestamp()
+    };
+
+    // Usar el folio como ID del doc para evitar duplicados
+    await setDoc(doc(db, 'certificados', folio), datos);
+
+    CERTIFICADOS_USUARIO[cursoId] = { folio, ...datos };
+
+    // Abrir certificado en nueva pestaña
+    window.open('ver-certificado.html?folio=' + encodeURIComponent(folio), '_blank');
+
+    // Actualizar UI
+    actualizarBannerCertificado(cursoId, 100);
+  } catch (e) {
+    console.error('Error generando certificado:', e);
+    alert('No se pudo generar el certificado. Intenta de nuevo en unos segundos.');
+    if (btn) { btn.disabled = false; btn.textContent = '🎓 Generar mi certificado'; }
+  }
+};
+
+// Renderizar lista de certificados (página Mis Certificados)
+function renderCertificadosLista() {
+  const cont = document.getElementById('lista-certificados');
+  const count = document.getElementById('cert-count');
+  if (!cont) return;
+
+  const certs = Object.values(CERTIFICADOS_USUARIO);
+  if (count) count.textContent = certs.length;
+
+  if (certs.length === 0) {
+    cont.innerHTML = `
+      <div style="grid-column:1/-1;background:var(--surface);border:1px dashed var(--border);border-radius:16px;padding:32px 24px;text-align:center;">
+        <div style="font-size:2.6rem;margin-bottom:8px;">🎓</div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:4px;">Aún no tienes certificados</div>
+        <div style="color:var(--muted);font-size:.88rem;">Completa un curso al 100% para generar tu primer certificado oficial.</div>
+      </div>`;
+    return;
+  }
+
+  // Ordenar por fecha descendente
+  certs.sort((a, b) => new Date(b.fechaEmision) - new Date(a.fechaEmision));
+
+  cont.innerHTML = certs.map(c => {
+    const fecha = new Date(c.fechaEmision).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `
+    <div class="course-card" style="cursor:default;">
+      <div class="course-thumb" style="background:linear-gradient(135deg,#1a6b2f,#2d8f42);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:3.2rem;position:relative;z-index:1;">🎓</span>
+        <div style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,.95);color:#1a6b2f;padding:4px 10px;border-radius:100px;font-size:.7rem;font-weight:800;z-index:2;">${c.folio}</div>
+      </div>
+      <div class="course-info">
+        <div class="course-category">${c.categoria}</div>
+        <div class="course-title">${c.cursoTitulo}</div>
+        <div class="course-desc">Emitido el ${fecha}</div>
+        <div class="course-meta" style="flex-direction:column;align-items:stretch;gap:8px;">
+          <button class="btn-ver-curso" onclick="window.open('ver-certificado.html?folio=${encodeURIComponent(c.folio)}','_blank')">
+            📄 Ver / Descargar
+          </button>
+          <button onclick="copiarLinkVerificacion('${c.folio}')"
+            style="background:rgba(26,107,47,.08);color:var(--verde);border:1px solid rgba(26,107,47,.2);border-radius:10px;padding:8px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--font);">
+            🔗 Copiar link público
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.copiarLinkVerificacion = function(folio) {
+  const base = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+  const link = base + 'verificar.html?folio=' + encodeURIComponent(folio);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(() => {
+      if (typeof window.showToast === 'function') window.showToast('🔗 Link copiado al portapapeles');
+      else alert('Link copiado: ' + link);
+    });
+  } else {
+    prompt('Copia este link:', link);
+  }
+};
+
+window.renderCertificadosLista = renderCertificadosLista;
+// ═══════════════════════════════════════════════════════════════════════
 
 // ── MARCAR CLASE COMPLETADA ──
 function actualizarBtnCompletar(cursoId, numClase, completada) {
@@ -3744,6 +3959,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const origShowPage = window.showPage;
   window.showPage = function(id, el, bnId) {
     const ret = origShowPage ? origShowPage.apply(this, arguments) : undefined;
+    // 🎓 Renderizar lista cuando entra a certificados
+    if (id === 'certificados' && typeof renderCertificadosLista === 'function') {
+      renderCertificadosLista();
+    }
     if (id === 'notificaciones') {
       // 3 segundos: suficiente para leer lo nuevo antes de que desaparezcan
       setTimeout(() => {
