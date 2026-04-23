@@ -321,6 +321,37 @@
       white-space: nowrap;
     }
     .free-cta-section__btn:hover { transform: translateY(-1px); }
+
+    /* INPUTS BLOQUEADOS para usuarios FREE en herramientas y apoyos */
+    body.is-free #page-herramientas input,
+    body.is-free #page-herramientas select,
+    body.is-free #page-herramientas textarea,
+    body.is-free #page-apoyos select,
+    body.is-free #foro-modal input,
+    body.is-free #foro-modal textarea,
+    body.is-free #modal-parcela input,
+    body.is-free #modal-parcela select,
+    body.is-free #modal-evento input,
+    body.is-free #modal-evento textarea {
+      pointer-events: none;
+      opacity: .65;
+      cursor: not-allowed;
+      background-image: linear-gradient(45deg, transparent 48%, rgba(251,191,36,.2) 48%, rgba(251,191,36,.2) 52%, transparent 52%);
+      background-size: 10px 10px;
+    }
+    body.is-free #page-herramientas .herr-btn-pri,
+    body.is-free #page-herramientas .herr-chip {
+      pointer-events: auto; /* Sí permitir click para disparar paywall */
+    }
+    body.is-free #page-herramientas .herr-tab {
+      pointer-events: auto; /* que pueda cambiar tabs para ver */
+      opacity: 1;
+    }
+
+    /* Badge "Bloqueado" visible sobre botones de acción */
+    body.is-free #page-herramientas .herr-btn-pri::before {
+      content: '🔒 ';
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     a { text-decoration: none; color: inherit; }
@@ -7061,6 +7092,66 @@ window.cerrarPaywallBg = function(e) {
       return orig.apply(this, args);
     };
   }
+})();
+
+// 9) Conversor de unidades (bloquear resultado)
+(function() {
+  const esperar = () => {
+    const orig = window.convertir;
+    if (typeof orig !== 'function') { setTimeout(esperar, 300); return; }
+    window.convertir = function(...args) {
+      if (!esVIPActivo()) {
+        const res = document.getElementById('conv-resultados');
+        if (res) res.innerHTML = '<div style="text-align:center;padding:30px 20px;color:#92400e;"><div style="font-size:2.5rem;margin-bottom:10px;">🔒</div><div style="font-weight:800;margin-bottom:4px;">Conversor bloqueado</div><div style="font-size:.85rem;">Suscríbete para calcular conversiones ilimitadas</div></div>';
+        return;
+      }
+      return orig.apply(this, args);
+    };
+  };
+  esperar();
+})();
+
+// 10) Guardar parcela / evento
+(function() {
+  const esperarP = () => {
+    const orig = window.guardarParcela;
+    if (typeof orig !== 'function') { setTimeout(esperarP, 300); return; }
+    window.guardarParcela = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('bitacora'); return; }
+      return orig.apply(this, args);
+    };
+  };
+  const esperarE = () => {
+    const orig = window.guardarEvento;
+    if (typeof orig !== 'function') { setTimeout(esperarE, 300); return; }
+    window.guardarEvento = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('bitacora'); return; }
+      return orig.apply(this, args);
+    };
+  };
+  esperarP(); esperarE();
+})();
+
+// 11) Apoyos del gobierno — bloquear click en "Ver info oficial"
+(function() {
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest && e.target.closest('.apoyo-item__link');
+    if (link && !esVIPActivo()) {
+      e.preventDefault();
+      mostrarPaywallModal('apoyos');
+      return false;
+    }
+  }, true);
+})();
+
+// 12) Bloquear los filtros/selects de Apoyos también
+(function() {
+  document.addEventListener('change', (e) => {
+    if ((e.target.id === 'apoyo-filtro-estado' || e.target.id === 'apoyo-filtro-tipo') && !esVIPActivo()) {
+      e.target.value = ''; // resetear
+      mostrarPaywallModal('apoyos');
+    }
+  }, true);
 })();
 
 // ===== 🌙 TEMA CLARO/OSCURO =====
