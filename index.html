@@ -105,6 +105,13 @@
       transform: translateX(26px);
       background: #0f1411;
     }
+
+    @media (max-width: 640px) {
+      .tema-card { padding: 12px 14px; }
+      .tema-card__icon { width: 36px; height: 36px; font-size: 1.3rem; }
+      .tema-card__txt strong { font-size: .88rem; }
+      .tema-card__txt span { font-size: .72rem; }
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     a { text-decoration: none; color: inherit; }
@@ -3302,6 +3309,64 @@
       </span>
       <span class="mobile-drawer__item-label">Notificaciones</span>
       <span class="mobile-drawer__item-badge" id="drawer-badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="foro" onclick="drawerIr('foro')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Foro VIP</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="certificados" onclick="drawerIr('certificados')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="7"/>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Certificados</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="logros" onclick="drawerIr('logros')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9H4.5a2.5 2.5 0 010-5H6"/>
+          <path d="M18 9h1.5a2.5 2.5 0 000-5H18"/>
+          <path d="M4 22h16"/>
+          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+          <path d="M18 2H6v7a6 6 0 0012 0V2z"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Logros</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="herramientas" onclick="drawerIr('herramientas')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Herramientas</span>
+    </button>
+
+    <button class="mobile-drawer__item" data-page="apoyos" onclick="drawerIr('apoyos')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="21" x2="21" y2="21"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <polyline points="5 6 12 3 19 6"/>
+          <line x1="4" y1="10" x2="4" y2="21"/>
+          <line x1="20" y1="10" x2="20" y2="21"/>
+          <line x1="8" y1="14" x2="8" y2="17"/>
+          <line x1="12" y1="14" x2="12" y2="17"/>
+          <line x1="16" y1="14" x2="16" y2="17"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Apoyos gob.</span>
     </button>
 
     <div class="mobile-drawer__divider"></div>
