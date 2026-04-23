@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgroClub MX — Iniciar sesión</title>
+  <title>AgroClub MX — Acceso</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,7 +15,7 @@
     }
     .login-card {
       background: #fff; border-radius: 20px; padding: 40px;
-      width: 100%; max-width: 420px;
+      width: 100%; max-width: 440px;
       box-shadow: 0 24px 64px rgba(0,0,0,.25);
     }
     .login-logo {
@@ -29,9 +29,26 @@
     }
     .logo-text h2 { font-size: 1.2rem; font-weight: 800; color: #1a1f18; }
     .logo-text p { font-size: .78rem; color: #6b7a65; }
+
+    /* Tabs de Login / Registro */
+    .auth-tabs {
+      display: flex; gap: 6px; background: #f0f4ee; border-radius: 12px;
+      padding: 4px; margin-bottom: 22px;
+    }
+    .auth-tab {
+      flex: 1; padding: 10px; border: none; background: transparent;
+      border-radius: 9px; font-family: inherit; font-weight: 700;
+      font-size: .88rem; color: #6b7a65; cursor: pointer;
+      transition: all .2s;
+    }
+    .auth-tab.active {
+      background: #fff; color: #1a6b2f;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
     h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; color: #1a1f18; }
-    .sub { font-size: .88rem; color: #6b7a65; margin-bottom: 28px; }
-    .form-group { margin-bottom: 16px; }
+    .sub { font-size: .88rem; color: #6b7a65; margin-bottom: 22px; }
+    .form-group { margin-bottom: 14px; }
     label { display: block; font-size: .78rem; font-weight: 600; color: #6b7a65; margin-bottom: 6px; }
     input {
       width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8dc;
@@ -39,24 +56,42 @@
       transition: border-color .2s;
     }
     input:focus { border-color: #52c97a; }
+
     .btn-login {
       width: 100%; padding: 14px; background: #1a6b2f; color: #fff;
       border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
       cursor: pointer; font-family: inherit; margin-top: 8px; transition: background .2s;
     }
     .btn-login:hover { background: #2d9e4f; }
+    .btn-login.loading { opacity: .6; pointer-events: none; }
+
     .error-msg {
       background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.2);
       color: #dc2626; font-size: .82rem; padding: 10px 14px;
-      border-radius: 10px; margin-bottom: 16px; display: none;
+      border-radius: 10px; margin-bottom: 14px; display: none;
     }
-    .loading { opacity: .6; pointer-events: none; }
-    .divider { text-align: center; color: #6b7a65; font-size: .78rem; margin: 20px 0; }
-    .btn-wa {
-      width: 100%; padding: 12px; background: #25D366; color: #fff;
-      border: none; border-radius: 12px; font-size: .9rem; font-weight: 700;
-      cursor: pointer; font-family: inherit; display: flex; align-items: center;
-      justify-content: center; gap: 8px;
+    .success-msg {
+      background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.25);
+      color: #047857; font-size: .82rem; padding: 10px 14px;
+      border-radius: 10px; margin-bottom: 14px; display: none;
+    }
+
+    .auth-view { display: none; }
+    .auth-view.active { display: block; }
+
+    .small-note {
+      font-size: .75rem; color: #6b7a65; text-align: center;
+      margin-top: 14px; line-height: 1.5;
+    }
+    .small-note a { color: #1a6b2f; font-weight: 700; text-decoration: none; }
+
+    .free-banner {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 1px solid #fbbf24;
+      padding: 10px 14px; border-radius: 10px;
+      font-size: .78rem; color: #78350f;
+      margin-bottom: 14px; text-align: center;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -66,30 +101,71 @@
       <div class="logo-icon">AC</div>
       <div class="logo-text">
         <h2>AgroClub MX</h2>
-        <p>Portal de miembros VIP</p>
+        <p>Portal de miembros</p>
       </div>
     </div>
-    <h3>Bienvenido 🌱</h3>
-    <p class="sub">Inicia sesión para acceder a tu contenido exclusivo</p>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="cambiarTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" id="tabRegistro" onclick="cambiarTab('registro')">Crear cuenta</button>
+    </div>
+
     <div class="error-msg" id="errorMsg"></div>
-    <div class="form-group">
-      <label>Correo electrónico</label>
-      <input type="email" id="email" placeholder="tu@correo.com">
+    <div class="success-msg" id="successMsg"></div>
+
+    <!-- VIEW LOGIN -->
+    <div class="auth-view active" id="viewLogin">
+      <h3>Bienvenido 🌱</h3>
+      <p class="sub">Inicia sesión para acceder a tu contenido</p>
+
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="loginEmail" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')iniciarSesion()">
+      </div>
+      <button class="btn-login" id="btnLogin" onclick="iniciarSesion()">Iniciar sesión →</button>
+
+      <div class="small-note">
+        ¿Olvidaste tu contraseña? <a href="#" onclick="recuperarPassword();return false;">Recuperar</a>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password" id="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')iniciarSesion()">
+
+    <!-- VIEW REGISTRO -->
+    <div class="auth-view" id="viewRegistro">
+      <h3>Crea tu cuenta 🌾</h3>
+      <p class="sub">Regístrate gratis y conoce el portal. Suscríbete cuando quieras.</p>
+
+      <div class="free-banner">
+        🎁 Cuenta gratuita — acceso limitado al portal
+      </div>
+
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="regNombre" placeholder="Juan Pérez">
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="regEmail" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña (mín. 6 caracteres)</label>
+        <input type="password" id="regPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')crearCuenta()">
+      </div>
+      <button class="btn-login" id="btnRegistro" onclick="crearCuenta()">Crear cuenta gratis →</button>
+
+      <div class="small-note">
+        Al registrarte aceptas los <a href="https://agrotecamerican.com/privacidad.html" target="_blank">términos y privacidad</a>
+      </div>
     </div>
-    <button class="btn-login" id="btnLogin" onclick="iniciarSesion()">Iniciar sesión →</button>
-    <div class="divider">¿No tienes acceso?</div>
-    <button class="btn-wa" onclick="window.open('https://wa.me/5212361066811?text=Hola!%20Quiero%20suscribirme%20a%20AgroClub%20MX%20VIP','_blank')">
-      💬 Suscribirme por WhatsApp
-    </button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCa6zt7YD3QUzGxyPky0zPPfjQwhtYMeTw",
@@ -103,34 +179,107 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Si ya está logueado, redirigir
+    // Si ya está logueado, redirigir al portal
     onAuthStateChanged(auth, (user) => {
       if (user) window.location.href = "index.html";
     });
 
-    window.iniciarSesion = async function() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const btn = document.getElementById("btnLogin");
-      const err = document.getElementById("errorMsg");
-
-      if (!email || !password) {
-        err.textContent = "Por favor llena todos los campos.";
-        err.style.display = "block"; return;
+    // Cambiar entre login / registro
+    window.cambiarTab = function(tab) {
+      const tl = document.getElementById('tabLogin');
+      const tr = document.getElementById('tabRegistro');
+      const vl = document.getElementById('viewLogin');
+      const vr = document.getElementById('viewRegistro');
+      document.getElementById('errorMsg').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'none';
+      if (tab === 'login') {
+        tl.classList.add('active'); tr.classList.remove('active');
+        vl.classList.add('active'); vr.classList.remove('active');
+      } else {
+        tr.classList.add('active'); tl.classList.remove('active');
+        vr.classList.add('active'); vl.classList.remove('active');
       }
+    };
 
-      btn.textContent = "Entrando...";
-      btn.classList.add("loading");
-      err.style.display = "none";
+    function mostrarError(msg) {
+      const e = document.getElementById('errorMsg');
+      e.textContent = msg; e.style.display = 'block';
+      document.getElementById('successMsg').style.display = 'none';
+    }
+    function mostrarOk(msg) {
+      const e = document.getElementById('successMsg');
+      e.textContent = msg; e.style.display = 'block';
+      document.getElementById('errorMsg').style.display = 'none';
+    }
 
+    // Mapeo de errores de Firebase a mensajes en español
+    function traducirError(code) {
+      const errores = {
+        'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+        'auth/wrong-password': 'Contraseña incorrecta.',
+        'auth/user-not-found': 'No existe una cuenta con ese correo.',
+        'auth/invalid-email': 'El correo no es válido.',
+        'auth/email-already-in-use': 'Ya existe una cuenta con ese correo. Inicia sesión.',
+        'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
+        'auth/too-many-requests': 'Demasiados intentos fallidos. Espera unos minutos.',
+        'auth/network-request-failed': 'Sin conexión a internet.'
+      };
+      return errores[code] || 'Error: ' + code;
+    }
+
+    // INICIAR SESIÓN
+    window.iniciarSesion = async function() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const btn = document.getElementById("btnLogin");
+
+      if (!email || !password) return mostrarError("Llena todos los campos.");
+
+      btn.textContent = "Entrando..."; btn.classList.add("loading");
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = "index.html";
+        // onAuthStateChanged arriba redirige
       } catch (e) {
-        btn.textContent = "Iniciar sesión →";
-        btn.classList.remove("loading");
-        err.textContent = "Correo o contraseña incorrectos. Intenta de nuevo.";
-        err.style.display = "block";
+        btn.textContent = "Iniciar sesión →"; btn.classList.remove("loading");
+        mostrarError(traducirError(e.code));
+      }
+    };
+
+    // CREAR CUENTA
+    window.crearCuenta = async function() {
+      const nombre = document.getElementById("regNombre").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value;
+      const btn = document.getElementById("btnRegistro");
+
+      if (!nombre || !email || !password) return mostrarError("Llena todos los campos.");
+      if (nombre.length < 3) return mostrarError("Ingresa tu nombre completo.");
+      if (password.length < 6) return mostrarError("La contraseña debe tener al menos 6 caracteres.");
+
+      btn.textContent = "Creando cuenta..."; btn.classList.add("loading");
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        // Guardar nombre en el perfil de Firebase Auth
+        if (cred.user) {
+          try { await updateProfile(cred.user, { displayName: nombre }); } catch(e) {}
+        }
+        mostrarOk("✅ Cuenta creada. Redirigiendo...");
+        // onAuthStateChanged redirige automático al portal
+      } catch (e) {
+        btn.textContent = "Crear cuenta gratis →"; btn.classList.remove("loading");
+        mostrarError(traducirError(e.code));
+      }
+    };
+
+    // RECUPERAR PASSWORD
+    window.recuperarPassword = async function() {
+      const email = document.getElementById("loginEmail").value.trim();
+      if (!email) return mostrarError("Escribe primero tu correo en el campo de arriba.");
+      try {
+        await sendPasswordResetEmail(auth, email);
+        mostrarOk("📧 Te enviamos un correo para restablecer tu contraseña.");
+      } catch (e) {
+        mostrarError(traducirError(e.code));
       }
     };
   </script>
