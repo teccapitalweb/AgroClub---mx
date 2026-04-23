@@ -112,6 +112,121 @@
       .tema-card__txt strong { font-size: .88rem; }
       .tema-card__txt span { font-size: .72rem; }
     }
+
+    /* ═══════════════════════════════════════════════════════
+       🔒 PAYWALL GLOBAL (para usuarios sin suscripción)
+       ═══════════════════════════════════════════════════════ */
+    .paywall-banner {
+      position: sticky; top: 0; z-index: 500;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #ef4444 100%);
+      color: #fff;
+      padding: 12px 20px;
+      display: none;
+      align-items: center; gap: 14px; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      font-weight: 700; font-size: .88rem;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    body.is-free .paywall-banner { display: flex; }
+    .paywall-banner__icon { font-size: 1.3rem; }
+    .paywall-banner__btn {
+      background: #fff; color: #b91c1c;
+      padding: 7px 18px; border-radius: 100px;
+      font-weight: 800; font-size: .84rem;
+      border: none; cursor: pointer; font-family: inherit;
+      box-shadow: 0 4px 10px rgba(0,0,0,.2);
+      transition: transform .15s;
+    }
+    .paywall-banner__btn:hover { transform: translateY(-1px) scale(1.03); }
+
+    /* Modal paywall cuando intenta hacer algo bloqueado */
+    .paywall-modal {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(0,0,0,.75); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .paywall-modal.open { display: flex; animation: pwFadeIn .3s ease; }
+    @keyframes pwFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .paywall-modal__box {
+      background: linear-gradient(135deg, #fff 0%, #fefce8 100%);
+      border-radius: 22px; max-width: 460px; width: 100%;
+      padding: 32px 28px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.4);
+      text-align: center;
+      animation: pwSlideIn .35s cubic-bezier(.34,1.56,.64,1);
+      position: relative;
+    }
+    @keyframes pwSlideIn { from { transform: translateY(40px) scale(.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+    .paywall-modal__close {
+      position: absolute; top: 14px; right: 14px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(0,0,0,.08); border: none; cursor: pointer;
+      font-size: 1rem; color: #6b7280;
+      font-family: inherit;
+    }
+    .paywall-modal__close:hover { background: rgba(0,0,0,.15); }
+    .paywall-modal__icon {
+      font-size: 3.5rem; margin-bottom: 16px;
+      filter: drop-shadow(0 6px 12px rgba(251,191,36,.4));
+      animation: pwLock 2s ease-in-out infinite;
+    }
+    @keyframes pwLock {
+      0%,100% { transform: rotate(-5deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.08); }
+    }
+    .paywall-modal__kicker {
+      font-size: .72rem; font-weight: 800; letter-spacing: .2em;
+      color: #b45309; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .paywall-modal__title {
+      font-size: 1.6rem; font-weight: 800;
+      color: #161d14; margin-bottom: 10px;
+      font-family: 'Playfair Display', Georgia, serif;
+      line-height: 1.15;
+    }
+    .paywall-modal__desc {
+      font-size: .95rem; color: #4b5563; line-height: 1.55;
+      margin-bottom: 22px;
+    }
+    .paywall-modal__features {
+      text-align: left;
+      background: rgba(251,191,36,.08);
+      border-radius: 14px; padding: 16px 18px;
+      margin-bottom: 22px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .paywall-modal__feat {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .88rem; color: #161d14;
+    }
+    .paywall-modal__feat::before {
+      content: '✅'; font-size: .95rem;
+    }
+    .paywall-modal__cta {
+      display: block; width: 100%;
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      color: #fff; border: none; border-radius: 14px;
+      padding: 16px; font-weight: 800; font-size: 1.02rem;
+      cursor: pointer; font-family: inherit;
+      box-shadow: 0 8px 20px rgba(16,185,129,.35);
+      transition: transform .15s;
+      text-decoration: none;
+      text-align: center;
+    }
+    .paywall-modal__cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(16,185,129,.45); }
+    .paywall-modal__small {
+      margin-top: 12px; font-size: .76rem; color: #6b7280;
+    }
+
+    body.is-free .paywall-lock-icon {
+      display: inline-block !important;
+    }
+    .paywall-lock-icon {
+      display: none; margin-left: 6px; font-size: .85em;
+      opacity: .8;
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     a { text-decoration: none; color: inherit; }
@@ -3244,6 +3359,41 @@
 </head>
 <body>
 
+<!-- 🔒 BANNER PAYWALL (solo visible si es usuario FREE) -->
+<div class="paywall-banner" id="paywallBanner">
+  <span class="paywall-banner__icon">🔒</span>
+  <span>Tu cuenta está en modo gratuito · <strong>Suscríbete para desbloquear todo</strong></span>
+  <button class="paywall-banner__btn" onclick="mostrarPaywallModal('banner')">✨ Suscribirme</button>
+</div>
+
+<!-- 🔒 MODAL PAYWALL -->
+<div class="paywall-modal" id="paywallModal" onclick="cerrarPaywallBg(event)">
+  <div class="paywall-modal__box" onclick="event.stopPropagation()">
+    <button class="paywall-modal__close" onclick="cerrarPaywallModal()">✕</button>
+    <div class="paywall-modal__icon">🔒</div>
+    <div class="paywall-modal__kicker">Función VIP</div>
+    <div class="paywall-modal__title" id="paywallModalTitle">Suscríbete para acceder</div>
+    <div class="paywall-modal__desc" id="paywallModalDesc">
+      Esta función está disponible solo para miembros VIP de AgroClub. Únete ahora y desbloquea todo el portal.
+    </div>
+    <div class="paywall-modal__features">
+      <div class="paywall-modal__feat">Biblioteca completa de cursos</div>
+      <div class="paywall-modal__feat">Webinars en vivo y grabados</div>
+      <div class="paywall-modal__feat">Foro privado con expertos</div>
+      <div class="paywall-modal__feat">Herramientas del agro exclusivas</div>
+      <div class="paywall-modal__feat">Apoyos del gobierno curados</div>
+      <div class="paywall-modal__feat">Certificados digitales oficiales</div>
+    </div>
+    <a href="https://agrotecamerican.com#suscripcion" class="paywall-modal__cta" target="_blank" rel="noopener">
+      ✨ Suscribirme en AgroTec America
+    </a>
+    <div class="paywall-modal__small">
+      💳 Pago seguro · Cancela cuando quieras
+    </div>
+  </div>
+</div>
+
+
 <!-- TOPBAR -->
 <!-- OVERLAY + DRAWER MÓVIL -->
 <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="cerrarDrawer()"></div>
@@ -4639,10 +4789,24 @@ onAuthStateChanged(auth, async (user) => {
   if (!snap.empty) {
     const data = snap.docs[0].data();
     if (data.estado !== "activo") {
-      alert("Tu membresía no está activa. Contacta al administrador.");
-      signOut(auth); return;
+      // Membresía existe pero NO activa (pausada, cancelada, etc.)
+      currentUser = { uid: user.uid, email: user.email, nombre: data.nombre || user.email.split('@')[0], esVIP: false, estadoMembresia: data.estado || 'inactivo' };
+      window.currentUser = currentUser;
+      mostrarPaywallGlobal();
+      const nombre = data.nombre || user.email.split('@')[0];
+      document.getElementById("userName").textContent = nombre.split(" ")[0];
+      document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
+      if (document.getElementById("hero-greeting")) document.getElementById("hero-greeting").textContent = saludoPorHora(nombre.split(" ")[0]);
+      if (document.getElementById("perfil-nombre-hero")) document.getElementById("perfil-nombre-hero").textContent = nombre;
+      if (document.getElementById("perfil-email-hero")) document.getElementById("perfil-email-hero").textContent = user.email;
+      if (document.getElementById("perfil-avatar-big")) document.getElementById("perfil-avatar-big").textContent = nombre[0].toUpperCase();
+      loadCursosFirebase();
+      loadSesiones();
+      loadMateriales();
+      loadConfig();
+      return;
     }
-    currentUser = { uid: user.uid, ...data };
+    currentUser = { uid: user.uid, ...data, esVIP: true };
     window.currentUser = currentUser;
     // Cargar certificados del usuario
     if (typeof cargarCertificadosUsuario === 'function') cargarCertificadosUsuario();
@@ -4665,12 +4829,18 @@ onAuthStateChanged(auth, async (user) => {
     actualizarEstadisticasPerfil();
     cargarHistorialPagos(user.email);
   } else {
-    // Usuario autenticado pero sin doc en miembros — mostrar nombre del email
+    // Usuario autenticado pero SIN membresía → modo FREE con paywall
     const nombre = user.email.split("@")[0];
+    currentUser = { uid: user.uid, email: user.email, nombre, esVIP: false, estadoMembresia: 'sin_membresia' };
+    window.currentUser = currentUser;
+    mostrarPaywallGlobal();
     document.getElementById("userName").textContent = nombre;
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
-    document.getElementById("hero-greeting").textContent = saludoPorHora(nombre);
-    document.getElementById("perfil-email").textContent = user.email;
+    if (document.getElementById("hero-greeting")) document.getElementById("hero-greeting").textContent = saludoPorHora(nombre);
+    if (document.getElementById("perfil-email")) document.getElementById("perfil-email").textContent = user.email;
+    if (document.getElementById("perfil-nombre-hero")) document.getElementById("perfil-nombre-hero").textContent = nombre;
+    if (document.getElementById("perfil-email-hero")) document.getElementById("perfil-email-hero").textContent = user.email;
+    if (document.getElementById("perfil-avatar-big")) document.getElementById("perfil-avatar-big").textContent = nombre[0].toUpperCase();
   }
 
   // Cargar progreso por UID
@@ -6625,6 +6795,162 @@ window.eliminarMiPost = async function(postId) {
 };
 
 window.renderForo = renderForo;
+
+// ═══════════════════════════════════════════════════════════
+// 🔒 PAYWALL GLOBAL
+// ═══════════════════════════════════════════════════════════
+window.mostrarPaywallGlobal = function() {
+  document.body.classList.add('is-free');
+};
+window.ocultarPaywallGlobal = function() {
+  document.body.classList.remove('is-free');
+};
+window.esVIPActivo = function() {
+  return !!(window.currentUser && window.currentUser.esVIP === true);
+};
+window.requiereVIP = function(funcion, titulo, desc) {
+  // Retorna true si puede proceder, false si está bloqueado (y muestra paywall)
+  if (esVIPActivo()) return true;
+  mostrarPaywallModal(funcion, titulo, desc);
+  return false;
+};
+window.mostrarPaywallModal = function(origen, titulo, desc) {
+  const t = document.getElementById('paywallModalTitle');
+  const d = document.getElementById('paywallModalDesc');
+  const titulos = {
+    curso: '🎓 Cursos exclusivos VIP',
+    webinar: '🎥 Webinars premium',
+    foro: '💬 Foro privado VIP',
+    herramientas: '🛠️ Herramientas del agro',
+    apoyos: '🏛️ Apoyos del gobierno',
+    certificados: '🏆 Certificados oficiales',
+    bitacora: '📓 Bitácora de parcela',
+    banner: '✨ Desbloquea todo AgroClub'
+  };
+  const descs = {
+    curso: 'Los cursos completos con clases, temarios y certificados están disponibles solo para miembros VIP.',
+    webinar: 'Webinars en vivo con expertos y acceso a grabaciones pasadas solo para suscriptores.',
+    foro: 'Comparte con otros productores, resuelve dudas y accede al conocimiento del club.',
+    herramientas: 'Calculadoras, bitácora, conversor de unidades del agro — herramientas reales que usan los productores exitosos.',
+    apoyos: 'Accede al catálogo curado de programas federales y estatales vigentes para productores.',
+    certificados: 'Genera tu certificado oficial al completar cursos. Solo para miembros VIP.',
+    bitacora: 'Registra todas las actividades de tu parcela y lleva un control profesional de tu producción.',
+    banner: 'Únete al club y accede a todo el contenido VIP de AgroClub MX.'
+  };
+  if (t && titulo) t.textContent = titulo;
+  else if (t && titulos[origen]) t.textContent = titulos[origen];
+  if (d && desc) d.textContent = desc;
+  else if (d && descs[origen]) d.textContent = descs[origen];
+  document.getElementById('paywallModal').classList.add('open');
+};
+window.cerrarPaywallModal = function() {
+  document.getElementById('paywallModal').classList.remove('open');
+};
+window.cerrarPaywallBg = function(e) {
+  if (e.target.id === 'paywallModal') cerrarPaywallModal();
+};
+
+// ═══════ INTERCEPTAR ACCIONES BLOQUEADAS ═══════
+
+// 1) showPage — redirigir a paywall si es sección VIP
+(function() {
+  const PAGINAS_VIP = {
+    cursos: 'curso', sesiones: 'webinar', foro: 'foro',
+    herramientas: 'herramientas', apoyos: 'apoyos',
+    certificados: 'certificados'
+    // NO bloquear: inicio, perfil, suscripcion, notificaciones
+  };
+  const origShow = window.showPage;
+  window.showPage = function(id, el, bnId) {
+    if (!esVIPActivo() && PAGINAS_VIP[id]) {
+      // Deja cambiar visualmente pero muestra paywall encima
+      if (typeof origShow === 'function') origShow(id, el, bnId);
+      setTimeout(() => mostrarPaywallModal(PAGINAS_VIP[id]), 300);
+      return;
+    }
+    if (typeof origShow === 'function') origShow(id, el, bnId);
+  };
+})();
+
+// 2) Abrir curso (verDetalleCurso) — bloquear si free
+(function() {
+  const orig = window.verDetalleCurso;
+  if (typeof orig === 'function') {
+    window.verDetalleCurso = function(...args) {
+      if (!esVIPActivo()) {
+        mostrarPaywallModal('curso');
+        return;
+      }
+      return orig.apply(this, args);
+    };
+  }
+})();
+
+// 3) Publicar post en foro
+(function() {
+  const orig = window.publicarPost;
+  if (typeof orig === 'function') {
+    window.publicarPost = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('foro'); return; }
+      return orig.apply(this, args);
+    };
+  }
+})();
+
+// 4) Enviar comentario
+(function() {
+  const orig = window.enviarComentario;
+  if (typeof orig === 'function') {
+    window.enviarComentario = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('foro'); return; }
+      return orig.apply(this, args);
+    };
+  }
+})();
+
+// 5) Dar like en foro
+(function() {
+  const orig = window.toggleLikePost;
+  if (typeof orig === 'function') {
+    window.toggleLikePost = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('foro'); return; }
+      return orig.apply(this, args);
+    };
+  }
+})();
+
+// 6) Abrir composer del foro
+(function() {
+  const orig = window.abrirComposer;
+  if (typeof orig === 'function') {
+    window.abrirComposer = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('foro'); return; }
+      return orig.apply(this, args);
+    };
+  }
+})();
+
+// 7) Crear parcela
+(function() {
+  const orig = window.abrirModalParcela;
+  if (typeof orig === 'function') {
+    window.abrirModalParcela = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('bitacora'); return; }
+      return orig.apply(this, args);
+    };
+  }
+})();
+
+// 8) Calcular agroquímicos
+(function() {
+  const orig = window.calcularAgro;
+  if (typeof orig === 'function') {
+    window.calcularAgro = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('herramientas'); return; }
+      return orig.apply(this, args);
+    };
+  }
+})();
 
 // ===== 🌙 TEMA CLARO/OSCURO =====
 window.toggleTema = function() {
