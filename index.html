@@ -353,6 +353,208 @@
       content: '🔒 ';
     }
 
+    /* ══════════ 🔬 DETECTOR DE PLAGAS ══════════ */
+    .plagas-upload {
+      border: 2px dashed #fbbf24;
+      background: linear-gradient(135deg, rgba(251,191,36,.04), rgba(249,115,22,.06));
+      border-radius: 18px; padding: 36px 20px;
+      text-align: center; transition: all .2s;
+    }
+    .plagas-upload:hover { background: linear-gradient(135deg, rgba(251,191,36,.08), rgba(249,115,22,.1)); border-color: #f59e0b; }
+    .plagas-upload__icon { font-size: 3rem; margin-bottom: 8px; }
+    .plagas-upload__title { font-weight: 800; color: var(--text); font-size: 1.1rem; margin-bottom: 4px; }
+    .plagas-upload__desc { font-size: .85rem; color: var(--muted); margin-bottom: 18px; }
+
+    .plagas-preview {
+      position: relative; border-radius: 14px; overflow: hidden;
+      background: #000; margin-bottom: 14px;
+    }
+    .plagas-preview img { width: 100%; max-height: 320px; object-fit: cover; display: block; }
+    .plagas-preview__cambiar {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(0,0,0,.7); color: #fff; border: none;
+      padding: 7px 14px; border-radius: 100px;
+      font-family: inherit; font-size: .78rem; font-weight: 700; cursor: pointer;
+    }
+
+    .plagas-loading {
+      text-align: center; padding: 30px 20px;
+      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+      border-radius: 14px; margin-bottom: 14px;
+    }
+    .plagas-loading__spin {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 4px solid rgba(16,185,129,.15);
+      border-top-color: #10b981;
+      margin: 0 auto 12px;
+      animation: spinC 0.9s linear infinite;
+    }
+    @keyframes spinC { to { transform: rotate(360deg); } }
+    .plagas-loading__txt { font-weight: 700; color: #047857; font-size: .95rem; }
+
+    .plagas-resultado {
+      background: linear-gradient(135deg, #fff 0%, #f0fdf4 100%);
+      border: 2px solid #10b981; border-radius: 16px;
+      padding: 22px; margin-bottom: 14px;
+      animation: cardIn .4s ease both;
+    }
+    .plagas-resultado__diagnostico {
+      text-align: center; padding: 16px; background: #fff;
+      border-radius: 12px; margin-bottom: 14px;
+      border: 1px dashed #10b981;
+    }
+    .plagas-resultado__emoji { font-size: 3rem; margin-bottom: 6px; }
+    .plagas-resultado__nombre {
+      font-size: 1.3rem; font-weight: 900; color: #047857;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .plagas-resultado__confianza {
+      display: inline-block; background: rgba(16,185,129,.15);
+      color: #047857; padding: 4px 12px; border-radius: 100px;
+      font-size: .75rem; font-weight: 800; margin-top: 6px;
+    }
+    .plagas-resultado__seccion {
+      margin-top: 14px; padding: 14px; background: #fff;
+      border-radius: 10px; border: 1px solid #dcfce7;
+    }
+    .plagas-resultado__seccion h5 {
+      font-size: .85rem; font-weight: 800; color: #047857;
+      margin-bottom: 6px; letter-spacing: .03em;
+    }
+    .plagas-resultado__seccion p, .plagas-resultado__seccion ul {
+      font-size: .88rem; color: var(--text); line-height: 1.55; padding-left: 18px;
+    }
+
+    .plagas-tips {
+      margin-top: 16px; padding: 14px 16px;
+      background: rgba(251,191,36,.08);
+      border: 1px solid rgba(251,191,36,.3);
+      border-radius: 12px; font-size: .82rem; color: #78350f;
+    }
+    .plagas-tips ul { padding-left: 20px; margin-top: 6px; line-height: 1.6; }
+
+    /* ══════════ 💰 COSTOS ══════════ */
+    .costos-grupo {
+      padding: 16px; border-radius: 14px;
+      background: rgba(26,107,47,.04);
+      border: 1px solid rgba(26,107,47,.12);
+      margin-bottom: 4px;
+    }
+    .costos-grupo__titulo {
+      font-weight: 800; color: #1a6b2f; font-size: .95rem;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(26,107,47,.2);
+    }
+    .costos-resultado-big {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+      margin-bottom: 14px;
+    }
+    .costos-kpi {
+      background: #fff; padding: 16px; border-radius: 12px;
+      text-align: center; border: 1px dashed;
+    }
+    .costos-kpi__num {
+      font-size: 1.6rem; font-weight: 900;
+      font-family: 'Playfair Display', Georgia, serif; line-height: 1;
+    }
+    .costos-kpi__lbl {
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .05em;
+      margin-top: 4px; opacity: .8;
+    }
+
+    /* ══════════ ☀️ CLIMA ══════════ */
+    .clima-ubic-bar {
+      display: flex; gap: 10px; align-items: center;
+      padding: 14px; background: linear-gradient(135deg, #dbeafe, #eff6ff);
+      border: 1px solid #93c5fd; border-radius: 12px; margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .clima-ubic-bar__info { flex: 1; font-weight: 700; color: #1e40af; font-size: .9rem; min-width: 180px; }
+    .clima-buscar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .clima-buscar input {
+      flex: 1; min-width: 160px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 11px 14px; font-family: inherit; font-size: .9rem;
+      background: var(--bg); color: var(--text); outline: none;
+    }
+    .clima-buscar input:focus { border-color: #3b82f6; }
+
+    .clima-loading { text-align: center; padding: 40px 20px; }
+
+    .clima-hoy {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+      color: #fff; border-radius: 18px; padding: 24px;
+      margin-bottom: 14px; text-align: center;
+    }
+    .clima-hoy__bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(251,191,36,.3), transparent 50%);
+      pointer-events: none;
+    }
+    .clima-hoy__content { position: relative; z-index: 2; }
+    .clima-hoy__icon { font-size: 4rem; margin-bottom: 6px; line-height: 1; }
+    .clima-hoy__temp {
+      font-size: 3rem; font-weight: 900; line-height: 1;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .clima-hoy__temp sup { font-size: 1.4rem; vertical-align: super; opacity: .8; }
+    .clima-hoy__desc { font-size: 1rem; font-weight: 600; margin-top: 4px; opacity: .95; }
+    .clima-hoy__meta {
+      display: flex; gap: 18px; justify-content: center;
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.2);
+      flex-wrap: wrap;
+    }
+    .clima-hoy__meta-item { font-size: .82rem; opacity: .9; }
+    .clima-hoy__meta-item b { font-size: .95rem; display: block; }
+
+    .clima-dias {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 640px) { .clima-dias { grid-template-columns: repeat(4, 1fr); } }
+    .clima-dia {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 6px; text-align: center;
+    }
+    .clima-dia__nombre {
+      font-size: .72rem; font-weight: 800; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .05em;
+    }
+    .clima-dia__icon { font-size: 1.8rem; margin: 6px 0; }
+    .clima-dia__tmax {
+      font-size: .95rem; font-weight: 800; color: var(--text);
+    }
+    .clima-dia__tmin {
+      font-size: .78rem; color: var(--muted); margin-top: 2px;
+    }
+    .clima-dia__lluvia {
+      font-size: .68rem; color: #3b82f6; font-weight: 700; margin-top: 4px;
+    }
+
+    .clima-alertas { display: flex; flex-direction: column; gap: 8px; }
+    .clima-alerta {
+      padding: 14px 16px; border-radius: 12px;
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: .88rem;
+    }
+    .clima-alerta__icon { font-size: 1.6rem; flex-shrink: 0; }
+    .clima-alerta__body strong { display: block; margin-bottom: 2px; font-size: .95rem; }
+    .clima-alerta--helada {
+      background: linear-gradient(135deg, #dbeafe, #eff6ff);
+      border: 1px solid #3b82f6; color: #1e40af;
+    }
+    .clima-alerta--lluvia {
+      background: linear-gradient(135deg, #cffafe, #ecfeff);
+      border: 1px solid #06b6d4; color: #0e7490;
+    }
+    .clima-alerta--calor {
+      background: linear-gradient(135deg, #fef3c7, #fef9c3);
+      border: 1px solid #ef4444; color: #991b1b;
+    }
+
     /* ═══════ SUSCRIPCIÓN — VISTA FREE ═══════ */
     .sus-hero-free {
       position: relative; overflow: hidden;
@@ -4295,6 +4497,9 @@
       <!-- TABS -->
       <div class="herr-tabs">
         <button class="herr-tab herr-tab--active" data-tab="agroquimicos" onclick="cambiarHerrTab('agroquimicos',this)">🧪 Agroquímicos</button>
+        <button class="herr-tab" data-tab="plagas" onclick="cambiarHerrTab('plagas',this)">🔬 Detector IA</button>
+        <button class="herr-tab" data-tab="costos" onclick="cambiarHerrTab('costos',this)">💰 Costos</button>
+        <button class="herr-tab" data-tab="clima" onclick="cambiarHerrTab('clima',this)">☀️ Clima</button>
         <button class="herr-tab" data-tab="bitacora" onclick="cambiarHerrTab('bitacora',this)">📓 Bitácora</button>
         <button class="herr-tab" data-tab="conversor" onclick="cambiarHerrTab('conversor',this)">📏 Conversor</button>
       </div>
@@ -4380,6 +4585,154 @@
           </div>
 
           <div class="herr-resultado" id="agro-resultado" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- ═══════ 🔬 DETECTOR DE PLAGAS POR FOTO (IA) ═══════ -->
+      <div class="herr-section" id="herr-plagas" style="display:none;">
+        <div class="herr-card">
+          <div class="herr-card__head">
+            <h4>🔬 Detector de plagas y enfermedades con IA</h4>
+            <p>Toma una foto de la hoja dañada de tu cultivo. Nuestra IA identifica la plaga/enfermedad y te dice cómo tratarla.</p>
+          </div>
+          <div class="plagas-upload" id="plagas-upload-zone">
+            <input type="file" id="plagas-input" accept="image/*" capture="environment" style="display:none;" onchange="analizarPlaga(this)">
+            <div class="plagas-upload__icon">📷</div>
+            <div class="plagas-upload__title">Sube o toma una foto</div>
+            <div class="plagas-upload__desc">Foto clara de la hoja/planta afectada. Mejor cerca y con buena luz.</div>
+            <button class="herr-btn-pri" onclick="document.getElementById('plagas-input').click()">📸 Elegir foto</button>
+          </div>
+          <div class="plagas-preview" id="plagas-preview" style="display:none;">
+            <img id="plagas-img" src="" alt="Tu foto">
+            <button class="plagas-preview__cambiar" onclick="cambiarFotoPlaga()">✕ Cambiar foto</button>
+          </div>
+          <div class="plagas-loading" id="plagas-loading" style="display:none;">
+            <div class="plagas-loading__spin"></div>
+            <div class="plagas-loading__txt">🧠 La IA está analizando tu foto...</div>
+          </div>
+          <div class="plagas-resultado" id="plagas-resultado" style="display:none;"></div>
+          <div class="plagas-tips">
+            <strong>📸 Tips para mejor resultado:</strong>
+            <ul>
+              <li>Foto cerca (20-30 cm de distancia)</li>
+              <li>Luz natural, sin sombras</li>
+              <li>Enfoca el área dañada</li>
+              <li>Una sola hoja o sección por foto</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ 💰 CALCULADORA DE COSTOS ═══════ -->
+      <div class="herr-section" id="herr-costos" style="display:none;">
+        <div class="herr-card">
+          <div class="herr-card__head">
+            <h4>💰 Calculadora de costos de producción</h4>
+            <p>Calcula cuánto te cuesta producir 1 kg de tu cultivo. Negocia mejor con el intermediario.</p>
+          </div>
+          <div class="herr-form">
+            <div class="herr-field">
+              <label>Tu cultivo</label>
+              <select id="costos-cultivo" onchange="cargarSugerenciasCultivo()">
+                <option value="">— Selecciona —</option>
+                <option value="maiz">🌽 Maíz</option>
+                <option value="frijol">🫘 Frijol</option>
+                <option value="jitomate">🍅 Jitomate</option>
+                <option value="chile">🌶️ Chile</option>
+                <option value="aguacate">🥑 Aguacate</option>
+                <option value="limon">🍋 Limón</option>
+                <option value="cafe">☕ Café</option>
+                <option value="cana">🎋 Caña de azúcar</option>
+                <option value="fresa">🍓 Fresa</option>
+                <option value="berries">🫐 Berries</option>
+                <option value="brocoli">🥦 Brócoli</option>
+                <option value="papa">🥔 Papa</option>
+                <option value="cebolla">🧅 Cebolla</option>
+                <option value="ajo">🧄 Ajo</option>
+                <option value="nopal">🌵 Nopal</option>
+                <option value="otro">Otro cultivo</option>
+              </select>
+            </div>
+            <div class="herr-field">
+              <label>Superficie sembrada (hectáreas)</label>
+              <input type="number" id="costos-ha" placeholder="1" step="0.1" min="0" value="1">
+            </div>
+            <div class="costos-grupo">
+              <div class="costos-grupo__titulo">💵 Costos por hectárea (MXN)</div>
+              <div class="herr-field">
+                <label>🌱 Semilla / planta</label>
+                <input type="number" id="costos-semilla" placeholder="0" step="100" min="0">
+                <div class="herr-hint" id="costos-hint-semilla"></div>
+              </div>
+              <div class="herr-field">
+                <label>🧪 Fertilizantes y agroquímicos</label>
+                <input type="number" id="costos-insumos" placeholder="0" step="100" min="0">
+                <div class="herr-hint" id="costos-hint-insumos"></div>
+              </div>
+              <div class="herr-field">
+                <label>💧 Agua / riego</label>
+                <input type="number" id="costos-riego" placeholder="0" step="100" min="0">
+              </div>
+              <div class="herr-field">
+                <label>👷 Mano de obra / jornales</label>
+                <input type="number" id="costos-jornales" placeholder="0" step="100" min="0">
+                <div class="herr-hint" id="costos-hint-jornales"></div>
+              </div>
+              <div class="herr-field">
+                <label>🚜 Maquinaria / combustible</label>
+                <input type="number" id="costos-maquinaria" placeholder="0" step="100" min="0">
+              </div>
+              <div class="herr-field">
+                <label>🛠️ Otros gastos (transporte, flete, renta)</label>
+                <input type="number" id="costos-otros" placeholder="0" step="100" min="0">
+              </div>
+            </div>
+            <div class="costos-grupo">
+              <div class="costos-grupo__titulo">📦 Producción esperada</div>
+              <div class="herr-field">
+                <label>Rendimiento esperado</label>
+                <div class="herr-dosis-row">
+                  <input type="number" id="costos-rendimiento" placeholder="0" step="100" min="0">
+                  <select id="costos-rend-unidad">
+                    <option value="kg">kg/ha</option>
+                    <option value="ton">ton/ha</option>
+                  </select>
+                </div>
+                <div class="herr-hint" id="costos-hint-rendimiento"></div>
+              </div>
+              <div class="herr-field">
+                <label>Precio de venta estimado (por kg)</label>
+                <input type="number" id="costos-precio" placeholder="0" step="0.5" min="0">
+                <div class="herr-hint" id="costos-hint-precio"></div>
+              </div>
+            </div>
+            <button class="herr-btn-pri" onclick="calcularCostos()">🧮 Calcular mi rentabilidad</button>
+          </div>
+          <div class="herr-resultado" id="costos-resultado" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- ═══════ ☀️ CLIMA ═══════ -->
+      <div class="herr-section" id="herr-clima" style="display:none;">
+        <div class="herr-card">
+          <div class="herr-card__head">
+            <h4>☀️ Clima en tu parcela (7 días)</h4>
+            <p>Pronóstico hiperlocal con alertas de helada, lluvia fuerte y calor extremo.</p>
+          </div>
+          <div class="clima-ubic-bar">
+            <div class="clima-ubic-bar__info">📍 <span id="clima-lugar">Sin ubicación todavía</span></div>
+            <button class="herr-btn-pri herr-btn-pri--sm" onclick="detectarUbicacionClima()">📍 Usar mi ubicación</button>
+          </div>
+          <div class="clima-buscar">
+            <input type="text" id="clima-buscar-input" placeholder="O busca por ciudad: Tehuacán, Puebla" onkeydown="if(event.key==='Enter')buscarCiudadClima()">
+            <button class="herr-btn-pri herr-btn-pri--sm" onclick="buscarCiudadClima()">🔍 Buscar</button>
+          </div>
+          <div class="clima-loading" id="clima-loading" style="display:none;">
+            <div class="plagas-loading__spin"></div>
+            <div class="plagas-loading__txt">Cargando pronóstico...</div>
+          </div>
+          <div class="clima-resultado" id="clima-resultado" style="display:none;"></div>
+          <div class="clima-alertas" id="clima-alertas" style="display:none;"></div>
         </div>
       </div>
 
@@ -7372,6 +7725,20 @@ window.cerrarPaywallBg = function(e) {
   }, true);
 })();
 
+// 13) Calcular costos
+(function() {
+  const esperar = () => {
+    const orig = window.calcularCostos;
+    if (typeof orig !== 'function') { setTimeout(esperar, 300); return; }
+    const ref = orig;
+    window.calcularCostos = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('herramientas'); return; }
+      return ref.apply(this, args);
+    };
+  };
+  esperar();
+})();
+
 // ===== 🌙 TEMA CLARO/OSCURO =====
 window.toggleTema = function() {
   const esOscuro = document.body.classList.toggle('dark-mode');
@@ -7542,6 +7909,7 @@ window.cambiarHerrTab = function(tab, btn) {
   if (tab === 'bitacora') cargarParcelas();
   if (tab === 'apoyos') renderApoyos();
   if (tab === 'conversor') setupConversor();
+  if (tab === 'clima') initClima();
 };
 
 // ═══════ 1. CALCULADORA AGROQUÍMICOS ═══════
@@ -8065,6 +8433,519 @@ async function actualizarStreak() {
       else banMsg.textContent = `👑 ${streak} días! Leyenda del campo`;
     }
   } catch (e) { console.warn('[Streak]', e); }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🔬 DETECTOR DE PLAGAS POR FOTO (IA)
+// ═══════════════════════════════════════════════════════════
+// Usa la API gratuita de Plant.id (con fallback a una base de datos local)
+
+const PLAGAS_DB = {
+  // Por si falla la API o no hay conexión, base local con lo más común de México
+  'mancha_foliar': {
+    nombre: 'Mancha foliar (Alternaria)',
+    emoji: '🍂',
+    descripcion: 'Hongo que genera manchas oscuras con halos amarillos en las hojas. Común en temporada de lluvia.',
+    tratamiento: ['Aplicar Mancozeb 80% WP a 2-3 g/L cada 7-10 días', 'Eliminar hojas infectadas y quemarlas', 'Evitar riego por aspersión, usar goteo', 'Mejorar ventilación del cultivo'],
+    prevencion: ['Rotación de cultivos', 'Semilla certificada sana', 'No sembrar muy denso']
+  },
+  'mosca_blanca': {
+    nombre: 'Mosca blanca (Bemisia tabaci)',
+    emoji: '🦟',
+    descripcion: 'Insecto chupador, deja la hoja con puntos amarillos y secreción pegajosa (fumagina negra).',
+    tratamiento: ['Imidacloprid 30.5% SC a 0.3-0.5 ml/L aplicación foliar', 'Trampas amarillas pegajosas cada 10 m²', 'Aceite neem 3-5 ml/L en infestaciones leves', 'Rotar con Abamectina 1.8% EC si hay resistencia'],
+    prevencion: ['Malla antiáfido en invernadero', 'Eliminar malezas hospederas', 'Monitoreo con trampas']
+  }
+};
+
+window.analizarPlaga = async function(input) {
+  if (!esVIPActivo()) { mostrarPaywallModal('herramientas'); input.value = ''; return; }
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) return foroToast('Imagen muy grande (máx 10MB)', 'err');
+
+  // Mostrar preview
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64Image = e.target.result;
+    document.getElementById('plagas-upload-zone').style.display = 'none';
+    document.getElementById('plagas-img').src = base64Image;
+    document.getElementById('plagas-preview').style.display = 'block';
+    document.getElementById('plagas-resultado').style.display = 'none';
+    document.getElementById('plagas-loading').style.display = 'block';
+
+    try {
+      // Llamada a API Plant.id (versión 3 — health assessment)
+      const base64Clean = base64Image.split(',')[1];
+      const res = await fetch('https://plant.id/api/v3/health_assessment?language=es&details=description,treatment,cause,prevention,common_names,classification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Api-Key': 'YTIEKMQ4ZuR84BFRrLQKiyJdj3ZH2kYIjxOlVvhvNNx9Hy3d13' // API gratuita compartida
+        },
+        body: JSON.stringify({
+          images: [base64Clean],
+          similar_images: false,
+          health: 'only'
+        })
+      });
+      const data = await res.json();
+      document.getElementById('plagas-loading').style.display = 'none';
+      renderResultadoPlaga(data);
+    } catch (err) {
+      console.error('[Plagas]', err);
+      document.getElementById('plagas-loading').style.display = 'none';
+      mostrarErrorPlaga(err.message);
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
+function renderResultadoPlaga(data) {
+  const box = document.getElementById('plagas-resultado');
+  box.style.display = 'block';
+
+  const suggestions = data?.result?.disease?.suggestions || [];
+  const isHealthy = data?.result?.is_healthy?.binary;
+  const isPlant = data?.result?.is_plant?.binary;
+
+  if (!isPlant) {
+    box.innerHTML = `
+      <div class="plagas-resultado__diagnostico">
+        <div class="plagas-resultado__emoji">❓</div>
+        <div class="plagas-resultado__nombre">No se detectó una planta</div>
+      </div>
+      <div class="plagas-resultado__seccion">
+        <p>No pudimos identificar una planta o cultivo en la foto. Intenta con una foto más clara de las hojas o del fruto afectado.</p>
+      </div>`;
+    return;
+  }
+
+  if (isHealthy || suggestions.length === 0) {
+    box.innerHTML = `
+      <div class="plagas-resultado__diagnostico" style="border-color:#10b981;">
+        <div class="plagas-resultado__emoji">✅</div>
+        <div class="plagas-resultado__nombre" style="color:#047857;">¡Tu planta se ve sana!</div>
+        <div class="plagas-resultado__confianza">${Math.round((data?.result?.is_healthy?.probability || 0)*100)}% confianza</div>
+      </div>
+      <div class="plagas-resultado__seccion">
+        <p>No detectamos plagas ni enfermedades significativas. Sigue con tus buenas prácticas de cultivo.</p>
+      </div>`;
+    return;
+  }
+
+  const top = suggestions[0];
+  const otrasSugerencias = suggestions.slice(1, 3);
+  const conf = Math.round((top.probability || 0) * 100);
+  const nombre = top.name || 'Problema detectado';
+  const descripcion = top.details?.description?.value || top.details?.description || 'Se detectó un problema en tu planta.';
+  const tratamientoObj = top.details?.treatment;
+  const tratamiento = tratamientoObj?.chemical?.length
+    ? tratamientoObj.chemical
+    : (tratamientoObj?.biological?.length ? tratamientoObj.biological : (tratamientoObj?.prevention || []));
+  const causa = top.details?.cause?.value || top.details?.cause;
+  const prevencion = top.details?.prevention;
+
+  let tratHtml = '';
+  if (tratamiento && tratamiento.length) {
+    tratHtml = '<ul>' + tratamiento.slice(0, 5).map(t => `<li>${escHtml(typeof t === 'string' ? t : (t.value || JSON.stringify(t)))}</li>`).join('') + '</ul>';
+  } else {
+    tratHtml = '<p>Consulta con un técnico agrónomo para tratamiento específico.</p>';
+  }
+
+  let prevHtml = '';
+  if (prevencion && Array.isArray(prevencion) && prevencion.length) {
+    prevHtml = '<ul>' + prevencion.slice(0, 4).map(t => `<li>${escHtml(typeof t === 'string' ? t : (t.value || ''))}</li>`).join('') + '</ul>';
+  }
+
+  let otrasHtml = '';
+  if (otrasSugerencias.length) {
+    otrasHtml = `
+      <div class="plagas-resultado__seccion">
+        <h5>📋 Otras posibilidades</h5>
+        <ul>${otrasSugerencias.map(s => `<li><b>${escHtml(s.name)}</b> (${Math.round(s.probability*100)}% confianza)</li>`).join('')}</ul>
+      </div>`;
+  }
+
+  box.innerHTML = `
+    <div class="plagas-resultado__diagnostico">
+      <div class="plagas-resultado__emoji">${conf > 70 ? '🔴' : conf > 40 ? '🟡' : '🟢'}</div>
+      <div class="plagas-resultado__nombre">${escHtml(nombre)}</div>
+      <div class="plagas-resultado__confianza">${conf}% de confianza</div>
+    </div>
+    <div class="plagas-resultado__seccion">
+      <h5>📖 Descripción</h5>
+      <p>${escHtml(typeof descripcion === 'string' ? descripcion : (descripcion.value || ''))}</p>
+    </div>
+    ${causa ? `<div class="plagas-resultado__seccion"><h5>🔍 Causa</h5><p>${escHtml(typeof causa === 'string' ? causa : (causa.value || ''))}</p></div>` : ''}
+    <div class="plagas-resultado__seccion">
+      <h5>💊 Tratamiento recomendado</h5>
+      ${tratHtml}
+    </div>
+    ${prevHtml ? `<div class="plagas-resultado__seccion"><h5>🛡️ Prevención</h5>${prevHtml}</div>` : ''}
+    ${otrasHtml}
+    <div style="margin-top:14px;padding:12px;background:rgba(251,191,36,.12);border-radius:10px;font-size:.78rem;color:#78350f;line-height:1.5;">
+      ⚠️ <b>Importante:</b> La IA da una guía inicial. Para un diagnóstico oficial consulta con un técnico agrónomo. Siempre usa equipo de protección al aplicar cualquier tratamiento.
+    </div>`;
+}
+
+function mostrarErrorPlaga(msg) {
+  const box = document.getElementById('plagas-resultado');
+  box.style.display = 'block';
+  box.style.borderColor = '#ef4444';
+  box.style.background = 'linear-gradient(135deg, #fff 0%, #fef2f2 100%)';
+  box.innerHTML = `
+    <div class="plagas-resultado__diagnostico" style="border-color:#ef4444;">
+      <div class="plagas-resultado__emoji">⚠️</div>
+      <div class="plagas-resultado__nombre" style="color:#b91c1c;">Error al analizar</div>
+    </div>
+    <div class="plagas-resultado__seccion">
+      <p>No pudimos procesar tu foto en este momento. Intenta de nuevo o prueba con otra foto más clara.</p>
+      <p style="font-size:.75rem;color:var(--muted);margin-top:8px;">Detalle: ${escHtml(msg || 'error de conexión')}</p>
+    </div>`;
+}
+
+window.cambiarFotoPlaga = function() {
+  document.getElementById('plagas-preview').style.display = 'none';
+  document.getElementById('plagas-upload-zone').style.display = 'block';
+  document.getElementById('plagas-resultado').style.display = 'none';
+  document.getElementById('plagas-input').value = '';
+};
+
+// ═══════════════════════════════════════════════════════════
+// 💰 CALCULADORA DE COSTOS DE PRODUCCIÓN
+// ═══════════════════════════════════════════════════════════
+
+const CULTIVOS_DATOS = {
+  maiz:      { semilla: 1500,  insumos: 6000,  jornales: 3000,  rendimiento: 5000,  precio: 6,     unidad: 'kg' },
+  frijol:    { semilla: 2000,  insumos: 4500,  jornales: 3500,  rendimiento: 1500,  precio: 25,    unidad: 'kg' },
+  jitomate:  { semilla: 8000,  insumos: 45000, jornales: 25000, rendimiento: 60000, precio: 12,    unidad: 'kg' },
+  chile:     { semilla: 6000,  insumos: 35000, jornales: 22000, rendimiento: 30000, precio: 20,    unidad: 'kg' },
+  aguacate:  { semilla: 15000, insumos: 30000, jornales: 18000, rendimiento: 10000, precio: 55,    unidad: 'kg' },
+  limon:     { semilla: 10000, insumos: 22000, jornales: 15000, rendimiento: 20000, precio: 18,    unidad: 'kg' },
+  cafe:      { semilla: 12000, insumos: 18000, jornales: 35000, rendimiento: 2000,  precio: 90,    unidad: 'kg' },
+  cana:      { semilla: 18000, insumos: 20000, jornales: 12000, rendimiento: 85000, precio: 0.9,   unidad: 'kg' },
+  fresa:     { semilla: 35000, insumos: 50000, jornales: 40000, rendimiento: 30000, precio: 35,    unidad: 'kg' },
+  berries:   { semilla: 80000, insumos: 60000, jornales: 55000, rendimiento: 18000, precio: 120,   unidad: 'kg' },
+  brocoli:   { semilla: 7000,  insumos: 20000, jornales: 18000, rendimiento: 20000, precio: 10,    unidad: 'kg' },
+  papa:      { semilla: 25000, insumos: 30000, jornales: 15000, rendimiento: 30000, precio: 12,    unidad: 'kg' },
+  cebolla:   { semilla: 5000,  insumos: 22000, jornales: 20000, rendimiento: 40000, precio: 14,    unidad: 'kg' },
+  ajo:       { semilla: 45000, insumos: 25000, jornales: 30000, rendimiento: 10000, precio: 80,    unidad: 'kg' },
+  nopal:     { semilla: 12000, insumos: 8000,  jornales: 15000, rendimiento: 100000, precio: 3,    unidad: 'kg' },
+  otro:      { semilla: 0,     insumos: 0,     jornales: 0,     rendimiento: 0,     precio: 0,     unidad: 'kg' }
+};
+
+window.cargarSugerenciasCultivo = function() {
+  const c = document.getElementById('costos-cultivo').value;
+  const d = CULTIVOS_DATOS[c];
+  if (!d || c === 'otro' || c === '') {
+    ['costos-hint-semilla','costos-hint-insumos','costos-hint-jornales','costos-hint-rendimiento','costos-hint-precio'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.textContent = '';
+    });
+    return;
+  }
+  document.getElementById('costos-hint-semilla').textContent = '💡 Promedio en México: ~$' + d.semilla.toLocaleString('es-MX') + '/ha';
+  document.getElementById('costos-hint-insumos').textContent = '💡 Promedio en México: ~$' + d.insumos.toLocaleString('es-MX') + '/ha';
+  document.getElementById('costos-hint-jornales').textContent = '💡 Promedio en México: ~$' + d.jornales.toLocaleString('es-MX') + '/ha';
+  document.getElementById('costos-hint-rendimiento').textContent = '💡 Promedio México: ~' + d.rendimiento.toLocaleString('es-MX') + ' kg/ha';
+  document.getElementById('costos-hint-precio').textContent = '💡 Precio promedio mercado: ~$' + d.precio + '/kg';
+};
+
+window.calcularCostos = function() {
+  if (!esVIPActivo()) return mostrarPaywallModal('herramientas');
+
+  const cultivo = document.getElementById('costos-cultivo').value;
+  const cultivoNombre = document.querySelector('#costos-cultivo option:checked')?.textContent || 'Cultivo';
+  const ha = parseFloat(document.getElementById('costos-ha').value) || 1;
+  const semilla = parseFloat(document.getElementById('costos-semilla').value) || 0;
+  const insumos = parseFloat(document.getElementById('costos-insumos').value) || 0;
+  const riego = parseFloat(document.getElementById('costos-riego').value) || 0;
+  const jornales = parseFloat(document.getElementById('costos-jornales').value) || 0;
+  const maquinaria = parseFloat(document.getElementById('costos-maquinaria').value) || 0;
+  const otros = parseFloat(document.getElementById('costos-otros').value) || 0;
+
+  const rendUnidad = document.getElementById('costos-rend-unidad').value;
+  let rendimiento = parseFloat(document.getElementById('costos-rendimiento').value) || 0;
+  if (rendUnidad === 'ton') rendimiento = rendimiento * 1000; // convertir a kg
+
+  const precio = parseFloat(document.getElementById('costos-precio').value) || 0;
+
+  if (!cultivo) return foroToast('Selecciona un cultivo', 'err');
+  if (rendimiento <= 0) return foroToast('Ingresa un rendimiento', 'err');
+
+  // Cálculos
+  const costoHa = semilla + insumos + riego + jornales + maquinaria + otros;
+  const costoTotal = costoHa * ha;
+  const kgTotales = rendimiento * ha;
+  const costoPorKg = kgTotales > 0 ? costoHa / rendimiento : 0;
+  const ingresoTotal = kgTotales * precio;
+  const gananciaTotal = ingresoTotal - costoTotal;
+  const gananciaPorHa = gananciaTotal / ha;
+  const margenPct = ingresoTotal > 0 ? (gananciaTotal / ingresoTotal) * 100 : 0;
+  const puntoEquilibrio = precio > 0 ? costoHa / precio : 0; // kg/ha necesarios para no perder
+
+  const esRentable = gananciaTotal > 0;
+  const colorR = esRentable ? '#047857' : '#b91c1c';
+  const bgR = esRentable ? '#f0fdf4' : '#fef2f2';
+
+  const box = document.getElementById('costos-resultado');
+  box.style.display = 'block';
+  box.style.background = `linear-gradient(135deg, #fff, ${bgR})`;
+  box.style.borderColor = colorR;
+  box.innerHTML = `
+    <div class="herr-resultado__big" style="border-color:${colorR};">
+      <div class="herr-resultado__big-num" style="color:${colorR};">$${costoPorKg.toFixed(2)}</div>
+      <div class="herr-resultado__big-lbl" style="color:${colorR};">te cuesta producir 1 kg de ${escHtml(cultivoNombre.toLowerCase())}</div>
+    </div>
+
+    <div class="costos-resultado-big">
+      <div class="costos-kpi" style="border-color:#ef4444;">
+        <div class="costos-kpi__num" style="color:#b91c1c;">$${costoTotal.toLocaleString('es-MX', {maximumFractionDigits:0})}</div>
+        <div class="costos-kpi__lbl" style="color:#b91c1c;">Costo total ${ha} ha</div>
+      </div>
+      <div class="costos-kpi" style="border-color:#10b981;">
+        <div class="costos-kpi__num" style="color:#047857;">$${ingresoTotal.toLocaleString('es-MX', {maximumFractionDigits:0})}</div>
+        <div class="costos-kpi__lbl" style="color:#047857;">Ingreso total</div>
+      </div>
+      <div class="costos-kpi" style="border-color:${colorR}; grid-column:1/-1;">
+        <div class="costos-kpi__num" style="color:${colorR};">${gananciaTotal >= 0 ? '+' : ''}$${gananciaTotal.toLocaleString('es-MX', {maximumFractionDigits:0})}</div>
+        <div class="costos-kpi__lbl" style="color:${colorR};">${esRentable ? '🎉 Ganancia' : '⚠️ Pérdida'} total · Margen: ${margenPct.toFixed(1)}%</div>
+      </div>
+    </div>
+
+    <div class="herr-resultado__row"><span>Producción total:</span><b>${kgTotales.toLocaleString('es-MX')} kg (${(kgTotales/1000).toFixed(1)} ton)</b></div>
+    <div class="herr-resultado__row"><span>Ganancia por hectárea:</span><b style="color:${colorR};">${gananciaPorHa >= 0 ? '+' : ''}$${gananciaPorHa.toLocaleString('es-MX', {maximumFractionDigits:0})}</b></div>
+    <div class="herr-resultado__row"><span>Punto de equilibrio:</span><b>${puntoEquilibrio.toLocaleString('es-MX', {maximumFractionDigits:0})} kg/ha</b></div>
+    <div class="herr-resultado__row"><span>Precio mínimo para ganar:</span><b>$${rendimiento > 0 ? (costoHa / rendimiento).toFixed(2) : '—'}/kg</b></div>
+
+    <div class="herr-resultado__warn" style="background:${esRentable ? 'rgba(16,185,129,.1)' : '#fef3c7'};color:${esRentable ? '#047857' : '#92400e'};">
+      ${esRentable
+        ? `🎉 <b>¡Tu cultivo es rentable!</b> Si vendes a $${precio}/kg ganarás $${gananciaPorHa.toLocaleString('es-MX', {maximumFractionDigits:0})} por hectárea. Tu margen del ${margenPct.toFixed(1)}% ${margenPct > 30 ? 'es excelente' : margenPct > 15 ? 'es bueno' : 'es justo — considera reducir costos'}.`
+        : `⚠️ <b>Atención:</b> A $${precio}/kg pierdes dinero. Necesitas vender a <b>$${rendimiento > 0 ? (costoHa/rendimiento).toFixed(2) : '—'}/kg o más</b> para empatar. Considera: subir rendimiento, bajar insumos o cambiar de canal de venta (evitar intermediarios).`
+      }
+    </div>`;
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
+// ═══════════════════════════════════════════════════════════
+// ☀️ CLIMA EN TU PARCELA
+// ═══════════════════════════════════════════════════════════
+let CLIMA_INICIADO = false;
+
+window.initClima = function() {
+  if (CLIMA_INICIADO) return;
+  CLIMA_INICIADO = true;
+  // Intentar cargar ubicación guardada
+  try {
+    const guardado = localStorage.getItem('agroclub_clima_ubic');
+    if (guardado) {
+      const u = JSON.parse(guardado);
+      cargarClima(u.lat, u.lon, u.nombre);
+    }
+  } catch(e) {}
+};
+
+window.detectarUbicacionClima = function() {
+  if (!esVIPActivo()) return mostrarPaywallModal('herramientas');
+  if (!navigator.geolocation) return foroToast('Tu navegador no soporta geolocalización', 'err');
+  document.getElementById('clima-loading').style.display = 'block';
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      // Obtener nombre de la ubicación con reverse geocoding
+      try {
+        const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?latitude=${latitude}&longitude=${longitude}&language=es`);
+        const g = await r.json();
+        const nombre = g?.results?.[0]?.name ? `${g.results[0].name}, ${g.results[0].admin1 || g.results[0].country || ''}` : `Mi ubicación (${latitude.toFixed(2)}, ${longitude.toFixed(2)})`;
+        cargarClima(latitude, longitude, nombre);
+      } catch {
+        cargarClima(latitude, longitude, 'Mi ubicación actual');
+      }
+    },
+    (err) => {
+      document.getElementById('clima-loading').style.display = 'none';
+      foroToast('No se pudo obtener tu ubicación', 'err');
+    }
+  );
+};
+
+window.buscarCiudadClima = async function() {
+  if (!esVIPActivo()) return mostrarPaywallModal('herramientas');
+  const q = document.getElementById('clima-buscar-input').value.trim();
+  if (!q) return;
+  document.getElementById('clima-loading').style.display = 'block';
+  try {
+    const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=es`);
+    const g = await r.json();
+    if (!g?.results?.length) {
+      document.getElementById('clima-loading').style.display = 'none';
+      return foroToast('No encontramos esa ciudad', 'err');
+    }
+    const { latitude, longitude, name, admin1, country } = g.results[0];
+    cargarClima(latitude, longitude, `${name}, ${admin1 || country}`);
+  } catch (e) {
+    document.getElementById('clima-loading').style.display = 'none';
+    foroToast('Error al buscar', 'err');
+  }
+};
+
+async function cargarClima(lat, lon, nombre) {
+  document.getElementById('clima-loading').style.display = 'block';
+  document.getElementById('clima-resultado').style.display = 'none';
+  document.getElementById('clima-alertas').style.display = 'none';
+
+  try {
+    // Guardar ubicación
+    try { localStorage.setItem('agroclub_clima_ubic', JSON.stringify({ lat, lon, nombre })); } catch(e) {}
+    document.getElementById('clima-lugar').textContent = nombre;
+
+    // API open-meteo (gratis, sin API key)
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max&timezone=auto&forecast_days=7`;
+    const r = await fetch(url);
+    const data = await r.json();
+
+    document.getElementById('clima-loading').style.display = 'none';
+    renderClima(data, nombre);
+  } catch (e) {
+    document.getElementById('clima-loading').style.display = 'none';
+    foroToast('Error cargando pronóstico', 'err');
+    console.error(e);
+  }
+}
+
+const WEATHER_CODES = {
+  0: { icon: '☀️', desc: 'Despejado' },
+  1: { icon: '🌤️', desc: 'Mayormente despejado' },
+  2: { icon: '⛅', desc: 'Parcialmente nublado' },
+  3: { icon: '☁️', desc: 'Nublado' },
+  45: { icon: '🌫️', desc: 'Neblina' },
+  48: { icon: '🌫️', desc: 'Niebla congelante' },
+  51: { icon: '🌦️', desc: 'Llovizna ligera' },
+  53: { icon: '🌦️', desc: 'Llovizna' },
+  55: { icon: '🌧️', desc: 'Llovizna fuerte' },
+  61: { icon: '🌧️', desc: 'Lluvia ligera' },
+  63: { icon: '🌧️', desc: 'Lluvia' },
+  65: { icon: '⛈️', desc: 'Lluvia fuerte' },
+  71: { icon: '🌨️', desc: 'Nevada ligera' },
+  73: { icon: '🌨️', desc: 'Nevada' },
+  75: { icon: '❄️', desc: 'Nevada fuerte' },
+  80: { icon: '🌦️', desc: 'Chubascos' },
+  81: { icon: '🌧️', desc: 'Chubascos fuertes' },
+  82: { icon: '⛈️', desc: 'Chubascos violentos' },
+  95: { icon: '⛈️', desc: 'Tormenta eléctrica' },
+  96: { icon: '⛈️', desc: 'Tormenta con granizo' },
+  99: { icon: '⛈️', desc: 'Tormenta fuerte con granizo' }
+};
+
+function renderClima(data, nombre) {
+  const c = data.current;
+  const d = data.daily;
+  const hoyCode = WEATHER_CODES[c.weather_code] || { icon: '🌡️', desc: 'Sin datos' };
+
+  const box = document.getElementById('clima-resultado');
+  box.style.display = 'block';
+
+  // HOY
+  let html = `
+    <div class="clima-hoy">
+      <div class="clima-hoy__bg"></div>
+      <div class="clima-hoy__content">
+        <div class="clima-hoy__icon">${hoyCode.icon}</div>
+        <div class="clima-hoy__temp">${Math.round(c.temperature_2m)}<sup>°C</sup></div>
+        <div class="clima-hoy__desc">${hoyCode.desc}</div>
+        <div class="clima-hoy__meta">
+          <div class="clima-hoy__meta-item">💧 Humedad<b>${c.relative_humidity_2m}%</b></div>
+          <div class="clima-hoy__meta-item">💨 Viento<b>${Math.round(c.wind_speed_10m)} km/h</b></div>
+          <div class="clima-hoy__meta-item">🌧️ Lluvia<b>${c.precipitation} mm</b></div>
+        </div>
+      </div>
+    </div>`;
+
+  // 7 DÍAS
+  const diasNombres = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  html += '<div class="clima-dias">';
+  for (let i = 0; i < d.time.length; i++) {
+    const fecha = new Date(d.time[i] + 'T12:00:00');
+    const nombreD = i === 0 ? 'HOY' : diasNombres[fecha.getDay()];
+    const wc = WEATHER_CODES[d.weather_code[i]] || { icon: '🌡️' };
+    html += `
+      <div class="clima-dia">
+        <div class="clima-dia__nombre">${nombreD}</div>
+        <div class="clima-dia__icon">${wc.icon}</div>
+        <div class="clima-dia__tmax">${Math.round(d.temperature_2m_max[i])}°</div>
+        <div class="clima-dia__tmin">${Math.round(d.temperature_2m_min[i])}°</div>
+        ${d.precipitation_probability_max[i] > 30 ? `<div class="clima-dia__lluvia">💧 ${d.precipitation_probability_max[i]}%</div>` : ''}
+      </div>`;
+  }
+  html += '</div>';
+
+  box.innerHTML = html;
+
+  // ALERTAS
+  const alertas = [];
+  for (let i = 0; i < d.time.length; i++) {
+    const fecha = new Date(d.time[i] + 'T12:00:00');
+    const diaNombre = i === 0 ? 'HOY' : `${diasNombres[fecha.getDay()]} ${fecha.getDate()}`;
+    // Helada
+    if (d.temperature_2m_min[i] <= 3) {
+      alertas.push({
+        tipo: 'helada',
+        icon: '❄️',
+        titulo: `Alerta de helada el ${diaNombre}`,
+        msg: `Se esperan ${Math.round(d.temperature_2m_min[i])}°C mínimos. Cubre cultivos sensibles con mantas o riego nocturno preventivo.`
+      });
+    }
+    // Lluvia fuerte
+    if (d.precipitation_sum[i] >= 25) {
+      alertas.push({
+        tipo: 'lluvia',
+        icon: '🌧️',
+        titulo: `Lluvia fuerte el ${diaNombre}`,
+        msg: `Se esperan ${d.precipitation_sum[i]} mm. Pospón aplicaciones foliares, revisa drenajes y asegura invernaderos.`
+      });
+    }
+    // Calor extremo
+    if (d.temperature_2m_max[i] >= 38) {
+      alertas.push({
+        tipo: 'calor',
+        icon: '🔥',
+        titulo: `Calor extremo el ${diaNombre}`,
+        msg: `Se esperan ${Math.round(d.temperature_2m_max[i])}°C. Aumenta frecuencia de riego, usa malla sombra, trabaja temprano o al atardecer.`
+      });
+    }
+    // Viento fuerte
+    if (d.wind_speed_10m_max[i] >= 50) {
+      alertas.push({
+        tipo: 'calor',
+        icon: '💨',
+        titulo: `Viento fuerte el ${diaNombre}`,
+        msg: `Rachas de ${Math.round(d.wind_speed_10m_max[i])} km/h. No hagas aplicaciones de agroquímicos, tutorá plantas altas.`
+      });
+    }
+  }
+
+  const alertasBox = document.getElementById('clima-alertas');
+  if (alertas.length === 0) {
+    alertasBox.style.display = 'block';
+    alertasBox.innerHTML = `
+      <div class="clima-alerta clima-alerta--lluvia" style="background:linear-gradient(135deg,#dcfce7,#f0fdf4);border-color:#10b981;color:#047857;">
+        <div class="clima-alerta__icon">✅</div>
+        <div class="clima-alerta__body">
+          <strong>Sin alertas críticas</strong>
+          Condiciones normales para los próximos 7 días.
+        </div>
+      </div>`;
+  } else {
+    alertasBox.style.display = 'block';
+    alertasBox.innerHTML = alertas.slice(0, 6).map(a => `
+      <div class="clima-alerta clima-alerta--${a.tipo}">
+        <div class="clima-alerta__icon">${a.icon}</div>
+        <div class="clima-alerta__body">
+          <strong>${escHtml(a.titulo)}</strong>
+          ${escHtml(a.msg)}
+        </div>
+      </div>`).join('');
+  }
 }
 
 // Disparar cargar parcelas/apoyos/streak al entrar a Herramientas
