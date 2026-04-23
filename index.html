@@ -6741,12 +6741,17 @@ async function cargarParcelas() {
   try {
     const q = query(
       collection(db, 'parcelas'),
-      where('uid', '==', window.currentUser.uid),
-      orderBy('fecha_creacion', 'desc')
+      where('uid', '==', window.currentUser.uid)
     );
     const snap = await getDocs(q);
     const parcelas = [];
     snap.forEach(d => parcelas.push({ id: d.id, ...d.data() }));
+    // Ordenar en cliente por fecha_creacion desc
+    parcelas.sort((a, b) => {
+      const fa = a.fecha_creacion?.toDate?.() || new Date(0);
+      const fb = b.fecha_creacion?.toDate?.() || new Date(0);
+      return fb - fa;
+    });
 
     if (parcelas.length === 0) {
       cont.innerHTML = `
