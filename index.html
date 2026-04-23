@@ -4661,7 +4661,7 @@
         <div class="perfil-hero-info">
           <h3 id="perfil-nombre-hero">—</h3>
           <p id="perfil-email-hero">—</p>
-          <div class="perfil-badge">⭐ Miembro VIP Activo</div>
+          <div class="perfil-badge" id="perfil-badge-estado">⭐ Miembro VIP Activo</div>
         </div>
       </div>
 
@@ -5139,14 +5139,33 @@ onAuthStateChanged(auth, async (user) => {
     cargarHistorialPagos(user.email);
   } else {
     // Usuario autenticado pero SIN membresía → modo FREE con paywall
-    const nombre = user.email.split("@")[0];
+    const nombre = user.displayName || user.email.split("@")[0];
     currentUser = { uid: user.uid, email: user.email, nombre, esVIP: false, estadoMembresia: 'sin_membresia' };
     window.currentUser = currentUser;
     mostrarPaywallGlobal();
-    document.getElementById("userName").textContent = nombre;
+    // Cambiar badge a FREE
+    const badge = document.getElementById('perfil-badge-estado');
+    if (badge) {
+      badge.innerHTML = '🔒 Cuenta gratuita';
+      badge.style.background = 'rgba(251,191,36,.2)';
+      badge.style.borderColor = 'rgba(251,191,36,.4)';
+      badge.style.color = '#fbbf24';
+    }
+    document.getElementById("userName").textContent = nombre.split(" ")[0];
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
-    if (document.getElementById("hero-greeting")) document.getElementById("hero-greeting").textContent = saludoPorHora(nombre);
+    if (document.getElementById("hero-greeting")) document.getElementById("hero-greeting").textContent = saludoPorHora(nombre.split(" ")[0]);
+    // Llenar campos del perfil con datos del registro
+    if (document.getElementById("perfil-nombre")) document.getElementById("perfil-nombre").textContent = nombre;
     if (document.getElementById("perfil-email")) document.getElementById("perfil-email").textContent = user.email;
+    if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = '—';
+    if (document.getElementById("perfil-fecha")) {
+      const fecha = user.metadata?.creationTime
+        ? new Date(user.metadata.creationTime).toLocaleDateString("es-MX", {day:"numeric",month:"long",year:"numeric"})
+        : '—';
+      document.getElementById("perfil-fecha").textContent = fecha;
+    }
+    if (document.getElementById("perfil-plan")) document.getElementById("perfil-plan").textContent = 'Cuenta gratuita';
+    if (document.getElementById("perfil-vence")) document.getElementById("perfil-vence").textContent = '—';
     if (document.getElementById("perfil-nombre-hero")) document.getElementById("perfil-nombre-hero").textContent = nombre;
     if (document.getElementById("perfil-email-hero")) document.getElementById("perfil-email-hero").textContent = user.email;
     if (document.getElementById("perfil-avatar-big")) document.getElementById("perfil-avatar-big").textContent = nombre[0].toUpperCase();
