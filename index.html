@@ -375,6 +375,184 @@
       .cert-card__title { font-size: .92rem; }
     }
     /* ══ FIN CERTIFICADOS ═══════════════════════════════════════════════ */
+
+    /* ══ 🏆 LOGROS PAGE ═══════════════════════════════════════════════════ */
+    .logros-page-hero {
+      position: relative; overflow: hidden; margin-bottom: 20px;
+      background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #a78bfa 100%);
+      border-radius: 24px; padding: 24px 26px;
+      box-shadow: 0 20px 50px rgba(76,29,149,.25);
+      color: #fff; animation: cardIn .4s ease both;
+    }
+    .logros-page-hero__bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(251,191,36,.18), transparent 50%),
+        radial-gradient(circle at 15% 80%, rgba(255,255,255,.08), transparent 40%);
+    }
+    .logros-page-hero__content {
+      position: relative; z-index: 2; display: flex; align-items: center; gap: 22px;
+    }
+    .logros-page-hero__medal {
+      width: 100px; height: 100px; flex-shrink: 0;
+      filter: drop-shadow(0 8px 16px rgba(251,191,36,.4));
+      animation: trophyFloat 3.5s ease-in-out infinite;
+    }
+    .logros-page-hero__medal-svg { width: 100%; height: 100%; }
+    .logros-page-hero__text { flex: 1; min-width: 0; }
+    .logros-page-hero__kicker {
+      font-size: .68rem; text-transform: uppercase; letter-spacing: .18em;
+      color: #fbbf24; font-weight: 800; margin-bottom: 6px;
+    }
+    .logros-page-hero__title { font-size: 1.6rem; font-weight: 800; line-height: 1.1; margin-bottom: 6px; }
+    .logros-page-hero__desc { font-size: .84rem; line-height: 1.5; opacity: .85; max-width: 500px; }
+
+    /* ══ 💬 FORO ═════════════════════════════════════════════════════════ */
+    .foro-hero {
+      position: relative; overflow: hidden; margin-bottom: 18px;
+      background: linear-gradient(135deg, #0a3d1a 0%, #1a6b2f 50%, #2d8f42 100%);
+      border-radius: 24px; padding: 24px 26px;
+      box-shadow: 0 20px 50px rgba(10,61,26,.25);
+      color: #fff; animation: cardIn .4s ease both;
+    }
+    .foro-hero__bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,.12), transparent 50%),
+        radial-gradient(circle at 20% 90%, rgba(251,191,36,.1), transparent 50%);
+    }
+    .foro-hero__content { position: relative; z-index: 2; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .foro-hero__icon {
+      width: 72px; height: 72px; border-radius: 18px;
+      background: rgba(255,255,255,.15); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+    .foro-hero__text { flex: 1; min-width: 220px; }
+    .foro-hero__kicker { font-size: .68rem; text-transform: uppercase; letter-spacing: .18em; color: #fbbf24; font-weight: 800; margin-bottom: 6px; }
+    .foro-hero__title { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+    .foro-hero__desc { font-size: .84rem; line-height: 1.5; opacity: .88; }
+    .foro-hero__stats { display: flex; gap: 18px; }
+    .foro-hero__stat { text-align: center; }
+    .foro-hero__stat strong { display: block; font-size: 1.1rem; font-weight: 800; color: #fbbf24; font-family: 'Playfair Display', Georgia, serif; }
+    .foro-hero__stat span { font-size: .6rem; text-transform: uppercase; letter-spacing: .1em; opacity: .8; font-weight: 700; }
+
+    .foro-coming-banner {
+      display: flex; gap: 14px; align-items: center;
+      background: linear-gradient(135deg, rgba(251,191,36,.12), rgba(251,191,36,.04));
+      border: 1px solid rgba(251,191,36,.3);
+      border-radius: 14px; padding: 14px 18px;
+      margin-bottom: 18px;
+    }
+    .foro-coming-banner__icon { font-size: 1.6rem; }
+    .foro-coming-banner__text { display: flex; flex-direction: column; gap: 2px; }
+    .foro-coming-banner__text strong { color: #92400e; font-size: .92rem; font-weight: 800; }
+    .foro-coming-banner__text span { font-size: .8rem; color: var(--muted); line-height: 1.4; }
+
+    .foro-composer {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 18px; margin-bottom: 14px;
+      cursor: pointer; transition: border-color .15s, box-shadow .15s;
+    }
+    .foro-composer:hover { border-color: var(--verde,#1a6b2f); box-shadow: 0 4px 12px rgba(26,107,47,.08); }
+    .foro-composer__avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #1a6b2f, #2d8f42);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; flex-shrink: 0;
+    }
+    .foro-composer__input {
+      flex: 1; background: var(--bg); border-radius: 100px;
+      padding: 10px 16px; color: var(--muted); font-size: .88rem;
+    }
+    .foro-composer__actions { display: flex; gap: 14px; font-size: 1.2rem; opacity: .6; }
+
+    .foro-filters {
+      display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .foro-filters::-webkit-scrollbar { display: none; }
+    .foro-filter {
+      background: var(--card); border: 1px solid var(--border); border-radius: 100px;
+      padding: 8px 16px; font-size: .82rem; font-weight: 700; color: var(--text);
+      cursor: pointer; white-space: nowrap; font-family: inherit;
+      transition: all .15s;
+    }
+    .foro-filter:hover { border-color: var(--verde,#1a6b2f); }
+    .foro-filter--active { background: var(--verde,#1a6b2f); color: #fff; border-color: var(--verde,#1a6b2f); }
+
+    .foro-feed { display: flex; flex-direction: column; gap: 14px; }
+
+    .foro-post {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px 20px; animation: cardIn .4s ease both;
+    }
+    .foro-post:nth-child(1) { animation-delay: .05s; }
+    .foro-post:nth-child(2) { animation-delay: .1s; }
+    .foro-post:nth-child(3) { animation-delay: .15s; }
+    .foro-post:nth-child(4) { animation-delay: .2s; }
+
+    .foro-post__head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .foro-post__avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--a,#1a6b2f), var(--b,#2d8f42));
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem;
+    }
+    .foro-post__author { flex: 1; min-width: 0; }
+    .foro-post__name {
+      font-weight: 700; font-size: .92rem; color: var(--text);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .foro-post__badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff;
+      padding: 2px 8px; border-radius: 100px; font-size: .62rem; font-weight: 800;
+      letter-spacing: .05em;
+    }
+    .foro-post__meta { font-size: .74rem; color: var(--muted); margin-top: 1px; }
+    .foro-post__cat {
+      display: inline-block; background: rgba(26,107,47,.1); color: var(--verde,#1a6b2f);
+      padding: 4px 10px; border-radius: 100px; font-size: .68rem; font-weight: 800;
+      letter-spacing: .03em; margin-bottom: 8px;
+    }
+    .foro-post__title { font-size: 1rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3; color: var(--text); }
+    .foro-post__body { font-size: .88rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .foro-post__img {
+      width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin-bottom: 12px;
+      background-size: cover; background-position: center;
+      background-color: #e8f5e9;
+    }
+    .foro-post__actions {
+      display: flex; gap: 18px; padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .foro-post__action {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .82rem; color: var(--muted); font-weight: 700;
+      cursor: pointer; transition: color .15s;
+    }
+    .foro-post__action:hover { color: var(--verde,#1a6b2f); }
+    .foro-post__action.liked { color: #dc2626; }
+
+    @media (max-width: 640px) {
+      .logros-page-hero { padding: 20px; border-radius: 20px; }
+      .logros-page-hero__content { gap: 14px; }
+      .logros-page-hero__medal { width: 72px; height: 72px; }
+      .logros-page-hero__title { font-size: 1.25rem; }
+      .foro-hero { padding: 20px; border-radius: 20px; }
+      .foro-hero__content { gap: 14px; }
+      .foro-hero__icon { width: 56px; height: 56px; font-size: 1.8rem; border-radius: 14px; }
+      .foro-hero__title { font-size: 1.2rem; }
+      .foro-hero__desc { font-size: .78rem; }
+      .foro-hero__stats { width: 100%; justify-content: space-between; }
+      .foro-post { padding: 14px; }
+      .foro-composer { padding: 12px; }
+      .foro-composer__input { font-size: .82rem; padding: 8px 14px; }
+    }
+    /* ══ FIN FORO/LOGROS ═════════════════════════════════════════════════ */
     .course-thumb {
       height: 190px; display: flex; align-items: center; justify-content: center;
       font-size: 4.5rem; position: relative; overflow: hidden; background: #e8f5e9;
@@ -2313,7 +2491,9 @@
       <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🎥</span> Webinars</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>📄</span> Materiales</div></div>
       <div class="sidebar-item" onclick="showPage('notificaciones',this)"><div class="sidebar-item-left"><span>🔔</span> Notificaciones</div><span class="sidebar-badge" id="badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span></div>
+      <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div><span class="sidebar-badge" style="background:#10b981;color:#fff;">Nuevo</span></div>
       <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
+      <div class="sidebar-item" onclick="showPage('logros',this)"><div class="sidebar-item-left"><span>🏆</span> Logros</div></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mi cuenta</div>
@@ -2624,6 +2804,98 @@
       <div id="lista-certificados" class="cert-grid"></div>
     </div>
 
+    <!-- ===================== LOGROS ===================== -->
+    <div class="page" id="page-logros">
+      <div class="logros-page-hero">
+        <div class="logros-page-hero__bg"></div>
+        <div class="logros-page-hero__content">
+          <div class="logros-page-hero__medal">
+            <svg viewBox="0 0 100 100" class="logros-page-hero__medal-svg">
+              <defs>
+                <linearGradient id="medal-hero-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fef3c7"/>
+                  <stop offset="50%" stop-color="#fbbf24"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+              </defs>
+              <path d="M30 5 L70 5 L60 35 L40 35 Z" fill="#1a6b2f"/>
+              <path d="M32 5 L40 5 L40 37 Z" fill="#0a3d1a"/>
+              <path d="M68 5 L60 5 L60 37 Z" fill="#0a3d1a"/>
+              <circle cx="50" cy="62" r="30" fill="url(#medal-hero-grad)" stroke="#92400e" stroke-width="1.5"/>
+              <circle cx="50" cy="62" r="22" fill="none" stroke="#92400e" stroke-width="1" opacity=".4"/>
+              <text x="50" y="74" font-size="28" text-anchor="middle" fill="#78350f" font-weight="bold">🏆</text>
+            </svg>
+          </div>
+          <div class="logros-page-hero__text">
+            <div class="logros-page-hero__kicker">Sistema de recompensas</div>
+            <h3 class="logros-page-hero__title">Mis Logros</h3>
+            <p class="logros-page-hero__desc">Desbloquea medallas completando retos dentro del club. Cada logro es una señal de tu compromiso con el campo.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Widget de logros (mismo componente que tenía el perfil) -->
+      <div class="logros-section" style="margin:0;">
+        <div class="logros-header">
+          <h3>🏅 Mis medallas</h3>
+          <span class="logros-counter" id="logros-counter">0 / 0 desbloqueados</span>
+        </div>
+        <div class="logros-grid" id="logros-grid"></div>
+      </div>
+    </div>
+
+    <!-- ===================== FORO VIP ===================== -->
+    <div class="page" id="page-foro">
+      <!-- Hero -->
+      <div class="foro-hero">
+        <div class="foro-hero__bg"></div>
+        <div class="foro-hero__content">
+          <div class="foro-hero__icon">💬</div>
+          <div class="foro-hero__text">
+            <div class="foro-hero__kicker">Comunidad privada</div>
+            <h3 class="foro-hero__title">Foro VIP AgroClub</h3>
+            <p class="foro-hero__desc">Comparte tus dudas, casos de éxito y aprende de otros productores del club. Más de <strong>500 miembros activos</strong> listos para ayudarte.</p>
+          </div>
+          <div class="foro-hero__stats">
+            <div class="foro-hero__stat"><strong>500+</strong><span>Miembros</span></div>
+            <div class="foro-hero__stat"><strong>1,200</strong><span>Posts</span></div>
+            <div class="foro-hero__stat"><strong>24/7</strong><span>Activo</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner próximamente -->
+      <div class="foro-coming-banner">
+        <span class="foro-coming-banner__icon">🚀</span>
+        <div class="foro-coming-banner__text">
+          <strong>Próximamente habilitado</strong>
+          <span>Estamos preparando la plataforma de conversaciones. Mientras tanto, puedes ver una vista previa de cómo se verá.</span>
+        </div>
+      </div>
+
+      <!-- Crear post -->
+      <div class="foro-composer" onclick="window.alert('Pronto podrás compartir con la comunidad 💚')">
+        <div class="foro-composer__avatar" id="foro-composer-avatar">T</div>
+        <div class="foro-composer__input">¿Qué quieres compartir con la comunidad?</div>
+        <div class="foro-composer__actions">
+          <span>📷</span><span>📊</span><span>🌱</span>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="foro-filters">
+        <button class="foro-filter foro-filter--active">🌟 Todo</button>
+        <button class="foro-filter">❓ Preguntas</button>
+        <button class="foro-filter">🏆 Casos de éxito</button>
+        <button class="foro-filter">🌾 Tips del campo</button>
+        <button class="foro-filter">💰 Mercado</button>
+      </div>
+
+      <!-- Feed -->
+      <div class="foro-feed" id="foro-feed"></div>
+
+    </div>
+
     <div class="page" id="page-perfil">
       <!-- HERO -->
       <div class="perfil-hero">
@@ -2690,17 +2962,6 @@
         <div class="perfil-row"><span class="perfil-label">Miembro desde</span><span class="perfil-val" id="perfil-fecha">—</span></div>
         <div class="perfil-row"><span class="perfil-label">Plan activo</span><span class="perfil-val" id="perfil-plan">VIP</span></div>
         <div class="perfil-row"><span class="perfil-label">Vence</span><span class="perfil-val" id="perfil-vence">—</span></div>
-      </div>
-
-      <!-- ===== LOGROS ===== -->
-      <div class="logros-section">
-        <div class="logros-header">
-          <h3>🏅 Mis logros</h3>
-          <span class="logros-counter" id="logros-counter">0 / 0 desbloqueados</span>
-        </div>
-        <div class="logros-grid" id="logros-grid">
-          <!-- Se renderizan dinámicamente -->
-        </div>
       </div>
     </div>
 
@@ -4250,6 +4511,134 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(loadNotificaciones, 800);
 });
 
+// ==========================================================
+// ===== 💬 FORO VIP (mock data - solo diseño)
+// ==========================================================
+const FORO_POSTS_MOCK = [
+  {
+    autor: 'Ricardo Méndez',
+    inicial: 'R',
+    gradA: '#0ea5e9', gradB: '#0369a1',
+    vip: true,
+    fecha: 'hace 2 horas',
+    categoria: '🏆 Casos de éxito',
+    titulo: 'Logré aumentar 40% mi producción de jitomate con riego por goteo',
+    body: 'Después de 6 meses aplicando lo aprendido en el curso de "Sistemas de riego eficiente", los números hablan solos. Pasé de 18 ton/ha a 25 ton/ha en mi invernadero de 2,000 m². Comparto mi experiencia y respondo dudas...',
+    img: null,
+    likes: 47, comentarios: 12, vistas: 284
+  },
+  {
+    autor: 'María José Pérez',
+    inicial: 'M',
+    gradA: '#ec4899', gradB: '#be185d',
+    vip: true,
+    fecha: 'hace 5 horas',
+    categoria: '❓ Preguntas',
+    titulo: '¿Alguien ha probado biofertilizantes a base de lactobacilos?',
+    body: 'Estoy pensando en implementarlos en mi parcela de aguacate. Los resultados que veo en YouTube se ven increíbles pero quisiera escuchar de alguien del club que ya lo haya probado en campo real. ¿Vale la pena la inversión?',
+    img: null,
+    likes: 23, comentarios: 8, vistas: 156
+  },
+  {
+    autor: 'Juan Carlos Herrera',
+    inicial: 'J',
+    gradA: '#10b981', gradB: '#047857',
+    vip: false,
+    fecha: 'hace 1 día',
+    categoria: '🌾 Tips del campo',
+    titulo: 'Truco casero para detectar deficiencia de nitrógeno antes que las plantas',
+    body: 'Miren, esto me lo enseñó mi abuelo y funciona de maravilla. Antes de que la hoja amarillee, fíjense en las nervaduras nuevas. Si están más pálidas que el resto, ya empezó la deficiencia. Ahorren dinero actuando a tiempo...',
+    img: null,
+    likes: 89, comentarios: 24, vistas: 512
+  },
+  {
+    autor: 'Alejandra Torres',
+    inicial: 'A',
+    gradA: '#f59e0b', gradB: '#b45309',
+    vip: true,
+    fecha: 'hace 2 días',
+    categoria: '💰 Mercado',
+    titulo: 'Precios del aguacate para exportación - Semana 17 2026',
+    body: 'Comparto los precios que me están pagando en la central de abastos + el comparativo con los agroexportadores directos. Primera: $85/kg · Segunda: $62/kg · Exportación directa Estados Unidos: $115/kg. Factores clave que afectan estos precios ahora mismo...',
+    img: null,
+    likes: 156, comentarios: 43, vistas: 892
+  },
+  {
+    autor: 'Pedro Ramírez',
+    inicial: 'P',
+    gradA: '#8b5cf6', gradB: '#6d28d9',
+    vip: false,
+    fecha: 'hace 3 días',
+    categoria: '❓ Preguntas',
+    titulo: '¿Qué variedad de maíz criollo recomiendan para zona árida?',
+    body: 'Tengo 3 hectáreas en el norte de Puebla, muy poca lluvia (500mm al año). Quiero empezar a diversificar con maíz nativo pero no sé cuál aguante estas condiciones. ¿Consejos?',
+    img: null,
+    likes: 31, comentarios: 15, vistas: 198
+  }
+];
+
+function renderForo() {
+  const feed = document.getElementById('foro-feed');
+  if (!feed) return;
+
+  // Avatar del composer con la inicial del usuario actual
+  const composerAvatar = document.getElementById('foro-composer-avatar');
+  if (composerAvatar && window.currentUser) {
+    const nombre = window.currentUser.nombre || window.currentUser.email || 'T';
+    composerAvatar.textContent = nombre.charAt(0).toUpperCase();
+  }
+
+  feed.innerHTML = FORO_POSTS_MOCK.map(p => {
+    const imgHtml = p.img
+      ? `<div class="foro-post__img" style="background-image:url('${p.img}')"></div>`
+      : '';
+    return `
+    <div class="foro-post">
+      <div class="foro-post__head">
+        <div class="foro-post__avatar" style="--a:${p.gradA};--b:${p.gradB};">${p.inicial}</div>
+        <div class="foro-post__author">
+          <div class="foro-post__name">
+            ${p.autor}
+            ${p.vip ? '<span class="foro-post__badge">⭐ VIP</span>' : ''}
+          </div>
+          <div class="foro-post__meta">${p.fecha} · 👁️ ${p.vistas} vistas</div>
+        </div>
+      </div>
+      <div class="foro-post__cat">${p.categoria}</div>
+      <div class="foro-post__title">${p.titulo}</div>
+      <div class="foro-post__body">${p.body}</div>
+      ${imgHtml}
+      <div class="foro-post__actions">
+        <div class="foro-post__action" onclick="likeForoPost(this)">
+          <span>🤍</span> <span class="like-count">${p.likes}</span>
+        </div>
+        <div class="foro-post__action">
+          <span>💬</span> <span>${p.comentarios} comentarios</span>
+        </div>
+        <div class="foro-post__action">
+          <span>🔗</span> <span>Compartir</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.likeForoPost = function(el) {
+  const icon = el.querySelector('span:first-child');
+  const count = el.querySelector('.like-count');
+  if (!el.classList.contains('liked')) {
+    el.classList.add('liked');
+    icon.textContent = '❤️';
+    count.textContent = parseInt(count.textContent) + 1;
+  } else {
+    el.classList.remove('liked');
+    icon.textContent = '🤍';
+    count.textContent = parseInt(count.textContent) - 1;
+  }
+};
+
+window.renderForo = renderForo;
+
 // Interceptar showPage: al entrar a notificaciones, marcar como leídas
 // después de un delay razonable (el socio las lee → se desvanecen elegante)
 (function() {
@@ -4259,6 +4648,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // 🎓 Renderizar lista cuando entra a certificados
     if (id === 'certificados' && typeof renderCertificadosLista === 'function') {
       renderCertificadosLista();
+    }
+    // 🏆 Renderizar logros cuando entra a la página
+    if (id === 'logros' && typeof renderLogros === 'function') {
+      renderLogros();
+    }
+    // 💬 Renderizar foro cuando entra
+    if (id === 'foro' && typeof renderForo === 'function') {
+      renderForo();
     }
     if (id === 'notificaciones') {
       // 3 segundos: suficiente para leer lo nuevo antes de que desaparezcan
@@ -4916,15 +5313,22 @@ function parsearXmlRss(xmlText, fuente) {
     const pubDate = getText('pubDate') || getText('published') || getText('updated');
     const descrip = getText('description') || getText('summary') || getText('content');
 
-    // Buscar imagen en media:thumbnail, media:content, enclosure o dentro del HTML
+    // Buscar imagen en media:thumbnail, media:content, enclosure, content:encoded, itunes:image o dentro del HTML
     let imagen = null;
-    const mediaTh = it.getElementsByTagNameNS('*', 'thumbnail')[0];
-    const mediaCt = it.getElementsByTagNameNS('*', 'content')[0];
-    const enclos  = it.querySelector('enclosure');
+    const mediaTh   = it.getElementsByTagNameNS('*', 'thumbnail')[0];
+    const mediaCt   = it.getElementsByTagNameNS('*', 'content')[0];
+    const enclos    = it.querySelector('enclosure');
+    const contentEn = it.getElementsByTagNameNS('*', 'encoded')[0]; // content:encoded
+    const itunesImg = it.getElementsByTagNameNS('*', 'image')[0];
+    const image     = it.querySelector('image url');
     if (mediaTh) imagen = mediaTh.getAttribute('url');
     else if (mediaCt && mediaCt.getAttribute('url')) imagen = mediaCt.getAttribute('url');
+    else if (enclos && enclos.getAttribute('type')?.startsWith('image')) imagen = enclos.getAttribute('url');
     else if (enclos) imagen = enclos.getAttribute('url');
-    else imagen = extraerPrimeraImagen(descrip);
+    else if (itunesImg && itunesImg.getAttribute('href')) imagen = itunesImg.getAttribute('href');
+    else if (image) imagen = image.textContent;
+    else if (contentEn) imagen = extraerPrimeraImagen(contentEn.textContent);
+    if (!imagen) imagen = extraerPrimeraImagen(descrip);
 
     return {
       titulo: titulo || '(Sin título)',
