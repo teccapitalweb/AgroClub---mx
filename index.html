@@ -3295,10 +3295,11 @@
       <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🎥</span> Webinars</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>🎬</span> Videos</div><span class="sidebar-badge" style="background:#8b5cf6;color:#fff;">Pronto</span></div>
       <div class="sidebar-item" onclick="showPage('notificaciones',this)"><div class="sidebar-item-left"><span>🔔</span> Notificaciones</div><span class="sidebar-badge" id="badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span></div>
-      <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div><span class="sidebar-badge" style="background:#10b981;color:#fff;">Nuevo</span></div>
+      <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div></div>
       <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
       <div class="sidebar-item" onclick="showPage('logros',this)"><div class="sidebar-item-left"><span>🏆</span> Logros</div></div>
-      <div class="sidebar-item" onclick="showPage('herramientas',this)"><div class="sidebar-item-left"><span>🛠️</span> Herramientas</div><span class="sidebar-badge" style="background:#f59e0b;color:#fff;">Nuevo</span></div>
+      <div class="sidebar-item" onclick="showPage('herramientas',this)"><div class="sidebar-item-left"><span>🛠️</span> Herramientas</div></div>
+      <div class="sidebar-item" onclick="showPage('apoyos',this)"><div class="sidebar-item-left"><span>🏛️</span> Apoyos gob.</div><span class="sidebar-badge" style="background:#f59e0b;color:#fff;">Nuevo</span></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mi cuenta</div>
@@ -3767,7 +3768,6 @@
         <button class="herr-tab herr-tab--active" data-tab="agroquimicos" onclick="cambiarHerrTab('agroquimicos',this)">🧪 Agroquímicos</button>
         <button class="herr-tab" data-tab="bitacora" onclick="cambiarHerrTab('bitacora',this)">📓 Bitácora</button>
         <button class="herr-tab" data-tab="conversor" onclick="cambiarHerrTab('conversor',this)">📏 Conversor</button>
-        <button class="herr-tab" data-tab="apoyos" onclick="cambiarHerrTab('apoyos',this)">🏛️ Apoyos</button>
       </div>
 
       <!-- ═══════ 1. AGROQUÍMICOS ═══════ -->
@@ -3891,38 +3891,53 @@
         </div>
       </div>
 
-      <!-- ═══════ 4. APOYOS DEL GOBIERNO ═══════ -->
-      <div class="herr-section" id="herr-apoyos" style="display:none;">
-        <div class="herr-card">
-          <div class="herr-card__head">
-            <h4>🏛️ Apoyos del gobierno 2026</h4>
-            <p>Programas federales y estatales vigentes para productores del campo. Actualizado cada mes.</p>
+      <!-- (Apoyos movidos a página propia) -->
+    </div>
+
+    <!-- ===================== 🏛️ APOYOS DEL GOBIERNO ===================== -->
+    <div class="page" id="page-apoyos">
+      <!-- HERO -->
+      <div class="herr-hero" style="background:linear-gradient(135deg,#1e40af 0%,#1e3a8a 50%,#312e81 100%);">
+        <div class="herr-hero__glow"></div>
+        <div class="herr-hero__content">
+          <div class="herr-hero__icon">🏛️</div>
+          <div class="herr-hero__text">
+            <div class="herr-hero__kicker">PROGRAMAS OFICIALES 2026</div>
+            <h3 class="herr-hero__title">Apoyos del gobierno</h3>
+            <p class="herr-hero__desc">18+ programas federales y estatales vigentes para productores del campo. <strong>Todo lo que puedes aplicar ahora mismo.</strong></p>
           </div>
-          <div class="apoyos-filtros">
-            <select id="apoyo-filtro-estado">
-              <option value="">Todos los estados</option>
-              <option value="federal">Solo federales</option>
-              <option value="Puebla">Puebla</option>
-              <option value="Oaxaca">Oaxaca</option>
-              <option value="Veracruz">Veracruz</option>
-              <option value="Michoacán">Michoacán</option>
-              <option value="Jalisco">Jalisco</option>
-              <option value="Sinaloa">Sinaloa</option>
-              <option value="Sonora">Sonora</option>
-              <option value="Chiapas">Chiapas</option>
-              <option value="Guanajuato">Guanajuato</option>
-            </select>
-            <select id="apoyo-filtro-tipo">
-              <option value="">Todos los tipos</option>
-              <option value="subsidio">💵 Subsidios directos</option>
-              <option value="credito">💳 Créditos</option>
-              <option value="insumos">🌱 Insumos gratis</option>
-              <option value="seguro">🛡️ Seguros</option>
-              <option value="equipo">🚜 Equipo/maquinaria</option>
-            </select>
-          </div>
-          <div class="apoyos-lista" id="apoyos-lista"></div>
         </div>
+      </div>
+
+      <div class="herr-card">
+        <div class="herr-card__head">
+          <h4>🔍 Filtra los apoyos que te corresponden</h4>
+          <p>Elige tu estado y tipo de apoyo para ver solo los que aplican a ti.</p>
+        </div>
+        <div class="apoyos-filtros">
+          <select id="apoyo-filtro-estado">
+            <option value="">Todos los estados</option>
+            <option value="federal">Solo federales</option>
+            <option value="Puebla">Puebla</option>
+            <option value="Oaxaca">Oaxaca</option>
+            <option value="Veracruz">Veracruz</option>
+            <option value="Michoacán">Michoacán</option>
+            <option value="Jalisco">Jalisco</option>
+            <option value="Sinaloa">Sinaloa</option>
+            <option value="Sonora">Sonora</option>
+            <option value="Chiapas">Chiapas</option>
+            <option value="Guanajuato">Guanajuato</option>
+          </select>
+          <select id="apoyo-filtro-tipo">
+            <option value="">Todos los tipos</option>
+            <option value="subsidio">💵 Subsidios directos</option>
+            <option value="credito">💳 Créditos</option>
+            <option value="insumos">🌱 Insumos gratis</option>
+            <option value="seguro">🛡️ Seguros</option>
+            <option value="equipo">🚜 Equipo/maquinaria</option>
+          </select>
+        </div>
+        <div class="apoyos-lista" id="apoyos-lista"></div>
       </div>
     </div>
 
@@ -7143,6 +7158,9 @@ async function actualizarStreak() {
       // Mostrar la pestaña activa (agroquímicos por defecto)
       const tabActivo = document.querySelector('.herr-tab--active');
       if (tabActivo) cambiarHerrTab(tabActivo.dataset.tab, tabActivo);
+    }
+    if (id === 'apoyos') {
+      renderApoyos();
     }
   };
 })();
