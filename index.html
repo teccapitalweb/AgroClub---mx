@@ -227,6 +227,84 @@
       display: none; margin-left: 6px; font-size: .85em;
       opacity: .8;
     }
+
+    /* 🔒 CANDADITOS VISUALES SOBRE TARJETAS (usuario FREE) */
+    body.is-free .course-card,
+    body.is-free .sesion-card,
+    body.is-free .foro-post,
+    body.is-free .apoyo-item,
+    body.is-free .parcela-card,
+    body.is-free .herr-card,
+    body.is-free .cert-card,
+    body.is-free .widget-logro {
+      position: relative;
+    }
+    body.is-free .course-card::after,
+    body.is-free .sesion-card::after,
+    body.is-free .foro-post::after,
+    body.is-free .apoyo-item::after,
+    body.is-free .parcela-card::after,
+    body.is-free .herr-card::after,
+    body.is-free .cert-card::after {
+      content: '🔒';
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 12px rgba(251,191,36,.55), 0 0 0 3px #fff;
+      z-index: 5;
+      pointer-events: none;
+      animation: lockPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes lockPulse {
+      0%,100% { transform: scale(1); box-shadow: 0 4px 12px rgba(251,191,36,.55), 0 0 0 3px #fff; }
+      50%     { transform: scale(1.08); box-shadow: 0 6px 18px rgba(251,191,36,.75), 0 0 0 3px #fff; }
+    }
+
+    /* Tarjetas con tinte para dar sensación de "bloqueado" */
+    body.is-free .course-card,
+    body.is-free .sesion-card {
+      filter: saturate(.75);
+      transition: filter .2s;
+    }
+    body.is-free .course-card:hover,
+    body.is-free .sesion-card:hover {
+      filter: saturate(1);
+    }
+
+    /* Secciones completas con un overlay en "modo candado" */
+    .section-locked-overlay {
+      position: absolute; inset: 0; z-index: 3;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 60%, rgba(255,255,255,.7) 100%);
+      pointer-events: none;
+      display: none;
+    }
+    body.is-free .section-locked-overlay { display: block; }
+
+    /* Banner dorado CTA en cada sección VIP (usuario FREE) */
+    .free-cta-section {
+      display: none;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 2px solid #fbbf24;
+      border-radius: 16px; padding: 14px 18px; margin-bottom: 18px;
+      align-items: center; justify-content: space-between; gap: 12px;
+      flex-wrap: wrap;
+    }
+    body.is-free .free-cta-section { display: flex; }
+    .free-cta-section__txt { font-size: .92rem; color: #78350f; font-weight: 700; flex: 1; min-width: 180px; }
+    .free-cta-section__btn {
+      background: linear-gradient(135deg, #10b981, #047857);
+      color: #fff; border: none; padding: 10px 18px;
+      border-radius: 100px; font-weight: 800; font-size: .82rem;
+      cursor: pointer; font-family: inherit;
+      box-shadow: 0 4px 12px rgba(16,185,129,.35);
+      white-space: nowrap;
+    }
+    .free-cta-section__btn:hover { transform: translateY(-1px); }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     a { text-decoration: none; color: inherit; }
@@ -3384,7 +3462,7 @@
       <div class="paywall-modal__feat">Apoyos del gobierno curados</div>
       <div class="paywall-modal__feat">Certificados digitales oficiales</div>
     </div>
-    <a href="https://agrotecamerican.com#suscripcion" class="paywall-modal__cta" target="_blank" rel="noopener">
+    <a href="https://agrotecamerican.com/?suscribirme=1" class="paywall-modal__cta" target="_blank" rel="noopener">
       ✨ Suscribirme en AgroTec America
     </a>
     <div class="paywall-modal__small">
@@ -6851,26 +6929,11 @@ window.cerrarPaywallBg = function(e) {
 };
 
 // ═══════ INTERCEPTAR ACCIONES BLOQUEADAS ═══════
+// Usuario FREE puede VER TODO el portal, pero con candaditos encima.
+// Al hacer click en cualquier acción → paywall.
 
-// 1) showPage — redirigir a paywall si es sección VIP
-(function() {
-  const PAGINAS_VIP = {
-    cursos: 'curso', sesiones: 'webinar', foro: 'foro',
-    herramientas: 'herramientas', apoyos: 'apoyos',
-    certificados: 'certificados'
-    // NO bloquear: inicio, perfil, suscripcion, notificaciones
-  };
-  const origShow = window.showPage;
-  window.showPage = function(id, el, bnId) {
-    if (!esVIPActivo() && PAGINAS_VIP[id]) {
-      // Deja cambiar visualmente pero muestra paywall encima
-      if (typeof origShow === 'function') origShow(id, el, bnId);
-      setTimeout(() => mostrarPaywallModal(PAGINAS_VIP[id]), 300);
-      return;
-    }
-    if (typeof origShow === 'function') origShow(id, el, bnId);
-  };
-})();
+// 1) showPage — dejar navegar libremente (solo candados visuales)
+//    (Se quita el bloqueo de navegación para que puedan explorar el portal)
 
 // 2) Abrir curso (verDetalleCurso) — bloquear si free
 (function() {
