@@ -5415,6 +5415,96 @@ let NOTICIAS_EXPANDIDAS = false;
 const NOTICIAS_INICIALES = 4;
 const NOTICIAS_TOTAL_MAX = 12;
 
+// Cache en memoria para imágenes extraídas de og:image
+const OG_IMG_CACHE = {};
+
+// Extrae og:image de una URL (incluso si es una redirección de Google News)
+async function fetchOgImage(url) {
+  if (OG_IMG_CACHE[url] !== undefined) return OG_IMG_CACHE[url];
+
+  // OPCIÓN 1: microlink.io — servicio gratis que sigue redirecciones y saca og:image
+  // Límite: 50 req/día por IP (suficiente para uso normal)
+  try {
+    const microUrl = 'https://api.microlink.io/?url=' + encodeURIComponent(url);
+    const res = await fetch(microUrl, { signal: AbortSignal.timeout(9000) });
+    if (res.ok) {
+      const json = await res.json();
+      const img = json?.data?.image?.url || json?.data?.logo?.url || null;
+      if (img) {
+        OG_IMG_CACHE[url] = img;
+        return img;
+      }
+    }
+  } catch (e) { /* siguiente método */ }
+
+  // OPCIÓN 2: Fetch directo via proxy CORS (para RSS que no son Google News)
+  for (const proxy of CORS_PROXIES) {
+    try {
+      const res = await fetch(proxy(url), { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) continue;
+      const html = await res.text();
+
+      let img = null;
+      const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+                   || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+      if (ogMatch) img = ogMatch[1];
+
+      if (!img) {
+        const twMatch = html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i)
+                     || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
+        if (twMatch) img = twMatch[1];
+      }
+
+      if (!img) {
+        const imgMatch = html.match(/<img[^>]+src=["']([^"']+\.(?:jpg|jpeg|png|webp)[^"']*)["']/i);
+        if (imgMatch) img = imgMatch[1];
+      }
+
+      if (img && !img.startsWith('http')) {
+        try { img = new URL(img, url).href; } catch { img = null; }
+      }
+
+      if (img) {
+        OG_IMG_CACHE[url] = img;
+        return img;
+      }
+    } catch (e) { /* probar siguiente proxy */ }
+  }
+
+  OG_IMG_CACHE[url] = null;
+  return null;
+}
+
+// Hidrata las miniaturas de noticias que no traen imagen en el feed
+async function hydrateImagesNoticias() {
+  const thumbs = document.querySelectorAll('.noticia-thumb[data-needs-img="1"]');
+  if (!thumbs.length) return;
+
+  // Procesar en paralelo con límite de 2 concurrentes para no saturar las APIs
+  const queue = Array.from(thumbs);
+  const concurrencia = 2;
+
+  async function worker() {
+    while (queue.length) {
+      const thumb = queue.shift();
+      const link = thumb.getAttribute('data-link');
+      if (!link || link === '#') continue;
+
+      // Google News redirige — usar el link tal cual (el proxy sigue la redirección)
+      try {
+        const img = await fetchOgImage(link);
+        if (img) {
+          // Reemplazar el fallback por la imagen
+          thumb.innerHTML = `<img src="${img}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=&quot;noticia-thumb-fallback&quot;>📰</span>'">`;
+          thumb.removeAttribute('data-needs-img');
+        }
+      } catch (e) { /* seguir */ }
+    }
+  }
+
+  await Promise.all(Array.from({ length: concurrencia }, () => worker()));
+}
+
 function renderNoticias(fuenteId) {
   const grid = document.getElementById('noticias-grid');
   const btnVerMas = document.getElementById('noticias-ver-mas-btn');
@@ -5451,14 +5541,15 @@ function renderNoticias(fuenteId) {
   const mostrarCuantas = NOTICIAS_EXPANDIDAS ? items.length : Math.min(NOTICIAS_INICIALES, items.length);
   const itemsMostrar = items.slice(0, mostrarCuantas);
 
-  grid.innerHTML = itemsMostrar.map(n => {
+  grid.innerHTML = itemsMostrar.map((n, idx) => {
     const thumb = n.imagen
       ? `<img src="${n.imagen}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<span class=&quot;noticia-thumb-fallback&quot;>📰</span>'">`
       : `<span class="noticia-thumb-fallback">📰</span>`;
     const link = n.link ? n.link.replace(/"/g, '&quot;') : '#';
+    const needsImg = !n.imagen && n.link ? `data-needs-img="1" data-link="${link}"` : '';
     return `
       <a class="noticia-card" href="${link}" target="_blank" rel="noopener noreferrer">
-        <div class="noticia-thumb">${thumb}</div>
+        <div class="noticia-thumb" ${needsImg}>${thumb}</div>
         <div class="noticia-body">
           <div>
             <div class="noticia-source-row">
@@ -5472,6 +5563,9 @@ function renderNoticias(fuenteId) {
         </div>
       </a>`;
   }).join('');
+
+  // 🖼️ Hidratar imágenes de noticias que no las traen en el RSS (Google News)
+  setTimeout(() => hydrateImagesNoticias(), 200);
 
   // Mostrar/ocultar botón según si hay más noticias
   if (btnVerMas) {
