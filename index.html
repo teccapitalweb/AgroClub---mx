@@ -554,6 +554,282 @@
     }
     /* ══ FIN FORO/LOGROS ═════════════════════════════════════════════════ */
 
+    /* ══ FORO: EXTRAS (modal, reputación, sort, skeleton, solución) ══════ */
+
+    /* Reputación del usuario */
+    .foro-mirep {
+      display: flex; justify-content: space-between; align-items: center; gap: 14px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 18px; margin-bottom: 14px;
+      animation: cardIn .4s ease both;
+    }
+    .foro-mirep__left { display: flex; align-items: center; gap: 12px; }
+    .foro-mirep__avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #1a6b2f, #2d8f42);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; flex-shrink: 0;
+    }
+    .foro-mirep__nombre { font-weight: 700; font-size: .92rem; color: var(--text); }
+    .foro-mirep__nivel {
+      font-size: .78rem; color: var(--verde, #1a6b2f); font-weight: 700;
+      margin-top: 2px;
+    }
+    .foro-mirep__badges { display: flex; gap: 4px; flex-wrap: wrap; max-width: 50%; justify-content: flex-end; }
+    .foro-badge-mini {
+      background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3);
+      border-radius: 100px; padding: 4px 10px; font-size: .7rem; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 4px;
+      color: #92400e;
+    }
+
+    /* Ordenar */
+    .foro-sort {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap;
+      font-size: .82rem;
+    }
+    .foro-sort__label { color: var(--muted); font-weight: 600; }
+    .foro-sort__btn {
+      background: transparent; border: none; color: var(--muted);
+      font-weight: 700; font-family: inherit; cursor: pointer;
+      padding: 4px 10px; border-radius: 100px; transition: all .15s;
+      font-size: .82rem;
+    }
+    .foro-sort__btn:hover { background: var(--bg); color: var(--text); }
+    .foro-sort__btn--active { background: rgba(26,107,47,.12); color: var(--verde, #1a6b2f); }
+
+    /* Skeleton loader */
+    .foro-skeleton {
+      height: 180px; border-radius: 14px;
+      background: linear-gradient(90deg, var(--card) 25%, var(--bg) 50%, var(--card) 75%);
+      background-size: 200% 100%; animation: skel-shine 1.6s infinite linear;
+      margin-bottom: 14px;
+    }
+    @keyframes skel-shine {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Post: nuevas piezas */
+    .foro-post__img-user {
+      width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px;
+      margin-bottom: 12px; display: block; cursor: pointer;
+    }
+    .foro-post__estado {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #d1fae5; color: #047857;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: .66rem; font-weight: 800; letter-spacing: .03em;
+      margin-left: 6px;
+    }
+    .foro-post__hashtags {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+    }
+    .foro-post__hashtag {
+      color: var(--verde, #1a6b2f); font-size: .78rem; font-weight: 700;
+      text-decoration: none; cursor: pointer;
+    }
+    .foro-post__hashtag:hover { text-decoration: underline; }
+    .foro-post__ubicacion {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: .72rem; color: var(--muted); margin-left: 6px;
+    }
+
+    /* Solución badge */
+    .foro-solucion {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border: 2px solid #10b981;
+      border-radius: 10px; padding: 10px 12px; margin-bottom: 12px;
+      display: flex; gap: 8px; align-items: flex-start;
+    }
+    .foro-solucion__icon { font-size: 1.1rem; }
+    .foro-solucion__txt { flex: 1; }
+    .foro-solucion__lbl { font-size: .68rem; font-weight: 800; color: #047857; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+    .foro-solucion__autor { font-size: .82rem; color: var(--text); font-weight: 700; }
+
+    /* MODAL */
+    .foro-modal {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+      display: none; align-items: flex-start; justify-content: center;
+      padding: 40px 16px; overflow-y: auto;
+    }
+    .foro-modal.open { display: flex; }
+    .foro-modal__box {
+      background: var(--card); border-radius: 18px;
+      width: 100%; max-width: 560px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.25);
+      animation: modalIn .3s ease;
+      overflow: hidden; position: relative;
+    }
+    .foro-modal__box--wide { max-width: 680px; }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(-20px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .foro-modal__head {
+      padding: 18px 22px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .foro-modal__head h3 { font-size: 1.05rem; font-weight: 800; }
+    .foro-modal__close {
+      background: var(--bg); border: none; width: 34px; height: 34px;
+      border-radius: 50%; cursor: pointer; font-size: 1rem; color: var(--muted);
+      font-family: inherit;
+    }
+    .foro-modal__close:hover { background: #fee2e2; color: #b91c1c; }
+    .foro-modal__close--abs {
+      position: absolute; top: 14px; right: 14px; z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    .foro-modal__body { padding: 20px 22px; }
+    .foro-modal__row { margin-bottom: 16px; }
+    .foro-modal__row label {
+      display: block; font-weight: 700; font-size: .82rem; margin-bottom: 6px;
+      color: var(--text);
+    }
+    .foro-modal__row input[type="text"],
+    .foro-modal__row textarea {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 10px 14px; font-family: inherit; font-size: .92rem;
+      background: var(--bg); color: var(--text); outline: none;
+      resize: vertical;
+    }
+    .foro-modal__row input[type="text"]:focus,
+    .foro-modal__row textarea:focus { border-color: var(--verde, #1a6b2f); }
+
+    .foro-cat-picker { display: flex; flex-wrap: wrap; gap: 6px; }
+    .foro-cat {
+      background: var(--bg); border: 1.5px solid var(--border); border-radius: 100px;
+      padding: 6px 14px; font-size: .8rem; font-weight: 700; cursor: pointer;
+      font-family: inherit; color: var(--text); transition: all .15s;
+    }
+    .foro-cat:hover { border-color: var(--verde, #1a6b2f); }
+    .foro-cat--active { background: var(--verde, #1a6b2f); color: #fff; border-color: var(--verde, #1a6b2f); }
+
+    .foro-img-btn {
+      background: var(--bg); border: 2px dashed var(--border); border-radius: 10px;
+      padding: 20px; width: 100%; font-family: inherit; font-weight: 700;
+      color: var(--muted); cursor: pointer; font-size: .88rem;
+      transition: all .15s;
+    }
+    .foro-img-btn:hover { border-color: var(--verde, #1a6b2f); color: var(--verde, #1a6b2f); }
+    .foro-img-preview {
+      position: relative; border-radius: 10px; overflow: hidden;
+      max-height: 240px;
+    }
+    .foro-img-preview img { width: 100%; height: 240px; object-fit: cover; display: block; }
+    .foro-img-quitar {
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(0,0,0,.6); color: #fff; border: none;
+      padding: 6px 12px; border-radius: 100px; font-size: .72rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; backdrop-filter: blur(4px);
+    }
+
+    .foro-hashtags-preview {
+      margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;
+      min-height: 22px;
+    }
+    .foro-hashtags-preview .foro-ht-chip {
+      background: rgba(26,107,47,.1); color: var(--verde, #1a6b2f);
+      padding: 2px 8px; border-radius: 100px; font-size: .7rem; font-weight: 700;
+    }
+
+    .foro-modal__footer {
+      padding: 14px 22px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px; justify-content: flex-end;
+      background: var(--bg);
+    }
+    .foro-btn-sec, .foro-btn-pri {
+      border: none; border-radius: 10px; padding: 10px 18px;
+      font-weight: 800; cursor: pointer; font-family: inherit;
+      font-size: .88rem; transition: all .15s;
+    }
+    .foro-btn-sec { background: transparent; color: var(--muted); }
+    .foro-btn-sec:hover { background: var(--card); }
+    .foro-btn-pri {
+      background: linear-gradient(135deg, #1a6b2f, #2d8f42); color: #fff;
+      box-shadow: 0 4px 12px rgba(26,107,47,.3);
+    }
+    .foro-btn-pri:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(26,107,47,.4); }
+    .foro-btn-pri:disabled { opacity: .6; cursor: wait; }
+
+    /* Post detalle en modal */
+    .foro-detalle__img { width: 100%; max-height: 360px; object-fit: cover; border-radius: 10px; margin-bottom: 14px; }
+    .foro-detalle__coms { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .foro-detalle__coms-h { font-weight: 800; font-size: .94rem; margin-bottom: 12px; color: var(--text); }
+    .foro-coment {
+      background: var(--bg); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
+    }
+    .foro-coment--solucion {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border: 1.5px solid #10b981;
+    }
+    .foro-coment__head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .foro-coment__avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: .78rem; flex-shrink: 0;
+    }
+    .foro-coment__nombre { font-weight: 700; font-size: .84rem; color: var(--text); }
+    .foro-coment__fecha { font-size: .7rem; color: var(--muted); }
+    .foro-coment__texto { font-size: .88rem; color: var(--text); line-height: 1.5; margin-bottom: 6px; white-space: pre-wrap; }
+    .foro-coment__acc {
+      display: flex; gap: 12px; font-size: .74rem;
+    }
+    .foro-coment__acc-btn {
+      background: none; border: none; color: var(--muted); font-weight: 700; cursor: pointer;
+      font-family: inherit; font-size: .74rem;
+    }
+    .foro-coment__acc-btn.liked { color: #dc2626; }
+    .foro-coment__acc-btn--sol { color: #10b981; }
+
+    .foro-coment-nuevo {
+      display: flex; gap: 8px; margin-top: 14px;
+    }
+    .foro-coment-nuevo textarea {
+      flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 10px 14px; font-family: inherit; font-size: .88rem;
+      background: var(--bg); color: var(--text); outline: none;
+      resize: none; min-height: 42px;
+    }
+    .foro-coment-nuevo textarea:focus { border-color: var(--verde, #1a6b2f); }
+    .foro-coment-nuevo button {
+      background: var(--verde, #1a6b2f); color: #fff; border: none;
+      border-radius: 10px; padding: 0 18px; font-weight: 800; cursor: pointer;
+      font-family: inherit; font-size: .82rem;
+    }
+
+    .foro-empty {
+      text-align: center; padding: 40px 20px;
+      background: var(--card); border-radius: 14px;
+      border: 1px dashed var(--border);
+    }
+    .foro-empty__icon { font-size: 2.5rem; margin-bottom: 10px; opacity: .4; }
+    .foro-empty__txt { color: var(--muted); font-size: .9rem; }
+
+    .foro-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #1a2e1d; color: #fff;
+      padding: 12px 20px; border-radius: 100px;
+      font-weight: 700; font-size: .88rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+      z-index: 10000; opacity: 0; pointer-events: none;
+      transition: opacity .3s, transform .3s;
+    }
+    .foro-toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+    .foro-toast--ok { background: #059669; }
+    .foro-toast--err { background: #dc2626; }
+
+    @media (max-width: 640px) {
+      .foro-modal { padding: 0; align-items: stretch; }
+      .foro-modal__box { border-radius: 0; max-width: none; min-height: 100vh; }
+      .foro-mirep { flex-direction: column; align-items: flex-start; }
+      .foro-mirep__badges { max-width: 100%; justify-content: flex-start; }
+    }
+    /* ══ FIN FORO EXTRAS ═════════════════════════════════════════════════ */
+
     /* ══ 🎬 VIDEOS - COMING SOON ════════════════════════════════════════ */
     .video-cs {
       position: relative; overflow: hidden;
@@ -3162,36 +3438,101 @@
         </div>
       </div>
 
-      <!-- Banner próximamente -->
-      <div class="foro-coming-banner">
-        <span class="foro-coming-banner__icon">🚀</span>
-        <div class="foro-coming-banner__text">
-          <strong>Próximamente habilitado</strong>
-          <span>Estamos preparando la plataforma de conversaciones. Mientras tanto, puedes ver una vista previa de cómo se verá.</span>
+      <!-- Mi reputación (nivel + badges del usuario) -->
+      <div class="foro-mirep" id="foro-mirep" style="display:none;">
+        <div class="foro-mirep__left">
+          <div class="foro-mirep__avatar" id="foro-mirep-avatar">T</div>
+          <div class="foro-mirep__info">
+            <div class="foro-mirep__nombre" id="foro-mirep-nombre">—</div>
+            <div class="foro-mirep__nivel" id="foro-mirep-nivel">🌱 Nuevo · 0 puntos</div>
+          </div>
         </div>
+        <div class="foro-mirep__badges" id="foro-mirep-badges"></div>
       </div>
 
-      <!-- Crear post -->
-      <div class="foro-composer" onclick="window.alert('Pronto podrás compartir con la comunidad 💚')">
+      <!-- Crear post (abre modal) -->
+      <div class="foro-composer" onclick="abrirComposer()">
         <div class="foro-composer__avatar" id="foro-composer-avatar">T</div>
         <div class="foro-composer__input">¿Qué quieres compartir con la comunidad?</div>
         <div class="foro-composer__actions">
-          <span>📷</span><span>📊</span><span>🌱</span>
+          <span title="Crear encuesta">📊</span>
+          <span title="Mercado">💰</span>
         </div>
       </div>
 
       <!-- Filtros -->
       <div class="foro-filters">
-        <button class="foro-filter foro-filter--active">🌟 Todo</button>
-        <button class="foro-filter">❓ Preguntas</button>
-        <button class="foro-filter">🏆 Casos de éxito</button>
-        <button class="foro-filter">🌾 Tips del campo</button>
-        <button class="foro-filter">💰 Mercado</button>
+        <button class="foro-filter foro-filter--active" data-cat="todo" onclick="cambiarFiltroForo('todo', this)">🌟 Todo</button>
+        <button class="foro-filter" data-cat="preguntas" onclick="cambiarFiltroForo('preguntas', this)">❓ Preguntas</button>
+        <button class="foro-filter" data-cat="casos_exito" onclick="cambiarFiltroForo('casos_exito', this)">🏆 Casos de éxito</button>
+        <button class="foro-filter" data-cat="tips" onclick="cambiarFiltroForo('tips', this)">🌾 Tips del campo</button>
+        <button class="foro-filter" data-cat="mercado" onclick="cambiarFiltroForo('mercado', this)">💰 Mercado</button>
+      </div>
+
+      <!-- Ordenar -->
+      <div class="foro-sort">
+        <span class="foro-sort__label">Ordenar por:</span>
+        <button class="foro-sort__btn foro-sort__btn--active" data-sort="recientes" onclick="cambiarOrdenForo('recientes', this)">⏱️ Recientes</button>
+        <button class="foro-sort__btn" data-sort="populares" onclick="cambiarOrdenForo('populares', this)">🔥 Populares</button>
+        <button class="foro-sort__btn" data-sort="sin_responder" onclick="cambiarOrdenForo('sin_responder', this)">💭 Sin responder</button>
       </div>
 
       <!-- Feed -->
-      <div class="foro-feed" id="foro-feed"></div>
+      <div class="foro-feed" id="foro-feed">
+        <div class="foro-skeleton"></div>
+        <div class="foro-skeleton"></div>
+        <div class="foro-skeleton"></div>
+      </div>
+    </div>
 
+    <!-- ═══════════════ MODAL COMPOSER ═══════════════ -->
+    <div class="foro-modal" id="foro-modal" onclick="cerrarComposerBg(event)">
+      <div class="foro-modal__box" onclick="event.stopPropagation()">
+        <div class="foro-modal__head">
+          <h3 id="foro-modal-titulo">✍️ Nuevo post</h3>
+          <button class="foro-modal__close" onclick="cerrarComposer()">✕</button>
+        </div>
+        <div class="foro-modal__body">
+          <div class="foro-modal__row">
+            <label>Categoría</label>
+            <div class="foro-cat-picker" id="foro-cat-picker">
+              <button type="button" class="foro-cat foro-cat--active" data-cat="preguntas">❓ Pregunta</button>
+              <button type="button" class="foro-cat" data-cat="casos_exito">🏆 Caso de éxito</button>
+              <button type="button" class="foro-cat" data-cat="tips">🌾 Tip del campo</button>
+              <button type="button" class="foro-cat" data-cat="mercado">💰 Mercado</button>
+            </div>
+          </div>
+          <div class="foro-modal__row">
+            <label>Título</label>
+            <input type="text" id="foro-titulo" placeholder="Título claro y directo" maxlength="200">
+          </div>
+          <div class="foro-modal__row">
+            <label>Contenido</label>
+            <textarea id="foro-body" rows="6" placeholder="Comparte tu experiencia, duda o conocimiento. Usa #hashtags como #jitomate #riego para agrupar por tema."></textarea>
+            <div class="foro-hashtags-preview" id="foro-hashtags-preview"></div>
+          </div>
+          <div class="foro-modal__row">
+            <label>📍 Ubicación (opcional)</label>
+            <input type="text" id="foro-ubicacion" placeholder="Ej: Puebla, México" maxlength="60">
+          </div>
+        </div>
+        <div class="foro-modal__footer">
+          <button class="foro-btn-sec" onclick="cerrarComposer()">Cancelar</button>
+          <button class="foro-btn-pri" id="foro-btn-publicar" onclick="publicarPost()">
+            ✨ Publicar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ MODAL VER POST ═══════════════ -->
+    <div class="foro-modal foro-modal--post" id="foro-post-modal" onclick="cerrarPostModalBg(event)">
+      <div class="foro-modal__box foro-modal__box--wide" onclick="event.stopPropagation()">
+        <button class="foro-modal__close foro-modal__close--abs" onclick="cerrarPostModal()">✕</button>
+        <div class="foro-modal__body" id="foro-post-modal-body">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
     </div>
 
     <div class="page" id="page-perfil">
@@ -3461,7 +3802,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, addDoc, query, where, orderBy, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, addDoc, query, where, orderBy, getDocs, serverTimestamp, deleteDoc, updateDoc, arrayUnion, arrayRemove, increment, limit, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -4810,132 +5151,741 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================================
-// ===== 💬 FORO VIP (mock data - solo diseño)
+// ===== 💬 FORO VIP REAL (Firebase Firestore · solo texto · auto-borrado 14 días)
 // ==========================================================
-const FORO_POSTS_MOCK = [
-  {
-    autor: 'Ricardo Méndez',
-    inicial: 'R',
-    gradA: '#0ea5e9', gradB: '#0369a1',
-    vip: true,
-    fecha: 'hace 2 horas',
-    categoria: '🏆 Casos de éxito',
-    titulo: 'Logré aumentar 40% mi producción de jitomate con riego por goteo',
-    body: 'Después de 6 meses aplicando lo aprendido en el curso de "Sistemas de riego eficiente", los números hablan solos. Pasé de 18 ton/ha a 25 ton/ha en mi invernadero de 2,000 m². Comparto mi experiencia y respondo dudas...',
-    img: null,
-    likes: 47, comentarios: 12, vistas: 284
-  },
-  {
-    autor: 'María José Pérez',
-    inicial: 'M',
-    gradA: '#ec4899', gradB: '#be185d',
-    vip: true,
-    fecha: 'hace 5 horas',
-    categoria: '❓ Preguntas',
-    titulo: '¿Alguien ha probado biofertilizantes a base de lactobacilos?',
-    body: 'Estoy pensando en implementarlos en mi parcela de aguacate. Los resultados que veo en YouTube se ven increíbles pero quisiera escuchar de alguien del club que ya lo haya probado en campo real. ¿Vale la pena la inversión?',
-    img: null,
-    likes: 23, comentarios: 8, vistas: 156
-  },
-  {
-    autor: 'Juan Carlos Herrera',
-    inicial: 'J',
-    gradA: '#10b981', gradB: '#047857',
-    vip: false,
-    fecha: 'hace 1 día',
-    categoria: '🌾 Tips del campo',
-    titulo: 'Truco casero para detectar deficiencia de nitrógeno antes que las plantas',
-    body: 'Miren, esto me lo enseñó mi abuelo y funciona de maravilla. Antes de que la hoja amarillee, fíjense en las nervaduras nuevas. Si están más pálidas que el resto, ya empezó la deficiencia. Ahorren dinero actuando a tiempo...',
-    img: null,
-    likes: 89, comentarios: 24, vistas: 512
-  },
-  {
-    autor: 'Alejandra Torres',
-    inicial: 'A',
-    gradA: '#f59e0b', gradB: '#b45309',
-    vip: true,
-    fecha: 'hace 2 días',
-    categoria: '💰 Mercado',
-    titulo: 'Precios del aguacate para exportación - Semana 17 2026',
-    body: 'Comparto los precios que me están pagando en la central de abastos + el comparativo con los agroexportadores directos. Primera: $85/kg · Segunda: $62/kg · Exportación directa Estados Unidos: $115/kg. Factores clave que afectan estos precios ahora mismo...',
-    img: null,
-    likes: 156, comentarios: 43, vistas: 892
-  },
-  {
-    autor: 'Pedro Ramírez',
-    inicial: 'P',
-    gradA: '#8b5cf6', gradB: '#6d28d9',
-    vip: false,
-    fecha: 'hace 3 días',
-    categoria: '❓ Preguntas',
-    titulo: '¿Qué variedad de maíz criollo recomiendan para zona árida?',
-    body: 'Tengo 3 hectáreas en el norte de Puebla, muy poca lluvia (500mm al año). Quiero empezar a diversificar con maíz nativo pero no sé cuál aguante estas condiciones. ¿Consejos?',
-    img: null,
-    likes: 31, comentarios: 15, vistas: 198
+
+// 🔧 CONFIG
+const FORO_DIAS_RETENCION = 14;
+const FORO_LIMITE_POSTS = 30;
+const FORO_COLECCION = 'foro_posts';
+const FORO_REP_COLECCION = 'foro_reputacion';
+
+// Estado
+let FORO_CACHE = { posts: [], ultimoFetch: 0 };
+let FORO_FILTRO_CAT = 'todo';
+let FORO_ORDEN = 'recientes';
+let FORO_POST_ABIERTO = null;
+let FORO_HASHTAG_ACTIVO = null;
+
+// Gradientes para avatares consistentes
+const FORO_GRADIENTES = [
+  ['#0ea5e9','#0369a1'],['#ec4899','#be185d'],['#10b981','#047857'],
+  ['#f59e0b','#b45309'],['#8b5cf6','#6d28d9'],['#ef4444','#991b1b'],
+  ['#6366f1','#4338ca'],['#14b8a6','#0f766e'],['#f97316','#c2410c']
+];
+function foroGradiente(uid) {
+  if (!uid) return FORO_GRADIENTES[0];
+  let h = 0;
+  for (let i = 0; i < uid.length; i++) h = (h * 31 + uid.charCodeAt(i)) & 0xffffffff;
+  return FORO_GRADIENTES[Math.abs(h) % FORO_GRADIENTES.length];
+}
+function foroInicial(n) { return n ? String(n).charAt(0).toUpperCase() : '?'; }
+function escHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function escAttr(s) { return String(s||'').replace(/['"\\]/g,'\\$&').replace(/\n/g,'\\n'); }
+
+function foroFechaRel(fecha) {
+  if (!fecha) return '';
+  const d = fecha.toDate ? fecha.toDate() : new Date(fecha);
+  const diff = Date.now() - d.getTime();
+  const s = Math.floor(diff/1000);
+  if (s < 60) return 'ahora';
+  if (s < 3600) return 'hace ' + Math.floor(s/60) + 'm';
+  if (s < 86400) return 'hace ' + Math.floor(s/3600) + 'h';
+  if (s < 604800) return 'hace ' + Math.floor(s/86400) + 'd';
+  return 'hace ' + Math.floor(s/604800) + 'sem';
+}
+
+function foroToast(msg, tipo='') {
+  let t = document.getElementById('foro-toast-el');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'foro-toast-el';
+    t.className = 'foro-toast';
+    document.body.appendChild(t);
   }
+  t.className = 'foro-toast' + (tipo ? ' foro-toast--' + tipo : '');
+  t.textContent = msg;
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function extraerHashtags(texto) {
+  const matches = String(texto||'').match(/#[a-záéíóúñü0-9_]+/gi) || [];
+  return [...new Set(matches.map(h => h.substring(1).toLowerCase()))].slice(0, 10);
+}
+
+// ========== NIVELES Y BADGES ==========
+
+const FORO_NIVELES = [
+  { n: 1, nombre: 'Semilla 🌱',          min: 0 },
+  { n: 2, nombre: 'Brote 🌿',            min: 30 },
+  { n: 3, nombre: 'Plántula 🪴',         min: 100 },
+  { n: 4, nombre: 'Cultivador 🧑‍🌾',      min: 250 },
+  { n: 5, nombre: 'Experto 🌾',          min: 500 },
+  { n: 6, nombre: 'Maestro del campo 🏆', min: 1000 }
+];
+function calcularNivel(puntos) {
+  let actual = FORO_NIVELES[0];
+  for (const nv of FORO_NIVELES) if ((puntos || 0) >= nv.min) actual = nv;
+  return actual;
+}
+const FORO_BADGES = [
+  { id: 'primer_post',   nombre: 'Primer post',       icono: '🌱', fn: s => s.posts >= 1 },
+  { id: 'coleccionista', nombre: 'Coleccionista',     icono: '📚', fn: s => s.posts >= 5 },
+  { id: 'voz_activa',    nombre: 'Voz activa',        icono: '📣', fn: s => s.posts >= 15 },
+  { id: 'ayudador',      nombre: 'Ayudador',          icono: '🤝', fn: s => s.comentarios >= 10 },
+  { id: 'popular',       nombre: 'Popular',           icono: '⭐', fn: s => s.likes_recibidos >= 10 },
+  { id: 'estrella',      nombre: 'Estrella del foro', icono: '🌟', fn: s => s.likes_recibidos >= 50 },
+  { id: 'resolutor',     nombre: 'Resolutor',         icono: '🏆', fn: s => s.soluciones >= 3 },
+  { id: 'maestro',       nombre: 'Maestro',           icono: '🎓', fn: s => s.soluciones >= 10 },
+  { id: 'dedicado',      nombre: 'Dedicado',          icono: '🔥', fn: s => s.posts >= 1 && s.comentarios >= 5 }
 ];
 
-function renderForo() {
+// ========== FIRESTORE HELPERS ==========
+
+async function foroIncrementarReputacion(uid, nombre, cambios) {
+  try {
+    const ref = doc(db, FORO_REP_COLECCION, uid);
+    const snap = await getDoc(ref);
+    const data = snap.exists() ? snap.data() : {
+      uid, nombre: nombre || 'Socio', posts: 0, comentarios: 0,
+      likes_recibidos: 0, soluciones: 0, puntos: 0
+    };
+    Object.keys(cambios).forEach(k => {
+      data[k] = Math.max(0, (data[k] || 0) + cambios[k]);
+    });
+    if (nombre) data.nombre = nombre;
+    await setDoc(ref, data, { merge: true });
+  } catch (e) { console.warn('[Foro] Error reputación:', e); }
+}
+
+// Borra posts con más de N días de antigüedad (auto-limpieza)
+async function foroLimpiarAntiguos() {
+  try {
+    const limite = new Date(Date.now() - FORO_DIAS_RETENCION * 24 * 60 * 60 * 1000);
+    const q = query(
+      collection(db, FORO_COLECCION),
+      where('fecha_creacion', '<', Timestamp.fromDate(limite)),
+      limit(20) // máximo 20 por ejecución para no saturar
+    );
+    const snap = await getDocs(q);
+    if (snap.empty) return 0;
+    const batch = writeBatch(db);
+    let count = 0;
+    snap.forEach(d => {
+      const data = d.data();
+      // No borrar posts oficiales (del equipo) ni fijados
+      if (data.uid !== 'equipo_agroclub' && !data.fijado) {
+        batch.delete(d.ref);
+        count++;
+      }
+    });
+    if (count > 0) await batch.commit();
+    console.log('[Foro] 🧹 Borrados ' + count + ' posts antiguos (>' + FORO_DIAS_RETENCION + 'd)');
+    return count;
+  } catch (e) { console.warn('[Foro] Limpieza:', e); return 0; }
+}
+
+// ========== RENDER PRINCIPAL ==========
+
+async function renderForo() {
   const feed = document.getElementById('foro-feed');
   if (!feed) return;
 
-  // Avatar del composer con la inicial del usuario actual
-  const composerAvatar = document.getElementById('foro-composer-avatar');
-  if (composerAvatar && window.currentUser) {
-    const nombre = window.currentUser.nombre || window.currentUser.email || 'T';
-    composerAvatar.textContent = nombre.charAt(0).toUpperCase();
+  // Avatar composer
+  const comAv = document.getElementById('foro-composer-avatar');
+  if (comAv && window.currentUser) {
+    comAv.textContent = foroInicial(window.currentUser.nombre || window.currentUser.email || 'T');
   }
 
-  feed.innerHTML = FORO_POSTS_MOCK.map(p => {
-    const imgHtml = p.img
-      ? `<div class="foro-post__img" style="background-image:url('${p.img}')"></div>`
-      : '';
-    return `
-    <div class="foro-post">
-      <div class="foro-post__head">
-        <div class="foro-post__avatar" style="--a:${p.gradA};--b:${p.gradB};">${p.inicial}</div>
-        <div class="foro-post__author">
-          <div class="foro-post__name">
-            ${p.autor}
-            ${p.vip ? '<span class="foro-post__badge">⭐ VIP</span>' : ''}
-          </div>
-          <div class="foro-post__meta">${p.fecha} · 👁️ ${p.vistas} vistas</div>
-        </div>
-      </div>
-      <div class="foro-post__cat">${p.categoria}</div>
-      <div class="foro-post__title">${p.titulo}</div>
-      <div class="foro-post__body">${p.body}</div>
-      ${imgHtml}
-      <div class="foro-post__actions">
-        <div class="foro-post__action" onclick="likeForoPost(this)">
-          <span>🤍</span> <span class="like-count">${p.likes}</span>
-        </div>
-        <div class="foro-post__action">
-          <span>💬</span> <span>${p.comentarios} comentarios</span>
-        </div>
-        <div class="foro-post__action">
-          <span>🔗</span> <span>Compartir</span>
-        </div>
-      </div>
+  // Cargar mi reputación (no bloqueante)
+  cargarMiReputacion();
+
+  // Limpieza en segundo plano (no bloqueante)
+  foroLimpiarAntiguos();
+
+  // Skeleton
+  feed.innerHTML = '<div class="foro-skeleton"></div><div class="foro-skeleton"></div><div class="foro-skeleton"></div>';
+
+  try {
+    // Query básico: todos los posts activos, ordenados por fecha desc
+    let q = query(
+      collection(db, FORO_COLECCION),
+      orderBy('fecha_creacion', 'desc'),
+      limit(FORO_LIMITE_POSTS)
+    );
+
+    const snap = await getDocs(q);
+    let posts = [];
+    snap.forEach(d => {
+      const data = d.data();
+      posts.push({ id: d.id, ...data });
+    });
+
+    // Filtrar localmente
+    if (FORO_FILTRO_CAT !== 'todo') {
+      posts = posts.filter(p => p.categoria === FORO_FILTRO_CAT);
+    }
+    if (FORO_HASHTAG_ACTIVO) {
+      posts = posts.filter(p => (p.hashtags || []).includes(FORO_HASHTAG_ACTIVO));
+    }
+
+    // Ordenamiento
+    if (FORO_ORDEN === 'populares') {
+      posts.sort((a, b) => (b.likes_count || 0) + (b.comentarios_count || 0) * 2 -
+                            ((a.likes_count || 0) + (a.comentarios_count || 0) * 2));
+    } else if (FORO_ORDEN === 'sin_responder') {
+      posts = posts.filter(p => (p.comentarios_count || 0) === 0);
+    } else {
+      // Recientes + fijados arriba
+      posts.sort((a, b) => {
+        if (a.fijado && !b.fijado) return -1;
+        if (!a.fijado && b.fijado) return 1;
+        const fa = a.fecha_creacion?.toDate?.() || new Date(0);
+        const fb = b.fecha_creacion?.toDate?.() || new Date(0);
+        return fb - fa;
+      });
+    }
+
+    FORO_CACHE.posts = posts;
+
+    if (posts.length === 0) {
+      feed.innerHTML = `<div class="foro-empty">
+        <div class="foro-empty__icon">🌱</div>
+        <div class="foro-empty__txt">${FORO_HASHTAG_ACTIVO ? 'Nadie ha usado #' + FORO_HASHTAG_ACTIVO + ' aún.' : 'Aún no hay posts en esta categoría.'} ¡Sé el primero en romper el hielo!</div>
+      </div>`;
+      return;
+    }
+
+    feed.innerHTML = posts.map(foroHtmlPost).join('');
+
+  } catch (e) {
+    console.error('[Foro] Error cargando:', e);
+    feed.innerHTML = `<div class="foro-empty">
+      <div class="foro-empty__icon">⚠️</div>
+      <div class="foro-empty__txt">Error cargando posts. ${escHtml(e.message || '')}</div>
     </div>`;
-  }).join('');
+  }
 }
 
-window.likeForoPost = function(el) {
-  const icon = el.querySelector('span:first-child');
+function foroHtmlPost(p) {
+  const [gA, gB] = foroGradiente(p.uid);
+  const catMap = {
+    preguntas: '❓ Preguntas', casos_exito: '🏆 Casos de éxito',
+    tips: '🌾 Tips del campo', mercado: '💰 Mercado', general: '🌟 General'
+  };
+  const esEquipo = p.uid === 'equipo_agroclub';
+  const badge = esEquipo ? '<span class="foro-post__badge">✅ OFICIAL</span>' : '';
+  const estado = p.estado === 'resuelto' ? '<span class="foro-post__estado">✓ Resuelto</span>' : '';
+  const fijado = p.fijado ? '📌 ' : '';
+  const hashtagsHtml = (p.hashtags || []).map(h =>
+    `<span class="foro-post__hashtag" onclick="filtrarPorHashtag('${escAttr(h)}', event)">#${escHtml(h)}</span>`
+  ).join('');
+  const bodyRecortado = (p.body || '').length > 280 ? p.body.substring(0, 280) + '...' : (p.body || '');
+  const ubicacion = p.ubicacion ? `<span class="foro-post__ubicacion">📍 ${escHtml(p.ubicacion)}</span>` : '';
+  const uidActual = window.currentUser?.uid || '';
+  const yoDiLike = (p.likes_by || []).includes(uidActual);
+  const likeIcon = yoDiLike ? '❤️' : '🤍';
+  const likeClass = yoDiLike ? ' liked' : '';
+
+  return `
+  <div class="foro-post" data-post-id="${p.id}">
+    <div class="foro-post__head">
+      <div class="foro-post__avatar" style="--a:${gA};--b:${gB};">${foroInicial(p.autor)}</div>
+      <div class="foro-post__author">
+        <div class="foro-post__name">${escHtml(p.autor)} ${badge}</div>
+        <div class="foro-post__meta">${foroFechaRel(p.fecha_creacion)}${ubicacion}</div>
+      </div>
+    </div>
+    <div>
+      <span class="foro-post__cat">${catMap[p.categoria] || '🌟 General'}</span>
+      ${estado}
+    </div>
+    <div class="foro-post__title" onclick="abrirPost('${p.id}')" style="cursor:pointer;">${fijado}${escHtml(p.titulo)}</div>
+    <div class="foro-post__body">${escHtml(bodyRecortado).replace(/\n/g, '<br>')}</div>
+    ${hashtagsHtml ? `<div class="foro-post__hashtags">${hashtagsHtml}</div>` : ''}
+    <div class="foro-post__actions">
+      <div class="foro-post__action${likeClass}" onclick="toggleLikePost('${p.id}', '${escAttr(p.uid)}', '${escAttr(p.autor)}', this)">
+        <span class="like-icon">${likeIcon}</span> <span class="like-count">${p.likes_count || 0}</span>
+      </div>
+      <div class="foro-post__action" onclick="abrirPost('${p.id}')">
+        <span>💬</span> <span>${p.comentarios_count || 0} ${p.comentarios_count === 1 ? 'comentario' : 'comentarios'}</span>
+      </div>
+      <div class="foro-post__action" onclick="compartirPost('${p.id}', event)">
+        <span>🔗</span> <span>Compartir</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ========== FILTROS Y ORDEN ==========
+
+window.cambiarFiltroForo = function(cat, btn) {
+  FORO_FILTRO_CAT = cat;
+  FORO_HASHTAG_ACTIVO = null;
+  document.querySelectorAll('.foro-filter').forEach(b => b.classList.remove('foro-filter--active'));
+  btn.classList.add('foro-filter--active');
+  renderForo();
+};
+
+window.cambiarOrdenForo = function(orden, btn) {
+  FORO_ORDEN = orden;
+  document.querySelectorAll('.foro-sort__btn').forEach(b => b.classList.remove('foro-sort__btn--active'));
+  btn.classList.add('foro-sort__btn--active');
+  renderForo();
+};
+
+window.filtrarPorHashtag = function(hashtag, e) {
+  if (e) e.stopPropagation();
+  FORO_HASHTAG_ACTIVO = hashtag;
+  FORO_FILTRO_CAT = 'todo';
+  document.querySelectorAll('.foro-filter').forEach(b => b.classList.toggle('foro-filter--active', b.dataset.cat === 'todo'));
+  foroToast('🔍 Filtrando #' + hashtag);
+  renderForo();
+};
+
+// ========== LIKES ==========
+
+window.toggleLikePost = async function(postId, autorUid, autorNombre, el) {
+  if (!window.currentUser) return foroToast('Inicia sesión para dar like', 'err');
+  const uid = window.currentUser.uid;
+
+  const icon = el.querySelector('.like-icon');
   const count = el.querySelector('.like-count');
-  if (!el.classList.contains('liked')) {
-    el.classList.add('liked');
-    icon.textContent = '❤️';
-    count.textContent = parseInt(count.textContent) + 1;
+  const wasLiked = el.classList.contains('liked');
+
+  // Optimistic UI
+  el.classList.toggle('liked');
+  icon.textContent = wasLiked ? '🤍' : '❤️';
+  count.textContent = parseInt(count.textContent) + (wasLiked ? -1 : 1);
+
+  try {
+    const ref = doc(db, FORO_COLECCION, postId);
+    await updateDoc(ref, {
+      likes_by: wasLiked ? arrayRemove(uid) : arrayUnion(uid),
+      likes_count: increment(wasLiked ? -1 : 1)
+    });
+    // Reputación al autor
+    if (autorUid && autorUid !== uid) {
+      await foroIncrementarReputacion(autorUid, autorNombre, {
+        likes_recibidos: wasLiked ? -1 : 1,
+        puntos: wasLiked ? -1 : 1
+      });
+    }
+  } catch (e) {
+    // Revertir
+    el.classList.toggle('liked');
+    icon.textContent = wasLiked ? '❤️' : '🤍';
+    count.textContent = parseInt(count.textContent) + (wasLiked ? 1 : -1);
+    foroToast('No se pudo registrar', 'err');
+    console.error(e);
+  }
+};
+
+window.toggleLikeComentario = async function(postId, comId, autorUid, autorNombre, el) {
+  if (!window.currentUser) return foroToast('Inicia sesión', 'err');
+  const uid = window.currentUser.uid;
+  const icon = el.querySelector('.like-icon');
+  const count = el.querySelector('.like-count');
+  const wasLiked = el.classList.contains('liked');
+
+  el.classList.toggle('liked');
+  icon.textContent = wasLiked ? '🤍' : '❤️';
+  count.textContent = parseInt(count.textContent) + (wasLiked ? -1 : 1);
+
+  try {
+    const ref = doc(db, FORO_COLECCION, postId, 'comentarios', comId);
+    await updateDoc(ref, {
+      likes_by: wasLiked ? arrayRemove(uid) : arrayUnion(uid),
+      likes_count: increment(wasLiked ? -1 : 1)
+    });
+    if (autorUid && autorUid !== uid) {
+      await foroIncrementarReputacion(autorUid, autorNombre, {
+        likes_recibidos: wasLiked ? -1 : 1,
+        puntos: wasLiked ? -1 : 1
+      });
+    }
+  } catch (e) {
+    el.classList.toggle('liked');
+    icon.textContent = wasLiked ? '❤️' : '🤍';
+    count.textContent = parseInt(count.textContent) + (wasLiked ? 1 : -1);
+    console.error(e);
+  }
+};
+
+// ========== COMPARTIR ==========
+
+window.compartirPost = function(postId, e) {
+  if (e) e.stopPropagation();
+  const url = location.origin + location.pathname + '#foro-post=' + postId;
+  if (navigator.share) {
+    navigator.share({ title: 'Foro VIP AgroClub', url }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => foroToast('🔗 Link copiado', 'ok'));
   } else {
-    el.classList.remove('liked');
-    icon.textContent = '🤍';
-    count.textContent = parseInt(count.textContent) - 1;
+    prompt('Copia este link:', url);
+  }
+};
+
+// ========== COMPOSER (NUEVO POST) ==========
+
+window.abrirComposer = function() {
+  if (!window.currentUser) return foroToast('Debes iniciar sesión', 'err');
+  document.getElementById('foro-modal').classList.add('open');
+  document.getElementById('foro-titulo').value = '';
+  document.getElementById('foro-body').value = '';
+  document.getElementById('foro-ubicacion').value = '';
+  document.getElementById('foro-hashtags-preview').innerHTML = '';
+  document.querySelectorAll('.foro-cat').forEach(b => b.classList.remove('foro-cat--active'));
+  const defCat = document.querySelector('.foro-cat[data-cat="preguntas"]');
+  if (defCat) defCat.classList.add('foro-cat--active');
+};
+
+window.cerrarComposer = function() {
+  document.getElementById('foro-modal').classList.remove('open');
+};
+window.cerrarComposerBg = function(e) {
+  if (e.target.id === 'foro-modal') cerrarComposer();
+};
+
+// Picker de categoría
+document.addEventListener('click', (e) => {
+  if (e.target.classList && e.target.classList.contains('foro-cat')) {
+    document.querySelectorAll('.foro-cat').forEach(b => b.classList.remove('foro-cat--active'));
+    e.target.classList.add('foro-cat--active');
+  }
+});
+
+// Preview hashtags en tiempo real
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'foro-body' || e.target.id === 'foro-titulo') {
+    const texto = (document.getElementById('foro-titulo')?.value || '') + ' ' + (document.getElementById('foro-body')?.value || '');
+    const hashtags = [...new Set((texto.match(/#[a-záéíóúñü0-9_]+/gi) || []).map(h => h.toLowerCase()))];
+    const prev = document.getElementById('foro-hashtags-preview');
+    if (prev) prev.innerHTML = hashtags.map(h => `<span class="foro-ht-chip">${escHtml(h)}</span>`).join('');
+  }
+});
+
+// Publicar (Firestore)
+window.publicarPost = async function() {
+  const titulo = document.getElementById('foro-titulo').value.trim();
+  const body = document.getElementById('foro-body').value.trim();
+  const ubicacion = document.getElementById('foro-ubicacion').value.trim();
+  const catEl = document.querySelector('.foro-cat--active');
+  const categoria = catEl ? catEl.dataset.cat : 'preguntas';
+
+  if (!titulo || titulo.length < 6) return foroToast('Título muy corto', 'err');
+  if (!body || body.length < 15)    return foroToast('Escribe más contenido', 'err');
+  if (!window.currentUser)          return foroToast('Debes iniciar sesión', 'err');
+
+  const btn = document.getElementById('foro-btn-publicar');
+  btn.disabled = true; btn.textContent = '💾 Publicando...';
+
+  try {
+    const hashtags = extraerHashtags(titulo + ' ' + body);
+    const nombreAutor = window.currentUser.nombre || window.currentUser.email || 'Socio AgroClub';
+
+    const docData = {
+      uid: window.currentUser.uid,
+      autor: nombreAutor,
+      categoria,
+      titulo: titulo.substring(0, 200),
+      body: body.substring(0, 3000),
+      hashtags,
+      ubicacion: ubicacion.substring(0, 60),
+      fecha_creacion: serverTimestamp(),
+      likes_count: 0,
+      likes_by: [],
+      comentarios_count: 0,
+      estado: 'abierto',
+      solucion_comentario_id: '',
+      fijado: false
+    };
+
+    await addDoc(collection(db, FORO_COLECCION), docData);
+
+    // Reputación
+    await foroIncrementarReputacion(window.currentUser.uid, nombreAutor, {
+      posts: 1, puntos: 5
+    });
+
+    foroToast('✅ ¡Post publicado!', 'ok');
+    cerrarComposer();
+    renderForo();
+  } catch (e) {
+    console.error('[Foro] Error publicando:', e);
+    foroToast('Error: ' + (e.message || 'desconocido'), 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = '✨ Publicar';
+  }
+};
+
+// ========== MI REPUTACIÓN ==========
+
+async function cargarMiReputacion() {
+  if (!window.currentUser) return;
+  try {
+    const ref = doc(db, FORO_REP_COLECCION, window.currentUser.uid);
+    const snap = await getDoc(ref);
+    const rep = snap.exists() ? snap.data() : {
+      posts: 0, comentarios: 0, likes_recibidos: 0, soluciones: 0, puntos: 0
+    };
+    const nivel = calcularNivel(rep.puntos || 0);
+    const badges = FORO_BADGES.filter(b => b.fn(rep));
+
+    const box = document.getElementById('foro-mirep');
+    if (!box) return;
+    document.getElementById('foro-mirep-avatar').textContent = foroInicial(window.currentUser.nombre || 'T');
+    document.getElementById('foro-mirep-nombre').textContent = window.currentUser.nombre || 'Socio VIP';
+    document.getElementById('foro-mirep-nivel').textContent = `${nivel.nombre} · ${rep.puntos || 0} pts`;
+
+    const bdgs = document.getElementById('foro-mirep-badges');
+    if (badges.length > 0) {
+      bdgs.innerHTML = badges.slice(0, 4).map(b =>
+        `<span class="foro-badge-mini">${b.icono} ${escHtml(b.nombre)}</span>`
+      ).join('');
+    } else {
+      bdgs.innerHTML = '<span class="foro-badge-mini" style="opacity:.5;">¡Gana tu primer badge!</span>';
+    }
+    box.style.display = 'flex';
+  } catch (e) { console.warn('[Foro] Reputación:', e); }
+}
+
+// ========== MODAL VER POST ==========
+
+window.abrirPost = async function(postId) {
+  FORO_POST_ABIERTO = postId;
+  const modal = document.getElementById('foro-post-modal');
+  const body = document.getElementById('foro-post-modal-body');
+  modal.classList.add('open');
+  body.innerHTML = '<div class="foro-skeleton"></div><div class="foro-skeleton" style="height:80px;"></div>';
+
+  try {
+    const ref = doc(db, FORO_COLECCION, postId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      body.innerHTML = '<div class="foro-empty">❌ Post no encontrado o ya fue borrado</div>';
+      return;
+    }
+    const p = { id: snap.id, ...snap.data() };
+
+    // Cargar comentarios
+    const comQ = query(
+      collection(db, FORO_COLECCION, postId, 'comentarios'),
+      orderBy('fecha', 'asc')
+    );
+    const comSnap = await getDocs(comQ);
+    const comentarios = [];
+    comSnap.forEach(d => comentarios.push({ id: d.id, ...d.data() }));
+
+    // Solución primero
+    comentarios.sort((a, b) => {
+      if (a.es_solucion && !b.es_solucion) return -1;
+      if (!a.es_solucion && b.es_solucion) return 1;
+      return 0;
+    });
+
+    const [gA, gB] = foroGradiente(p.uid);
+    const catMap = { preguntas: '❓ Preguntas', casos_exito: '🏆 Casos de éxito', tips: '🌾 Tips del campo', mercado: '💰 Mercado', general: '🌟 General' };
+    const hashtagsHtml = (p.hashtags || []).map(h =>
+      `<span class="foro-post__hashtag">#${escHtml(h)}</span>`).join('');
+    const ubicacion = p.ubicacion ? `<span class="foro-post__ubicacion">📍 ${escHtml(p.ubicacion)}</span>` : '';
+    const uid = window.currentUser?.uid || '';
+    const yoDiLike = (p.likes_by || []).includes(uid);
+    const likeIcon = yoDiLike ? '❤️' : '🤍';
+    const likeClass = yoDiLike ? ' liked' : '';
+    const esAutor = uid && uid === p.uid;
+
+    // Solución si existe
+    let solucionHtml = '';
+    if (p.estado === 'resuelto' && p.solucion_comentario_id) {
+      const sol = comentarios.find(c => c.id === p.solucion_comentario_id);
+      if (sol) {
+        solucionHtml = `
+          <div class="foro-solucion">
+            <span class="foro-solucion__icon">✅</span>
+            <div class="foro-solucion__txt">
+              <div class="foro-solucion__lbl">Solución aceptada</div>
+              <div class="foro-solucion__autor">por ${escHtml(sol.autor)}</div>
+            </div>
+          </div>`;
+      }
+    }
+
+    const comentariosHtml = comentarios.length === 0
+      ? '<div style="color:var(--muted);font-size:.88rem;text-align:center;padding:20px;">Aún no hay comentarios. Sé el primero 💬</div>'
+      : comentarios.map(c => foroHtmlComentario(c, postId, esAutor, p.estado !== 'resuelto')).join('');
+
+    body.innerHTML = `
+      <div class="foro-post__head">
+        <div class="foro-post__avatar" style="--a:${gA};--b:${gB};">${foroInicial(p.autor)}</div>
+        <div class="foro-post__author">
+          <div class="foro-post__name">${escHtml(p.autor)}</div>
+          <div class="foro-post__meta">${foroFechaRel(p.fecha_creacion)}${ubicacion}</div>
+        </div>
+      </div>
+      <div>
+        <span class="foro-post__cat">${catMap[p.categoria] || '🌟'}</span>
+        ${p.estado === 'resuelto' ? '<span class="foro-post__estado">✓ Resuelto</span>' : ''}
+      </div>
+      <h2 style="font-size:1.3rem;font-weight:800;margin:10px 0;color:var(--text);">${escHtml(p.titulo)}</h2>
+      ${solucionHtml}
+      <div style="font-size:.95rem;color:var(--text);line-height:1.6;white-space:pre-wrap;margin-bottom:14px;">${escHtml(p.body)}</div>
+      ${hashtagsHtml ? `<div class="foro-post__hashtags">${hashtagsHtml}</div>` : ''}
+      <div class="foro-post__actions">
+        <div class="foro-post__action${likeClass}" onclick="toggleLikePost('${p.id}', '${escAttr(p.uid)}', '${escAttr(p.autor)}', this)">
+          <span class="like-icon">${likeIcon}</span> <span class="like-count">${p.likes_count || 0}</span>
+        </div>
+        <div class="foro-post__action"><span>💬</span> <span>${comentarios.length} coments</span></div>
+        ${esAutor ? `<div class="foro-post__action" onclick="eliminarMiPost('${p.id}')"><span>🗑️</span> <span>Eliminar</span></div>` : ''}
+      </div>
+
+      <div class="foro-detalle__coms">
+        <div class="foro-detalle__coms-h">💬 Comentarios (${comentarios.length})</div>
+        <div id="foro-coms-lista">${comentariosHtml}</div>
+        <div class="foro-coment-nuevo">
+          <textarea id="foro-com-input" placeholder="Escribe tu comentario..."></textarea>
+          <button onclick="enviarComentario('${p.id}')">Enviar</button>
+        </div>
+      </div>
+    `;
+  } catch (e) {
+    console.error('[Foro] Abrir post:', e);
+    body.innerHTML = `<div class="foro-empty">⚠️ Error: ${escHtml(e.message || '')}</div>`;
+  }
+};
+
+function foroHtmlComentario(c, postId, esAutorPost, puedeMarcarSolucion) {
+  const [gA, gB] = foroGradiente(c.uid);
+  const uid = window.currentUser?.uid || '';
+  const yoDiLike = (c.likes_by || []).includes(uid);
+  const likeIcon = yoDiLike ? '❤️' : '🤍';
+  const likeClass = yoDiLike ? ' liked' : '';
+  const solBtn = (esAutorPost && puedeMarcarSolucion && !c.es_solucion)
+    ? `<button class="foro-coment__acc-btn foro-coment__acc-btn--sol" onclick="marcarSolucion('${postId}', '${c.id}')">✅ Marcar solución</button>`
+    : '';
+  const solClass = c.es_solucion ? ' foro-coment--solucion' : '';
+  const solBadge = c.es_solucion ? '<span style="color:#10b981;font-weight:800;font-size:.72rem;margin-left:6px;">✅ SOLUCIÓN</span>' : '';
+  return `
+    <div class="foro-coment${solClass}">
+      <div class="foro-coment__head">
+        <div class="foro-coment__avatar" style="background:linear-gradient(135deg,${gA},${gB});">${foroInicial(c.autor)}</div>
+        <div style="flex:1;">
+          <span class="foro-coment__nombre">${escHtml(c.autor)}</span>${solBadge}
+          <span class="foro-coment__fecha"> · ${foroFechaRel(c.fecha)}</span>
+        </div>
+      </div>
+      <div class="foro-coment__texto">${escHtml(c.texto)}</div>
+      <div class="foro-coment__acc">
+        <button class="foro-coment__acc-btn${likeClass}" onclick="toggleLikeComentario('${postId}', '${c.id}', '${escAttr(c.uid)}', '${escAttr(c.autor)}', this)">
+          <span class="like-icon">${likeIcon}</span> <span class="like-count">${c.likes_count || 0}</span>
+        </button>
+        ${solBtn}
+      </div>
+    </div>`;
+}
+
+window.cerrarPostModal = function() {
+  document.getElementById('foro-post-modal').classList.remove('open');
+  FORO_POST_ABIERTO = null;
+  renderForo();
+};
+window.cerrarPostModalBg = function(e) {
+  if (e.target.id === 'foro-post-modal') cerrarPostModal();
+};
+
+// ========== COMENTARIOS ==========
+
+window.enviarComentario = async function(postId) {
+  const ta = document.getElementById('foro-com-input');
+  const texto = ta.value.trim();
+  if (!texto) return foroToast('Escribe algo primero', 'err');
+  if (!window.currentUser) return foroToast('Debes iniciar sesión', 'err');
+
+  try {
+    const nombreAutor = window.currentUser.nombre || window.currentUser.email || 'Socio';
+    await addDoc(collection(db, FORO_COLECCION, postId, 'comentarios'), {
+      uid: window.currentUser.uid,
+      autor: nombreAutor,
+      texto: texto.substring(0, 1500),
+      fecha: serverTimestamp(),
+      likes_count: 0,
+      likes_by: [],
+      es_solucion: false
+    });
+
+    // Incrementar contador del post
+    await updateDoc(doc(db, FORO_COLECCION, postId), {
+      comentarios_count: increment(1)
+    });
+
+    // Reputación
+    await foroIncrementarReputacion(window.currentUser.uid, nombreAutor, {
+      comentarios: 1, puntos: 2
+    });
+
+    ta.value = '';
+    foroToast('✅ Comentario enviado', 'ok');
+    abrirPost(postId);
+  } catch (e) {
+    console.error('[Foro] Comentar:', e);
+    foroToast('Error: ' + (e.message || ''), 'err');
+  }
+};
+
+// ========== MARCAR SOLUCIÓN ==========
+
+window.marcarSolucion = async function(postId, comId) {
+  if (!confirm('¿Marcar este comentario como la solución?')) return;
+  try {
+    // Obtener el comentario para saber su autor
+    const comRef = doc(db, FORO_COLECCION, postId, 'comentarios', comId);
+    const comSnap = await getDoc(comRef);
+    if (!comSnap.exists()) return foroToast('Comentario no existe', 'err');
+    const com = comSnap.data();
+
+    // Actualizar post
+    await updateDoc(doc(db, FORO_COLECCION, postId), {
+      estado: 'resuelto',
+      solucion_comentario_id: comId
+    });
+    // Marcar comentario
+    await updateDoc(comRef, { es_solucion: true });
+
+    // Reputación al autor del comentario
+    if (com.uid && com.uid !== window.currentUser.uid) {
+      await foroIncrementarReputacion(com.uid, com.autor, {
+        soluciones: 1, puntos: 15
+      });
+    }
+
+    foroToast('🏆 Marcado como solución', 'ok');
+    abrirPost(postId);
+  } catch (e) {
+    console.error('[Foro] Solución:', e);
+    foroToast('Error: ' + (e.message || ''), 'err');
+  }
+};
+
+// ========== ELIMINAR POST ==========
+
+window.eliminarMiPost = async function(postId) {
+  if (!confirm('¿Eliminar este post? No se puede recuperar.')) return;
+  try {
+    await deleteDoc(doc(db, FORO_COLECCION, postId));
+    foroToast('🗑️ Post eliminado', 'ok');
+    cerrarPostModal();
+    renderForo();
+  } catch (e) {
+    console.error('[Foro] Eliminar:', e);
+    foroToast('Error: ' + (e.message || ''), 'err');
   }
 };
 
 window.renderForo = renderForo;
+
 
 // Interceptar showPage: al entrar a notificaciones, marcar como leídas
 // después de un delay razonable (el socio las lee → se desvanecen elegante)
