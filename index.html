@@ -220,8 +220,24 @@
       margin-top: 12px; font-size: .76rem; color: #6b7280;
     }
 
-    body.is-free .paywall-lock-icon {
-      display: inline-block !important;
+    body.is-free .widget-descuento {
+      position: relative;
+    }
+    body.is-free .widget-descuento::after {
+      content: '🔒';
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #fff; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 12px rgba(251,191,36,.55), 0 0 0 3px #fff;
+      z-index: 5; pointer-events: none;
+      animation: lockPulse 2.2s ease-in-out infinite;
+    }
+    body.is-free .widget-descuento__btn {
+      opacity: .75;
     }
     .paywall-lock-icon {
       display: none; margin-left: 6px; font-size: .85em;
@@ -3752,7 +3768,7 @@
           <span class="widget-descuento__tag">🎁 Tu descuento VIP</span>
           <div class="widget-descuento__pct">20%</div>
           <div class="widget-descuento__sub">En todos los próximos cursos</div>
-          <button class="widget-descuento__btn" onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank')">
+          <button class="widget-descuento__btn" onclick="canjearDescuento()">
             💬 Canjear por WhatsApp
           </button>
         </div>
@@ -4694,7 +4710,7 @@
       <span class="widget-descuento__tag">🎁 Tu descuento VIP</span>
       <div class="widget-descuento__pct">20%</div>
       <div class="widget-descuento__sub">En todos los próximos cursos</div>
-      <button class="widget-descuento__btn" onclick="window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank')">
+      <button class="widget-descuento__btn" onclick="canjearDescuento()">
         💬 Canjear por WhatsApp
       </button>
     </div>
@@ -6873,6 +6889,15 @@ window.eliminarMiPost = async function(postId) {
 };
 
 window.renderForo = renderForo;
+
+// Canjear descuento: si no es VIP → paywall; si es VIP → abre WhatsApp
+window.canjearDescuento = function() {
+  if (!esVIPActivo || !esVIPActivo()) {
+    mostrarPaywallModal('banner', '🎁 Descuento exclusivo VIP', 'El 20% de descuento en cursos es un beneficio exclusivo de miembros VIP. Suscríbete para canjearlo.');
+    return;
+  }
+  window.open('https://wa.me/522381228511?text=Hola%2C%20soy%20miembro%20VIP%20de%20AgroClub%20MX%20y%20quiero%20canjear%20mi%20descuento%20del%2020%25%20en%20un%20curso%20%F0%9F%8C%BF','_blank');
+};
 
 // ═══════════════════════════════════════════════════════════
 // 🔒 PAYWALL GLOBAL
