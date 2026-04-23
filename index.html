@@ -553,6 +553,220 @@
       .foro-composer__input { font-size: .82rem; padding: 8px 14px; }
     }
     /* ══ FIN FORO/LOGROS ═════════════════════════════════════════════════ */
+
+    /* ══ 🎬 VIDEOS - COMING SOON ════════════════════════════════════════ */
+    .video-cs {
+      position: relative; overflow: hidden;
+      min-height: 70vh;
+      background: linear-gradient(135deg, #0f0a1f 0%, #1a0f2e 35%, #2d1b69 75%, #1e3a8a 100%);
+      border-radius: 28px;
+      padding: 50px 30px;
+      color: #fff;
+      animation: cardIn .5s ease both;
+      isolation: isolate;
+    }
+    /* Gradiente de "luz" detrás */
+    .video-cs::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 25% 25%, rgba(139,92,246,.35), transparent 45%),
+        radial-gradient(circle at 75% 75%, rgba(59,130,246,.25), transparent 50%),
+        radial-gradient(circle at 50% 60%, rgba(236,72,153,.18), transparent 40%);
+      pointer-events: none; z-index: 0;
+    }
+    /* Grid de fondo */
+    .video-cs::after {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .video-cs__particles {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      overflow: hidden;
+    }
+    .video-cs__particles span {
+      position: absolute; bottom: -50px; left: var(--x, 50%);
+      font-size: calc(1.8rem * var(--s, 1));
+      opacity: .15;
+      animation: float-up 12s var(--d, 0s) linear infinite;
+    }
+    @keyframes float-up {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: .2; }
+      90%  { opacity: .2; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    }
+
+    .video-cs__inner {
+      position: relative; z-index: 2;
+      max-width: 720px; margin: 0 auto;
+      text-align: center;
+    }
+
+    .video-cs__badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(139,92,246,.15); border: 1px solid rgba(139,92,246,.35);
+      padding: 6px 16px; border-radius: 100px;
+      font-size: .72rem; font-weight: 800; letter-spacing: .15em;
+      text-transform: uppercase; color: #c4b5fd;
+      margin-bottom: 30px;
+    }
+    .video-cs__pulse {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #a78bfa; display: inline-block;
+      box-shadow: 0 0 0 0 rgba(167,139,250,.7);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%   { box-shadow: 0 0 0 0 rgba(167,139,250,.7); }
+      70%  { box-shadow: 0 0 0 12px rgba(167,139,250,0); }
+      100% { box-shadow: 0 0 0 0 rgba(167,139,250,0); }
+    }
+
+    /* BOTÓN PLAY GIGANTE con anillos */
+    .video-cs__play-wrap {
+      position: relative; width: 140px; height: 140px;
+      margin: 0 auto 36px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .video-cs__play-ring {
+      position: absolute; inset: 0; border-radius: 50%;
+      border: 2px solid rgba(167,139,250,.5);
+      animation: ring-pulse 2.5s ease-out infinite;
+    }
+    .video-cs__play-ring--2 { animation-delay: .8s; }
+    .video-cs__play-ring--3 { animation-delay: 1.6s; }
+    @keyframes ring-pulse {
+      0%   { transform: scale(1); opacity: .6; border-width: 2px; }
+      100% { transform: scale(1.8); opacity: 0; border-width: 1px; }
+    }
+    .video-cs__play-btn {
+      position: relative;
+      width: 110px; height: 110px; border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      box-shadow:
+        0 0 60px rgba(139,92,246,.6),
+        0 15px 40px rgba(59,130,246,.3),
+        inset 0 2px 8px rgba(255,255,255,.2);
+      animation: play-float 3s ease-in-out infinite;
+    }
+    .video-cs__play-btn svg {
+      margin-left: 6px; /* compensar forma triangular */
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
+    }
+    @keyframes play-float {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%     { transform: translateY(-6px) scale(1.03); }
+    }
+
+    .video-cs__kicker {
+      font-size: .82rem; letter-spacing: .28em; color: #fbbf24;
+      font-weight: 800; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .video-cs__title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800; line-height: 1.05; margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, #c4b5fd 50%, #93c5fd 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -.02em;
+    }
+    .video-cs__subtitle {
+      font-size: 1rem; line-height: 1.6; color: rgba(255,255,255,.75);
+      max-width: 560px; margin: 0 auto 40px;
+    }
+    .video-cs__subtitle strong { color: #fff; font-weight: 700; }
+
+    /* FEATURES GRID */
+    .video-cs__features {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+      margin-bottom: 40px; text-align: left;
+    }
+    .video-cs__feature {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,.05); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px; padding: 14px;
+      transition: all .3s;
+    }
+    .video-cs__feature:hover {
+      background: rgba(139,92,246,.12);
+      border-color: rgba(139,92,246,.3);
+      transform: translateY(-2px);
+    }
+    .video-cs__feature-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(139,92,246,.3), rgba(59,130,246,.2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .video-cs__feature-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .video-cs__feature-txt strong { color: #fff; font-size: .88rem; font-weight: 700; }
+    .video-cs__feature-txt span { color: rgba(255,255,255,.6); font-size: .75rem; }
+
+    /* BARRA DE PROGRESO */
+    .video-cs__progress-wrap { margin-bottom: 36px; max-width: 440px; margin-left: auto; margin-right: auto; }
+    .video-cs__progress-label {
+      display: flex; justify-content: space-between;
+      font-size: .78rem; color: rgba(255,255,255,.7);
+      margin-bottom: 8px; font-weight: 600;
+    }
+    .video-cs__progress-pct { color: #fbbf24; font-weight: 800; font-family: 'Playfair Display', Georgia, serif; font-size: .95rem; }
+    .video-cs__progress-bar {
+      height: 8px; background: rgba(255,255,255,.1); border-radius: 100px;
+      overflow: hidden; position: relative;
+    }
+    .video-cs__progress-fill {
+      position: absolute; top: 0; left: 0; height: 100%;
+      width: 65%;
+      background: linear-gradient(90deg, #8b5cf6, #6366f1, #3b82f6, #fbbf24);
+      background-size: 200% 100%;
+      border-radius: 100px;
+      animation: progress-shine 3s linear infinite;
+      box-shadow: 0 0 20px rgba(139,92,246,.5);
+    }
+    @keyframes progress-shine {
+      0%   { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+
+    /* CTA */
+    .video-cs__cta { margin-top: 12px; }
+    .video-cs__cta-txt { font-size: .88rem; color: rgba(255,255,255,.7); margin-bottom: 14px; }
+    .video-cs__cta-btn {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1a0f2e; border: none; border-radius: 100px;
+      padding: 14px 32px; font-size: .92rem; font-weight: 800;
+      cursor: pointer; font-family: inherit;
+      box-shadow: 0 10px 30px rgba(251,191,36,.35);
+      transition: all .2s;
+      letter-spacing: .02em;
+    }
+    .video-cs__cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(251,191,36,.5);
+    }
+    .video-cs__cta-btn:active { transform: translateY(0); }
+
+    @media (max-width: 640px) {
+      .video-cs { padding: 36px 20px; border-radius: 22px; min-height: 80vh; }
+      .video-cs__features { grid-template-columns: 1fr; }
+      .video-cs__play-wrap { width: 110px; height: 110px; margin-bottom: 26px; }
+      .video-cs__play-btn { width: 90px; height: 90px; }
+      .video-cs__play-btn svg { width: 38px; height: 38px; }
+      .video-cs__title { font-size: 2rem; }
+      .video-cs__subtitle { font-size: .92rem; margin-bottom: 30px; }
+      .video-cs__badge { margin-bottom: 22px; }
+    }
+    /* ══ FIN VIDEOS ══════════════════════════════════════════════════════ */
     .course-thumb {
       height: 190px; display: flex; align-items: center; justify-content: center;
       font-size: 4.5rem; position: relative; overflow: hidden; background: #e8f5e9;
@@ -2409,13 +2623,11 @@
     <button class="mobile-drawer__item" data-page="materiales" onclick="drawerIr('materiales')">
       <span class="mobile-drawer__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="8" y1="13" x2="16" y2="13"/>
-          <line x1="8" y1="17" x2="13" y2="17"/>
+          <polygon points="23 7 16 12 23 17 23 7"/>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
         </svg>
       </span>
-      <span class="mobile-drawer__item-label">Materiales</span>
+      <span class="mobile-drawer__item-label">Videos</span>
     </button>
 
     <button class="mobile-drawer__item" data-page="notificaciones" onclick="drawerIr('notificaciones')">
@@ -2489,7 +2701,7 @@
       <div class="sidebar-item active" onclick="showPage('inicio',this)"><div class="sidebar-item-left"><span>🏠</span> Inicio</div></div>
       <div class="sidebar-item" onclick="showPage('cursos',this)"><div class="sidebar-item-left"><span>🎬</span> Biblioteca de cursos</div><span class="sidebar-badge" id="badge-cursos" style="display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🎥</span> Webinars</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
-      <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>📄</span> Materiales</div></div>
+      <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>🎬</span> Videos</div><span class="sidebar-badge" style="background:#8b5cf6;color:#fff;">Pronto</span></div>
       <div class="sidebar-item" onclick="showPage('notificaciones',this)"><div class="sidebar-item-left"><span>🔔</span> Notificaciones</div><span class="sidebar-badge" id="badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div><span class="sidebar-badge" style="background:#10b981;color:#fff;">Nuevo</span></div>
       <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
@@ -2724,8 +2936,94 @@
 
     <!-- MATERIALES -->
     <div class="page" id="page-materiales">
-      <div class="section-header" style="margin-bottom:20px"><h3>📄 Materiales de apoyo</h3></div>
-      <div class="pdf-grid" id="lista-pdfs-global"></div>
+      <div class="video-cs">
+        <!-- Partículas flotando -->
+        <div class="video-cs__particles">
+          <span style="--x:10%;--d:0s;--s:1">🎬</span>
+          <span style="--x:25%;--d:2s;--s:.8">▶️</span>
+          <span style="--x:42%;--d:4s;--s:1.1">🎥</span>
+          <span style="--x:58%;--d:1s;--s:.9">📹</span>
+          <span style="--x:72%;--d:3s;--s:1">🎞️</span>
+          <span style="--x:88%;--d:5s;--s:.85">🎬</span>
+        </div>
+
+        <!-- Contenido centrado -->
+        <div class="video-cs__inner">
+          <div class="video-cs__badge">
+            <span class="video-cs__pulse"></span>
+            En desarrollo
+          </div>
+
+          <!-- Play button gigante animado -->
+          <div class="video-cs__play-wrap">
+            <div class="video-cs__play-ring"></div>
+            <div class="video-cs__play-ring video-cs__play-ring--2"></div>
+            <div class="video-cs__play-ring video-cs__play-ring--3"></div>
+            <div class="video-cs__play-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="video-cs__kicker">🎬 Próximamente</div>
+          <h2 class="video-cs__title">Videoteca VIP</h2>
+          <p class="video-cs__subtitle">
+            Estamos preparando una biblioteca exclusiva de <strong>masterclasses, webinars grabados y contenido premium en video</strong> para miembros del club.
+          </p>
+
+          <!-- Features grid -->
+          <div class="video-cs__features">
+            <div class="video-cs__feature">
+              <div class="video-cs__feature-icon">🎯</div>
+              <div class="video-cs__feature-txt">
+                <strong>Masterclasses</strong>
+                <span>Contenido exclusivo de expertos</span>
+              </div>
+            </div>
+            <div class="video-cs__feature">
+              <div class="video-cs__feature-icon">📺</div>
+              <div class="video-cs__feature-txt">
+                <strong>Webinars grabados</strong>
+                <span>Acceso cuando quieras</span>
+              </div>
+            </div>
+            <div class="video-cs__feature">
+              <div class="video-cs__feature-icon">🌱</div>
+              <div class="video-cs__feature-txt">
+                <strong>Casos reales</strong>
+                <span>De productores del club</span>
+              </div>
+            </div>
+            <div class="video-cs__feature">
+              <div class="video-cs__feature-icon">⚡</div>
+              <div class="video-cs__feature-txt">
+                <strong>Tips rápidos</strong>
+                <span>Videos cortos con lo esencial</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de progreso -->
+          <div class="video-cs__progress-wrap">
+            <div class="video-cs__progress-label">
+              <span>Progreso de desarrollo</span>
+              <span class="video-cs__progress-pct">65%</span>
+            </div>
+            <div class="video-cs__progress-bar">
+              <div class="video-cs__progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="video-cs__cta">
+            <p class="video-cs__cta-txt">🔔 Te avisaremos apenas esté listo</p>
+            <button class="video-cs__cta-btn" onclick="alert('🌱 Gracias carnal! Te avisaremos por notificación cuando esté listo.')">
+              ✨ Mantenme al tanto
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- PERFIL -->
@@ -3153,7 +3451,7 @@
       <span class="bn-dot"></span>
     </div>
     <div class="bn-item" id="bn-materiales" onclick="showPage('materiales', this, 'bn-materiales')">
-      <span class="bn-icon">📄</span><span class="bn-label">Materiales</span>
+      <span class="bn-icon">🎬</span><span class="bn-label">Videos</span>
     </div>
     <div class="bn-item" id="bn-perfil" onclick="showPage('perfil', this, 'bn-perfil')">
       <span class="bn-icon">👤</span><span class="bn-label">Perfil</span>
