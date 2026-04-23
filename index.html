@@ -3931,20 +3931,22 @@
         </div>
       </div>
 
-      <!-- ===== NOTICIAS AGRO (debajo de widgets) ===== -->
-      <div class="noticias-header">
-        <h3><span class="pulse-live"></span> 📰 Noticias del agro</h3>
-        <div class="noticias-source-btns" id="noticias-source-btns"></div>
+      <!-- ===== NOTICIAS AGRO (debajo de cursos) ===== -->
+      <div style="margin-top:40px;padding-top:30px;border-top:2px solid var(--border);">
+        <div class="noticias-header">
+          <h3><span class="pulse-live"></span> 📰 Noticias del agro en vivo</h3>
+          <div class="noticias-source-btns" id="noticias-source-btns"></div>
+        </div>
+        <div class="noticias-grid" id="noticias-grid">
+          <div class="noticias-skeleton"></div>
+          <div class="noticias-skeleton"></div>
+          <div class="noticias-skeleton"></div>
+        </div>
+        <button class="noticias-ver-mas" id="noticias-ver-mas-btn" style="display:none;" onclick="toggleVerMasNoticias(this)">
+          <span id="noticias-ver-mas-txt">📰 Leer más noticias del día</span>
+          <span class="noticias-ver-mas__arrow">▼</span>
+        </button>
       </div>
-      <div class="noticias-grid" id="noticias-grid">
-        <div class="noticias-skeleton"></div>
-        <div class="noticias-skeleton"></div>
-        <div class="noticias-skeleton"></div>
-      </div>
-      <button class="noticias-ver-mas" id="noticias-ver-mas-btn" style="display:none;" onclick="toggleVerMasNoticias(this)">
-        <span id="noticias-ver-mas-txt">📰 Leer más noticias del día</span>
-        <span class="noticias-ver-mas__arrow">▼</span>
-      </button>
 
     </div>
 
@@ -5304,7 +5306,7 @@ function renderCursos() {
     </div>`;
   };
 
-  // INICIO: solo cursos desbloqueados (lo que puede consumir ya)
+  // INICIO: solo cursos desbloqueados (lo que puede consumir ya), máx 4 + botón ver más
   const cursosDesbloqueados = CURSOS.filter(c => !estaBloqueado(c));
   const inicioCursos = document.getElementById("inicio-cursos");
   if (inicioCursos) {
@@ -5316,7 +5318,20 @@ function renderCursos() {
           <div style="color:var(--muted);font-size:.88rem;">Revisa la <a href="#" onclick="showPage('cursos',document.querySelector('[onclick*=cursos]'));return false;" style="color:var(--verde);font-weight:600;text-decoration:underline;">Biblioteca de cursos</a> para ver lo que viene próximamente.</div>
         </div>`;
     } else {
-      inicioCursos.innerHTML = cursosDesbloqueados.map(renderCard).join("");
+      const primeros4 = cursosDesbloqueados.slice(0, 4);
+      const restantes = cursosDesbloqueados.length - 4;
+      let html = primeros4.map(renderCard).join("");
+      if (restantes > 0) {
+        html += `
+          <div style="grid-column:1/-1;text-align:center;margin-top:10px;">
+            <button onclick="showPage('cursos', document.querySelector('[onclick*=cursos]'))"
+                    style="background:linear-gradient(135deg,#1a6b2f,#2d9e4f);color:#fff;border:none;border-radius:100px;padding:14px 34px;font-family:inherit;font-weight:800;font-size:.95rem;cursor:pointer;box-shadow:0 6px 16px rgba(26,107,47,.3);transition:transform .15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              📚 Ver más cursos (${restantes})
+            </button>
+          </div>`;
+      }
+      inicioCursos.innerHTML = html;
     }
   }
 
