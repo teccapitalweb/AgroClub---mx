@@ -352,6 +352,122 @@
     body.is-free #page-herramientas .herr-btn-pri::before {
       content: '🔒 ';
     }
+
+    /* ═══════ SUSCRIPCIÓN — VISTA FREE ═══════ */
+    .sus-hero-free {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+      border: 2px solid #fbbf24;
+      border-radius: 22px; padding: 36px 28px; margin-bottom: 22px;
+      text-align: center;
+    }
+    .sus-hero-free__bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(251,191,36,.4) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(239,68,68,.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .sus-hero-free__icon {
+      font-size: 3.5rem; margin-bottom: 14px;
+      filter: drop-shadow(0 6px 12px rgba(180,83,9,.4));
+      animation: lockPulse 2.5s ease-in-out infinite;
+    }
+    .sus-hero-free__title {
+      font-size: 1.8rem; font-weight: 800; color: #78350f;
+      font-family: 'Playfair Display', Georgia, serif;
+      line-height: 1.15; margin-bottom: 10px;
+    }
+    .sus-hero-free__desc {
+      font-size: 1rem; color: #92400e; line-height: 1.55;
+      max-width: 520px; margin: 0 auto 18px;
+    }
+    .sus-hero-free__badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(185,28,28,.1); color: #991b1b;
+      padding: 8px 18px; border-radius: 100px;
+      font-size: .82rem; font-weight: 700;
+      border: 1px solid rgba(185,28,28,.3);
+    }
+    .sus-hero-free__dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #dc2626;
+      animation: pulse-dot 2s infinite;
+    }
+
+    /* Grid de planes */
+    .sus-planes {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 720px) {
+      .sus-planes { grid-template-columns: 1fr; }
+    }
+    .sus-plan-card {
+      background: var(--card); border: 2px solid var(--border);
+      border-radius: 18px; padding: 26px 22px;
+      display: flex; flex-direction: column;
+      position: relative;
+      transition: all .2s;
+    }
+    .sus-plan-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+    .sus-plan-card--destacado {
+      border-color: #1a6b2f;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      box-shadow: 0 8px 24px rgba(26,107,47,.15);
+    }
+    .sus-plan-card__badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, #1a6b2f, #047857); color: #fff;
+      padding: 6px 16px; border-radius: 100px;
+      font-size: .72rem; font-weight: 800; white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(26,107,47,.35);
+    }
+    .sus-plan-card__kicker {
+      font-size: .72rem; font-weight: 800; letter-spacing: .2em;
+      color: var(--muted); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .sus-plan-card__price {
+      display: flex; align-items: baseline; gap: 4px;
+      margin-bottom: 6px;
+    }
+    .sus-plan-card__moneda { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+    .sus-plan-card__num {
+      font-size: 2.6rem; font-weight: 900; color: var(--text);
+      font-family: 'Playfair Display', Georgia, serif; line-height: 1;
+    }
+    .sus-plan-card__per { font-size: .88rem; color: var(--muted); margin-left: 4px; }
+    .sus-plan-card__equivale {
+      display: inline-block; background: rgba(16,185,129,.15);
+      color: #047857; padding: 3px 10px; border-radius: 100px;
+      font-size: .72rem; font-weight: 700; margin-bottom: 12px;
+    }
+    .sus-plan-card__feats {
+      list-style: none; margin: 18px 0; padding: 0;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .sus-plan-card__feats li {
+      font-size: .88rem; color: var(--text); line-height: 1.4;
+    }
+    .sus-plan-card__btn {
+      margin-top: auto;
+      background: linear-gradient(135deg, #1a6b2f, #047857);
+      color: #fff; border: none; border-radius: 12px;
+      padding: 14px; font-weight: 800; font-size: .95rem;
+      cursor: pointer; font-family: inherit;
+      transition: all .15s;
+      box-shadow: 0 4px 12px rgba(26,107,47,.25);
+    }
+    .sus-plan-card__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,107,47,.4); }
+    .sus-plan-card__btn--pri {
+      background: linear-gradient(135deg, #10b981 0%, #047857 50%, #064e3b 100%);
+      box-shadow: 0 6px 16px rgba(16,185,129,.4);
+    }
+
+    .sus-free-nota {
+      text-align: center; font-size: .8rem; color: var(--muted);
+      padding: 12px; margin-bottom: 22px;
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     a { text-decoration: none; color: inherit; }
@@ -4624,69 +4740,137 @@
     <!-- SUSCRIPCION -->
     <div class="page" id="page-suscripcion">
 
-      <!-- HERO -->
-      <div class="sus-hero">
-        <h3>⭐ Membresía VIP Activa</h3>
-        <p>Tienes acceso completo a todo el contenido de AgroClub MX</p>
-        <div class="sus-badge">✅ Activa · Vence: <span id="sus-vence">—</span></div>
+      <!-- ════════ VISTA FREE (usuario sin pagar) ════════ -->
+      <div id="sus-view-free" style="display:none;">
+        <div class="sus-hero-free">
+          <div class="sus-hero-free__bg"></div>
+          <div style="position:relative;z-index:2;">
+            <div class="sus-hero-free__icon">🔒</div>
+            <h3 class="sus-hero-free__title">Aún no eres miembro VIP</h3>
+            <p class="sus-hero-free__desc">Suscríbete y desbloquea todo el contenido del club: cursos completos, webinars en vivo, herramientas exclusivas y mucho más.</p>
+            <div class="sus-hero-free__badge">
+              <span class="sus-hero-free__dot"></span>
+              Estado: <strong>Sin suscripción</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- PLANES DISPONIBLES -->
+        <div class="sus-planes">
+          <div class="sus-plan-card">
+            <div class="sus-plan-card__kicker">MENSUAL</div>
+            <div class="sus-plan-card__price">
+              <span class="sus-plan-card__moneda">$</span>
+              <span class="sus-plan-card__num">200</span>
+              <span class="sus-plan-card__per">MXN/mes</span>
+            </div>
+            <ul class="sus-plan-card__feats">
+              <li>✓ Videos exclusivos ilimitados</li>
+              <li>✓ PDFs descargables</li>
+              <li>✓ Sesiones en vivo</li>
+              <li>✓ Grupo WhatsApp VIP</li>
+              <li>✓ Certificado mensual</li>
+              <li>✓ 20% descuento en cursos</li>
+            </ul>
+            <button class="sus-plan-card__btn" onclick="window.open('https://agrotecamerican.com/?suscribirme=1','_blank')">
+              💳 Suscribirme mensual →
+            </button>
+          </div>
+
+          <div class="sus-plan-card sus-plan-card--destacado">
+            <div class="sus-plan-card__badge">🌟 Más popular — Ahorra 30%</div>
+            <div class="sus-plan-card__kicker">ANUAL</div>
+            <div class="sus-plan-card__price">
+              <span class="sus-plan-card__moneda">$</span>
+              <span class="sus-plan-card__num">1,920</span>
+              <span class="sus-plan-card__per">MXN/año</span>
+            </div>
+            <div class="sus-plan-card__equivale">Equivale a $160/mes</div>
+            <ul class="sus-plan-card__feats">
+              <li>✓ Todo lo del plan mensual</li>
+              <li>✓ <strong>2 meses GRATIS</strong></li>
+              <li>✓ Acceso prioritario</li>
+              <li>✓ Sesión 1 a 1 con instructor</li>
+              <li>✓ Certificado anual especial</li>
+              <li>✓ 30% descuento en cursos</li>
+            </ul>
+            <button class="sus-plan-card__btn sus-plan-card__btn--pri" onclick="window.open('https://agrotecamerican.com/?suscribirme=1','_blank')">
+              💳 Suscribirme anual →
+            </button>
+          </div>
+        </div>
+
+        <div class="sus-free-nota">
+          🔒 Pago seguro · Cancela cuando quieras · Sin contratos
+        </div>
       </div>
 
-      <!-- INFO RÁPIDA -->
-      <div class="sus-info-grid">
-        <div class="sus-info-card">
-          <div class="sus-info-label">📅 Próximo cobro</div>
-          <div class="sus-info-val" id="sus-proximo-cobro">—</div>
+      <!-- ════════ VISTA VIP (usuario con pago activo) ════════ -->
+      <div id="sus-view-vip">
+        <!-- HERO -->
+        <div class="sus-hero">
+          <h3>⭐ Membresía VIP Activa</h3>
+          <p>Tienes acceso completo a todo el contenido de AgroClub MX</p>
+          <div class="sus-badge">✅ Activa · Vence: <span id="sus-vence">—</span></div>
         </div>
-        <div class="sus-info-card">
-          <div class="sus-info-label">💳 Plan activo</div>
-          <div class="sus-info-val" id="sus-plan-info">VIP Mensual</div>
+
+        <!-- INFO RÁPIDA -->
+        <div class="sus-info-grid">
+          <div class="sus-info-card">
+            <div class="sus-info-label">📅 Próximo cobro</div>
+            <div class="sus-info-val" id="sus-proximo-cobro">—</div>
+          </div>
+          <div class="sus-info-card">
+            <div class="sus-info-label">💳 Plan activo</div>
+            <div class="sus-info-val" id="sus-plan-info">VIP Mensual</div>
+          </div>
+        </div>
+
+        <!-- BENEFICIOS -->
+        <div class="sus-beneficios" style="margin-bottom:20px;">
+          <h4>Tus beneficios incluyen</h4>
+          <div class="sus-item">
+            <div class="sus-icon" style="background:rgba(82,201,122,.1)">🎬</div>
+            <div><div class="sus-item-text">Cursos en video ilimitados</div><div class="sus-item-sub">Acceso completo a todos los cursos de la biblioteca</div></div>
+          </div>
+          <div class="sus-item">
+            <div class="sus-icon" style="background:rgba(239,68,68,.1)">🔴</div>
+            <div><div class="sus-item-text">Sesiones en vivo con expertos</div><div class="sus-item-sub">Webinars y Q&A en tiempo real</div></div>
+          </div>
+          <div class="sus-item">
+            <div class="sus-icon" style="background:rgba(249,115,22,.1)">📄</div>
+            <div><div class="sus-item-text">Materiales descargables</div><div class="sus-item-sub">PDFs, guías y temarios exclusivos</div></div>
+          </div>
+          <div class="sus-item">
+            <div class="sus-icon" style="background:rgba(37,211,102,.1)">💬</div>
+            <div><div class="sus-item-text">Comunidad WhatsApp VIP</div><div class="sus-item-sub">Red de productores y técnicos activos</div></div>
+          </div>
+          <div class="sus-item">
+            <div class="sus-icon" style="background:rgba(251,191,36,.1)">🎁</div>
+            <div><div class="sus-item-text">20% descuento en cursos</div><div class="sus-item-sub">En todos los próximos cursos de la plataforma</div></div>
+          </div>
+        </div>
+
+        <!-- HISTORIAL DE PAGOS -->
+        <div class="sus-pagos-list">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:.88rem;font-weight:800;font-family:var(--font-display);">💰 Historial de pagos</div>
+          <div id="sus-historial-pagos">
+            <div class="sus-pago-row" style="color:var(--muted);">Cargando historial...</div>
+          </div>
+        </div>
+
+        <!-- CANCELAR SUSCRIPCIÓN -->
+        <div class="sus-cancelar-card">
+          <div style="font-size:.9rem;font-weight:800;color:#b91c1c;margin-bottom:6px;font-family:var(--font-display);">⚠️ Cancelar membresía</div>
+          <p style="font-size:.82rem;color:#7f1d1d;line-height:1.6;margin-bottom:16px;">Si deseas cancelar tu membresía, tu acceso se mantendrá activo hasta la fecha de vencimiento actual. No se realizan reembolsos parciales.</p>
+          <button onclick="window.solicitarCancelacion()"
+            style="background:#ef4444;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;">
+            Cancelar membresía
+          </button>
         </div>
       </div>
 
-      <!-- BENEFICIOS -->
-      <div class="sus-beneficios" style="margin-bottom:20px;">
-        <h4>Tus beneficios incluyen</h4>
-        <div class="sus-item">
-          <div class="sus-icon" style="background:rgba(82,201,122,.1)">🎬</div>
-          <div><div class="sus-item-text">Cursos en video ilimitados</div><div class="sus-item-sub">Acceso completo a todos los cursos de la biblioteca</div></div>
-        </div>
-        <div class="sus-item">
-          <div class="sus-icon" style="background:rgba(239,68,68,.1)">🔴</div>
-          <div><div class="sus-item-text">Sesiones en vivo con expertos</div><div class="sus-item-sub">Webinars y Q&A en tiempo real</div></div>
-        </div>
-        <div class="sus-item">
-          <div class="sus-icon" style="background:rgba(249,115,22,.1)">📄</div>
-          <div><div class="sus-item-text">Materiales descargables</div><div class="sus-item-sub">PDFs, guías y temarios exclusivos</div></div>
-        </div>
-        <div class="sus-item">
-          <div class="sus-icon" style="background:rgba(37,211,102,.1)">💬</div>
-          <div><div class="sus-item-text">Comunidad WhatsApp VIP</div><div class="sus-item-sub">Red de productores y técnicos activos</div></div>
-        </div>
-        <div class="sus-item">
-          <div class="sus-icon" style="background:rgba(251,191,36,.1)">🎁</div>
-          <div><div class="sus-item-text">20% descuento en cursos</div><div class="sus-item-sub">En todos los próximos cursos de la plataforma</div></div>
-        </div>
-      </div>
-
-      <!-- HISTORIAL DE PAGOS -->
-      <div class="sus-pagos-list">
-        <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:.88rem;font-weight:800;font-family:var(--font-display);">💰 Historial de pagos</div>
-        <div id="sus-historial-pagos">
-          <div class="sus-pago-row" style="color:var(--muted);">Cargando historial...</div>
-        </div>
-      </div>
-
-      <!-- CANCELAR SUSCRIPCIÓN -->
-      <div class="sus-cancelar-card">
-        <div style="font-size:.9rem;font-weight:800;color:#b91c1c;margin-bottom:6px;font-family:var(--font-display);">⚠️ Cancelar membresía</div>
-        <p style="font-size:.82rem;color:#7f1d1d;line-height:1.6;margin-bottom:16px;">Si deseas cancelar tu membresía, tu acceso se mantendrá activo hasta la fecha de vencimiento actual. No se realizan reembolsos parciales.</p>
-        <button onclick="window.solicitarCancelacion()"
-          style="background:#ef4444;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;">
-          Cancelar membresía
-        </button>
-      </div>
-
-      <!-- POLÍTICA DE PRIVACIDAD -->
+      <!-- POLÍTICA DE PRIVACIDAD (visible siempre) -->
       <div class="sus-privacidad">
         <div style="font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:10px;font-family:var(--font-display);">🔒 Política de privacidad y términos</div>
         <p><strong>Datos personales:</strong> AgroClub MX recopila únicamente tu nombre, email y WhatsApp para gestionar tu membresía y enviarte información relevante del club. No compartimos tus datos con terceros.</p>
@@ -7862,6 +8046,19 @@ async function actualizarStreak() {
     }
     if (id === 'apoyos') {
       renderApoyos();
+    }
+    if (id === 'suscripcion') {
+      const vFree = document.getElementById('sus-view-free');
+      const vVip  = document.getElementById('sus-view-vip');
+      if (vFree && vVip) {
+        if (esVIPActivo()) {
+          vVip.style.display  = 'block';
+          vFree.style.display = 'none';
+        } else {
+          vFree.style.display = 'block';
+          vVip.style.display  = 'none';
+        }
+      }
     }
   };
 })();
