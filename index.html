@@ -3496,10 +3496,10 @@
           <div class="foro-modal__row">
             <label>Categoría</label>
             <div class="foro-cat-picker" id="foro-cat-picker">
-              <button type="button" class="foro-cat foro-cat--active" data-cat="preguntas">❓ Pregunta</button>
-              <button type="button" class="foro-cat" data-cat="casos_exito">🏆 Caso de éxito</button>
-              <button type="button" class="foro-cat" data-cat="tips">🌾 Tip del campo</button>
-              <button type="button" class="foro-cat" data-cat="mercado">💰 Mercado</button>
+              <button type="button" class="foro-cat foro-cat--active" data-cat="preguntas" onclick="seleccionarCategoriaForo(this)">❓ Pregunta</button>
+              <button type="button" class="foro-cat" data-cat="casos_exito" onclick="seleccionarCategoriaForo(this)">🏆 Caso de éxito</button>
+              <button type="button" class="foro-cat" data-cat="tips" onclick="seleccionarCategoriaForo(this)">🌾 Tip del campo</button>
+              <button type="button" class="foro-cat" data-cat="mercado" onclick="seleccionarCategoriaForo(this)">💰 Mercado</button>
             </div>
           </div>
           <div class="foro-modal__row">
@@ -5550,15 +5550,11 @@ window.cerrarComposerBg = function(e) {
   if (e.target.id === 'foro-modal') cerrarComposer();
 };
 
-// Picker de categoría
-document.addEventListener('click', (e) => {
-  const catBtn = e.target.closest && e.target.closest('.foro-cat');
-  // Asegurar que está dentro del picker del modal (no un falso positivo)
-  if (catBtn && catBtn.closest('.foro-cat-picker')) {
-    document.querySelectorAll('.foro-cat').forEach(b => b.classList.remove('foro-cat--active'));
-    catBtn.classList.add('foro-cat--active');
-  }
-});
+// Selector de categoría (onclick directo en cada botón)
+window.seleccionarCategoriaForo = function(btn) {
+  document.querySelectorAll('.foro-cat').forEach(b => b.classList.remove('foro-cat--active'));
+  btn.classList.add('foro-cat--active');
+};
 
 // Preview hashtags en tiempo real
 document.addEventListener('input', (e) => {
@@ -6499,7 +6495,7 @@ const FUENTES_NOTICIAS = [
   { id: 'agronoticias',  nombre: '🌾 Agronoticias',      rss: 'https://agronoticias.com.mx/feed/' },
   { id: 'infoagro',      nombre: '🌱 InfoAgro México',   rss: 'https://mexico.infoagro.com/feed/' },
   { id: '2000agro',      nombre: '📰 2000Agro',          rss: 'https://2000agro.com.mx/feed/' },
-  { id: 'agronline',     nombre: '🌽 AgrOnline',         rss: 'https://agronline.mx/feed/' },
+  { id: 'tecnoagro',     nombre: '🌽 TecnoAgro',         rss: 'https://tecnoagro.com.mx/feed/' },
   { id: 'inforural-cat-cult', nombre: '🌾 Cultivos',     rss: 'https://inforural.com.mx/category/agricultura/feed/' }
 ];
 
