@@ -6896,23 +6896,23 @@ window.mostrarPaywallModal = function(origen, titulo, desc) {
   const t = document.getElementById('paywallModalTitle');
   const d = document.getElementById('paywallModalDesc');
   const titulos = {
-    curso: '🎓 Cursos exclusivos VIP',
-    webinar: '🎥 Webinars premium',
-    foro: '💬 Foro privado VIP',
-    herramientas: '🛠️ Herramientas del agro',
-    apoyos: '🏛️ Apoyos del gobierno',
-    certificados: '🏆 Certificados oficiales',
-    bitacora: '📓 Bitácora de parcela',
+    curso: '▶️ Reproducir contenido VIP',
+    webinar: '🎥 Unirte al webinar',
+    foro: '💬 Participar en el foro',
+    herramientas: '🛠️ Usar esta herramienta',
+    apoyos: '🏛️ Acceder a los apoyos',
+    certificados: '🏆 Generar certificado',
+    bitacora: '📓 Registrar en bitácora',
     banner: '✨ Desbloquea todo AgroClub'
   };
   const descs = {
-    curso: 'Los cursos completos con clases, temarios y certificados están disponibles solo para miembros VIP.',
-    webinar: 'Webinars en vivo con expertos y acceso a grabaciones pasadas solo para suscriptores.',
-    foro: 'Comparte con otros productores, resuelve dudas y accede al conocimiento del club.',
-    herramientas: 'Calculadoras, bitácora, conversor de unidades del agro — herramientas reales que usan los productores exitosos.',
-    apoyos: 'Accede al catálogo curado de programas federales y estatales vigentes para productores.',
-    certificados: 'Genera tu certificado oficial al completar cursos. Solo para miembros VIP.',
-    bitacora: 'Registra todas las actividades de tu parcela y lleva un control profesional de tu producción.',
+    curso: 'Para reproducir las clases y descargar materiales necesitas ser miembro VIP. Puedes ver el temario completo gratis.',
+    webinar: 'Únete al club y participa en webinars en vivo + accede a las grabaciones.',
+    foro: 'Para publicar, comentar y dar like en el foro necesitas ser miembro VIP.',
+    herramientas: 'Las calculadoras y bitácora son exclusivas para suscriptores VIP. Suscríbete y empieza a usarlas.',
+    apoyos: 'Los enlaces oficiales y detalles completos de los apoyos son solo para miembros VIP.',
+    certificados: 'Para generar tu certificado oficial completa los cursos como miembro VIP.',
+    bitacora: 'Para crear parcelas y registrar eventos necesitas ser miembro VIP.',
     banner: 'Únete al club y accede a todo el contenido VIP de AgroClub MX.'
   };
   if (t && titulo) t.textContent = titulo;
@@ -6935,18 +6935,41 @@ window.cerrarPaywallBg = function(e) {
 // 1) showPage — dejar navegar libremente (solo candados visuales)
 //    (Se quita el bloqueo de navegación para que puedan explorar el portal)
 
-// 2) Abrir curso (verDetalleCurso) — bloquear si free
+// 2) Abrir curso (verDetalleCurso) — SE PERMITE VER, se bloquean las acciones dentro
+
+// 2a) Reproducir clase del curso — bloquear si free
 (function() {
-  const orig = window.verDetalleCurso;
-  if (typeof orig === 'function') {
-    window.verDetalleCurso = function(...args) {
-      if (!esVIPActivo()) {
-        mostrarPaywallModal('curso');
-        return;
-      }
+  const esperar = () => {
+    const orig = window.reproducirClase;
+    if (typeof orig !== 'function') { setTimeout(esperar, 300); return; }
+    window.reproducirClase = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('curso'); return; }
       return orig.apply(this, args);
     };
-  }
+  };
+  esperar();
+})();
+
+// 2b) Marcar clase como completada — bloquear si free
+(function() {
+  const esperar = () => {
+    const orig = window.marcarClase;
+    if (typeof orig !== 'function') { setTimeout(esperar, 300); return; }
+    window.marcarClase = function(...args) {
+      if (!esVIPActivo()) { mostrarPaywallModal('curso'); return; }
+      return orig.apply(this, args);
+    };
+  };
+  esperar();
+})();
+
+// 2c) Ver detalle webinar / sesión
+(function() {
+  const esperar = () => {
+    const orig = window.verDetalleSesion || window.abrirSesion;
+    if (typeof orig !== 'function') { setTimeout(esperar, 500); return; }
+  };
+  esperar();
 })();
 
 // 3) Publicar post en foro
