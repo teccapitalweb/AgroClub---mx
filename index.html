@@ -2844,6 +2844,322 @@
       .logro-medalla__title { font-size: 0.72rem; }
       .logro-medalla__desc { font-size: 0.64rem; }
     }
+
+    /* ══════════════════════════════════════════════════════════
+       🛠️ HERRAMIENTAS
+       ══════════════════════════════════════════════════════════ */
+    .herr-hero {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #1e3a2e 0%, #2d5a3d 50%, #4a7c59 100%);
+      border-radius: 20px; padding: 30px; margin-bottom: 18px;
+      color: #fff;
+    }
+    .herr-hero__glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 50%, rgba(251,191,36,.2), transparent 60%);
+      pointer-events: none;
+    }
+    .herr-hero__content {
+      position: relative; display: flex; align-items: center; gap: 18px;
+    }
+    .herr-hero__icon {
+      font-size: 3rem; flex-shrink: 0;
+      background: rgba(255,255,255,.1); width: 70px; height: 70px;
+      border-radius: 20px; display: flex; align-items: center; justify-content: center;
+    }
+    .herr-hero__kicker {
+      font-size: .72rem; font-weight: 800; letter-spacing: .18em;
+      color: #fbbf24; margin-bottom: 4px;
+    }
+    .herr-hero__title {
+      font-size: 1.45rem; font-weight: 800; margin-bottom: 4px;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .herr-hero__desc {
+      font-size: .88rem; color: rgba(255,255,255,.82); line-height: 1.4;
+    }
+
+    /* STREAK BANNER */
+    .streak-banner {
+      display: flex; align-items: center; gap: 14px;
+      background: linear-gradient(135deg, #fff7ed, #fef3c7);
+      border: 2px solid #fbbf24; border-radius: 16px;
+      padding: 14px 18px; margin-bottom: 18px;
+      animation: cardIn .5s ease both;
+    }
+    .streak-banner__flame { font-size: 2.4rem; animation: flame 2s ease-in-out infinite; }
+    @keyframes flame {
+      0%,100% { transform: scale(1) rotate(-3deg); }
+      50% { transform: scale(1.15) rotate(3deg); }
+    }
+    .streak-banner__info { display: flex; flex-direction: column; align-items: center; padding: 0 10px; border-right: 1px solid rgba(0,0,0,.1); }
+    .streak-banner__num { font-size: 1.8rem; font-weight: 900; color: #b45309; line-height: 1; font-family: 'Playfair Display', Georgia, serif; }
+    .streak-banner__lbl { font-size: .7rem; color: #92400e; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .streak-banner__msg { font-size: .95rem; color: #78350f; font-weight: 600; flex: 1; }
+
+    /* TABS */
+    .herr-tabs {
+      display: flex; gap: 6px; margin-bottom: 16px;
+      overflow-x: auto; scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .herr-tabs::-webkit-scrollbar { display: none; }
+    .herr-tab {
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 100px; padding: 8px 16px;
+      font-family: inherit; font-weight: 700; font-size: .85rem;
+      color: var(--text); cursor: pointer; white-space: nowrap;
+      transition: all .15s;
+    }
+    .herr-tab:hover { border-color: #1a6b2f; }
+    .herr-tab--active {
+      background: linear-gradient(135deg, #1a6b2f, #2d8f42);
+      color: #fff; border-color: transparent;
+      box-shadow: 0 4px 12px rgba(26,107,47,.3);
+    }
+
+    /* CARDS */
+    .herr-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 22px; margin-bottom: 14px;
+      animation: cardIn .5s ease both;
+    }
+    .herr-card__head h4 { font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .herr-card__head p { font-size: .85rem; color: var(--muted); margin-bottom: 18px; line-height: 1.4; }
+    .herr-card__head--flex { display: flex; align-items: flex-start; gap: 12px; justify-content: space-between; flex-wrap: wrap; }
+    .herr-card__head--flex div { flex: 1; min-width: 200px; }
+
+    /* FORMS */
+    .herr-form { display: flex; flex-direction: column; gap: 14px; }
+    .herr-field label {
+      display: block; font-weight: 700; font-size: .82rem;
+      margin-bottom: 6px; color: var(--text);
+    }
+    .herr-field select,
+    .herr-field input[type="number"],
+    .herr-field input[type="text"] {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 11px 14px; font-family: inherit; font-size: .92rem;
+      background: var(--bg); color: var(--text); outline: none;
+    }
+    .herr-field select:focus,
+    .herr-field input:focus { border-color: #1a6b2f; }
+    .herr-dosis-row { display: flex; gap: 8px; }
+    .herr-dosis-row input { flex: 2; }
+    .herr-dosis-row select { flex: 3; }
+    .herr-hint { margin-top: 6px; font-size: .76rem; color: var(--muted); font-style: italic; }
+
+    .herr-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .herr-chip {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 100px; padding: 8px 14px;
+      font-family: inherit; font-weight: 700; font-size: .82rem;
+      color: var(--text); cursor: pointer; transition: all .15s;
+    }
+    .herr-chip:hover { border-color: #1a6b2f; }
+    .herr-chip--active {
+      background: #1a6b2f; color: #fff; border-color: #1a6b2f;
+    }
+
+    .herr-btn-pri {
+      background: linear-gradient(135deg, #1a6b2f, #2d8f42);
+      color: #fff; border: none; border-radius: 12px;
+      padding: 13px 20px; font-family: inherit;
+      font-weight: 800; font-size: .95rem; cursor: pointer;
+      box-shadow: 0 6px 16px rgba(26,107,47,.25);
+      transition: all .15s;
+    }
+    .herr-btn-pri:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(26,107,47,.35); }
+    .herr-btn-pri--sm { padding: 9px 16px; font-size: .85rem; border-radius: 10px; }
+
+    /* RESULTADO AGROQUÍMICOS */
+    .herr-resultado {
+      margin-top: 18px; padding: 20px;
+      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+      border: 2px solid #10b981; border-radius: 16px;
+      animation: cardIn .4s ease both;
+    }
+    .herr-resultado__big {
+      text-align: center; padding: 16px; background: #fff;
+      border-radius: 12px; margin-bottom: 12px;
+      border: 1px dashed #10b981;
+    }
+    .herr-resultado__big-num {
+      font-size: 2.8rem; font-weight: 900; color: #047857;
+      font-family: 'Playfair Display', Georgia, serif; line-height: 1;
+    }
+    .herr-resultado__big-lbl {
+      font-size: .82rem; color: #047857; font-weight: 700;
+      margin-top: 4px; letter-spacing: .05em;
+    }
+    .herr-resultado__row {
+      display: flex; justify-content: space-between; padding: 8px 0;
+      font-size: .88rem; border-bottom: 1px dashed rgba(16,185,129,.3);
+    }
+    .herr-resultado__row:last-child { border: none; }
+    .herr-resultado__row b { color: #047857; }
+    .herr-resultado__warn {
+      margin-top: 12px; padding: 12px;
+      background: #fef3c7; border-radius: 10px;
+      font-size: .82rem; color: #92400e; line-height: 1.4;
+    }
+
+    /* CONVERSOR */
+    .conv-tipo-tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+    .conv-tipo-tab {
+      flex: 1; background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px; font-family: inherit;
+      font-weight: 700; font-size: .85rem; cursor: pointer;
+      color: var(--text); transition: all .15s;
+    }
+    .conv-tipo-tab--active { background: #1a6b2f; color: #fff; border-color: #1a6b2f; }
+    .conv-wrap { display: flex; flex-direction: column; gap: 14px; }
+    .conv-field { display: flex; gap: 8px; }
+    .conv-field input {
+      flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 14px; font-family: inherit; font-size: 1.2rem;
+      font-weight: 700; background: var(--bg); color: var(--text);
+      outline: none;
+    }
+    .conv-field input:focus { border-color: #1a6b2f; }
+    .conv-field select {
+      flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 14px; font-family: inherit; font-size: .95rem;
+      background: var(--bg); color: var(--text); outline: none;
+    }
+    .conv-arrow { text-align: center; font-size: 1.4rem; color: #1a6b2f; opacity: .5; }
+    .conv-resultados {
+      background: var(--bg); border-radius: 12px; padding: 14px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .conv-res-row {
+      display: flex; justify-content: space-between; padding: 8px 4px;
+      border-bottom: 1px dashed var(--border); font-size: .92rem;
+    }
+    .conv-res-row:last-child { border: none; }
+    .conv-res-row .conv-res-val { font-weight: 800; color: #1a6b2f; font-family: 'Space Grotesk', monospace; }
+    .conv-res-row .conv-res-lbl { color: var(--muted); }
+
+    /* APOYOS */
+    .apoyos-filtros { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .apoyos-filtros select {
+      flex: 1; min-width: 140px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 10px 12px; font-family: inherit; font-size: .88rem;
+      background: var(--bg); color: var(--text); outline: none;
+    }
+    .apoyo-item {
+      background: var(--bg); border: 1px solid var(--border);
+      border-left: 4px solid #1a6b2f;
+      border-radius: 12px; padding: 16px; margin-bottom: 10px;
+      transition: all .15s;
+    }
+    .apoyo-item:hover {
+      border-left-color: #fbbf24;
+      transform: translateX(2px);
+    }
+    .apoyo-item__head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 10px; margin-bottom: 8px;
+    }
+    .apoyo-item__titulo { font-weight: 800; font-size: .98rem; color: var(--text); flex: 1; }
+    .apoyo-item__badge {
+      background: #fef3c7; color: #92400e;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: .66rem; font-weight: 800; white-space: nowrap; letter-spacing: .05em;
+    }
+    .apoyo-item__badge--federal { background: #dbeafe; color: #1e40af; }
+    .apoyo-item__monto {
+      background: linear-gradient(135deg, #10b981, #047857);
+      color: #fff; display: inline-block;
+      padding: 4px 12px; border-radius: 100px;
+      font-size: .78rem; font-weight: 800; margin-bottom: 8px;
+    }
+    .apoyo-item__desc { font-size: .86rem; color: var(--text); line-height: 1.5; margin-bottom: 10px; }
+    .apoyo-item__meta { display: flex; gap: 14px; font-size: .76rem; color: var(--muted); flex-wrap: wrap; }
+    .apoyo-item__meta b { color: var(--text); }
+    .apoyo-item__link {
+      display: inline-block; margin-top: 10px;
+      color: #1a6b2f; font-weight: 700; font-size: .82rem;
+      text-decoration: none;
+    }
+    .apoyo-item__link:hover { text-decoration: underline; }
+
+    /* PARCELAS */
+    .parcela-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px; margin-bottom: 12px;
+    }
+    .parcela-head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 10px; margin-bottom: 10px;
+    }
+    .parcela-head__info h5 {
+      font-size: 1.05rem; font-weight: 800; color: var(--text); margin-bottom: 2px;
+    }
+    .parcela-head__meta { font-size: .8rem; color: var(--muted); }
+    .parcela-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+      margin-bottom: 12px;
+    }
+    .parcela-stat {
+      background: var(--card); border-radius: 10px; padding: 10px; text-align: center;
+    }
+    .parcela-stat__num { font-size: 1.1rem; font-weight: 900; color: #1a6b2f; font-family: 'Playfair Display', Georgia, serif; }
+    .parcela-stat__lbl { font-size: .68rem; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+    .parcela-eventos {
+      display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;
+    }
+    .evento-row {
+      display: flex; align-items: flex-start; gap: 10px; padding: 10px;
+      background: var(--card); border-radius: 10px;
+    }
+    .evento-row__icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+      background: rgba(26,107,47,.1);
+    }
+    .evento-row__body { flex: 1; min-width: 0; }
+    .evento-row__desc { font-size: .86rem; color: var(--text); }
+    .evento-row__meta { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+    .evento-row__monto { font-weight: 800; color: #047857; font-size: .85rem; }
+    .parcela-acciones {
+      display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .parcela-btn {
+      flex: 1; background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 9px; font-family: inherit;
+      font-weight: 700; font-size: .82rem; color: var(--text); cursor: pointer;
+    }
+    .parcela-btn:hover { background: #1a6b2f; color: #fff; border-color: #1a6b2f; }
+    .parcela-btn--del:hover { background: #dc2626; border-color: #dc2626; }
+
+    .evento-tipos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .evento-tipo {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 8px;
+      font-family: inherit; font-weight: 700; font-size: .82rem;
+      color: var(--text); cursor: pointer; transition: all .15s;
+    }
+    .evento-tipo:hover { border-color: #1a6b2f; }
+    .evento-tipo--active { background: #1a6b2f; color: #fff; border-color: #1a6b2f; }
+
+    .herr-empty {
+      text-align: center; padding: 40px 20px;
+      color: var(--muted); font-size: .92rem;
+    }
+    .herr-empty__icon { font-size: 3rem; margin-bottom: 10px; opacity: .4; }
+
+    @media (max-width: 640px) {
+      .herr-hero { padding: 22px; }
+      .herr-hero__title { font-size: 1.2rem; }
+      .herr-hero__icon { width: 54px; height: 54px; font-size: 2rem; }
+      .conv-tipo-tabs { flex-wrap: wrap; }
+      .conv-tipo-tab { flex: 1 1 30%; }
+      .evento-tipos { grid-template-columns: repeat(2, 1fr); }
+    }
+
   </style>
     <!-- Canvas-confetti para celebración al 100% -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -2982,6 +3298,7 @@
       <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div><span class="sidebar-badge" style="background:#10b981;color:#fff;">Nuevo</span></div>
       <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
       <div class="sidebar-item" onclick="showPage('logros',this)"><div class="sidebar-item-left"><span>🏆</span> Logros</div></div>
+      <div class="sidebar-item" onclick="showPage('herramientas',this)"><div class="sidebar-item-left"><span>🛠️</span> Herramientas</div><span class="sidebar-badge" style="background:#f59e0b;color:#fff;">Nuevo</span></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mi cuenta</div>
@@ -3415,6 +3732,266 @@
           <span class="logros-counter" id="logros-counter">0 / 0 desbloqueados</span>
         </div>
         <div class="logros-grid" id="logros-grid"></div>
+      </div>
+    </div>
+
+    
+    <!-- ===================== 🛠️ HERRAMIENTAS ===================== -->
+    <div class="page" id="page-herramientas">
+
+      <!-- HERO -->
+      <div class="herr-hero">
+        <div class="herr-hero__glow"></div>
+        <div class="herr-hero__content">
+          <div class="herr-hero__icon">🛠️</div>
+          <div class="herr-hero__text">
+            <div class="herr-hero__kicker">HERRAMIENTAS VIP</div>
+            <h3 class="herr-hero__title">Tu caja de herramientas del agro</h3>
+            <p class="herr-hero__desc">5 herramientas exclusivas que ninguna otra plataforma de México tiene. <strong>Calculadoras, bitácora, apoyos del gobierno y más.</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STREAK BANNER -->
+      <div class="streak-banner" id="streak-banner">
+        <div class="streak-banner__flame">🔥</div>
+        <div class="streak-banner__info">
+          <div class="streak-banner__num" id="streak-num">0</div>
+          <div class="streak-banner__lbl">días seguidos</div>
+        </div>
+        <div class="streak-banner__msg" id="streak-msg">¡Empieza tu racha hoy!</div>
+      </div>
+
+      <!-- TABS -->
+      <div class="herr-tabs">
+        <button class="herr-tab herr-tab--active" data-tab="agroquimicos" onclick="cambiarHerrTab('agroquimicos',this)">🧪 Agroquímicos</button>
+        <button class="herr-tab" data-tab="bitacora" onclick="cambiarHerrTab('bitacora',this)">📓 Bitácora</button>
+        <button class="herr-tab" data-tab="conversor" onclick="cambiarHerrTab('conversor',this)">📏 Conversor</button>
+        <button class="herr-tab" data-tab="apoyos" onclick="cambiarHerrTab('apoyos',this)">🏛️ Apoyos</button>
+      </div>
+
+      <!-- ═══════ 1. AGROQUÍMICOS ═══════ -->
+      <div class="herr-section" id="herr-agroquimicos">
+        <div class="herr-card">
+          <div class="herr-card__head">
+            <h4>🧪 Calculadora de dosis de agroquímicos</h4>
+            <p>Calcula exactamente cuánto producto echar en tu mochila. Evita errores costosos.</p>
+          </div>
+          <div class="herr-form">
+            <div class="herr-field">
+              <label>Producto</label>
+              <select id="agro-producto">
+                <option value="">— Selecciona —</option>
+                <optgroup label="🐛 Insecticidas">
+                  <option value="cipermetrina-25">Cipermetrina 25% EC (líquido)</option>
+                  <option value="malation-50">Malatión 50% EC (líquido)</option>
+                  <option value="imidacloprid-30">Imidacloprid 30.5% SC (líquido)</option>
+                  <option value="abamectina-18">Abamectina 1.8% EC (líquido)</option>
+                  <option value="clorpirifos-48">Clorpirifós 48% EC (líquido)</option>
+                  <option value="lambdacialotrina-5">Lambda Cialotrina 5% EC (líquido)</option>
+                </optgroup>
+                <optgroup label="🌿 Herbicidas">
+                  <option value="glifosato-41">Glifosato 41% SL (líquido)</option>
+                  <option value="paraquat-20">Paraquat 20% SL (líquido)</option>
+                  <option value="24d-amina">2,4-D Amina 48% SL (líquido)</option>
+                  <option value="atrazina-50">Atrazina 50% WP (polvo)</option>
+                </optgroup>
+                <optgroup label="🍄 Fungicidas">
+                  <option value="mancozeb-80">Mancozeb 80% WP (polvo)</option>
+                  <option value="clorotalonil-50">Clorotalonil 50% SC (líquido)</option>
+                  <option value="azufre-80">Azufre 80% WP (polvo)</option>
+                  <option value="cobre-50">Oxicloruro de cobre 50% WP (polvo)</option>
+                  <option value="captan-50">Captán 50% WP (polvo)</option>
+                </optgroup>
+                <optgroup label="🌱 Fertilizantes foliares">
+                  <option value="foliar-np">Foliar NPK 10-30-20 (polvo)</option>
+                  <option value="nitrato-calcio">Nitrato de calcio (polvo)</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="herr-field">
+              <label>Dosis recomendada</label>
+              <div class="herr-dosis-row">
+                <input type="number" id="agro-dosis" placeholder="2" step="0.1" min="0">
+                <select id="agro-dosis-unidad">
+                  <option value="ml-l">ml por litro</option>
+                  <option value="g-l">gr por litro</option>
+                  <option value="ml-ha">ml por hectárea</option>
+                  <option value="l-ha">L por hectárea</option>
+                  <option value="kg-ha">kg por hectárea</option>
+                </select>
+              </div>
+              <div class="herr-hint" id="agro-dosis-hint"></div>
+            </div>
+
+            <div class="herr-field">
+              <label>Tamaño de mochila</label>
+              <div class="herr-chips" id="agro-mochila-chips">
+                <button type="button" class="herr-chip" data-v="4">4 L</button>
+                <button type="button" class="herr-chip herr-chip--active" data-v="16">16 L</button>
+                <button type="button" class="herr-chip" data-v="20">20 L</button>
+                <button type="button" class="herr-chip" data-v="200">Tambor 200L</button>
+              </div>
+            </div>
+
+            <div class="herr-field">
+              <label>Superficie a tratar</label>
+              <div class="herr-dosis-row">
+                <input type="number" id="agro-ha" placeholder="1" step="0.1" min="0" value="1">
+                <select id="agro-ha-unidad">
+                  <option value="ha">hectáreas</option>
+                  <option value="m2">m²</option>
+                  <option value="tareas">tareas</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="herr-btn-pri" onclick="calcularAgro()">🧮 Calcular dosis</button>
+          </div>
+
+          <div class="herr-resultado" id="agro-resultado" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- ═══════ 2. BITÁCORA ═══════ -->
+      <div class="herr-section" id="herr-bitacora" style="display:none;">
+        <div class="herr-card">
+          <div class="herr-card__head herr-card__head--flex">
+            <div>
+              <h4>📓 Bitácora de parcela</h4>
+              <p>Registra todo lo que haces en tu campo. Tu historial privado.</p>
+            </div>
+            <button class="herr-btn-pri herr-btn-pri--sm" onclick="abrirModalParcela()">+ Nueva parcela</button>
+          </div>
+          <div id="parcelas-lista"></div>
+        </div>
+      </div>
+
+      <!-- ═══════ 3. CONVERSOR ═══════ -->
+      <div class="herr-section" id="herr-conversor" style="display:none;">
+        <div class="herr-card">
+          <div class="herr-card__head">
+            <h4>📏 Conversor de unidades del agro</h4>
+            <p>Hectáreas, fanegas, quintales, cargas, arrobas... todas las unidades que usan los agricultores mexicanos.</p>
+          </div>
+          <div class="conv-tipo-tabs">
+            <button class="conv-tipo-tab conv-tipo-tab--active" data-tipo="superficie" onclick="cambiarConvTipo('superficie',this)">📐 Superficie</button>
+            <button class="conv-tipo-tab" data-tipo="peso" onclick="cambiarConvTipo('peso',this)">⚖️ Peso</button>
+            <button class="conv-tipo-tab" data-tipo="volumen" onclick="cambiarConvTipo('volumen',this)">💧 Volumen</button>
+          </div>
+          <div class="conv-wrap">
+            <div class="conv-field">
+              <input type="number" id="conv-input" value="1" step="0.01" oninput="convertir()">
+              <select id="conv-desde" onchange="convertir()"></select>
+            </div>
+            <div class="conv-arrow">⇅</div>
+            <div class="conv-resultados" id="conv-resultados"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ 4. APOYOS DEL GOBIERNO ═══════ -->
+      <div class="herr-section" id="herr-apoyos" style="display:none;">
+        <div class="herr-card">
+          <div class="herr-card__head">
+            <h4>🏛️ Apoyos del gobierno 2026</h4>
+            <p>Programas federales y estatales vigentes para productores del campo. Actualizado cada mes.</p>
+          </div>
+          <div class="apoyos-filtros">
+            <select id="apoyo-filtro-estado">
+              <option value="">Todos los estados</option>
+              <option value="federal">Solo federales</option>
+              <option value="Puebla">Puebla</option>
+              <option value="Oaxaca">Oaxaca</option>
+              <option value="Veracruz">Veracruz</option>
+              <option value="Michoacán">Michoacán</option>
+              <option value="Jalisco">Jalisco</option>
+              <option value="Sinaloa">Sinaloa</option>
+              <option value="Sonora">Sonora</option>
+              <option value="Chiapas">Chiapas</option>
+              <option value="Guanajuato">Guanajuato</option>
+            </select>
+            <select id="apoyo-filtro-tipo">
+              <option value="">Todos los tipos</option>
+              <option value="subsidio">💵 Subsidios directos</option>
+              <option value="credito">💳 Créditos</option>
+              <option value="insumos">🌱 Insumos gratis</option>
+              <option value="seguro">🛡️ Seguros</option>
+              <option value="equipo">🚜 Equipo/maquinaria</option>
+            </select>
+          </div>
+          <div class="apoyos-lista" id="apoyos-lista"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal nueva parcela -->
+    <div class="foro-modal" id="modal-parcela" onclick="cerrarModalParcelaBg(event)">
+      <div class="foro-modal__box" onclick="event.stopPropagation()">
+        <div class="foro-modal__head">
+          <h3>📓 <span id="modal-parcela-titulo">Nueva parcela</span></h3>
+          <button class="foro-modal__close" onclick="cerrarModalParcela()">✕</button>
+        </div>
+        <div class="foro-modal__body">
+          <div class="foro-modal__row">
+            <label>Nombre de la parcela</label>
+            <input type="text" id="parcela-nombre" placeholder="Ej: Parcela norte" maxlength="60">
+          </div>
+          <div class="foro-modal__row">
+            <label>Cultivo principal</label>
+            <input type="text" id="parcela-cultivo" placeholder="Ej: Jitomate saladette" maxlength="60">
+          </div>
+          <div class="foro-modal__row">
+            <label>Tamaño (hectáreas)</label>
+            <input type="number" id="parcela-ha" placeholder="1.5" step="0.1" min="0">
+          </div>
+          <div class="foro-modal__row">
+            <label>Ubicación (opcional)</label>
+            <input type="text" id="parcela-ubic" placeholder="Ej: Tehuacán, Puebla" maxlength="80">
+          </div>
+        </div>
+        <div class="foro-modal__footer">
+          <button class="foro-btn-sec" onclick="cerrarModalParcela()">Cancelar</button>
+          <button class="foro-btn-pri" onclick="guardarParcela()">✨ Guardar parcela</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal nuevo evento bitácora -->
+    <div class="foro-modal" id="modal-evento" onclick="cerrarModalEventoBg(event)">
+      <div class="foro-modal__box" onclick="event.stopPropagation()">
+        <div class="foro-modal__head">
+          <h3>📝 Nuevo evento</h3>
+          <button class="foro-modal__close" onclick="cerrarModalEvento()">✕</button>
+        </div>
+        <div class="foro-modal__body">
+          <div class="foro-modal__row">
+            <label>Tipo de evento</label>
+            <div class="evento-tipos">
+              <button type="button" class="evento-tipo evento-tipo--active" data-t="siembra" onclick="seleccionarTipoEvento(this)">🌱 Siembra</button>
+              <button type="button" class="evento-tipo" data-t="riego" onclick="seleccionarTipoEvento(this)">💧 Riego</button>
+              <button type="button" class="evento-tipo" data-t="fertilizacion" onclick="seleccionarTipoEvento(this)">🧪 Fertilización</button>
+              <button type="button" class="evento-tipo" data-t="fumigacion" onclick="seleccionarTipoEvento(this)">🐛 Fumigación</button>
+              <button type="button" class="evento-tipo" data-t="cosecha" onclick="seleccionarTipoEvento(this)">🌾 Cosecha</button>
+              <button type="button" class="evento-tipo" data-t="nota" onclick="seleccionarTipoEvento(this)">📝 Nota</button>
+              <button type="button" class="evento-tipo" data-t="gasto" onclick="seleccionarTipoEvento(this)">💰 Gasto</button>
+              <button type="button" class="evento-tipo" data-t="venta" onclick="seleccionarTipoEvento(this)">💵 Venta</button>
+            </div>
+          </div>
+          <div class="foro-modal__row">
+            <label>Descripción</label>
+            <textarea id="evento-desc" rows="3" placeholder="Ej: Apliqué 500ml de cipermetrina para gusano cogollero"></textarea>
+          </div>
+          <div class="foro-modal__row">
+            <label>Monto en pesos (opcional)</label>
+            <input type="number" id="evento-monto" placeholder="0" step="1" min="0">
+          </div>
+        </div>
+        <div class="foro-modal__footer">
+          <button class="foro-btn-sec" onclick="cerrarModalEvento()">Cancelar</button>
+          <button class="foro-btn-pri" onclick="guardarEvento()">✨ Guardar evento</button>
+        </div>
       </div>
     </div>
 
@@ -5883,6 +6460,688 @@ window.eliminarMiPost = async function(postId) {
 };
 
 window.renderForo = renderForo;
+
+// ==========================================================
+// ===== 🛠️ HERRAMIENTAS VIP
+// ==========================================================
+
+// ══════ DATOS ══════
+const AGROQUIMICOS_DB = {
+  'cipermetrina-25':      { nombre:'Cipermetrina 25% EC',  tipo:'liquido', dosis_tipica:'0.5-1 ml/L',      aplicacion:'foliar',   usos:'Gusano cogollero, pulgón, trips, mosquita blanca', reingreso:'4 h' },
+  'malation-50':          { nombre:'Malatión 50% EC',       tipo:'liquido', dosis_tipica:'2-3 ml/L',        aplicacion:'foliar',   usos:'Mosca de la fruta, pulgón, trips',                 reingreso:'12 h' },
+  'imidacloprid-30':      { nombre:'Imidacloprid 30.5% SC', tipo:'liquido', dosis_tipica:'0.3-0.5 ml/L',    aplicacion:'foliar/drench', usos:'Pulgón, mosquita blanca, trips, chicharrita', reingreso:'12 h' },
+  'abamectina-18':        { nombre:'Abamectina 1.8% EC',    tipo:'liquido', dosis_tipica:'0.5-1 ml/L',      aplicacion:'foliar',   usos:'Araña roja, minador, trips',                       reingreso:'12 h' },
+  'clorpirifos-48':       { nombre:'Clorpirifós 48% EC',    tipo:'liquido', dosis_tipica:'2-3 ml/L',        aplicacion:'foliar/suelo', usos:'Gusano, gallina ciega, picudo',                reingreso:'24 h' },
+  'lambdacialotrina-5':   { nombre:'Lambda Cialotrina 5% EC', tipo:'liquido', dosis_tipica:'0.5-1 ml/L',    aplicacion:'foliar',   usos:'Gusano, trips, pulgón, chapulín',                  reingreso:'24 h' },
+  'glifosato-41':         { nombre:'Glifosato 41% SL',      tipo:'liquido', dosis_tipica:'3-5 L/ha',        aplicacion:'herbicida', usos:'Malezas de hoja ancha y gramíneas',              reingreso:'12 h' },
+  'paraquat-20':          { nombre:'Paraquat 20% SL',       tipo:'liquido', dosis_tipica:'2-3 L/ha',        aplicacion:'herbicida', usos:'Malezas anuales',                                reingreso:'24 h' },
+  '24d-amina':            { nombre:'2,4-D Amina 48% SL',    tipo:'liquido', dosis_tipica:'1-2 L/ha',        aplicacion:'herbicida', usos:'Maleza de hoja ancha en maíz/cereales',          reingreso:'12 h' },
+  'atrazina-50':          { nombre:'Atrazina 50% WP',       tipo:'polvo',   dosis_tipica:'2-4 kg/ha',       aplicacion:'preemergente', usos:'Maleza en maíz, caña',                          reingreso:'24 h' },
+  'mancozeb-80':          { nombre:'Mancozeb 80% WP',       tipo:'polvo',   dosis_tipica:'2-3 g/L',         aplicacion:'foliar',   usos:'Tizón, mildiú, alternaria',                        reingreso:'24 h' },
+  'clorotalonil-50':      { nombre:'Clorotalonil 50% SC',   tipo:'liquido', dosis_tipica:'2-3 ml/L',        aplicacion:'foliar',   usos:'Tizón, antracnosis, cercospora',                   reingreso:'12 h' },
+  'azufre-80':            { nombre:'Azufre 80% WP',         tipo:'polvo',   dosis_tipica:'2-4 g/L',         aplicacion:'foliar',   usos:'Cenicilla, ácaros',                               reingreso:'24 h' },
+  'cobre-50':             { nombre:'Oxicloruro de cobre 50%', tipo:'polvo', dosis_tipica:'3-5 g/L',         aplicacion:'foliar',   usos:'Tizón, mancha bacteriana, roya',                   reingreso:'12 h' },
+  'captan-50':            { nombre:'Captán 50% WP',         tipo:'polvo',   dosis_tipica:'2-3 g/L',         aplicacion:'foliar',   usos:'Mancha foliar, antracnosis, moho',                 reingreso:'24 h' },
+  'foliar-np':            { nombre:'Foliar NPK 10-30-20',   tipo:'polvo',   dosis_tipica:'2-4 g/L',         aplicacion:'foliar',   usos:'Nutrición foliar en floración y fructificación',   reingreso:'1 h' },
+  'nitrato-calcio':       { nombre:'Nitrato de calcio',     tipo:'polvo',   dosis_tipica:'3-5 g/L',         aplicacion:'foliar',   usos:'Prevención de pudrición apical y deficiencias',    reingreso:'1 h' }
+};
+
+// APOYOS DEL GOBIERNO 2026 (curados)
+const APOYOS_DB = [
+  { id:'pb-2026', titulo:'Producción para el Bienestar', nivel:'federal', tipo:'subsidio',
+    monto:'Hasta $24,000 pesos/ha', estado:null,
+    desc:'Apoyo directo a pequeños y medianos productores de maíz, frijol, arroz, trigo y caña. Se paga por hectárea sembrada sin trámites complicados.',
+    requisitos:'Ser productor registrado, tener hasta 20 ha (temporal) o 5 ha (riego)',
+    fecha:'Inscripciones abiertas todo el año', link:'https://www.gob.mx/bienestar' },
+
+  { id:'fert-gratis', titulo:'Fertilizantes gratuitos', nivel:'federal', tipo:'insumos',
+    monto:'Gratis (urea, DAP, KCl)', estado:null,
+    desc:'Entrega directa de fertilizantes gratuitos a productores de maíz, frijol y arroz. Priorizado en 11 estados: Guerrero, Oaxaca, Chiapas, Puebla, Tlaxcala, Zacatecas, Durango, Morelos, Nayarit, Sinaloa, Michoacán.',
+    requisitos:'Ser pequeño productor en los estados priorizados',
+    fecha:'Registro por temporada (primavera-verano y otoño-invierno)', link:'https://www.gob.mx/agricultura' },
+
+  { id:'fira-credito', titulo:'Crédito FIRA para productores', nivel:'federal', tipo:'credito',
+    monto:'Desde $50,000 hasta $2 millones', estado:null,
+    desc:'Créditos con tasas preferenciales (desde 8.5% anual) para capital de trabajo o inversión. Plazos de 1 a 10 años según destino.',
+    requisitos:'Proyecto viable, historial crediticio, garantías parciales',
+    fecha:'Todo el año', link:'https://www.fira.gob.mx' },
+
+  { id:'seg-catastrofico', titulo:'Seguro Agrícola Catastrófico', nivel:'federal', tipo:'seguro',
+    monto:'Cobertura hasta $5,000/ha por siniestro', estado:null,
+    desc:'Protege al productor ante sequía, helada, granizo, inundación o plagas que no pueden controlarse. Lo paga el gobierno estatal y federal.',
+    requisitos:'Estar en el padrón estatal, ser de temporal',
+    fecha:'Inscripción al inicio del ciclo agrícola', link:'https://www.gob.mx/agroasemex' },
+
+  { id:'sembrando-vida', titulo:'Sembrando Vida', nivel:'federal', tipo:'subsidio',
+    monto:'$6,450 pesos mensuales por productor', estado:null,
+    desc:'Apoyo mensual a campesinos que siembran árboles frutales y maderables en al menos 2.5 ha. Incluye capacitación técnica.',
+    requisitos:'Tener al menos 2.5 ha disponibles, ser mayor de edad',
+    fecha:'Inscripciones anuales (revisar convocatoria)', link:'https://www.gob.mx/bienestar/sembrandovida' },
+
+  { id:'fr-pequeno', titulo:'Crédito Financiera Rural (pequeños productores)', nivel:'federal', tipo:'credito',
+    monto:'Desde $10,000 hasta $500,000', estado:null,
+    desc:'Financiera Nacional de Desarrollo. Créditos simples para pequeños productores sin historial crediticio formal. Tasa desde 9% anual.',
+    requisitos:'INE, comprobante de domicilio, actividad agrícola comprobable',
+    fecha:'Todo el año', link:'https://www.gob.mx/fnd' },
+
+  { id:'apoyo-cafe', titulo:'Apoyo a productores de café', nivel:'federal', tipo:'subsidio',
+    monto:'Hasta $5,500 pesos por productor', estado:null,
+    desc:'Apoyo directo a cafeticultores registrados en SADER. Bonificación extra por café orgánico o de altura.',
+    requisitos:'Estar en el padrón cafetalero nacional',
+    fecha:'Inscripción anual', link:'https://www.gob.mx/agricultura' },
+
+  { id:'progan', titulo:'PROGAN Productivo', nivel:'federal', tipo:'subsidio',
+    monto:'$400-$800 pesos por cabeza', estado:null,
+    desc:'Apoyo directo a ganaderos registrados en SINIIGA. Se paga por vaca, becerra o vientre. Incluye apoyo por apicultura.',
+    requisitos:'Estar registrado en SINIIGA, tener UPP vigente',
+    fecha:'Padrón anual', link:'https://www.gob.mx/agricultura' },
+
+  // ESTATALES
+  { id:'pue-maiz', titulo:'Apoyo al maíz nativo poblano', nivel:'estatal', tipo:'subsidio',
+    monto:'$3,000 pesos/ha', estado:'Puebla',
+    desc:'Apoyo del gobierno de Puebla a productores de maíz nativo en municipios de la Sierra Norte, Mixteca y Sierra Negra.',
+    requisitos:'Ser de Puebla, sembrar maíz nativo, hasta 5 ha',
+    fecha:'Marzo-mayo', link:'https://sdr.puebla.gob.mx' },
+
+  { id:'pue-invernadero', titulo:'Invernaderos subsidiados Puebla', nivel:'estatal', tipo:'equipo',
+    monto:'Hasta 50% del costo', estado:'Puebla',
+    desc:'Subsidio del gobierno de Puebla para construcción o rehabilitación de invernaderos menores a 2,000 m².',
+    requisitos:'Proyecto técnico, tener terreno propio',
+    fecha:'Enero-marzo', link:'https://sdr.puebla.gob.mx' },
+
+  { id:'oax-cafe', titulo:'Programa cafetalero Oaxaca', nivel:'estatal', tipo:'insumos',
+    monto:'Plantas y fertilizante gratis', estado:'Oaxaca',
+    desc:'Entrega de plantas de café resistentes a roya y fertilizante orgánico a productores cafetaleros de Oaxaca.',
+    requisitos:'Ser cafeticultor de Oaxaca registrado',
+    fecha:'Abril-junio', link:'https://sedapa.oaxaca.gob.mx' },
+
+  { id:'mich-aguacate', titulo:'Asistencia técnica aguacate Michoacán', nivel:'estatal', tipo:'insumos',
+    monto:'Técnicos gratuitos + insumos', estado:'Michoacán',
+    desc:'Asesoría gratuita para productores de aguacate en certificaciones de exportación (USDA, GlobalGAP).',
+    requisitos:'Ser productor de aguacate en Michoacán',
+    fecha:'Todo el año', link:'https://www.michoacan.gob.mx' },
+
+  { id:'sin-agua', titulo:'Tecnificación de riego Sinaloa', nivel:'estatal', tipo:'equipo',
+    monto:'Hasta 60% del sistema de goteo', estado:'Sinaloa',
+    desc:'Subsidio para instalar riego por goteo en cultivos de jitomate, chile, hortalizas en Sinaloa.',
+    requisitos:'Tener pozo autorizado o concesión de agua',
+    fecha:'Febrero-abril', link:'https://saderasin.gob.mx' },
+
+  { id:'ver-ganaderia', titulo:'Repoblamiento ganadero Veracruz', nivel:'estatal', tipo:'subsidio',
+    monto:'$5,000-$15,000 pesos por productor', estado:'Veracruz',
+    desc:'Apoyo para compra de vientres o sementales bovinos mejorados.',
+    requisitos:'UPP vigente, tener al menos 5 ha de pastizal',
+    fecha:'Marzo-junio', link:'https://sedarpa.veracruz.gob.mx' },
+
+  { id:'jal-berries', titulo:'Fondo berries Jalisco', nivel:'estatal', tipo:'credito',
+    monto:'Crédito hasta $300,000 a 4% anual', estado:'Jalisco',
+    desc:'Créditos preferenciales para productores de berries (fresa, arándano, zarzamora, frambuesa) en Jalisco.',
+    requisitos:'Proyecto técnico, hasta 10 ha',
+    fecha:'Convocatoria anual', link:'https://sader.jalisco.gob.mx' },
+
+  { id:'son-cobertura', titulo:'Coberturas de precios Sonora', nivel:'estatal', tipo:'seguro',
+    monto:'Hasta 50% de la cobertura', estado:'Sonora',
+    desc:'Subsidio para comprar coberturas de precios (futuros) para trigo, maíz, soya y sorgo.',
+    requisitos:'Ser productor de grano registrado en Sonora',
+    fecha:'Según ciclo', link:'https://sagarhpa.sonora.gob.mx' },
+
+  { id:'chis-cacao', titulo:'Apoyo productores de cacao Chiapas', nivel:'estatal', tipo:'insumos',
+    monto:'Plantas y capacitación gratis', estado:'Chiapas',
+    desc:'Plantas de cacao criollo, biofábrica y asesoría para productores del Soconusco y Selva.',
+    requisitos:'Ser de Chiapas, ejidatario o pequeño propietario',
+    fecha:'Abril-agosto', link:'https://secampo.chiapas.gob.mx' },
+
+  { id:'gto-fresa', titulo:'Apoyo a fresa y brócoli Guanajuato', nivel:'estatal', tipo:'subsidio',
+    monto:'Hasta $10,000 pesos/ha', estado:'Guanajuato',
+    desc:'Subsidio directo a productores de fresa, brócoli y coliflor en Guanajuato.',
+    requisitos:'Tener hasta 5 ha, estar registrado en SDAyR',
+    fecha:'Ciclo primavera-verano', link:'https://sdayr.guanajuato.gob.mx' }
+];
+
+// ═══════ TABS ═══════
+window.cambiarHerrTab = function(tab, btn) {
+  document.querySelectorAll('.herr-tab').forEach(b => b.classList.remove('herr-tab--active'));
+  btn.classList.add('herr-tab--active');
+  document.querySelectorAll('.herr-section').forEach(s => s.style.display = 'none');
+  document.getElementById('herr-' + tab).style.display = 'block';
+
+  if (tab === 'bitacora') cargarParcelas();
+  if (tab === 'apoyos') renderApoyos();
+  if (tab === 'conversor') setupConversor();
+};
+
+// ═══════ 1. CALCULADORA AGROQUÍMICOS ═══════
+
+// Al seleccionar producto, rellenar dosis típica
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'agro-producto') {
+    const prod = AGROQUIMICOS_DB[e.target.value];
+    const hint = document.getElementById('agro-dosis-hint');
+    if (prod && hint) {
+      hint.textContent = '💡 Dosis típica: ' + prod.dosis_tipica + ' · Uso: ' + prod.usos;
+      // Preseleccionar dosis numérica y unidad
+      const dos = prod.dosis_tipica.match(/[\d.]+/);
+      const doseInput = document.getElementById('agro-dosis');
+      const unitSelect = document.getElementById('agro-dosis-unidad');
+      if (dos && doseInput) doseInput.value = dos[0];
+      if (unitSelect) {
+        if (prod.dosis_tipica.includes('ml/L')) unitSelect.value = 'ml-l';
+        else if (prod.dosis_tipica.includes('g/L')) unitSelect.value = 'g-l';
+        else if (prod.dosis_tipica.includes('L/ha')) unitSelect.value = 'l-ha';
+        else if (prod.dosis_tipica.includes('kg/ha')) unitSelect.value = 'kg-ha';
+        else if (prod.dosis_tipica.includes('ml/ha')) unitSelect.value = 'ml-ha';
+      }
+    } else if (hint) {
+      hint.textContent = '';
+    }
+  }
+});
+
+// Chips de mochila
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest && e.target.closest('#agro-mochila-chips .herr-chip');
+  if (chip) {
+    chip.parentElement.querySelectorAll('.herr-chip').forEach(c => c.classList.remove('herr-chip--active'));
+    chip.classList.add('herr-chip--active');
+  }
+});
+
+window.calcularAgro = function() {
+  const prodKey = document.getElementById('agro-producto').value;
+  const prod = AGROQUIMICOS_DB[prodKey];
+  if (!prod) return foroToast('Selecciona un producto', 'err');
+
+  const dosis = parseFloat(document.getElementById('agro-dosis').value) || 0;
+  const unidad = document.getElementById('agro-dosis-unidad').value;
+  const mochilaActiva = document.querySelector('#agro-mochila-chips .herr-chip--active');
+  const mochilaL = mochilaActiva ? parseFloat(mochilaActiva.dataset.v) : 16;
+
+  const haInput = parseFloat(document.getElementById('agro-ha').value) || 1;
+  const haUnidad = document.getElementById('agro-ha-unidad').value;
+  // Convertir a hectáreas
+  let ha = haInput;
+  if (haUnidad === 'm2') ha = haInput / 10000;
+  else if (haUnidad === 'tareas') ha = haInput / 16; // 1 ha ≈ 16 tareas (varía, promedio)
+
+  if (dosis <= 0 || ha <= 0) return foroToast('Ingresa valores válidos', 'err');
+
+  // Agua estimada por hectárea (aplicación foliar típica: 200-400 L/ha)
+  const aguaPorHa = 300; // L/ha (promedio tradicional)
+  const aguaTotal = aguaPorHa * ha;
+  const mochilasTotal = Math.ceil(aguaTotal / mochilaL);
+
+  let dosisPorMochila = 0;
+  let dosisTotal = 0;
+  let unidadResult = '';
+
+  if (unidad === 'ml-l') {
+    dosisPorMochila = dosis * mochilaL;
+    dosisTotal = dosisPorMochila * mochilasTotal;
+    unidadResult = 'ml';
+  } else if (unidad === 'g-l') {
+    dosisPorMochila = dosis * mochilaL;
+    dosisTotal = dosisPorMochila * mochilasTotal;
+    unidadResult = 'gr';
+  } else if (unidad === 'ml-ha') {
+    dosisTotal = dosis * ha;
+    dosisPorMochila = dosisTotal / mochilasTotal;
+    unidadResult = 'ml';
+  } else if (unidad === 'l-ha') {
+    dosisTotal = dosis * ha * 1000; // convertir a ml
+    dosisPorMochila = dosisTotal / mochilasTotal;
+    unidadResult = 'ml';
+  } else if (unidad === 'kg-ha') {
+    dosisTotal = dosis * ha * 1000; // convertir a gr
+    dosisPorMochila = dosisTotal / mochilasTotal;
+    unidadResult = 'gr';
+  }
+
+  const box = document.getElementById('agro-resultado');
+  box.style.display = 'block';
+  box.innerHTML = `
+    <div class="herr-resultado__big">
+      <div class="herr-resultado__big-num">${dosisPorMochila.toFixed(1)} ${unidadResult}</div>
+      <div class="herr-resultado__big-lbl">por mochila de ${mochilaL} litros</div>
+    </div>
+    <div class="herr-resultado__row">
+      <span>Producto:</span><b>${escHtml(prod.nombre)}</b>
+    </div>
+    <div class="herr-resultado__row">
+      <span>Superficie:</span><b>${ha.toFixed(2)} ha (${(ha*10000).toFixed(0)} m²)</b>
+    </div>
+    <div class="herr-resultado__row">
+      <span>Mochilas necesarias:</span><b>${mochilasTotal} mochilas de ${mochilaL} L</b>
+    </div>
+    <div class="herr-resultado__row">
+      <span>Agua total:</span><b>${aguaTotal.toFixed(0)} litros</b>
+    </div>
+    <div class="herr-resultado__row">
+      <span>Dosis total del producto:</span><b>${dosisTotal >= 1000 && unidadResult === 'ml' ? (dosisTotal/1000).toFixed(2)+' L' : (dosisTotal >= 1000 && unidadResult === 'gr' ? (dosisTotal/1000).toFixed(2)+' kg' : dosisTotal.toFixed(1)+' '+unidadResult)}</b>
+    </div>
+    <div class="herr-resultado__warn">
+      ⚠️ <b>Seguridad:</b> Usa equipo de protección (guantes, mascarilla, lentes). Tiempo de reingreso al cultivo: <b>${prod.reingreso}</b>. Aplica en horas frescas (6-9 am o 5-7 pm). No aplicar si hay lluvia en las próximas 4 h.
+    </div>
+  `;
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
+// ═══════ 2. BITÁCORA DE PARCELA ═══════
+
+let PARCELA_EDITANDO = null;
+let EVENTO_PARCELA_ACTUAL = null;
+
+async function cargarParcelas() {
+  const cont = document.getElementById('parcelas-lista');
+  if (!cont) return;
+  if (!window.currentUser) {
+    cont.innerHTML = '<div class="herr-empty">Inicia sesión para usar la bitácora</div>';
+    return;
+  }
+
+  try {
+    const q = query(
+      collection(db, 'parcelas'),
+      where('uid', '==', window.currentUser.uid),
+      orderBy('fecha_creacion', 'desc')
+    );
+    const snap = await getDocs(q);
+    const parcelas = [];
+    snap.forEach(d => parcelas.push({ id: d.id, ...d.data() }));
+
+    if (parcelas.length === 0) {
+      cont.innerHTML = `
+        <div class="herr-empty">
+          <div class="herr-empty__icon">📓</div>
+          <div>Aún no has creado ninguna parcela.<br>¡Crea la primera y empieza a llevar tu bitácora!</div>
+        </div>`;
+      return;
+    }
+
+    const htmlPcs = await Promise.all(parcelas.map(async p => {
+      // Cargar últimos 3 eventos
+      const evQ = query(
+        collection(db, 'parcelas', p.id, 'eventos'),
+        orderBy('fecha', 'desc'),
+        limit(3)
+      );
+      const evSnap = await getDocs(evQ);
+      const eventos = [];
+      evSnap.forEach(d => eventos.push({ id: d.id, ...d.data() }));
+
+      // Stats básicas (calcular de TODOS los eventos)
+      const allQ = query(collection(db, 'parcelas', p.id, 'eventos'));
+      const allSnap = await getDocs(allQ);
+      let totalGastos = 0, totalVentas = 0, totalEventos = 0;
+      allSnap.forEach(d => {
+        const e = d.data();
+        totalEventos++;
+        if (e.tipo === 'gasto') totalGastos += (e.monto || 0);
+        if (e.tipo === 'venta') totalVentas += (e.monto || 0);
+      });
+      const balance = totalVentas - totalGastos;
+
+      const eventosHtml = eventos.length === 0
+        ? '<div style="color:var(--muted);font-size:.82rem;text-align:center;padding:12px;">Sin eventos todavía</div>'
+        : eventos.map(e => renderEventoRow(e)).join('');
+
+      return `
+        <div class="parcela-card">
+          <div class="parcela-head">
+            <div class="parcela-head__info">
+              <h5>📍 ${escHtml(p.nombre)}</h5>
+              <div class="parcela-head__meta">🌱 ${escHtml(p.cultivo)} · ${p.hectareas} ha ${p.ubicacion ? '· ' + escHtml(p.ubicacion) : ''}</div>
+            </div>
+          </div>
+          <div class="parcela-stats">
+            <div class="parcela-stat">
+              <div class="parcela-stat__num">${totalEventos}</div>
+              <div class="parcela-stat__lbl">Eventos</div>
+            </div>
+            <div class="parcela-stat">
+              <div class="parcela-stat__num">$${totalGastos.toLocaleString('es-MX')}</div>
+              <div class="parcela-stat__lbl">Gastos</div>
+            </div>
+            <div class="parcela-stat">
+              <div class="parcela-stat__num" style="color:${balance >= 0 ? '#047857' : '#dc2626'}">$${balance.toLocaleString('es-MX')}</div>
+              <div class="parcela-stat__lbl">Balance</div>
+            </div>
+          </div>
+          <div class="parcela-eventos">${eventosHtml}</div>
+          <div class="parcela-acciones">
+            <button class="parcela-btn" onclick="abrirModalEvento('${p.id}')">+ Evento</button>
+            <button class="parcela-btn" onclick="verTodosEventos('${p.id}','${escAttr(p.nombre)}')">📋 Historial</button>
+            <button class="parcela-btn parcela-btn--del" onclick="eliminarParcela('${p.id}','${escAttr(p.nombre)}')">🗑️</button>
+          </div>
+        </div>`;
+    }));
+
+    cont.innerHTML = htmlPcs.join('');
+
+  } catch (e) {
+    console.error('[Parcelas] Error:', e);
+    cont.innerHTML = '<div class="herr-empty">⚠️ Error cargando parcelas: ' + escHtml(e.message) + '</div>';
+  }
+}
+
+function renderEventoRow(e) {
+  const iconos = { siembra:'🌱', riego:'💧', fertilizacion:'🧪', fumigacion:'🐛', cosecha:'🌾', nota:'📝', gasto:'💰', venta:'💵' };
+  const icono = iconos[e.tipo] || '📌';
+  const fecha = foroFechaRel(e.fecha);
+  const monto = e.monto > 0 ? `<span class="evento-row__monto">$${e.monto.toLocaleString('es-MX')}</span>` : '';
+  return `
+    <div class="evento-row">
+      <div class="evento-row__icon">${icono}</div>
+      <div class="evento-row__body">
+        <div class="evento-row__desc">${escHtml(e.descripcion || e.tipo)} ${monto}</div>
+        <div class="evento-row__meta">${fecha}</div>
+      </div>
+    </div>`;
+}
+
+window.abrirModalParcela = function() {
+  if (!window.currentUser) return foroToast('Inicia sesión', 'err');
+  PARCELA_EDITANDO = null;
+  document.getElementById('modal-parcela-titulo').textContent = 'Nueva parcela';
+  document.getElementById('parcela-nombre').value = '';
+  document.getElementById('parcela-cultivo').value = '';
+  document.getElementById('parcela-ha').value = '';
+  document.getElementById('parcela-ubic').value = '';
+  document.getElementById('modal-parcela').classList.add('open');
+};
+window.cerrarModalParcela = function() { document.getElementById('modal-parcela').classList.remove('open'); };
+window.cerrarModalParcelaBg = function(e) { if (e.target.id === 'modal-parcela') cerrarModalParcela(); };
+
+window.guardarParcela = async function() {
+  const nombre = document.getElementById('parcela-nombre').value.trim();
+  const cultivo = document.getElementById('parcela-cultivo').value.trim();
+  const ha = parseFloat(document.getElementById('parcela-ha').value) || 0;
+  const ubic = document.getElementById('parcela-ubic').value.trim();
+
+  if (!nombre) return foroToast('Nombre requerido', 'err');
+  if (!cultivo) return foroToast('Cultivo requerido', 'err');
+  if (ha <= 0) return foroToast('Hectáreas inválidas', 'err');
+
+  try {
+    await addDoc(collection(db, 'parcelas'), {
+      uid: window.currentUser.uid,
+      nombre, cultivo, hectareas: ha, ubicacion: ubic,
+      fecha_creacion: serverTimestamp()
+    });
+    foroToast('✅ Parcela creada', 'ok');
+    cerrarModalParcela();
+    cargarParcelas();
+  } catch (e) {
+    console.error(e); foroToast('Error: ' + e.message, 'err');
+  }
+};
+
+window.abrirModalEvento = function(parcelaId) {
+  EVENTO_PARCELA_ACTUAL = parcelaId;
+  document.getElementById('evento-desc').value = '';
+  document.getElementById('evento-monto').value = '';
+  document.querySelectorAll('.evento-tipo').forEach(b => b.classList.remove('evento-tipo--active'));
+  document.querySelector('.evento-tipo[data-t="siembra"]').classList.add('evento-tipo--active');
+  document.getElementById('modal-evento').classList.add('open');
+};
+window.cerrarModalEvento = function() { document.getElementById('modal-evento').classList.remove('open'); };
+window.cerrarModalEventoBg = function(e) { if (e.target.id === 'modal-evento') cerrarModalEvento(); };
+window.seleccionarTipoEvento = function(btn) {
+  document.querySelectorAll('.evento-tipo').forEach(b => b.classList.remove('evento-tipo--active'));
+  btn.classList.add('evento-tipo--active');
+};
+
+window.guardarEvento = async function() {
+  if (!EVENTO_PARCELA_ACTUAL) return;
+  const tipoBtn = document.querySelector('.evento-tipo--active');
+  const tipo = tipoBtn ? tipoBtn.dataset.t : 'nota';
+  const descripcion = document.getElementById('evento-desc').value.trim();
+  const monto = parseFloat(document.getElementById('evento-monto').value) || 0;
+
+  if (!descripcion) return foroToast('Escribe una descripción', 'err');
+
+  try {
+    await addDoc(collection(db, 'parcelas', EVENTO_PARCELA_ACTUAL, 'eventos'), {
+      uid: window.currentUser.uid,
+      tipo, descripcion, monto,
+      fecha: serverTimestamp()
+    });
+    foroToast('✅ Evento guardado', 'ok');
+    cerrarModalEvento();
+    cargarParcelas();
+  } catch (e) {
+    console.error(e); foroToast('Error: ' + e.message, 'err');
+  }
+};
+
+window.eliminarParcela = async function(id, nombre) {
+  if (!confirm('¿Eliminar la parcela "' + nombre + '" y todos sus eventos?')) return;
+  try {
+    // Borrar eventos primero
+    const evSnap = await getDocs(collection(db, 'parcelas', id, 'eventos'));
+    const batch = writeBatch(db);
+    evSnap.forEach(d => batch.delete(d.ref));
+    batch.delete(doc(db, 'parcelas', id));
+    await batch.commit();
+    foroToast('🗑️ Parcela eliminada', 'ok');
+    cargarParcelas();
+  } catch (e) {
+    console.error(e); foroToast('Error: ' + e.message, 'err');
+  }
+};
+
+window.verTodosEventos = async function(parcelaId, nombre) {
+  try {
+    const q = query(collection(db, 'parcelas', parcelaId, 'eventos'), orderBy('fecha', 'desc'));
+    const snap = await getDocs(q);
+    if (snap.empty) return foroToast('Sin eventos aún', '');
+    let lista = '';
+    snap.forEach(d => {
+      const e = d.data();
+      const iconos = { siembra:'🌱', riego:'💧', fertilizacion:'🧪', fumigacion:'🐛', cosecha:'🌾', nota:'📝', gasto:'💰', venta:'💵' };
+      const fecha = e.fecha?.toDate ? e.fecha.toDate().toLocaleDateString('es-MX') : '';
+      lista += `${iconos[e.tipo] || '📌'} ${fecha} · ${e.descripcion}${e.monto > 0 ? ' · $' + e.monto.toLocaleString('es-MX') : ''}\n`;
+    });
+    alert('📓 Historial - ' + nombre + '\n\n' + lista);
+  } catch (e) { foroToast('Error', 'err'); }
+};
+
+// ═══════ 3. CONVERSOR ═══════
+
+const CONV_UNIDADES = {
+  superficie: {
+    base: 'ha', // metros cuadrados no, hectáreas como base
+    unidades: [
+      { k:'ha',      lbl:'Hectáreas (ha)',        factor: 1 },
+      { k:'m2',      lbl:'Metros cuadrados (m²)', factor: 10000 },
+      { k:'tareas',  lbl:'Tareas',                factor: 16 },       // 1 ha ≈ 16 tareas (Centroamérica/Oaxaca)
+      { k:'manzana', lbl:'Manzanas',              factor: 1.4308 },   // 1 ha ≈ 1.43 manzanas
+      { k:'fanega',  lbl:'Fanegas (agrarias)',    factor: 1.5625 },   // 1 ha ≈ 1.5625 fanegas
+      { k:'acre',    lbl:'Acres',                 factor: 2.4711 },   // 1 ha ≈ 2.47 acres
+      { k:'cuadra',  lbl:'Cuadras',               factor: 2.3148 }    // 1 ha ≈ 2.3 cuadras
+    ]
+  },
+  peso: {
+    base: 'kg',
+    unidades: [
+      { k:'kg',      lbl:'Kilogramos (kg)',   factor: 1 },
+      { k:'ton',     lbl:'Toneladas (ton)',   factor: 0.001 },
+      { k:'quintal', lbl:'Quintales',         factor: 0.01 },    // 1 quintal = 100 kg
+      { k:'arroba',  lbl:'Arrobas',           factor: 0.087 },   // 1 arroba ≈ 11.5 kg
+      { k:'carga',   lbl:'Cargas',            factor: 0.00714 }, // 1 carga ≈ 140 kg
+      { k:'lb',      lbl:'Libras (lb)',       factor: 2.2046 },
+      { k:'costal',  lbl:'Costales de 50 kg', factor: 0.02 }
+    ]
+  },
+  volumen: {
+    base: 'L',
+    unidades: [
+      { k:'L',       lbl:'Litros (L)',           factor: 1 },
+      { k:'ml',      lbl:'Mililitros (ml)',      factor: 1000 },
+      { k:'galon',   lbl:'Galones (USA)',        factor: 0.2642 },
+      { k:'cubeta',  lbl:'Cubetas (19 L)',       factor: 0.0526 },
+      { k:'tambor',  lbl:'Tambor (200 L)',       factor: 0.005 },
+      { k:'tanque',  lbl:'Tanque (1100 L)',      factor: 0.000909 },
+      { k:'m3',      lbl:'Metros cúbicos (m³)',  factor: 0.001 }
+    ]
+  }
+};
+
+let CONV_TIPO_ACTUAL = 'superficie';
+
+function setupConversor() {
+  cambiarConvTipo(CONV_TIPO_ACTUAL, document.querySelector('.conv-tipo-tab--active'));
+}
+
+window.cambiarConvTipo = function(tipo, btn) {
+  CONV_TIPO_ACTUAL = tipo;
+  document.querySelectorAll('.conv-tipo-tab').forEach(b => b.classList.remove('conv-tipo-tab--active'));
+  if (btn) btn.classList.add('conv-tipo-tab--active');
+
+  const select = document.getElementById('conv-desde');
+  if (!select) return;
+  select.innerHTML = CONV_UNIDADES[tipo].unidades
+    .map(u => `<option value="${u.k}">${u.lbl}</option>`).join('');
+  convertir();
+};
+
+window.convertir = function() {
+  const input = parseFloat(document.getElementById('conv-input').value) || 0;
+  const desde = document.getElementById('conv-desde').value;
+  const cfg = CONV_UNIDADES[CONV_TIPO_ACTUAL];
+  const uDesde = cfg.unidades.find(u => u.k === desde);
+  if (!uDesde) return;
+
+  // input (desde) → base → otras
+  const enBase = input / uDesde.factor;
+
+  const res = document.getElementById('conv-resultados');
+  res.innerHTML = cfg.unidades
+    .filter(u => u.k !== desde)
+    .map(u => {
+      const val = enBase * u.factor;
+      let fmt;
+      if (val === 0) fmt = '0';
+      else if (val < 0.01) fmt = val.toExponential(2);
+      else if (val < 1) fmt = val.toFixed(4);
+      else if (val < 100) fmt = val.toFixed(2);
+      else fmt = val.toLocaleString('es-MX', { maximumFractionDigits: 2 });
+      return `<div class="conv-res-row">
+        <span class="conv-res-lbl">${u.lbl}</span>
+        <span class="conv-res-val">${fmt}</span>
+      </div>`;
+    }).join('');
+};
+
+// ═══════ 4. APOYOS DEL GOBIERNO ═══════
+
+function renderApoyos() {
+  const cont = document.getElementById('apoyos-lista');
+  if (!cont) return;
+
+  const filtroEstado = document.getElementById('apoyo-filtro-estado').value;
+  const filtroTipo = document.getElementById('apoyo-filtro-tipo').value;
+
+  let apoyos = APOYOS_DB.slice();
+  if (filtroEstado === 'federal') apoyos = apoyos.filter(a => a.nivel === 'federal');
+  else if (filtroEstado) apoyos = apoyos.filter(a => a.estado === filtroEstado || a.nivel === 'federal');
+  if (filtroTipo) apoyos = apoyos.filter(a => a.tipo === filtroTipo);
+
+  if (apoyos.length === 0) {
+    cont.innerHTML = '<div class="herr-empty"><div class="herr-empty__icon">🔍</div><div>No encontramos apoyos con esos filtros</div></div>';
+    return;
+  }
+
+  cont.innerHTML = apoyos.map(a => {
+    const badgeClass = a.nivel === 'federal' ? ' apoyo-item__badge--federal' : '';
+    const badgeTxt = a.nivel === 'federal' ? '🇲🇽 FEDERAL' : '📍 ' + escHtml(a.estado);
+    return `
+      <div class="apoyo-item">
+        <div class="apoyo-item__head">
+          <div class="apoyo-item__titulo">${escHtml(a.titulo)}</div>
+          <span class="apoyo-item__badge${badgeClass}">${badgeTxt}</span>
+        </div>
+        <div class="apoyo-item__monto">💰 ${escHtml(a.monto)}</div>
+        <div class="apoyo-item__desc">${escHtml(a.desc)}</div>
+        <div class="apoyo-item__meta">
+          <div><b>Requisitos:</b> ${escHtml(a.requisitos)}</div>
+          <div><b>📅 Fecha:</b> ${escHtml(a.fecha)}</div>
+        </div>
+        <a class="apoyo-item__link" href="${escHtml(a.link)}" target="_blank" rel="noopener">Ver info oficial →</a>
+      </div>`;
+  }).join('');
+}
+
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'apoyo-filtro-estado' || e.target.id === 'apoyo-filtro-tipo') {
+    renderApoyos();
+  }
+});
+
+// ═══════ 5. STREAK ═══════
+
+async function actualizarStreak() {
+  if (!window.currentUser) return;
+  try {
+    const ref = doc(db, 'usuarios_streak', window.currentUser.uid);
+    const snap = await getDoc(ref);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const hoyStr = hoy.toISOString().split('T')[0];
+
+    let streak = 1, ultimoDia = hoyStr;
+
+    if (snap.exists()) {
+      const data = snap.data();
+      const ultimo = data.ultimo_dia;
+      if (ultimo === hoyStr) {
+        // Ya entró hoy
+        streak = data.streak || 1;
+      } else {
+        // Ver si fue ayer
+        const ayerD = new Date(hoy);
+        ayerD.setDate(ayerD.getDate() - 1);
+        const ayerStr = ayerD.toISOString().split('T')[0];
+        if (ultimo === ayerStr) {
+          streak = (data.streak || 0) + 1;
+        } else {
+          streak = 1; // Reset
+        }
+      }
+    }
+
+    await setDoc(ref, {
+      uid: window.currentUser.uid,
+      streak, ultimo_dia: hoyStr
+    }, { merge: true });
+
+    // Actualizar banner
+    const banNum = document.getElementById('streak-num');
+    const banMsg = document.getElementById('streak-msg');
+    if (banNum) banNum.textContent = streak;
+    if (banMsg) {
+      if (streak === 1) banMsg.textContent = '¡Empezaste tu racha! Regresa mañana.';
+      else if (streak < 7) banMsg.textContent = `¡${streak} días seguidos! Sigue así carnal 🌱`;
+      else if (streak < 30) banMsg.textContent = `🔥 ${streak} días! Eres imparable`;
+      else if (streak < 100) banMsg.textContent = `⚡ ${streak} días! Productor comprometido`;
+      else banMsg.textContent = `👑 ${streak} días! Leyenda del campo`;
+    }
+  } catch (e) { console.warn('[Streak]', e); }
+}
+
+// Disparar cargar parcelas/apoyos/streak al entrar a Herramientas
+(function() {
+  const origShowPage2 = window.showPage;
+  window.showPage = function(id, el, bnId) {
+    if (typeof origShowPage2 === 'function') origShowPage2(id, el, bnId);
+    if (id === 'herramientas') {
+      actualizarStreak();
+      // Mostrar la pestaña activa (agroquímicos por defecto)
+      const tabActivo = document.querySelector('.herr-tab--active');
+      if (tabActivo) cambiarHerrTab(tabActivo.dataset.tab, tabActivo);
+    }
+  };
+})();
+
 
 
 // Interceptar showPage: al entrar a notificaciones, marcar como leídas
