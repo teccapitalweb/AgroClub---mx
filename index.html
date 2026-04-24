@@ -6603,52 +6603,53 @@ function formatearFechaVence(val) {
 }
 
 // ═══ FIX #1: PRE-PROCESAR HASH AUTOLOGIN ANTES DE onAuthStateChanged ═══
-// Si hay un hash #a=... de agrotecamerican, limpiar sesión vieja ANTES
-// de que Firebase dispare onAuthStateChanged con el user incorrecto.
-(async function preProcesarHashAutologin() {
-  const hash = window.location.hash;
-  if (!hash || !hash.includes('a=')) return;
-
-  const match = hash.match(/a=([^&]+)/);
-  if (!match || !match[1]) return;
-
-  try {
-    const data = JSON.parse(atob(decodeURIComponent(match[1])));
-    if (!data.t || (Date.now() - data.t) >= 5 * 60 * 1000) return;
-    if (!data.e || !data.p) return;
-
-    // Mostrar overlay AHORA para que no se vea la UI vieja
-    document.body.insertAdjacentHTML('beforeend', `
-      <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Plus Jakarta Sans',sans-serif;">
-        <div style="width:52px;height:52px;border:4px solid #a3e635;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-        <div style="color:#fff;font-size:1.1rem;font-weight:700;text-align:center;padding:0 20px;">✅ Entrando al portal...</div>
-        <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
-      </div>
-    `);
-
-    // Si el email en el hash NO coincide con el user de Firebase, forzar signOut
-    if (auth.currentUser && auth.currentUser.email !== data.e) {
-      console.log('🧹 Limpiando sesión vieja:', auth.currentUser.email, '→ nueva:', data.e);
-      try { await signOut(auth); } catch(e) {}
-    }
-
-    // Login con los datos del hash
-    try {
-      await signInWithEmailAndPassword(auth, data.e, data.p);
-      console.log('✅ Auto-login OK:', data.e);
-    } catch(e) {
-      console.error('❌ Auto-login fail:', e);
-      document.getElementById('_autologin-overlay')?.remove();
-    }
-
-    // Limpiar hash después del intento
-    history.replaceState(null, '', window.location.pathname);
-  } catch(e) {
-    console.error('Hash parse error:', e);
-  }
-})();
+// NOTA: Se removió la versión anterior con IIFE porque causaba race conditions.
+// La lógica nueva va DENTRO de onAuthStateChanged (ver FIX #1b más abajo).
 
 onAuthStateChanged(auth, async (user) => {
+  // ═══ FIX #1b: HASH AUTOLOGIN TIENE PRIORIDAD SOBRE SESIÓN VIEJA ═══
+  // Si hay un hash #a=... válido, SIEMPRE se procesa primero,
+  // aunque ya haya un user logueado (porque puede ser user viejo contaminado).
+  const hashPriority = window.location.hash;
+  if (hashPriority && hashPriority.includes('a=')) {
+    const matchH = hashPriority.match(/a=([^&]+)/);
+    if (matchH && matchH[1]) {
+      try {
+        const dataH = JSON.parse(atob(decodeURIComponent(matchH[1])));
+        if (dataH.t && (Date.now() - dataH.t) < 5 * 60 * 1000 && dataH.e && dataH.p) {
+          // Si el email del hash NO coincide con el user actual, re-login
+          if (!user || user.email !== dataH.e) {
+            console.log('🧹 Hash autologin: forzando sesión correcta →', dataH.e);
+            // Mostrar overlay SOLO si no existe
+            if (!document.getElementById('_autologin-overlay')) {
+              document.body.insertAdjacentHTML('beforeend', `
+                <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Plus Jakarta Sans',sans-serif;">
+                  <div style="width:52px;height:52px;border:4px solid #a3e635;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+                  <div style="color:#fff;font-size:1.1rem;font-weight:700;text-align:center;padding:0 20px;">✅ Entrando al portal...</div>
+                  <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+                </div>
+              `);
+            }
+            try {
+              if (user) await signOut(auth);
+              await signInWithEmailAndPassword(auth, dataH.e, dataH.p);
+              // onAuthStateChanged se disparará de nuevo con el user correcto
+              history.replaceState(null, '', window.location.pathname);
+              return;
+            } catch(e) {
+              console.error('❌ Hash auto-login fail:', e);
+              document.getElementById('_autologin-overlay')?.remove();
+              // Si falla, continuar con el flujo normal (abajo)
+            }
+          } else {
+            // User ya coincide con hash → limpiar hash y continuar
+            history.replaceState(null, '', window.location.pathname);
+          }
+        }
+      } catch(e) { console.warn('Hash parse error:', e); }
+    }
+  }
+
   if (!user) {
     // Si viene de pago, esperar el login del modal
     if (_paid === 'true' && _paidEmail) return;
@@ -6688,25 +6689,6 @@ onAuthStateChanged(auth, async (user) => {
 
     window.location.href = "login.html"; return;
   }
-
-  // ═══ FIX #1b: Validar que si había hash, el user logueado coincida ═══
-  // Si el hash traía un email diferente al user actual, cerrar sesión y relogin
-  try {
-    const h = window.location.hash;
-    if (h && h.includes('a=')) {
-      const m = h.match(/a=([^&]+)/);
-      if (m && m[1]) {
-        const d = JSON.parse(atob(decodeURIComponent(m[1])));
-        if (d.e && d.p && d.e !== user.email) {
-          console.log('🧹 User no coincide con hash, re-login:', user.email, '→', d.e);
-          await signOut(auth);
-          await signInWithEmailAndPassword(auth, d.e, d.p);
-          history.replaceState(null, '', window.location.pathname);
-          return; // onAuthStateChanged se disparará de nuevo con el correcto
-        }
-      }
-    }
-  } catch(e) { console.warn('Validación hash vs user:', e); }
 
   // Quitar overlay de auto-login si estaba visible
   document.getElementById('_autologin-overlay')?.remove();
