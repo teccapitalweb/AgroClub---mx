@@ -6555,12 +6555,105 @@ if (_paid === 'true' && _paidEmail) {
   });
 }
 
+// ═══ FIX #2: HELPER PARA FORMATEAR FECHAS DE VENCIMIENTO ═══
+// Acepta cualquier formato (string español, ISO, Timestamp Firestore, Date, number)
+// y devuelve un string legible. Si no se puede parsear, devuelve "—".
+function formatearFechaVence(val) {
+  if (!val) return '—';
+
+  // Si ya es string legible tipo "24 de mayo de 2026", devolverlo tal cual
+  if (typeof val === 'string') {
+    // Detectar si es el formato español ya formateado
+    if (/^\d{1,2}\s+de\s+\w+\s+de\s+\d{4}$/i.test(val.trim())) return val;
+
+    // Intentar parsear como Date (ISO u otros)
+    const d = new Date(val);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    return '—';
+  }
+
+  // Timestamp de Firestore: { seconds, nanoseconds } o método toDate()
+  if (typeof val === 'object') {
+    if (typeof val.toDate === 'function') {
+      try {
+        return val.toDate().toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch(e) { return '—'; }
+    }
+    if (typeof val.seconds === 'number') {
+      const d = new Date(val.seconds * 1000);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+    }
+  }
+
+  // Number (timestamp ms o segundos)
+  if (typeof val === 'number') {
+    // Heurística: si es > año 2100 en ms, probablemente ya está en ms; si es menor, segundos
+    const ms = val > 1e12 ? val : val * 1000;
+    const d = new Date(ms);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  }
+
+  return '—';
+}
+
+// ═══ FIX #1: PRE-PROCESAR HASH AUTOLOGIN ANTES DE onAuthStateChanged ═══
+// Si hay un hash #a=... de agrotecamerican, limpiar sesión vieja ANTES
+// de que Firebase dispare onAuthStateChanged con el user incorrecto.
+(async function preProcesarHashAutologin() {
+  const hash = window.location.hash;
+  if (!hash || !hash.includes('a=')) return;
+
+  const match = hash.match(/a=([^&]+)/);
+  if (!match || !match[1]) return;
+
+  try {
+    const data = JSON.parse(atob(decodeURIComponent(match[1])));
+    if (!data.t || (Date.now() - data.t) >= 5 * 60 * 1000) return;
+    if (!data.e || !data.p) return;
+
+    // Mostrar overlay AHORA para que no se vea la UI vieja
+    document.body.insertAdjacentHTML('beforeend', `
+      <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Plus Jakarta Sans',sans-serif;">
+        <div style="width:52px;height:52px;border:4px solid #a3e635;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+        <div style="color:#fff;font-size:1.1rem;font-weight:700;text-align:center;padding:0 20px;">✅ Entrando al portal...</div>
+        <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+      </div>
+    `);
+
+    // Si el email en el hash NO coincide con el user de Firebase, forzar signOut
+    if (auth.currentUser && auth.currentUser.email !== data.e) {
+      console.log('🧹 Limpiando sesión vieja:', auth.currentUser.email, '→ nueva:', data.e);
+      try { await signOut(auth); } catch(e) {}
+    }
+
+    // Login con los datos del hash
+    try {
+      await signInWithEmailAndPassword(auth, data.e, data.p);
+      console.log('✅ Auto-login OK:', data.e);
+    } catch(e) {
+      console.error('❌ Auto-login fail:', e);
+      document.getElementById('_autologin-overlay')?.remove();
+    }
+
+    // Limpiar hash después del intento
+    history.replaceState(null, '', window.location.pathname);
+  } catch(e) {
+    console.error('Hash parse error:', e);
+  }
+})();
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     // Si viene de pago, esperar el login del modal
     if (_paid === 'true' && _paidEmail) return;
 
-    // ═══ AUTOLOGIN DESDE agrotecamerican.com ═══
+    // ═══ AUTOLOGIN DESDE agrotecamerican.com (fallback si falló el pre-procesado) ═══
     const hash = window.location.hash;
     if (hash && hash.includes('a=')) {
       const match = hash.match(/a=([^&]+)/);
@@ -6595,6 +6688,25 @@ onAuthStateChanged(auth, async (user) => {
 
     window.location.href = "login.html"; return;
   }
+
+  // ═══ FIX #1b: Validar que si había hash, el user logueado coincida ═══
+  // Si el hash traía un email diferente al user actual, cerrar sesión y relogin
+  try {
+    const h = window.location.hash;
+    if (h && h.includes('a=')) {
+      const m = h.match(/a=([^&]+)/);
+      if (m && m[1]) {
+        const d = JSON.parse(atob(decodeURIComponent(m[1])));
+        if (d.e && d.p && d.e !== user.email) {
+          console.log('🧹 User no coincide con hash, re-login:', user.email, '→', d.e);
+          await signOut(auth);
+          await signInWithEmailAndPassword(auth, d.e, d.p);
+          history.replaceState(null, '', window.location.pathname);
+          return; // onAuthStateChanged se disparará de nuevo con el correcto
+        }
+      }
+    }
+  } catch(e) { console.warn('Validación hash vs user:', e); }
 
   // Quitar overlay de auto-login si estaba visible
   document.getElementById('_autologin-overlay')?.remove();
@@ -6643,10 +6755,10 @@ onAuthStateChanged(auth, async (user) => {
     if (document.getElementById("perfil-avatar-big")) document.getElementById("perfil-avatar-big").textContent = nombre[0].toUpperCase();
     if (document.getElementById("perfil-plan")) document.getElementById("perfil-plan").textContent = data.plan || "VIP";
     if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = data.whatsapp || "—";
-    if (document.getElementById("perfil-vence")) document.getElementById("perfil-vence").textContent = data.vence || "—";
-    if (document.getElementById("sus-vence")) document.getElementById("sus-vence").textContent = data.vence || "—";
+    if (document.getElementById("perfil-vence")) document.getElementById("perfil-vence").textContent = formatearFechaVence(data.vence);
+    if (document.getElementById("sus-vence")) document.getElementById("sus-vence").textContent = formatearFechaVence(data.vence);
     if (document.getElementById("sus-plan-info")) document.getElementById("sus-plan-info").textContent = data.plan || "VIP Mensual";
-    if (document.getElementById("sus-proximo-cobro")) document.getElementById("sus-proximo-cobro").textContent = data.vence || "—";
+    if (document.getElementById("sus-proximo-cobro")) document.getElementById("sus-proximo-cobro").textContent = formatearFechaVence(data.vence);
     actualizarEstadisticasPerfil();
     cargarHistorialPagos(user.email);
   } else {
