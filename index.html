@@ -8617,23 +8617,62 @@ window.analizarPlaga = async function(input) {
     document.getElementById('plagas-loading').style.display = 'block';
 
     try {
-      // Llamada a API Plant.id (versión 3 — health assessment)
       const base64Clean = base64Image.split(',')[1];
-      const res = await fetch('https://plant.id/api/v3/health_assessment?language=es&details=description,treatment,cause,prevention,common_names,classification', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Api-Key': 'YTIEKMQ4ZuR84BFRrLQKiyJdj3ZH2kYIjxOlVvhvNNx9Hy3d13' // API gratuita compartida
-        },
-        body: JSON.stringify({
-          images: [base64Clean],
-          similar_images: false,
-          health: 'only'
-        })
-      });
+
+      // Convertir imagen a blob para enviar
+      const byteChars = atob(base64Clean);
+      const byteNumbers = new Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: file.type });
+
+      // Usar Hugging Face Inference API - modelo público de clasificación de enfermedades de plantas
+      // Modelo: linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification
+      const res = await fetch(
+        'https://api-inference.huggingface.co/models/linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': file.type || 'image/jpeg' },
+          body: blob
+        }
+      );
+
+      if (!res.ok) {
+        // Fallback: otro modelo público
+        const res2 = await fetch(
+          'https://api-inference.huggingface.co/models/wambugu71/crop_leaf_diseases_vit',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': file.type || 'image/jpeg' },
+            body: blob
+          }
+        );
+        if (!res2.ok) throw new Error('API no disponible temporalmente');
+        const data2 = await res2.json();
+        document.getElementById('plagas-loading').style.display = 'none';
+        renderResultadoHF(data2);
+        return;
+      }
+
       const data = await res.json();
+
+      // Si el modelo está cargando (503), reintentar una vez
+      if (data.error && data.error.includes('loading')) {
+        document.getElementById('plagas-loading').querySelector('.plagas-loading__txt').textContent =
+          '🧠 Cargando modelo de IA (primera vez, ~15 segundos)...';
+        await new Promise(r => setTimeout(r, 15000));
+        const retry = await fetch(
+          'https://api-inference.huggingface.co/models/linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification',
+          { method: 'POST', headers: { 'Content-Type': file.type || 'image/jpeg' }, body: blob }
+        );
+        const retryData = await retry.json();
+        document.getElementById('plagas-loading').style.display = 'none';
+        renderResultadoHF(retryData);
+        return;
+      }
+
       document.getElementById('plagas-loading').style.display = 'none';
-      renderResultadoPlaga(data);
+      renderResultadoHF(data);
     } catch (err) {
       console.error('[Plagas]', err);
       document.getElementById('plagas-loading').style.display = 'none';
@@ -8643,91 +8682,249 @@ window.analizarPlaga = async function(input) {
   reader.readAsDataURL(file);
 };
 
-function renderResultadoPlaga(data) {
-  const box = document.getElementById('plagas-resultado');
-  box.style.display = 'block';
+// Base de datos local con info en español de las enfermedades más comunes
+const ENFERMEDADES_INFO = {
+  'tomato_late_blight': {
+    nombre: 'Tizón tardío del tomate', cultivo: 'Tomate/Jitomate', emoji: '🍅',
+    descripcion: 'Enfermedad fúngica causada por Phytophthora infestans. Se ven manchas oscuras acuosas en hojas y frutos, con pelusa blanca en el envés.',
+    tratamiento: ['Mancozeb 80% WP: 2-3 g/L cada 7 días', 'Clorotalonil 50% SC: 2 ml/L', 'En casos severos: Metalaxil + Mancozeb', 'Eliminar hojas infectadas y quemarlas (no compostar)'],
+    prevencion: ['No mojar el follaje al regar', 'Ventilación entre plantas (60 cm mínimo)', 'Rotación de cultivos 3 años', 'Fungicida preventivo en época lluviosa']
+  },
+  'tomato_early_blight': {
+    nombre: 'Tizón temprano del tomate', cultivo: 'Tomate/Jitomate', emoji: '🍅',
+    descripcion: 'Hongo Alternaria solani. Manchas circulares con anillos concéntricos tipo diana en hojas bajas.',
+    tratamiento: ['Clorotalonil 50% SC: 2-3 ml/L', 'Mancozeb 80% WP: 2 g/L', 'Aplicar cada 10-14 días', 'Retirar hojas afectadas desde abajo'],
+    prevencion: ['Mulch para evitar salpicado de tierra', 'Cobertura del suelo con paja', 'Riego por goteo, no aspersión']
+  },
+  'tomato_leaf_mold': {
+    nombre: 'Moho de la hoja del tomate', cultivo: 'Tomate/Jitomate', emoji: '🍅',
+    descripcion: 'Hongo Fulvia fulva. Manchas amarillas en el haz y moho verde-oliva en el envés. Común en invernaderos.',
+    tratamiento: ['Clorotalonil: 2 ml/L foliar', 'Bicarbonato de potasio: 5 g/L como preventivo', 'Mejorar ventilación del invernadero'],
+    prevencion: ['Ventilación forzada', 'Bajar humedad relativa <85%', 'Podar hojas para circulación de aire']
+  },
+  'tomato_bacterial_spot': {
+    nombre: 'Mancha bacteriana del tomate', cultivo: 'Tomate/Jitomate', emoji: '🍅',
+    descripcion: 'Bacteria Xanthomonas. Pequeñas manchas acuosas que se vuelven negras en hojas, tallos y frutos.',
+    tratamiento: ['Oxicloruro de cobre 50%: 3-5 g/L', 'Kasugamicina: 1 ml/L', 'No hay cura, solo contener'],
+    prevencion: ['Semilla certificada libre', 'Desinfectar herramientas', 'No trabajar con plantas mojadas']
+  },
+  'tomato_mosaic_virus': {
+    nombre: 'Virus del mosaico del tomate', cultivo: 'Tomate/Jitomate', emoji: '🍅',
+    descripcion: 'Virus TMV. Hojas con patrón de mosaico verde claro/oscuro, frutos deformes.',
+    tratamiento: ['NO hay tratamiento — arrancar y quemar plantas infectadas', 'Controlar vectores: pulgones, mosca blanca'],
+    prevencion: ['Semilla certificada', 'Desinfectar manos con leche al podar', 'Control estricto de insectos chupadores']
+  },
+  'tomato_yellow_leaf_curl_virus': {
+    nombre: 'Virus del rizado amarillo (TYLCV)', cultivo: 'Tomate/Jitomate', emoji: '🍅',
+    descripcion: 'Virus transmitido por mosca blanca. Hojas enrolladas hacia arriba, amarillentas, planta enana.',
+    tratamiento: ['NO hay cura — eliminar planta', 'Control agresivo de mosca blanca con Imidacloprid'],
+    prevencion: ['Malla antiáfido', 'Variedades resistentes', 'Trampas amarillas']
+  },
+  'tomato_septoria_leaf_spot': {
+    nombre: 'Mancha de Septoria', cultivo: 'Tomate/Jitomate', emoji: '🍅',
+    descripcion: 'Hongo Septoria lycopersici. Numerosas manchas pequeñas circulares con centro gris y borde oscuro.',
+    tratamiento: ['Clorotalonil: 2 ml/L', 'Mancozeb: 2-3 g/L cada 10 días'],
+    prevencion: ['Rotación con no-solanáceas', 'Eliminar restos de cosecha', 'Mulch']
+  },
+  'tomato_spider_mites': {
+    nombre: 'Araña roja en tomate', cultivo: 'Tomate/Jitomate', emoji: '🕷️',
+    descripcion: 'Ácaros Tetranychus. Hojas con puntos amarillos, telarañas finas en el envés, defoliación.',
+    tratamiento: ['Abamectina 1.8% EC: 0.5-1 ml/L', 'Azufre 80% WP: 3-5 g/L', 'Aceite de neem: 5 ml/L', 'Rotar productos para evitar resistencia'],
+    prevencion: ['Aumentar humedad (odian humedad alta)', 'Riego por aspersión', 'Ácaros predadores Phytoseiulus']
+  },
+  'potato_early_blight': {
+    nombre: 'Tizón temprano de la papa', cultivo: 'Papa', emoji: '🥔',
+    descripcion: 'Hongo Alternaria solani. Manchas tipo diana en hojas, empezando por las más viejas.',
+    tratamiento: ['Mancozeb 80% WP: 2-3 g/L', 'Clorotalonil: 2 ml/L', 'Cada 7-10 días en época húmeda'],
+    prevencion: ['Semilla certificada', 'Fertilización balanceada (no exceso de N)', 'Rotación 3 años']
+  },
+  'potato_late_blight': {
+    nombre: 'Tizón tardío de la papa', cultivo: 'Papa', emoji: '🥔',
+    descripcion: 'Phytophthora infestans (el mismo de la hambruna irlandesa). Manchas negras húmedas que pudren toda la planta.',
+    tratamiento: ['Metalaxyl + Mancozeb: 2.5 g/L (sistémico)', 'Cymoxanil + Mancozeb en rotación', 'Aplicar preventivo en lluvias'],
+    prevencion: ['Tubérculos semilla certificados', 'Aporque alto para proteger tubérculos', 'Monitoreo de clima (humedad >90% + temp 15-25°C = riesgo)']
+  },
+  'corn_common_rust': {
+    nombre: 'Roya común del maíz', cultivo: 'Maíz', emoji: '🌽',
+    descripcion: 'Hongo Puccinia sorghi. Pústulas color canela/rojizo en ambos lados de la hoja.',
+    tratamiento: ['Azoxystrobin: 0.8 ml/L', 'Mancozeb: 2.5 g/L', 'Tebuconazol: 1 ml/L'],
+    prevencion: ['Variedades resistentes', 'Siembra temprana', 'Evitar riego nocturno']
+  },
+  'corn_northern_leaf_blight': {
+    nombre: 'Tizón del norte del maíz', cultivo: 'Maíz', emoji: '🌽',
+    descripcion: 'Exserohilum turcicum. Lesiones alargadas gris-café en forma de cigarro.',
+    tratamiento: ['Azoxystrobin + Propiconazol: 1 ml/L', 'Aplicar en V8-R1'],
+    prevencion: ['Rotación con no-gramíneas', 'Labranza para enterrar residuos']
+  },
+  'corn_gray_leaf_spot': {
+    nombre: 'Mancha gris del maíz', cultivo: 'Maíz', emoji: '🌽',
+    descripcion: 'Cercospora zeae-maydis. Manchas rectangulares color gris limitadas por las venas.',
+    tratamiento: ['Estrobirulinas: 0.8 ml/L en floración', 'Triazoles como fallback'],
+    prevencion: ['Labranza profunda', 'Híbridos resistentes', 'Rotación']
+  },
+  'apple_scab': {
+    nombre: 'Sarna del manzano', cultivo: 'Manzano', emoji: '🍎',
+    descripcion: 'Hongo Venturia inaequalis. Manchas olivas-negras en hojas y frutos agrietados.',
+    tratamiento: ['Captán 50%: 2-3 g/L', 'Mancozeb: 2 g/L', 'Aplicar en brotación'],
+    prevencion: ['Recoger y quemar hojas caídas', 'Variedades resistentes', 'Poda de aireación']
+  },
+  'grape_black_rot': {
+    nombre: 'Podredumbre negra de la vid', cultivo: 'Uva/Vid', emoji: '🍇',
+    descripcion: 'Guignardia bidwellii. Manchas marrones en hojas, frutos momificados negros.',
+    tratamiento: ['Mancozeb: 2.5 g/L desde brotación', 'Myclobutanil: 0.5 ml/L'],
+    prevencion: ['Eliminar frutos momificados', 'Poda de aireación', 'Fungicidas preventivos']
+  },
+  'strawberry_leaf_scorch': {
+    nombre: 'Quemadura de la fresa', cultivo: 'Fresa', emoji: '🍓',
+    descripcion: 'Diplocarpon earlianum. Manchas púrpura que se vuelven necróticas.',
+    tratamiento: ['Captán: 2-3 g/L', 'Mancozeb: 2 g/L cada 10 días'],
+    prevencion: ['Variedades resistentes', 'Mulch', 'Riego por goteo']
+  },
+  'healthy': {
+    nombre: '✅ Planta sana', cultivo: '—', emoji: '🌱',
+    descripcion: 'No se detectan enfermedades. Tu planta luce saludable.',
+    tratamiento: ['No requiere tratamiento', 'Continúa con buenas prácticas de cultivo'],
+    prevencion: ['Monitoreo semanal', 'Fertilización balanceada', 'Manejo integrado de plagas']
+  }
+};
 
-  const suggestions = data?.result?.disease?.suggestions || [];
-  const isHealthy = data?.result?.is_healthy?.binary;
-  const isPlant = data?.result?.is_plant?.binary;
+function buscarInfoEnfermedad(label) {
+  if (!label) return null;
+  const normalized = label.toLowerCase()
+    .replace(/[_\s]+/g, '_')
+    .replace(/[^a-z_]/g, '');
 
-  if (!isPlant) {
-    box.innerHTML = `
-      <div class="plagas-resultado__diagnostico">
-        <div class="plagas-resultado__emoji">❓</div>
-        <div class="plagas-resultado__nombre">No se detectó una planta</div>
-      </div>
-      <div class="plagas-resultado__seccion">
-        <p>No pudimos identificar una planta o cultivo en la foto. Intenta con una foto más clara de las hojas o del fruto afectado.</p>
-      </div>`;
-    return;
+  // Buscar match exacto
+  if (ENFERMEDADES_INFO[normalized]) return ENFERMEDADES_INFO[normalized];
+
+  // Buscar match parcial
+  for (const key in ENFERMEDADES_INFO) {
+    if (normalized.includes(key) || key.includes(normalized)) return ENFERMEDADES_INFO[key];
   }
 
-  if (isHealthy || suggestions.length === 0) {
+  // Si contiene "healthy" → sana
+  if (normalized.includes('healthy') || normalized.includes('sana')) return ENFERMEDADES_INFO['healthy'];
+
+  return null;
+}
+
+function renderResultadoHF(data) {
+  const box = document.getElementById('plagas-resultado');
+  box.style.display = 'block';
+  box.style.borderColor = '#10b981';
+  box.style.background = 'linear-gradient(135deg, #fff 0%, #f0fdf4 100%)';
+
+  // HF devuelve array de {label, score}
+  if (!Array.isArray(data) || data.length === 0) {
+    return mostrarErrorPlaga('Sin resultados de la IA');
+  }
+
+  const top = data[0];
+  const conf = Math.round((top.score || 0) * 100);
+  const info = buscarInfoEnfermedad(top.label);
+  const isHealthy = (top.label || '').toLowerCase().includes('healthy');
+
+  // Prettificar label raw (quitar guiones bajos, etc.)
+  const labelBonito = (top.label || 'Desconocido')
+    .replace(/_+/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+
+  const otrasSugerencias = data.slice(1, 4).filter(s => s.score > 0.03);
+
+  if (isHealthy) {
     box.innerHTML = `
       <div class="plagas-resultado__diagnostico" style="border-color:#10b981;">
         <div class="plagas-resultado__emoji">✅</div>
         <div class="plagas-resultado__nombre" style="color:#047857;">¡Tu planta se ve sana!</div>
-        <div class="plagas-resultado__confianza">${Math.round((data?.result?.is_healthy?.probability || 0)*100)}% confianza</div>
+        <div class="plagas-resultado__confianza">${conf}% de confianza</div>
       </div>
       <div class="plagas-resultado__seccion">
-        <p>No detectamos plagas ni enfermedades significativas. Sigue con tus buenas prácticas de cultivo.</p>
+        <h5>📖 Análisis</h5>
+        <p>No detectamos enfermedades ni plagas significativas en la foto. Continúa con tus buenas prácticas de cultivo.</p>
+      </div>
+      <div class="plagas-resultado__seccion">
+        <h5>🌿 Recomendaciones para mantenerla así</h5>
+        <ul>
+          <li>Monitoreo semanal de las hojas (haz + envés)</li>
+          <li>Riego en las mañanas, no en la noche</li>
+          <li>Fertilización balanceada según etapa fenológica</li>
+          <li>Rotación de cultivos para prevenir plagas del suelo</li>
+        </ul>
       </div>`;
     return;
   }
 
-  const top = suggestions[0];
-  const otrasSugerencias = suggestions.slice(1, 3);
-  const conf = Math.round((top.probability || 0) * 100);
-  const nombre = top.name || 'Problema detectado';
-  const descripcion = top.details?.description?.value || top.details?.description || 'Se detectó un problema en tu planta.';
-  const tratamientoObj = top.details?.treatment;
-  const tratamiento = tratamientoObj?.chemical?.length
-    ? tratamientoObj.chemical
-    : (tratamientoObj?.biological?.length ? tratamientoObj.biological : (tratamientoObj?.prevention || []));
-  const causa = top.details?.cause?.value || top.details?.cause;
-  const prevencion = top.details?.prevention;
+  // Si tenemos info específica en español
+  if (info) {
+    let otrasHtml = '';
+    if (otrasSugerencias.length) {
+      otrasHtml = `
+        <div class="plagas-resultado__seccion">
+          <h5>📋 Otras posibilidades</h5>
+          <ul>${otrasSugerencias.map(s => {
+            const i = buscarInfoEnfermedad(s.label);
+            const n = i ? i.nombre : s.label.replace(/_+/g,' ');
+            return `<li><b>${escHtml(n)}</b> (${Math.round(s.score*100)}%)</li>`;
+          }).join('')}</ul>
+        </div>`;
+    }
 
-  let tratHtml = '';
-  if (tratamiento && tratamiento.length) {
-    tratHtml = '<ul>' + tratamiento.slice(0, 5).map(t => `<li>${escHtml(typeof t === 'string' ? t : (t.value || JSON.stringify(t)))}</li>`).join('') + '</ul>';
-  } else {
-    tratHtml = '<p>Consulta con un técnico agrónomo para tratamiento específico.</p>';
-  }
-
-  let prevHtml = '';
-  if (prevencion && Array.isArray(prevencion) && prevencion.length) {
-    prevHtml = '<ul>' + prevencion.slice(0, 4).map(t => `<li>${escHtml(typeof t === 'string' ? t : (t.value || ''))}</li>`).join('') + '</ul>';
-  }
-
-  let otrasHtml = '';
-  if (otrasSugerencias.length) {
-    otrasHtml = `
+    box.innerHTML = `
+      <div class="plagas-resultado__diagnostico">
+        <div class="plagas-resultado__emoji">${info.emoji}</div>
+        <div class="plagas-resultado__nombre">${escHtml(info.nombre)}</div>
+        <div class="plagas-resultado__confianza">${conf}% de confianza · ${escHtml(info.cultivo)}</div>
+      </div>
       <div class="plagas-resultado__seccion">
-        <h5>📋 Otras posibilidades</h5>
-        <ul>${otrasSugerencias.map(s => `<li><b>${escHtml(s.name)}</b> (${Math.round(s.probability*100)}% confianza)</li>`).join('')}</ul>
+        <h5>📖 Descripción</h5>
+        <p>${escHtml(info.descripcion)}</p>
+      </div>
+      <div class="plagas-resultado__seccion">
+        <h5>💊 Tratamiento recomendado</h5>
+        <ul>${info.tratamiento.map(t => `<li>${escHtml(t)}</li>`).join('')}</ul>
+      </div>
+      <div class="plagas-resultado__seccion">
+        <h5>🛡️ Prevención para próximos ciclos</h5>
+        <ul>${info.prevencion.map(p => `<li>${escHtml(p)}</li>`).join('')}</ul>
+      </div>
+      ${otrasHtml}
+      <div style="margin-top:14px;padding:12px;background:rgba(251,191,36,.12);border-radius:10px;font-size:.78rem;color:#78350f;line-height:1.5;">
+        ⚠️ <b>Importante:</b> La IA da una guía inicial. Para diagnóstico oficial consulta con un técnico agrónomo. Usa equipo de protección al aplicar tratamientos.
       </div>`;
+    return;
   }
 
+  // Si no tenemos info local, mostrar resultado crudo con guía genérica
   box.innerHTML = `
     <div class="plagas-resultado__diagnostico">
       <div class="plagas-resultado__emoji">${conf > 70 ? '🔴' : conf > 40 ? '🟡' : '🟢'}</div>
-      <div class="plagas-resultado__nombre">${escHtml(nombre)}</div>
+      <div class="plagas-resultado__nombre">${escHtml(labelBonito)}</div>
       <div class="plagas-resultado__confianza">${conf}% de confianza</div>
     </div>
     <div class="plagas-resultado__seccion">
       <h5>📖 Descripción</h5>
-      <p>${escHtml(typeof descripcion === 'string' ? descripcion : (descripcion.value || ''))}</p>
+      <p>Se detectó una anomalía en tu planta. El modelo de IA identificó esta condición pero no tenemos ficha técnica en español.</p>
     </div>
-    ${causa ? `<div class="plagas-resultado__seccion"><h5>🔍 Causa</h5><p>${escHtml(typeof causa === 'string' ? causa : (causa.value || ''))}</p></div>` : ''}
     <div class="plagas-resultado__seccion">
-      <h5>💊 Tratamiento recomendado</h5>
-      ${tratHtml}
+      <h5>💊 Tratamiento general recomendado</h5>
+      <ul>
+        <li>Retirar hojas o frutos afectados y quemarlos (no compostar)</li>
+        <li>Aplicar fungicida de amplio espectro: Mancozeb 80% WP a 2-3 g/L</li>
+        <li>Si es plaga de insectos: Imidacloprid 30.5% SC a 0.5 ml/L</li>
+        <li>Evitar riego por aspersión, usar goteo</li>
+      </ul>
     </div>
-    ${prevHtml ? `<div class="plagas-resultado__seccion"><h5>🛡️ Prevención</h5>${prevHtml}</div>` : ''}
-    ${otrasHtml}
+    <div class="plagas-resultado__seccion">
+      <h5>🛡️ Recomendación</h5>
+      <p>Comparte la foto y el resultado con un técnico agrónomo de tu zona para tratamiento específico. Puedes también publicarla en el <strong>Foro VIP</strong> para que otros productores te orienten.</p>
+    </div>
+    ${otrasSugerencias.length ? `
+      <div class="plagas-resultado__seccion">
+        <h5>📋 Otras posibilidades</h5>
+        <ul>${otrasSugerencias.map(s => `<li><b>${escHtml(s.label.replace(/_+/g,' '))}</b> (${Math.round(s.score*100)}%)</li>`).join('')}</ul>
+      </div>` : ''}
     <div style="margin-top:14px;padding:12px;background:rgba(251,191,36,.12);border-radius:10px;font-size:.78rem;color:#78350f;line-height:1.5;">
-      ⚠️ <b>Importante:</b> La IA da una guía inicial. Para un diagnóstico oficial consulta con un técnico agrónomo. Siempre usa equipo de protección al aplicar cualquier tratamiento.
+      ⚠️ <b>Importante:</b> La IA da una guía inicial. Consulta con un técnico agrónomo antes de aplicar tratamientos.
     </div>`;
 }
 
