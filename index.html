@@ -10299,12 +10299,8 @@ async function cargarExamenes() {
     INTENTOS_EXAMENES = [];
     intentosSnap.forEach(d => INTENTOS_EXAMENES.push({ id: d.id, ...d.data() }));
 
-    // 4. Cargar progreso del usuario (para saber qué cursos ha completado)
-    let progresoUsuario = {};
-    try {
-      const progSnap = await getDoc(doc(db, 'progreso', window.currentUser.uid));
-      if (progSnap.exists()) progresoUsuario = progSnap.data();
-    } catch(e) {}
+    // 4. Usar la variable local 'progreso' (misma que usa el widget Mi progreso)
+    // progreso[cursoId] es un ARRAY de strings con los IDs de las clases vistas
 
     // 5. Renderizar
     if (!Array.isArray(CURSOS) || CURSOS.length === 0) {
@@ -10318,11 +10314,10 @@ async function cargarExamenes() {
       const examen = examenesMap[curso.id];
       const tieneExamen = examen && Array.isArray(examen.preguntas) && examen.preguntas.length > 0;
 
-      // ¿Curso completado?
-      const prog = progresoUsuario[curso.id] || {};
-      const clasesVistas = Object.keys(prog).filter(k => prog[k] === true).length;
-      const totalClases = (curso.clases || []).length || 1;
-      const cursoCompleto = clasesVistas >= totalClases;
+      // ¿Curso completado? - MISMA LÓGICA QUE "Mi progreso"
+      const vistas = (progreso[curso.id] || []).length;
+      const totalClases = (curso.clases || []).length;
+      const cursoCompleto = totalClases > 0 && vistas >= totalClases;
 
       // Último intento
       const intentosCurso = INTENTOS_EXAMENES.filter(i => i.cursoId === curso.id);
@@ -10340,7 +10335,7 @@ async function cargarExamenes() {
         estado = '<span class="examen-card__estado examen-card__estado--bloqueado">⏳ Próximamente</span>';
         btn = '<button class="examen-card__btn examen-card__btn--bloqueado" disabled>Sin examen</button>';
       } else if (!cursoCompleto) {
-        estado = `<span class="examen-card__estado examen-card__estado--bloqueado">🔒 Termina el curso primero (${clasesVistas}/${totalClases} clases)</span>`;
+        estado = `<span class="examen-card__estado examen-card__estado--bloqueado">🔒 Termina el curso primero (${vistas}/${totalClases} clases)</span>`;
         btn = '<button class="examen-card__btn examen-card__btn--bloqueado" disabled>🔒 Bloqueado</button>';
       } else if (aprobado) {
         const mejor = Math.max(...intentosCurso.filter(i => typeof i.porcentaje === 'number').map(i => i.porcentaje));
