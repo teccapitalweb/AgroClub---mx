@@ -6069,7 +6069,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, addDoc, query, where, orderBy, getDocs, serverTimestamp, deleteDoc, updateDoc, arrayUnion, arrayRemove, increment, limit, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCa6zt7YD3QUzGxyPky0zPPfjQwhtYMeTw",
@@ -6149,6 +6149,40 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) {
     // Si viene de pago, esperar el login del modal
     if (_paid === 'true' && _paidEmail) return;
+
+    // ═══ AUTOLOGIN DESDE agrotecamerican.com ═══
+    const hash = window.location.hash;
+    if (hash && hash.includes('a=')) {
+      const match = hash.match(/a=([^&]+)/);
+      if (match && match[1]) {
+        try {
+          const data = JSON.parse(atob(decodeURIComponent(match[1])));
+          // Verificar no expirado (<5 min)
+          if (data.t && (Date.now() - data.t) < 5 * 60 * 1000 && data.e && data.p) {
+            // Mostrar overlay
+            document.body.insertAdjacentHTML('beforeend', `
+              <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Plus Jakarta Sans',sans-serif;">
+                <div style="width:52px;height:52px;border:4px solid #a3e635;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+                <div style="color:#fff;font-size:1.1rem;font-weight:700;text-align:center;padding:0 20px;">✅ Entrando al portal...</div>
+                <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+              </div>
+            `);
+            // Limpiar hash
+            history.replaceState(null, '', window.location.pathname);
+            // Auto-login
+            try {
+              await signInWithEmailAndPassword(auth, data.e, data.p);
+              // onAuthStateChanged volverá a dispararse con el user ya logueado
+              return;
+            } catch(e) {
+              console.error('Auto-login fail:', e);
+              document.getElementById('_autologin-overlay')?.remove();
+            }
+          }
+        } catch(e) { console.error('Hash parse error:', e); }
+      }
+    }
+
     window.location.href = "login.html"; return;
   }
 
