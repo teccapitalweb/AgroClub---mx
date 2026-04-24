@@ -4428,6 +4428,33 @@
   </div>
 </div>
 
+<!-- 🚪 MODAL BONITO PARA CERRAR SESIÓN -->
+<div id="logoutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:99999; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(8px);">
+  <div style="background:linear-gradient(145deg, #ffffff 0%, #f9fafb 100%); border-radius:20px; max-width:420px; width:100%; padding:32px 28px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(16,185,129,.1); animation:logoutIn .3s cubic-bezier(.34,1.56,.64,1);">
+    <div style="width:72px; height:72px; margin:0 auto 18px; background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.2rem; box-shadow:0 8px 20px rgba(251,191,36,.3);">🚪</div>
+    <h3 style="font-size:1.4rem; font-weight:800; color:#111827; margin:0 0 10px; letter-spacing:-.3px;">¿Cerrar sesión?</h3>
+    <p style="font-size:.95rem; color:#6b7280; margin:0 0 26px; line-height:1.5;">Tendrás que volver a iniciar sesión para acceder a tu contenido VIP.</p>
+    <div style="display:flex; gap:10px; flex-direction:column;">
+      <button id="logoutConfirmBtn" style="padding:14px 22px; background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 6px 16px rgba(239,68,68,.35);">
+        Sí, cerrar sesión
+      </button>
+      <button id="logoutCancelBtn" style="padding:14px 22px; background:#f3f4f6; color:#374151; border:none; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; transition:all .2s;">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+  @keyframes logoutIn { from {opacity:0; transform:scale(.85) translateY(10px);} to {opacity:1; transform:scale(1) translateY(0);} }
+  #logoutConfirmBtn:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(239,68,68,.45); }
+  #logoutCancelBtn:hover { background:#e5e7eb; }
+  body.dark-mode #logoutModal > div { background:linear-gradient(145deg, #1f2937 0%, #111827 100%); }
+  body.dark-mode #logoutModal h3 { color:#f9fafb; }
+  body.dark-mode #logoutModal p { color:#9ca3af; }
+  body.dark-mode #logoutCancelBtn { background:#374151; color:#e5e7eb; }
+  body.dark-mode #logoutCancelBtn:hover { background:#4b5563; }
+</style>
+
 <!-- 🏆 OVERLAY ÉPICO DE BIENVENIDA VIP (estilo Battle Pass) -->
 <style>
   #vipEpicOverlay {
@@ -7912,7 +7939,40 @@ window.showPage = function(id, el, bnId) {
 };
 
 window.cerrarSesion = function() {
-  if (confirm("¿Cerrar sesión?")) signOut(auth).then(() => window.location.href = "login.html");
+  const modal = document.getElementById('logoutModal');
+  if (!modal) {
+    // Fallback por si el modal no está presente
+    signOut(auth).then(() => window.location.href = "login.html");
+    return;
+  }
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  const confirmar = () => {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+    signOut(auth).then(() => window.location.href = "login.html");
+  };
+
+  const cancelar = () => {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  };
+
+  // Limpiar listeners anteriores usando cloneNode
+  const btnOk = document.getElementById('logoutConfirmBtn');
+  const btnCancel = document.getElementById('logoutCancelBtn');
+  const newOk = btnOk.cloneNode(true);
+  const newCancel = btnCancel.cloneNode(true);
+  btnOk.parentNode.replaceChild(newOk, btnOk);
+  btnCancel.parentNode.replaceChild(newCancel, btnCancel);
+
+  newOk.addEventListener('click', confirmar);
+  newCancel.addEventListener('click', cancelar);
+
+  // Cerrar al clickear fondo oscuro
+  modal.onclick = (e) => { if (e.target === modal) cancelar(); };
 };
 
 
