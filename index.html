@@ -729,6 +729,71 @@
       text-transform: uppercase; color: rgba(255,255,255,.25);
       padding: 0 8px; margin-bottom: 8px;
     }
+    /* SUBMENÚ DESPLEGABLE HERRAMIENTAS */
+    .sidebar-item--expand { cursor: pointer; }
+    .sidebar-arrow {
+      font-size: .85rem;
+      opacity: .6;
+      transition: transform .25s;
+    }
+    .sidebar-item--expand.open .sidebar-arrow { transform: rotate(90deg); opacity: 1; }
+    .sidebar-submenu {
+      max-height: 0; overflow: hidden;
+      transition: max-height .3s ease;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .sidebar-submenu.open { max-height: 400px; margin-bottom: 4px; }
+    .sidebar-subitem {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px 8px 34px;
+      font-size: .85rem;
+      color: rgba(255,255,255,.72);
+      cursor: pointer;
+      border-radius: 8px;
+      margin: 0 10px;
+      transition: all .15s;
+    }
+    .sidebar-subitem:hover {
+      background: rgba(255,255,255,.08);
+      color: #fff;
+    }
+    .sidebar-subitem.active {
+      background: rgba(82,201,122,.2);
+      color: #a3e635;
+      font-weight: 700;
+    }
+    .sidebar-subitem span:first-child { font-size: 1rem; }
+
+    /* Drawer móvil submenú */
+    .mobile-drawer__item--expand { cursor: pointer; }
+    .mobile-drawer__arrow {
+      margin-left: auto;
+      font-size: .9rem; color: var(--muted);
+      transition: transform .25s;
+    }
+    .mobile-drawer__item--expand.open .mobile-drawer__arrow { transform: rotate(90deg); }
+    .mobile-drawer__submenu {
+      max-height: 0; overflow: hidden;
+      transition: max-height .3s ease;
+      background: rgba(0,0,0,.03);
+    }
+    .mobile-drawer__submenu.open { max-height: 500px; }
+    .mobile-drawer__subitem {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; padding: 12px 20px 12px 52px;
+      background: none; border: none;
+      font-family: inherit; font-size: .92rem; color: var(--text);
+      text-align: left; cursor: pointer;
+      transition: background .15s;
+    }
+    .mobile-drawer__subitem:hover,
+    .mobile-drawer__subitem.active {
+      background: rgba(82,201,122,.12);
+      color: #1a6b2f;
+      font-weight: 700;
+    }
+    .mobile-drawer__subitem span:first-child { font-size: 1.1rem; }
+
     .sidebar-item {
       display: flex; align-items: center; justify-content: space-between;
       padding: 10px 12px; border-radius: 12px; cursor: pointer; margin-bottom: 2px;
@@ -3937,14 +4002,23 @@
       <span class="mobile-drawer__item-label">Logros</span>
     </button>
 
-    <button class="mobile-drawer__item" data-page="herramientas" onclick="drawerIr('herramientas')">
+    <button class="mobile-drawer__item mobile-drawer__item--expand" onclick="toggleDrawerHerrMenu(this)">
       <span class="mobile-drawer__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
         </svg>
       </span>
       <span class="mobile-drawer__item-label">Herramientas</span>
+      <span class="mobile-drawer__arrow">▸</span>
     </button>
+    <div class="mobile-drawer__submenu" id="drawer-herr-submenu">
+      <button class="mobile-drawer__subitem" onclick="irHerramientaDrawer('agroquimicos')"><span>🧪</span> Agroquímicos</button>
+      <button class="mobile-drawer__subitem" onclick="irHerramientaDrawer('plagas')"><span>🔬</span> Detector IA</button>
+      <button class="mobile-drawer__subitem" onclick="irHerramientaDrawer('costos')"><span>💰</span> Costos</button>
+      <button class="mobile-drawer__subitem" onclick="irHerramientaDrawer('clima')"><span>☀️</span> Clima</button>
+      <button class="mobile-drawer__subitem" onclick="irHerramientaDrawer('bitacora')"><span>📓</span> Bitácora</button>
+      <button class="mobile-drawer__subitem" onclick="irHerramientaDrawer('conversor')"><span>📏</span> Conversor</button>
+    </div>
 
     <button class="mobile-drawer__item" data-page="apoyos" onclick="drawerIr('apoyos')">
       <span class="mobile-drawer__icon">
@@ -4027,7 +4101,18 @@
       <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div></div>
       <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
       <div class="sidebar-item" onclick="showPage('logros',this)"><div class="sidebar-item-left"><span>🏆</span> Logros</div></div>
-      <div class="sidebar-item" onclick="showPage('herramientas',this)"><div class="sidebar-item-left"><span>🛠️</span> Herramientas</div></div>
+      <div class="sidebar-item sidebar-item--expand" onclick="toggleHerrMenu(this)">
+        <div class="sidebar-item-left"><span>🛠️</span> Herramientas</div>
+        <span class="sidebar-arrow">▸</span>
+      </div>
+      <div class="sidebar-submenu" id="sidebar-herr-submenu">
+        <div class="sidebar-subitem" onclick="irHerramienta('agroquimicos',this)"><span>🧪</span> Agroquímicos</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('plagas',this)"><span>🔬</span> Detector IA</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('costos',this)"><span>💰</span> Costos</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('clima',this)"><span>☀️</span> Clima</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('bitacora',this)"><span>📓</span> Bitácora</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('conversor',this)"><span>📏</span> Conversor</div>
+      </div>
       <div class="sidebar-item" onclick="showPage('apoyos',this)"><div class="sidebar-item-left"><span>🏛️</span> Apoyos gob.</div></div>
     </div>
     <div class="sidebar-section">
@@ -7491,6 +7576,63 @@ window.eliminarMiPost = async function(postId) {
 };
 
 window.renderForo = renderForo;
+
+// ══════════════════════════════════════════════════════════
+// 🛠️ SUBMENÚ HERRAMIENTAS (sidebar + drawer)
+// ══════════════════════════════════════════════════════════
+
+window.toggleHerrMenu = function(el) {
+  el.classList.toggle('open');
+  const sub = document.getElementById('sidebar-herr-submenu');
+  if (sub) sub.classList.toggle('open');
+};
+
+window.toggleDrawerHerrMenu = function(el) {
+  el.classList.toggle('open');
+  const sub = document.getElementById('drawer-herr-submenu');
+  if (sub) sub.classList.toggle('open');
+};
+
+window.irHerramienta = function(tab, el) {
+  // Marcar activo en sidebar
+  document.querySelectorAll('.sidebar-subitem').forEach(s => s.classList.remove('active'));
+  if (el) el.classList.add('active');
+  // Asegurar menú abierto
+  const expand = document.querySelector('.sidebar-item--expand');
+  const sub = document.getElementById('sidebar-herr-submenu');
+  if (expand && !expand.classList.contains('open')) {
+    expand.classList.add('open');
+    if (sub) sub.classList.add('open');
+  }
+  // Ir a herramientas y activar tab
+  showPage('herramientas');
+  setTimeout(() => {
+    const btn = document.querySelector('.herr-tab[data-tab="'+tab+'"]');
+    if (btn) cambiarHerrTab(tab, btn);
+  }, 100);
+  // Desmarcar ítems del sidebar principal
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+};
+
+window.irHerramientaDrawer = function(tab) {
+  document.querySelectorAll('.mobile-drawer__subitem').forEach(s => s.classList.remove('active'));
+  const btn = document.querySelector(`.mobile-drawer__subitem[onclick*="'${tab}'"]`);
+  if (btn) btn.classList.add('active');
+  // Cerrar drawer
+  const drawer = document.querySelector('.mobile-drawer');
+  const overlay = document.querySelector('.mobile-drawer-overlay');
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  if (drawer) drawer.classList.remove('is-open');
+  if (overlay) overlay.classList.remove('is-open');
+  if (menuBtn) menuBtn.classList.remove('is-open');
+  document.body.style.overflow = '';
+  // Ir a herramientas y activar tab
+  showPage('herramientas');
+  setTimeout(() => {
+    const tabBtn = document.querySelector('.herr-tab[data-tab="'+tab+'"]');
+    if (tabBtn) cambiarHerrTab(tab, tabBtn);
+  }, 100);
+};
 
 // Canjear descuento: si no es VIP → paywall; si es VIP → abre WhatsApp
 window.canjearDescuento = function() {
