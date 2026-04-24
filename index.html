@@ -4398,6 +4398,7 @@
   </style>
     <!-- Canvas-confetti para celebración al 100% -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 
@@ -4406,6 +4407,25 @@
   <span class="paywall-banner__icon">🔒</span>
   <span>Tu cuenta está en modo gratuito · <strong>Suscríbete para desbloquear todo</strong></span>
   <button class="paywall-banner__btn" onclick="mostrarPaywallModal('banner')">✨ Suscribirme</button>
+</div>
+
+<!-- 💳 MODAL STRIPE EMBEDDED CHECKOUT -->
+<div id="stripeCheckoutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:100000; align-items:flex-start; justify-content:center; overflow-y:auto; padding:20px;">
+  <div style="background:#fff; border-radius:16px; max-width:560px; width:100%; margin:20px auto; position:relative; box-shadow:0 20px 60px rgba(0,0,0,.4);">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:18px 22px; border-bottom:1px solid #e5e7eb;">
+      <div>
+        <div style="font-size:.72rem; font-weight:700; color:#059669; letter-spacing:.5px;">PAGO SEGURO</div>
+        <div style="font-size:1.05rem; font-weight:700; color:#111827;" id="stripeCheckoutTitle">AgroClub MX · Suscripción</div>
+      </div>
+      <button onclick="cerrarStripeCheckout()" style="background:#f3f4f6; border:none; width:34px; height:34px; border-radius:50%; font-size:1.2rem; cursor:pointer; color:#374151;">✕</button>
+    </div>
+    <div id="stripeCheckoutContainer" style="padding:10px;">
+      <div id="stripeCheckoutLoading" style="padding:60px 20px; text-align:center; color:#6b7280;">
+        <div style="font-size:2rem; margin-bottom:12px;">⏳</div>
+        <div>Preparando pago seguro...</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- 🔒 MODAL PAYWALL -->
@@ -4426,8 +4446,8 @@
       <div class="paywall-modal__feat">Apoyos del gobierno curados</div>
       <div class="paywall-modal__feat">Certificados digitales oficiales</div>
     </div>
-    <a href="https://agrotecamerican.com/?suscribirme=1" class="paywall-modal__cta" target="_blank" rel="noopener">
-      ✨ Suscribirme en AgroTec America
+    <a href="javascript:void(0)" class="paywall-modal__cta" onclick="abrirStripeCheckout('mensual'); cerrarPaywallModal();">
+      ✨ Suscribirme ahora
     </a>
     <div class="paywall-modal__small">
       💳 Pago seguro · Cancela cuando quieras
@@ -5824,7 +5844,7 @@
               <li>✓ Certificado mensual</li>
               <li>✓ 20% descuento en cursos</li>
             </ul>
-            <button class="sus-plan-card__btn" onclick="window.open('https://agrotecamerican.com/?suscribirme=1','_blank')">
+            <button class="sus-plan-card__btn" onclick="abrirStripeCheckout('mensual')">
               💳 Suscribirme mensual →
             </button>
           </div>
@@ -5846,7 +5866,7 @@
               <li>✓ Certificado anual especial</li>
               <li>✓ 30% descuento en cursos</li>
             </ul>
-            <button class="sus-plan-card__btn sus-plan-card__btn--pri" onclick="window.open('https://agrotecamerican.com/?suscribirme=1','_blank')">
+            <button class="sus-plan-card__btn sus-plan-card__btn--pri" onclick="abrirStripeCheckout('anual')">
               💳 Suscribirme anual →
             </button>
           </div>
@@ -8370,6 +8390,106 @@ window.cerrarPaywallModal = function() {
 window.cerrarPaywallBg = function(e) {
   if (e.target.id === 'paywallModal') cerrarPaywallModal();
 };
+
+// ═══════════════════════════════════════════════════════════════
+// 💳 STRIPE EMBEDDED CHECKOUT — Portal VIP
+// ═══════════════════════════════════════════════════════════════
+const STRIPE_PK = 'pk_test_51TMAchPBgqsOPfUYtBbalhoOLnnGz6LymFleli7OxTDbiK4FNYX0K82ispYDb39zKJQXevyMtIPetxVAvq9hhb5P005VGgxu99';
+const WEBHOOK_URL = 'https://agroclub-webhook-production.up.railway.app';
+let stripeInstance = null;
+let checkoutInstance = null;
+
+window.abrirStripeCheckout = async function(plan) {
+  const u = window.currentUser;
+  if (!u || !u.email) {
+    alert('Inicia sesión primero para suscribirte.');
+    return;
+  }
+
+  const modal = document.getElementById('stripeCheckoutModal');
+  const loading = document.getElementById('stripeCheckoutLoading');
+  const container = document.getElementById('stripeCheckoutContainer');
+  const title = document.getElementById('stripeCheckoutTitle');
+
+  title.textContent = plan === 'anual'
+    ? 'AgroClub MX · Plan Anual ($1,920 MXN)'
+    : 'AgroClub MX · Plan Mensual ($200 MXN)';
+
+  // Limpiar checkout anterior si existe
+  if (checkoutInstance) {
+    try { checkoutInstance.destroy(); } catch(e) {}
+    checkoutInstance = null;
+  }
+  container.innerHTML = '<div id="stripeCheckoutLoading" style="padding:60px 20px; text-align:center; color:#6b7280;"><div style="font-size:2rem; margin-bottom:12px;">⏳</div><div>Preparando pago seguro...</div></div><div id="stripe-embedded-mount"></div>';
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const r = await fetch(`${WEBHOOK_URL}/crear-checkout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        plan,
+        email: u.email,
+        uid: u.uid || '',
+        nombre: u.nombre || u.email.split('@')[0]
+      })
+    });
+
+    const data = await r.json();
+    if (!r.ok || !data.clientSecret) throw new Error(data.error || 'No se pudo crear la sesión');
+
+    if (!stripeInstance) stripeInstance = Stripe(STRIPE_PK);
+
+    const loadingEl = document.getElementById('stripeCheckoutLoading');
+    if (loadingEl) loadingEl.style.display = 'none';
+
+    checkoutInstance = await stripeInstance.initEmbeddedCheckout({
+      clientSecret: data.clientSecret
+    });
+    checkoutInstance.mount('#stripe-embedded-mount');
+
+  } catch (err) {
+    console.error('❌ Stripe checkout error:', err);
+    container.innerHTML = `<div style="padding:40px 20px; text-align:center; color:#dc2626;"><div style="font-size:2rem; margin-bottom:10px;">⚠️</div><div style="font-weight:600; margin-bottom:6px;">No se pudo abrir el pago</div><div style="font-size:.9rem; color:#6b7280;">${err.message}</div><button onclick="cerrarStripeCheckout()" style="margin-top:20px; padding:10px 24px; background:#10b981; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Cerrar</button></div>`;
+  }
+};
+
+window.cerrarStripeCheckout = function() {
+  const modal = document.getElementById('stripeCheckoutModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+  if (checkoutInstance) {
+    try { checkoutInstance.destroy(); } catch(e) {}
+    checkoutInstance = null;
+  }
+};
+
+// Cerrar al clickear fondo oscuro
+document.addEventListener('click', function(e) {
+  const modal = document.getElementById('stripeCheckoutModal');
+  if (e.target === modal) cerrarStripeCheckout();
+});
+
+// ═══════ DETECTAR PAGO EXITOSO (vuelve de Stripe) ═══════
+(function detectarPagoExitoso() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('pago_exitoso') === '1') {
+    // Limpia la URL
+    const url = new URL(window.location.href);
+    url.searchParams.delete('pago_exitoso');
+    url.searchParams.delete('session_id');
+    window.history.replaceState({}, '', url.toString());
+
+    // Mensaje de éxito y recarga suave después de 2s para que Firestore se sincronice
+    setTimeout(() => {
+      try { if (typeof confetti === 'function') confetti({ particleCount: 180, spread: 90, origin: { y: .6 } }); } catch(e) {}
+      alert('🎉 ¡Pago exitoso! Tu membresía VIP se está activando. Recargaremos la página para desbloquear todo.');
+      setTimeout(() => window.location.reload(), 1500);
+    }, 800);
+  }
+})();
 
 // ═══════ INTERCEPTAR ACCIONES BLOQUEADAS ═══════
 // Usuario FREE puede VER TODO el portal, pero con candaditos encima.
