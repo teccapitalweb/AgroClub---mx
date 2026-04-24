@@ -6602,6 +6602,30 @@ function formatearFechaVence(val) {
   return '—';
 }
 
+// ═══ FIX: Si data.vence viene vacío del webhook, calcular desde fechaRegistro + plan ═══
+function calcularVenceFallback(data) {
+  if (!data) return '—';
+  // Buscar fecha base: ultimoPago > fechaRegistro
+  const baseStr = data.ultimoPago || data.fechaRegistro;
+  if (!baseStr) return '—';
+
+  const base = new Date(baseStr);
+  if (isNaN(base.getTime())) return '—';
+
+  // Determinar plan
+  const plan = (data.plan || '').toLowerCase();
+  const esAnual = plan.includes('anual') || plan.includes('año');
+
+  const vence = new Date(base);
+  if (esAnual) {
+    vence.setFullYear(vence.getFullYear() + 1);
+  } else {
+    vence.setMonth(vence.getMonth() + 1);
+  }
+
+  return vence.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
 // ═══ FIX #1: PRE-PROCESAR HASH AUTOLOGIN ANTES DE onAuthStateChanged ═══
 // NOTA: Se removió la versión anterior con IIFE porque causaba race conditions.
 // La lógica nueva va DENTRO de onAuthStateChanged (ver FIX #1b más abajo).
@@ -6737,10 +6761,14 @@ onAuthStateChanged(auth, async (user) => {
     if (document.getElementById("perfil-avatar-big")) document.getElementById("perfil-avatar-big").textContent = nombre[0].toUpperCase();
     if (document.getElementById("perfil-plan")) document.getElementById("perfil-plan").textContent = data.plan || "VIP";
     if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = data.whatsapp || "—";
-    if (document.getElementById("perfil-vence")) document.getElementById("perfil-vence").textContent = formatearFechaVence(data.vence);
-    if (document.getElementById("sus-vence")) document.getElementById("sus-vence").textContent = formatearFechaVence(data.vence);
+    // ═══ FIX: Si no hay data.vence pero es VIP, calcular desde fechaRegistro+plan ═══
+    const venceCalculado = formatearFechaVence(data.vence) !== '—'
+      ? formatearFechaVence(data.vence)
+      : calcularVenceFallback(data);
+    if (document.getElementById("perfil-vence")) document.getElementById("perfil-vence").textContent = venceCalculado;
+    if (document.getElementById("sus-vence")) document.getElementById("sus-vence").textContent = venceCalculado;
     if (document.getElementById("sus-plan-info")) document.getElementById("sus-plan-info").textContent = data.plan || "VIP Mensual";
-    if (document.getElementById("sus-proximo-cobro")) document.getElementById("sus-proximo-cobro").textContent = formatearFechaVence(data.vence);
+    if (document.getElementById("sus-proximo-cobro")) document.getElementById("sus-proximo-cobro").textContent = venceCalculado;
     actualizarEstadisticasPerfil();
     cargarHistorialPagos(user.email);
   } else {
@@ -8917,7 +8945,8 @@ window.abrirStripeCheckout = async function(plan) {
         plan,
         email: u.email,
         uid: u.uid || '',
-        nombre: u.nombre || u.email.split('@')[0]
+        nombre: u.nombre || u.email.split('@')[0],
+        whatsapp: u.whatsapp || ''
       })
     });
 
