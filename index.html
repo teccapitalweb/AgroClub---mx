@@ -2475,6 +2475,67 @@
     .perfil-hero-info h3 { font-size: 1.4rem; font-weight: 900; font-family: var(--font-display); margin-bottom: 6px; }
     .perfil-hero-info p { color: rgba(255,255,255,.6); font-size: .88rem; }
     .perfil-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(82,201,122,.2); border: 1px solid rgba(82,201,122,.3); color: var(--verde-claro); border-radius: 100px; padding: 4px 14px; font-size: .78rem; font-weight: 700; }
+
+    /* 📱 FIX C: BANNER WHATSAPP VACÍO */
+    .perfil-wa-banner {
+      display: flex; align-items: center; gap: 16px;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border: 1.5px solid #10b981;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(16,185,129,.15);
+      animation: waBannerIn .4s ease;
+    }
+    @keyframes waBannerIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+    .perfil-wa-banner__icon {
+      font-size: 1.8rem; flex-shrink: 0;
+      width: 46px; height: 46px; border-radius: 50%;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+    .perfil-wa-banner__body { flex: 1; min-width: 0; }
+    .perfil-wa-banner__body strong {
+      display: block; font-size: .95rem; font-weight: 700;
+      color: #065f46; margin-bottom: 2px;
+    }
+    .perfil-wa-banner__body p {
+      font-size: .82rem; color: #047857; margin: 0; line-height: 1.35;
+    }
+    .perfil-wa-banner__btn {
+      background: #10b981; color: #fff; border: none;
+      padding: 10px 16px; border-radius: 10px;
+      font-size: .85rem; font-weight: 700; cursor: pointer;
+      transition: all .2s; white-space: nowrap; flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(16,185,129,.3);
+    }
+    .perfil-wa-banner__btn:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(16,185,129,.4); }
+    .perfil-wa-banner__close {
+      position: absolute; top: 8px; right: 10px;
+      background: transparent; border: none;
+      width: 24px; height: 24px; border-radius: 50%;
+      font-size: .85rem; color: #065f46;
+      cursor: pointer; opacity: .6;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0; line-height: 1;
+    }
+    .perfil-wa-banner__close:hover { opacity: 1; background: rgba(0,0,0,.08); }
+    /* Dark mode del banner */
+    body.dark-mode .perfil-wa-banner {
+      background: linear-gradient(135deg, rgba(16,185,129,.15) 0%, rgba(6,95,70,.2) 100%);
+      border-color: rgba(16,185,129,.4);
+    }
+    body.dark-mode .perfil-wa-banner__icon { background: #1f2937; }
+    body.dark-mode .perfil-wa-banner__body strong { color: #a7f3d0; }
+    body.dark-mode .perfil-wa-banner__body p { color: #6ee7b7; }
+    body.dark-mode .perfil-wa-banner__close { color: #a7f3d0; }
+    /* Responsive mobile */
+    @media (max-width: 640px) {
+      .perfil-wa-banner { flex-direction: column; align-items: flex-start; text-align: left; padding: 18px 16px; }
+      .perfil-wa-banner__btn { width: 100%; padding: 12px 16px; }
+    }
     .perfil-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .perfil-row:last-child { border-bottom: none; }
     .perfil-label { font-size: .8rem; color: var(--muted); font-weight: 600; flex-shrink: 0; }
@@ -4453,16 +4514,16 @@
 </div>
 
 <!-- 🚪 MODAL BONITO PARA CERRAR SESIÓN -->
-<div id="logoutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:99999; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(8px);">
-  <div style="background:linear-gradient(145deg, #ffffff 0%, #f9fafb 100%); border-radius:20px; max-width:420px; width:100%; padding:32px 28px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(16,185,129,.1); animation:logoutIn .3s cubic-bezier(.34,1.56,.64,1);">
-    <div style="width:72px; height:72px; margin:0 auto 18px; background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.2rem; box-shadow:0 8px 20px rgba(251,191,36,.3);">🚪</div>
-    <h3 style="font-size:1.4rem; font-weight:800; color:#111827; margin:0 0 10px; letter-spacing:-.3px;">¿Cerrar sesión?</h3>
-    <p style="font-size:.95rem; color:#6b7280; margin:0 0 26px; line-height:1.5;">Tendrás que volver a iniciar sesión para acceder a tu contenido VIP.</p>
-    <div style="display:flex; gap:10px; flex-direction:column;">
-      <button id="logoutConfirmBtn" style="padding:14px 22px; background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 6px 16px rgba(239,68,68,.35);">
+<div id="logoutModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:99999; align-items:center; justify-content:center; padding:12px; backdrop-filter:blur(8px); overflow-y:auto;">
+  <div style="background:linear-gradient(145deg, #ffffff 0%, #f9fafb 100%); border-radius:20px; max-width:420px; width:100%; padding:26px 22px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(16,185,129,.1); animation:logoutIn .3s cubic-bezier(.34,1.56,.64,1); box-sizing:border-box; max-height:95vh; overflow-y:auto;">
+    <div style="width:64px; height:64px; margin:0 auto 14px; background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; box-shadow:0 8px 20px rgba(251,191,36,.3);">🚪</div>
+    <h3 style="font-size:1.3rem; font-weight:800; color:#111827; margin:0 0 8px; letter-spacing:-.3px;">¿Cerrar sesión?</h3>
+    <p style="font-size:.9rem; color:#6b7280; margin:0 0 22px; line-height:1.5;">Tendrás que volver a iniciar sesión para acceder a tu contenido VIP.</p>
+    <div style="display:flex; gap:8px; flex-direction:column;">
+      <button id="logoutConfirmBtn" style="padding:13px 18px; background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color:#fff; border:none; border-radius:12px; font-size:.95rem; font-weight:700; cursor:pointer; transition:all .2s; box-shadow:0 6px 16px rgba(239,68,68,.35); width:100%; white-space:nowrap;">
         Sí, cerrar sesión
       </button>
-      <button id="logoutCancelBtn" style="padding:14px 22px; background:#f3f4f6; color:#374151; border:none; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; transition:all .2s;">
+      <button id="logoutCancelBtn" style="padding:13px 18px; background:#f3f4f6; color:#374151; border:none; border-radius:12px; font-size:.95rem; font-weight:600; cursor:pointer; transition:all .2s; width:100%; white-space:nowrap;">
         Cancelar
       </button>
     </div>
@@ -4472,11 +4533,23 @@
   @keyframes logoutIn { from {opacity:0; transform:scale(.85) translateY(10px);} to {opacity:1; transform:scale(1) translateY(0);} }
   #logoutConfirmBtn:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(239,68,68,.45); }
   #logoutCancelBtn:hover { background:#e5e7eb; }
-  body.dark-mode #logoutModal > div { background:linear-gradient(145deg, #1f2937 0%, #111827 100%); }
-  body.dark-mode #logoutModal h3 { color:#f9fafb; }
-  body.dark-mode #logoutModal p { color:#9ca3af; }
-  body.dark-mode #logoutCancelBtn { background:#374151; color:#e5e7eb; }
-  body.dark-mode #logoutCancelBtn:hover { background:#4b5563; }
+  /* ═══ FIX B: Dark mode del modal logout (con !important para vencer estilos inline) ═══ */
+  body.dark-mode #logoutModal > div {
+    background: linear-gradient(145deg, #1f2937 0%, #111827 100%) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(16,185,129,.2) !important;
+  }
+  body.dark-mode #logoutModal h3 { color: #f9fafb !important; }
+  body.dark-mode #logoutModal p { color: #9ca3af !important; }
+  body.dark-mode #logoutCancelBtn {
+    background: #374151 !important;
+    color: #e5e7eb !important;
+  }
+  body.dark-mode #logoutCancelBtn:hover { background: #4b5563 !important; }
+  body.dark-mode #logoutModal > div > div:first-child {
+    /* Ícono circular amarillo - adaptar brillo en dark */
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%) !important;
+    box-shadow: 0 8px 20px rgba(251,191,36,.2) !important;
+  }
 </style>
 
 <!-- 🏆 OVERLAY ÉPICO DE BIENVENIDA VIP (estilo Battle Pass) -->
@@ -6181,6 +6254,19 @@
         </div>
       </div>
 
+      <!-- 📱 FIX C: BANNER AMIGABLE SI WHATSAPP ESTÁ VACÍO -->
+      <div class="perfil-wa-banner" id="perfilWaBanner" style="display:none;">
+        <div class="perfil-wa-banner__icon">📱</div>
+        <div class="perfil-wa-banner__body">
+          <strong>Agrega tu WhatsApp</strong>
+          <p>Te enviaremos avisos del club, nuevos cursos y webinars directo a tu celular.</p>
+        </div>
+        <button class="perfil-wa-banner__btn" onclick="editarCampo('wa'); document.getElementById('perfilWaBanner').style.display='none';">
+          Agregar ahora →
+        </button>
+        <button class="perfil-wa-banner__close" onclick="dismissWaBanner()" aria-label="Cerrar">✕</button>
+      </div>
+
       <!-- TEMA CLARO/OSCURO -->
       <div class="tema-card">
         <div class="tema-card__left">
@@ -6822,6 +6908,8 @@ onAuthStateChanged(auth, async (user) => {
     if (document.getElementById("perfil-avatar-big")) document.getElementById("perfil-avatar-big").textContent = nombre[0].toUpperCase();
     if (document.getElementById("perfil-plan")) document.getElementById("perfil-plan").textContent = data.plan || "VIP";
     if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = data.whatsapp || "—";
+    // ═══ FIX C: Mostrar banner si WhatsApp está vacío ═══
+    mostrarBannerWaSiFalta(data.whatsapp || '');
     // ═══ FIX: Si no hay data.vence pero es VIP, calcular desde fechaRegistro+plan ═══
     const venceCalculado = formatearFechaVence(data.vence) !== '—'
       ? formatearFechaVence(data.vence)
@@ -6865,6 +6953,8 @@ onAuthStateChanged(auth, async (user) => {
     if (document.getElementById("perfil-nombre")) document.getElementById("perfil-nombre").textContent = nombre;
     if (document.getElementById("perfil-email")) document.getElementById("perfil-email").textContent = user.email;
     if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = whatsappFree || '—';
+    // ═══ FIX C: Mostrar banner si WhatsApp está vacío (usuario FREE) ═══
+    mostrarBannerWaSiFalta(whatsappFree);
     if (document.getElementById("perfil-fecha")) {
       const fecha = user.metadata?.creationTime
         ? new Date(user.metadata.creationTime).toLocaleDateString("es-MX", {day:"numeric",month:"long",year:"numeric"})
@@ -7970,6 +8060,37 @@ window.showPage = function(id, el, bnId) {
   if (bnTarget) bnTarget.classList.add("active");
   // Scroll al top en móvil
   window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ═══════════════════════════════════════════════════════════════
+// 📱 FIX C: BANNER WHATSAPP VACÍO EN MI PERFIL
+// ═══════════════════════════════════════════════════════════════
+window.mostrarBannerWaSiFalta = function(whatsapp) {
+  const banner = document.getElementById('perfilWaBanner');
+  if (!banner) return;
+
+  // No mostrar si ya tiene WhatsApp
+  if (whatsapp && String(whatsapp).trim().length >= 7) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  // No mostrar si el usuario ya lo descartó
+  try {
+    if (localStorage.getItem('waBannerDismissed') === '1') {
+      banner.style.display = 'none';
+      return;
+    }
+  } catch(e) {}
+
+  // Mostrar
+  banner.style.display = 'flex';
+};
+
+window.dismissWaBanner = function() {
+  const banner = document.getElementById('perfilWaBanner');
+  if (banner) banner.style.display = 'none';
+  try { localStorage.setItem('waBannerDismissed', '1'); } catch(e) {}
 };
 
 window.cerrarSesion = function() {

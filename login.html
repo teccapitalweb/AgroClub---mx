@@ -152,6 +152,10 @@
         <input type="email" id="regEmail" placeholder="tu@correo.com">
       </div>
       <div class="form-group">
+        <label>WhatsApp <span style="opacity:.6;font-weight:400;font-size:.85em;">(opcional)</span></label>
+        <input type="tel" id="regWhatsapp" placeholder="2381234567" maxlength="15">
+      </div>
+      <div class="form-group">
         <label>Contraseña (mín. 6 caracteres)</label>
         <input type="password" id="regPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')crearCuenta()">
       </div>
@@ -166,6 +170,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCa6zt7YD3QUzGxyPky0zPPfjQwhtYMeTw",
@@ -178,6 +183,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     // Si ya está logueado, redirigir al portal
     onAuthStateChanged(auth, (user) => {
@@ -328,10 +334,11 @@
     window.crearCuenta = async function() {
       const nombre = document.getElementById("regNombre").value.trim();
       const email = document.getElementById("regEmail").value.trim();
+      const whatsapp = document.getElementById("regWhatsapp").value.trim();
       const password = document.getElementById("regPassword").value;
       const btn = document.getElementById("btnRegistro");
 
-      if (!nombre || !email || !password) return mostrarError("Llena todos los campos.");
+      if (!nombre || !email || !password) return mostrarError("Llena los campos obligatorios.");
       if (nombre.length < 3) return mostrarError("Ingresa tu nombre completo.");
       if (password.length < 6) return mostrarError("La contraseña debe tener al menos 6 caracteres.");
 
@@ -341,6 +348,18 @@
         // Guardar nombre en el perfil de Firebase Auth
         if (cred.user) {
           try { await updateProfile(cred.user, { displayName: nombre }); } catch(e) {}
+          // ═══ FIX A: Guardar datos del FREE (incluyendo WhatsApp) en Firestore ═══
+          try {
+            await setDoc(doc(db, 'usuarios_free', cred.user.uid), {
+              nombre,
+              email: email.toLowerCase(),
+              whatsapp: whatsapp || '',
+              fechaRegistro: new Date().toISOString(),
+              origen: 'portal-login'
+            }, { merge: true });
+          } catch(e) {
+            console.warn('No se pudo guardar usuarios_free:', e);
+          }
         }
         mostrarOk("✅ Cuenta creada. Redirigiendo...");
         // onAuthStateChanged redirige automático al portal
