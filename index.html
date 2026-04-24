@@ -6186,6 +6186,9 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "login.html"; return;
   }
 
+  // Quitar overlay de auto-login si estaba visible
+  document.getElementById('_autologin-overlay')?.remove();
+
   // Setear currentUser inmediatamente con el UID de auth
   currentUser = { uid: user.uid, email: user.email };
   window.currentUser = currentUser;
