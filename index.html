@@ -308,6 +308,260 @@
     body.dark-mode .noticias-skeleton { background: #0f1411; }
     body.dark-mode .herr-empty { color: var(--muted); }
 
+    /* ═══════════════════════════════════════════
+       📝 EXÁMENES
+       ═══════════════════════════════════════════ */
+    .examenes-hero {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #7c2d12 0%, #b45309 50%, #d97706 100%);
+      border-radius: 20px; padding: 28px; margin-bottom: 18px;
+      color: #fff;
+    }
+    .examenes-hero__glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 50%, rgba(251,191,36,.4), transparent 60%);
+      pointer-events: none;
+    }
+    .examenes-hero__content { position: relative; display: flex; align-items: center; gap: 18px; }
+    .examenes-hero__icon {
+      font-size: 2.8rem; flex-shrink: 0;
+      background: rgba(255,255,255,.12); width: 66px; height: 66px;
+      border-radius: 18px; display: flex; align-items: center; justify-content: center;
+    }
+    .examenes-hero__kicker {
+      font-size: .72rem; font-weight: 800; letter-spacing: .18em;
+      color: #fde68a; margin-bottom: 4px;
+    }
+    .examenes-hero__title {
+      font-size: 1.45rem; font-weight: 800; margin-bottom: 4px;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .examenes-hero__desc { font-size: .88rem; color: rgba(255,255,255,.9); line-height: 1.4; }
+
+    .examenes-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      margin-bottom: 18px;
+    }
+    .examenes-stat {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px 10px; text-align: center;
+    }
+    .examenes-stat__num {
+      font-size: 1.6rem; font-weight: 900; color: #d97706;
+      font-family: 'Playfair Display', Georgia, serif; line-height: 1;
+    }
+    .examenes-stat__lbl {
+      font-size: .7rem; font-weight: 800; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .05em; margin-top: 4px;
+    }
+
+    .examenes-lista { display: flex; flex-direction: column; gap: 12px; }
+
+    .examen-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 4px solid #d97706;
+      border-radius: 14px; padding: 16px 18px;
+      display: flex; align-items: center; gap: 14px;
+      transition: all .15s;
+    }
+    .examen-card:hover { transform: translateX(3px); border-left-color: #fbbf24; }
+    .examen-card__icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .examen-card__info { flex: 1; min-width: 0; }
+    .examen-card__titulo {
+      font-weight: 800; color: var(--text); font-size: .98rem;
+      margin-bottom: 4px;
+    }
+    .examen-card__meta { font-size: .78rem; color: var(--muted); }
+    .examen-card__estado {
+      font-size: .72rem; font-weight: 800;
+      padding: 3px 10px; border-radius: 100px;
+      margin-top: 6px; display: inline-block;
+    }
+    .examen-card__estado--disponible { background: #dcfce7; color: #166534; }
+    .examen-card__estado--bloqueado { background: #fef3c7; color: #92400e; }
+    .examen-card__estado--aprobado { background: #dbeafe; color: #1e40af; }
+    .examen-card__estado--reprobado { background: #fee2e2; color: #991b1b; }
+    .examen-card__btn {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: #fff; border: none; padding: 9px 16px;
+      border-radius: 10px; font-weight: 800; font-size: .82rem;
+      cursor: pointer; font-family: inherit;
+      white-space: nowrap; flex-shrink: 0;
+      transition: all .15s;
+    }
+    .examen-card__btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(217,119,6,.4); }
+    .examen-card__btn--aprobado {
+      background: linear-gradient(135deg, #10b981, #047857);
+    }
+    .examen-card__btn--bloqueado {
+      background: #9ca3af; cursor: not-allowed;
+    }
+    .examen-card__btn--bloqueado:hover { transform: none; box-shadow: none; }
+
+    /* Modal del examen */
+    .examen-modal {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.85); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .examen-modal.open { display: flex; animation: pwFadeIn .3s ease; }
+    .examen-modal__box {
+      background: var(--card); border-radius: 22px;
+      max-width: 600px; width: 100%; max-height: 90vh;
+      display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+      animation: pwSlideIn .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .examen-modal__head {
+      padding: 22px 26px;
+      background: linear-gradient(135deg, #7c2d12, #b45309);
+      color: #fff;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+    }
+    .examen-modal__kicker {
+      font-size: .72rem; font-weight: 800; letter-spacing: .18em;
+      color: #fde68a; margin-bottom: 4px;
+    }
+    .examen-modal__title {
+      font-size: 1.25rem; font-weight: 800;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .examen-modal__close {
+      background: rgba(255,255,255,.2); border: none;
+      width: 34px; height: 34px; border-radius: 50%;
+      color: #fff; font-family: inherit; font-size: .95rem; cursor: pointer;
+      flex-shrink: 0;
+    }
+    .examen-modal__close:hover { background: rgba(255,255,255,.3); }
+    .examen-modal__body {
+      flex: 1; overflow-y: auto; padding: 24px 26px;
+    }
+    .examen-modal__footer {
+      padding: 16px 26px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      background: var(--card);
+    }
+    .examen-progress {
+      font-size: .85rem; font-weight: 700; color: var(--muted);
+      font-family: 'Space Grotesk', monospace;
+    }
+    .examen-progress span:first-child {
+      color: #d97706; font-size: 1.1rem; font-weight: 900;
+    }
+
+    .examen-pregunta {
+      margin-bottom: 8px;
+    }
+    .examen-pregunta__num {
+      display: inline-block;
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      color: #78350f; font-weight: 800; font-size: .72rem;
+      padding: 4px 12px; border-radius: 100px;
+      letter-spacing: .1em;
+      margin-bottom: 12px;
+    }
+    .examen-pregunta__texto {
+      font-size: 1.08rem; font-weight: 700; color: var(--text);
+      line-height: 1.45; margin-bottom: 20px;
+    }
+    .examen-opciones { display: flex; flex-direction: column; gap: 10px; }
+    .examen-opcion {
+      background: var(--bg); border: 2px solid var(--border);
+      border-radius: 12px; padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px;
+      font-family: inherit; font-size: .94rem; font-weight: 600;
+      color: var(--text); cursor: pointer;
+      text-align: left; width: 100%;
+      transition: all .15s;
+    }
+    .examen-opcion:hover { border-color: #d97706; background: rgba(251,191,36,.08); }
+    .examen-opcion.selected {
+      border-color: #d97706; background: rgba(251,191,36,.12);
+    }
+    .examen-opcion__letra {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: .88rem; color: var(--muted);
+      flex-shrink: 0;
+    }
+    .examen-opcion.selected .examen-opcion__letra {
+      background: #d97706; color: #fff; border-color: #d97706;
+    }
+
+    /* Resultado */
+    .examen-resultado-box {
+      max-width: 480px; padding: 36px 28px;
+      text-align: center;
+    }
+    .examen-resultado__icon {
+      font-size: 4.5rem; margin-bottom: 12px;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,.2));
+    }
+    .examen-resultado__num {
+      font-size: 3.5rem; font-weight: 900;
+      font-family: 'Playfair Display', Georgia, serif;
+      line-height: 1; margin-bottom: 4px;
+    }
+    .examen-resultado__num-tot { font-size: 1.4rem; opacity: .6; }
+    .examen-resultado__lbl {
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 8px;
+    }
+    .examen-resultado__msg {
+      font-size: .95rem; color: var(--muted); line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .examen-resultado__actions {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .examen-resultado__actions button {
+      flex: 1; min-width: 140px;
+      padding: 12px; border: none; border-radius: 10px;
+      font-family: inherit; font-weight: 800; font-size: .88rem;
+      cursor: pointer;
+    }
+    .examen-resultado__btn-close {
+      background: var(--bg); color: var(--text);
+      border: 1px solid var(--border) !important;
+    }
+    .examen-resultado__btn-retry {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: #fff;
+    }
+
+    /* Dark mode */
+    body.dark-mode .examen-card { background: var(--card); }
+    body.dark-mode .examen-card__titulo { color: var(--text); }
+    body.dark-mode .examenes-stat { background: var(--card); }
+    body.dark-mode .examen-opcion {
+      background: #0f1411;
+      color: var(--text);
+    }
+    body.dark-mode .examen-opcion__letra {
+      background: #0f1411; color: var(--muted);
+    }
+    body.dark-mode .examen-pregunta__texto { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .examenes-hero { padding: 22px; }
+      .examenes-hero__title { font-size: 1.2rem; }
+      .examenes-hero__icon { width: 52px; height: 52px; font-size: 2rem; }
+      .examen-card { flex-wrap: wrap; }
+      .examen-card__btn { width: 100%; margin-top: 8px; }
+      .examen-modal__head { padding: 18px 20px; }
+      .examen-modal__body { padding: 18px 20px; }
+      .examen-modal__footer { padding: 14px 20px; }
+      .examen-modal__title { font-size: 1.1rem; }
+      .examen-pregunta__texto { font-size: 1rem; }
+      .examen-opcion { padding: 12px 14px; }
+    }
+
     /* TARJETA TEMA */
     .tema-card {
       display: flex; align-items: center; justify-content: space-between;
@@ -4227,6 +4481,18 @@
       <span class="mobile-drawer__item-label">Certificados</span>
     </button>
 
+    <button class="mobile-drawer__item" data-page="examenes" onclick="drawerIr('examenes')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
+          <line x1="9" y1="11" x2="15" y2="11"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Exámenes</span>
+    </button>
+
     <button class="mobile-drawer__item" data-page="logros" onclick="drawerIr('logros')">
       <span class="mobile-drawer__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4339,6 +4605,7 @@
       <div class="sidebar-item" onclick="showPage('notificaciones',this)"><div class="sidebar-item-left"><span>🔔</span> Notificaciones</div><span class="sidebar-badge" id="badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span></div>
       <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div></div>
       <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
+      <div class="sidebar-item" onclick="showPage('examenes',this)"><div class="sidebar-item-left"><span>📝</span> Exámenes</div></div>
       <div class="sidebar-item" onclick="showPage('logros',this)"><div class="sidebar-item-left"><span>🏆</span> Logros</div></div>
       <div class="sidebar-item sidebar-item--expand" onclick="toggleHerrMenu(this)">
         <div class="sidebar-item-left"><span>🛠️</span> Herramientas</div>
@@ -4750,6 +5017,71 @@
 
       <div id="lista-certificados" class="cert-grid"></div>
     </div>
+
+    <!-- ===================== 📝 EXÁMENES ===================== -->
+    <div class="page" id="page-examenes">
+      <div class="examenes-hero">
+        <div class="examenes-hero__glow"></div>
+        <div class="examenes-hero__content">
+          <div class="examenes-hero__icon">📝</div>
+          <div class="examenes-hero__text">
+            <div class="examenes-hero__kicker">EVALUACIÓN VIP</div>
+            <h3 class="examenes-hero__title">Exámenes de cursos</h3>
+            <p class="examenes-hero__desc">Pon a prueba tu conocimiento. Aprueba con <strong>6/10 o más</strong> para desbloquear logros.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats rápidos -->
+      <div class="examenes-stats" id="examenes-stats">
+        <div class="examenes-stat">
+          <div class="examenes-stat__num" id="ex-stat-aprobados">0</div>
+          <div class="examenes-stat__lbl">Aprobados</div>
+        </div>
+        <div class="examenes-stat">
+          <div class="examenes-stat__num" id="ex-stat-disponibles">0</div>
+          <div class="examenes-stat__lbl">Disponibles</div>
+        </div>
+        <div class="examenes-stat">
+          <div class="examenes-stat__num" id="ex-stat-promedio">—</div>
+          <div class="examenes-stat__lbl">Promedio</div>
+        </div>
+      </div>
+
+      <div class="examenes-lista" id="examenes-lista">
+        <div style="text-align:center;padding:40px;color:var(--muted);">Cargando exámenes...</div>
+      </div>
+    </div>
+
+    <!-- Modal examen (donde se contesta) -->
+    <div class="examen-modal" id="examen-modal">
+      <div class="examen-modal__box">
+        <div class="examen-modal__head">
+          <div>
+            <div class="examen-modal__kicker" id="examen-cursoName">—</div>
+            <h3 class="examen-modal__title">📝 Examen del curso</h3>
+          </div>
+          <button class="examen-modal__close" onclick="cerrarExamen()">✕</button>
+        </div>
+        <div class="examen-modal__body" id="examen-body">
+          <!-- se rellena con JS -->
+        </div>
+        <div class="examen-modal__footer" id="examen-footer">
+          <div class="examen-progress">
+            <span id="examen-current">1</span> / <span id="examen-total">10</span>
+          </div>
+          <button class="herr-btn-pri" id="examen-btn-next" onclick="siguientePregunta()">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal resultado -->
+    <div class="examen-modal" id="examen-resultado-modal">
+      <div class="examen-modal__box examen-resultado-box">
+        <div id="examen-resultado-content"></div>
+      </div>
+    </div>
+    <!-- ===================== FIN EXÁMENES ===================== -->
 
     <!-- ===================== LOGROS ===================== -->
     <div class="page" id="page-logros">
@@ -9875,6 +10207,310 @@ function renderClima(data, nombre) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════
+// 📝 EXÁMENES
+// ═══════════════════════════════════════════════════════════
+
+const EXAMEN_PASS_PCT = 60; // 60% para aprobar
+const EXAMEN_PREGUNTAS_MIN = 10;
+
+let EXAMEN_ACTUAL = null;     // { cursoId, preguntas, idx, respuestas[] }
+let INTENTOS_EXAMENES = [];   // cache en memoria
+
+// Cargar lista de exámenes disponibles
+async function cargarExamenes() {
+  const cont = document.getElementById('examenes-lista');
+  if (!cont) return;
+  if (!window.currentUser) {
+    cont.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">Inicia sesión para ver los exámenes</div>';
+    return;
+  }
+
+  try {
+    // 1. Obtener cursos del portal (ya cargados en CURSOS)
+    if (!Array.isArray(CURSOS) || CURSOS.length === 0) {
+      await loadCursosFirebase();
+    }
+
+    // 2. Cargar todos los exámenes registrados en Firestore
+    const examenesSnap = await getDocs(collection(db, 'examenes'));
+    const examenesMap = {};
+    examenesSnap.forEach(d => { examenesMap[d.id] = d.data(); });
+
+    // 3. Cargar intentos del usuario
+    const intentosSnap = await getDocs(query(
+      collection(db, 'examenes_intentos'),
+      where('uid', '==', window.currentUser.uid)
+    ));
+    INTENTOS_EXAMENES = [];
+    intentosSnap.forEach(d => INTENTOS_EXAMENES.push({ id: d.id, ...d.data() }));
+
+    // 4. Cargar progreso del usuario (para saber qué cursos ha completado)
+    let progresoUsuario = {};
+    try {
+      const progSnap = await getDoc(doc(db, 'progreso', window.currentUser.uid));
+      if (progSnap.exists()) progresoUsuario = progSnap.data();
+    } catch(e) {}
+
+    // 5. Renderizar
+    if (!Array.isArray(CURSOS) || CURSOS.length === 0) {
+      cont.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">No hay cursos disponibles todavía</div>';
+      return;
+    }
+
+    let aprobados = 0, disponibles = 0, sumNotas = 0, totalIntentos = 0;
+
+    const html = CURSOS.map(curso => {
+      const examen = examenesMap[curso.id];
+      const tieneExamen = examen && Array.isArray(examen.preguntas) && examen.preguntas.length > 0;
+
+      // ¿Curso completado?
+      const prog = progresoUsuario[curso.id] || {};
+      const clasesVistas = Object.keys(prog).filter(k => prog[k] === true).length;
+      const totalClases = (curso.clases || []).length || 1;
+      const cursoCompleto = clasesVistas >= totalClases;
+
+      // Último intento
+      const intentosCurso = INTENTOS_EXAMENES.filter(i => i.cursoId === curso.id);
+      const ultimo = intentosCurso.sort((a, b) => (b.fecha?.seconds || 0) - (a.fecha?.seconds || 0))[0];
+      const aprobado = intentosCurso.some(i => i.aprobado === true);
+
+      if (aprobado) aprobados++;
+      if (tieneExamen && cursoCompleto) disponibles++;
+      intentosCurso.forEach(i => { if (typeof i.porcentaje === 'number') { sumNotas += i.porcentaje; totalIntentos++; } });
+
+      let estado = '';
+      let btn = '';
+
+      if (!tieneExamen) {
+        estado = '<span class="examen-card__estado examen-card__estado--bloqueado">⏳ Próximamente</span>';
+        btn = '<button class="examen-card__btn examen-card__btn--bloqueado" disabled>Sin examen</button>';
+      } else if (!cursoCompleto) {
+        estado = `<span class="examen-card__estado examen-card__estado--bloqueado">🔒 Termina el curso primero (${clasesVistas}/${totalClases} clases)</span>`;
+        btn = '<button class="examen-card__btn examen-card__btn--bloqueado" disabled>🔒 Bloqueado</button>';
+      } else if (aprobado) {
+        const mejor = Math.max(...intentosCurso.filter(i => typeof i.porcentaje === 'number').map(i => i.porcentaje));
+        estado = `<span class="examen-card__estado examen-card__estado--aprobado">✅ Aprobado · Mejor nota: ${mejor}%</span>`;
+        btn = `<button class="examen-card__btn examen-card__btn--aprobado" onclick="iniciarExamen('${curso.id}')">🔄 Repetir</button>`;
+      } else if (ultimo && ultimo.aprobado === false) {
+        estado = `<span class="examen-card__estado examen-card__estado--reprobado">❌ Último intento: ${ultimo.porcentaje}%</span>`;
+        btn = `<button class="examen-card__btn" onclick="iniciarExamen('${curso.id}')">🔄 Reintentar</button>`;
+      } else {
+        estado = '<span class="examen-card__estado examen-card__estado--disponible">✨ Disponible</span>';
+        btn = `<button class="examen-card__btn" onclick="iniciarExamen('${curso.id}')">▶️ Iniciar</button>`;
+      }
+
+      return `
+        <div class="examen-card">
+          <div class="examen-card__icon">${curso.emoji || '📚'}</div>
+          <div class="examen-card__info">
+            <div class="examen-card__titulo">${escHtml(curso.titulo)}</div>
+            <div class="examen-card__meta">${tieneExamen ? examen.preguntas.length : '—'} preguntas · Aprueba con ${EXAMEN_PASS_PCT}%</div>
+            ${estado}
+          </div>
+          ${btn}
+        </div>`;
+    }).join('');
+
+    cont.innerHTML = html;
+
+    // Stats
+    document.getElementById('ex-stat-aprobados').textContent = aprobados;
+    document.getElementById('ex-stat-disponibles').textContent = disponibles;
+    document.getElementById('ex-stat-promedio').textContent = totalIntentos > 0 ? Math.round(sumNotas / totalIntentos) + '%' : '—';
+
+  } catch (e) {
+    console.error('[Exámenes] Error:', e);
+    cont.innerHTML = '<div style="text-align:center;padding:40px;color:#dc2626;">Error cargando exámenes: ' + escHtml(e.message) + '</div>';
+  }
+}
+
+// Iniciar un examen
+window.iniciarExamen = async function(cursoId) {
+  if (!esVIPActivo()) return mostrarPaywallModal('curso');
+
+  try {
+    const exSnap = await getDoc(doc(db, 'examenes', cursoId));
+    if (!exSnap.exists()) return foroToast('Este examen aún no está disponible', 'err');
+
+    const examen = exSnap.data();
+    if (!Array.isArray(examen.preguntas) || examen.preguntas.length === 0) {
+      return foroToast('Este examen aún no tiene preguntas', 'err');
+    }
+
+    const curso = (CURSOS || []).find(c => c.id === cursoId);
+
+    // Mezclar preguntas y opciones (anti-memorización)
+    const preguntasMezcladas = examen.preguntas
+      .map(p => {
+        const opcionesConIndice = p.opciones.map((op, idx) => ({ op, esCorrecta: idx === p.correcta }));
+        const mezcladas = opcionesConIndice.sort(() => Math.random() - 0.5);
+        return {
+          pregunta: p.pregunta,
+          opciones: mezcladas.map(x => x.op),
+          correcta: mezcladas.findIndex(x => x.esCorrecta)
+        };
+      })
+      .sort(() => Math.random() - 0.5);
+
+    EXAMEN_ACTUAL = {
+      cursoId,
+      cursoTitulo: curso?.titulo || 'Curso',
+      preguntas: preguntasMezcladas,
+      idx: 0,
+      respuestas: new Array(preguntasMezcladas.length).fill(null)
+    };
+
+    document.getElementById('examen-cursoName').textContent = (curso?.emoji || '📚') + ' ' + (curso?.titulo || 'Curso');
+    document.getElementById('examen-total').textContent = preguntasMezcladas.length;
+    document.getElementById('examen-modal').classList.add('open');
+    renderPreguntaActual();
+  } catch (e) {
+    console.error(e); foroToast('Error: ' + e.message, 'err');
+  }
+};
+
+function renderPreguntaActual() {
+  if (!EXAMEN_ACTUAL) return;
+  const p = EXAMEN_ACTUAL.preguntas[EXAMEN_ACTUAL.idx];
+  const body = document.getElementById('examen-body');
+  const seleccionada = EXAMEN_ACTUAL.respuestas[EXAMEN_ACTUAL.idx];
+  const letras = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+  body.innerHTML = `
+    <div class="examen-pregunta">
+      <div class="examen-pregunta__num">PREGUNTA ${EXAMEN_ACTUAL.idx + 1} DE ${EXAMEN_ACTUAL.preguntas.length}</div>
+      <div class="examen-pregunta__texto">${escHtml(p.pregunta)}</div>
+    </div>
+    <div class="examen-opciones">
+      ${p.opciones.map((op, i) => `
+        <button class="examen-opcion ${seleccionada === i ? 'selected' : ''}" onclick="seleccionarOpcion(${i})">
+          <div class="examen-opcion__letra">${letras[i]}</div>
+          <div>${escHtml(op)}</div>
+        </button>
+      `).join('')}
+    </div>`;
+
+  document.getElementById('examen-current').textContent = EXAMEN_ACTUAL.idx + 1;
+  const esUltima = EXAMEN_ACTUAL.idx === EXAMEN_ACTUAL.preguntas.length - 1;
+  document.getElementById('examen-btn-next').textContent = esUltima ? '✅ Terminar examen' : 'Siguiente →';
+}
+
+window.seleccionarOpcion = function(idx) {
+  if (!EXAMEN_ACTUAL) return;
+  EXAMEN_ACTUAL.respuestas[EXAMEN_ACTUAL.idx] = idx;
+  renderPreguntaActual();
+};
+
+window.siguientePregunta = function() {
+  if (!EXAMEN_ACTUAL) return;
+  if (EXAMEN_ACTUAL.respuestas[EXAMEN_ACTUAL.idx] === null) {
+    return foroToast('Selecciona una respuesta', 'err');
+  }
+  if (EXAMEN_ACTUAL.idx < EXAMEN_ACTUAL.preguntas.length - 1) {
+    EXAMEN_ACTUAL.idx++;
+    renderPreguntaActual();
+  } else {
+    terminarExamen();
+  }
+};
+
+async function terminarExamen() {
+  if (!EXAMEN_ACTUAL) return;
+
+  // Calcular
+  let correctas = 0;
+  EXAMEN_ACTUAL.preguntas.forEach((p, i) => {
+    if (EXAMEN_ACTUAL.respuestas[i] === p.correcta) correctas++;
+  });
+  const total = EXAMEN_ACTUAL.preguntas.length;
+  const porcentaje = Math.round((correctas / total) * 100);
+  const aprobado = porcentaje >= EXAMEN_PASS_PCT;
+
+  // Guardar intento
+  try {
+    await addDoc(collection(db, 'examenes_intentos'), {
+      uid: window.currentUser.uid,
+      email: window.currentUser.email,
+      cursoId: EXAMEN_ACTUAL.cursoId,
+      cursoTitulo: EXAMEN_ACTUAL.cursoTitulo,
+      correctas, total, porcentaje, aprobado,
+      fecha: serverTimestamp()
+    });
+  } catch (e) { console.error('[Examen] No se pudo guardar intento:', e); }
+
+  // Cerrar modal examen
+  document.getElementById('examen-modal').classList.remove('open');
+
+  // Mostrar resultado
+  const content = document.getElementById('examen-resultado-content');
+  const iconEmoji = aprobado ? (porcentaje === 100 ? '🏆' : '🎉') : '💪';
+  const titulo = aprobado ? (porcentaje === 100 ? '¡Perfecto!' : '¡Aprobaste!') : 'Sigue intentando';
+  const color = aprobado ? '#047857' : '#b91c1c';
+  const bg = aprobado ? 'linear-gradient(135deg,#f0fdf4,#dcfce7)' : 'linear-gradient(135deg,#fef2f2,#fee2e2)';
+
+  const msg = aprobado
+    ? `Aprobaste el examen de <strong>${escHtml(EXAMEN_ACTUAL.cursoTitulo)}</strong>. ${porcentaje === 100 ? '¡Nota perfecta carnal! 🌟' : 'Excelente trabajo.'}`
+    : `Necesitas <strong>${EXAMEN_PASS_PCT}%</strong> para aprobar. Revisa el curso y vuelve a intentarlo cuando quieras.`;
+
+  content.innerHTML = `
+    <div style="background:${bg};margin:-36px -28px 20px;padding:28px;border-radius:22px 22px 0 0;">
+      <div class="examen-resultado__icon">${iconEmoji}</div>
+      <div class="examen-resultado__num" style="color:${color};">${correctas}<span class="examen-resultado__num-tot">/${total}</span></div>
+      <div class="examen-resultado__lbl" style="color:${color};">${porcentaje}% · ${titulo}</div>
+    </div>
+    <div class="examen-resultado__msg">${msg}</div>
+    <div class="examen-resultado__actions">
+      <button class="examen-resultado__btn-close" onclick="cerrarResultado()">Cerrar</button>
+      ${!aprobado ? `<button class="examen-resultado__btn-retry" onclick="reintentarExamen('${EXAMEN_ACTUAL.cursoId}')">🔄 Reintentar</button>` : ''}
+    </div>`;
+  document.getElementById('examen-resultado-modal').classList.add('open');
+
+  // Si aprobó → desbloquear logro
+  if (aprobado) {
+    desbloquearLogroExamen(correctas, total);
+  }
+
+  EXAMEN_ACTUAL = null;
+}
+
+window.cerrarExamen = function() {
+  if (EXAMEN_ACTUAL && EXAMEN_ACTUAL.respuestas.some(r => r !== null)) {
+    if (!confirm('¿Seguro que quieres salir? Se perderá el progreso del examen.')) return;
+  }
+  document.getElementById('examen-modal').classList.remove('open');
+  EXAMEN_ACTUAL = null;
+};
+
+window.cerrarResultado = function() {
+  document.getElementById('examen-resultado-modal').classList.remove('open');
+  cargarExamenes();
+};
+
+window.reintentarExamen = function(cursoId) {
+  document.getElementById('examen-resultado-modal').classList.remove('open');
+  setTimeout(() => iniciarExamen(cursoId), 300);
+};
+
+// Desbloquear logros automáticos
+async function desbloquearLogroExamen(correctas, total) {
+  try {
+    const aprobados = INTENTOS_EXAMENES.filter(i => i.aprobado === true);
+    const cursosUnicos = new Set(aprobados.map(i => i.cursoId));
+    const totalAprobados = cursosUnicos.size + 1; // +1 por el actual
+
+    let msg = '';
+    if (totalAprobados === 1) msg = '🎓 Logro desbloqueado: Primer examen aprobado';
+    else if (totalAprobados === 5) msg = '🏆 Logro desbloqueado: Aplicado (5 exámenes)';
+    else if (totalAprobados === 15) msg = '👑 Logro desbloqueado: Maestro del agro (15 exámenes)';
+
+    if (msg) setTimeout(() => foroToast(msg, 'ok'), 800);
+  } catch (e) { console.warn('[Logro examen]', e); }
+}
+
+// Hook en showPage para cargar cuando entra
+// (se registra abajo en el bloque general)
+
 // Disparar cargar parcelas/apoyos/streak al entrar a Herramientas
 (function() {
   const origShowPage2 = window.showPage;
@@ -9888,6 +10524,9 @@ function renderClima(data, nombre) {
     }
     if (id === 'apoyos') {
       renderApoyos();
+    }
+    if (id === 'examenes') {
+      cargarExamenes();
     }
     if (id === 'suscripcion') {
       const vFree = document.getElementById('sus-view-free');
@@ -10160,6 +10799,21 @@ const CATALOGO_LOGROS = [
     id: 'nocturno', icon: '🌙', titulo: 'Nocturno',
     desc: 'Viste una clase después de las 10pm',
     check: ctx => ({ unlocked: localStorage.getItem('logro_nocturno') === '1' })
+  },
+  {
+    id: 'examen-primer', icon: '🎓', titulo: 'Primer examen',
+    desc: 'Aprueba tu primer examen con 60% o más',
+    check: ctx => ({ unlocked: (ctx.examenesAprobados || 0) >= 1 })
+  },
+  {
+    id: 'aplicado', icon: '🏆', titulo: 'Aplicado',
+    desc: 'Aprueba 5 exámenes diferentes',
+    check: ctx => ({ unlocked: (ctx.examenesAprobados || 0) >= 5 })
+  },
+  {
+    id: 'maestro-agro', icon: '👑', titulo: 'Maestro del agro',
+    desc: 'Aprueba 15 exámenes diferentes',
+    check: ctx => ({ unlocked: (ctx.examenesAprobados || 0) >= 15 })
   }
 ];
 
@@ -10177,7 +10831,13 @@ function calcularContextoLogros() {
   if (window.currentUser && window.currentUser.fechaRegistro) {
     diasClub = Math.floor((new Date() - new Date(window.currentUser.fechaRegistro)) / 86400000);
   }
-  return { totalClases, cursosCompletos, diasClub };
+  // Exámenes aprobados (cursos únicos)
+  let examenesAprobados = 0;
+  if (Array.isArray(INTENTOS_EXAMENES)) {
+    const aprobadosSet = new Set(INTENTOS_EXAMENES.filter(i => i.aprobado).map(i => i.cursoId));
+    examenesAprobados = aprobadosSet.size;
+  }
+  return { totalClases, cursosCompletos, diasClub, examenesAprobados };
 }
 
 // Guardar logros misceláneos al marcar una clase (horario)
