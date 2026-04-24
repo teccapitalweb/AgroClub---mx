@@ -654,12 +654,36 @@
     @keyframes pwSlideIn { from { transform: translateY(40px) scale(.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
     .paywall-modal__close {
       position: absolute; top: 14px; right: 14px;
-      width: 32px; height: 32px; border-radius: 50%;
+      width: 36px; height: 36px; border-radius: 50%;
       background: rgba(0,0,0,.08); border: none; cursor: pointer;
-      font-size: 1rem; color: #6b7280;
+      font-size: 1.1rem; color: #374151;
       font-family: inherit;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+      transition: all .18s ease;
+      padding: 0; line-height: 1;
     }
-    .paywall-modal__close:hover { background: rgba(0,0,0,.15); }
+    .paywall-modal__close:hover { background: rgba(0,0,0,.18); transform: scale(1.08); color: #111; }
+    .paywall-modal__close:active { transform: scale(.94); }
+    .paywall-modal__later {
+      margin-top: 10px;
+      background: transparent;
+      border: 1.5px solid rgba(0,0,0,.12);
+      color: #6b7280;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      font-family: inherit;
+      transition: all .18s ease;
+    }
+    .paywall-modal__later:hover { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.2); color: #374151; }
+    body.dark-mode .paywall-modal__close { background: rgba(255,255,255,.1); color: #e5e7eb; }
+    body.dark-mode .paywall-modal__close:hover { background: rgba(255,255,255,.2); }
+    body.dark-mode .paywall-modal__later { border-color: rgba(255,255,255,.15); color: #9ca3af; }
+    body.dark-mode .paywall-modal__later:hover { background: rgba(255,255,255,.05); color: #e5e7eb; }
     .paywall-modal__icon {
       font-size: 3.5rem; margin-bottom: 16px;
       filter: drop-shadow(0 6px 12px rgba(251,191,36,.4));
@@ -4846,9 +4870,9 @@
 </div>
 
 <!-- 🔒 MODAL PAYWALL -->
-<div class="paywall-modal" id="paywallModal" onclick="cerrarPaywallBg(event)">
-  <div class="paywall-modal__box" onclick="event.stopPropagation()">
-    <button class="paywall-modal__close" onclick="cerrarPaywallModal()">✕</button>
+<div class="paywall-modal" id="paywallModal">
+  <div class="paywall-modal__box">
+    <button type="button" class="paywall-modal__close" id="paywallCloseBtn" aria-label="Cerrar">✕</button>
     <div class="paywall-modal__icon">🔒</div>
     <div class="paywall-modal__kicker">Función VIP</div>
     <div class="paywall-modal__title" id="paywallModalTitle">Suscríbete para acceder</div>
@@ -4863,9 +4887,12 @@
       <div class="paywall-modal__feat">Apoyos del gobierno curados</div>
       <div class="paywall-modal__feat">Certificados digitales oficiales</div>
     </div>
-    <a href="javascript:void(0)" class="paywall-modal__cta" onclick="abrirStripeCheckout('mensual'); cerrarPaywallModal();">
+    <a href="javascript:void(0)" class="paywall-modal__cta" id="paywallCtaBtn">
       ✨ Suscribirme ahora
     </a>
+    <button type="button" class="paywall-modal__later" id="paywallLaterBtn">
+      No por ahora
+    </button>
     <div class="paywall-modal__small">
       💳 Pago seguro · Cancela cuando quieras
     </div>
@@ -6634,10 +6661,17 @@ function calcularVenceFallback(data) {
   if (!data) return '—';
   // Buscar fecha base: ultimoPago > fechaRegistro
   const baseStr = data.ultimoPago || data.fechaRegistro;
-  if (!baseStr) return '—';
+  if (!baseStr) {
+    // Si es VIP activo pero no hay ninguna fecha aún, mostrar mensaje amigable
+    if (data.estado === 'activo') return 'Procesando...';
+    return '—';
+  }
 
   const base = new Date(baseStr);
-  if (isNaN(base.getTime())) return '—';
+  if (isNaN(base.getTime())) {
+    if (data.estado === 'activo') return 'Procesando...';
+    return '—';
+  }
 
   // Determinar plan
   const plan = (data.plan || '').toLowerCase();
@@ -8957,11 +8991,73 @@ window.mostrarPaywallModal = function(origen, titulo, desc) {
   document.getElementById('paywallModal').classList.add('open');
 };
 window.cerrarPaywallModal = function() {
-  document.getElementById('paywallModal').classList.remove('open');
+  const m = document.getElementById('paywallModal');
+  if (m) m.classList.remove('open');
 };
 window.cerrarPaywallBg = function(e) {
   if (e.target.id === 'paywallModal') cerrarPaywallModal();
 };
+
+// ═══ FIX BUG #1: Event listeners robustos para cerrar paywall ═══
+// En vez de depender de onclick inline (que a veces falla si el script
+// aún no cargó), usamos addEventListener con capture para garantizar
+// que SIEMPRE responda al click.
+(function instalarListenersPaywall() {
+  function install() {
+    const modal = document.getElementById('paywallModal');
+    const closeBtn = document.getElementById('paywallCloseBtn');
+    const laterBtn = document.getElementById('paywallLaterBtn');
+    const ctaBtn = document.getElementById('paywallCtaBtn');
+
+    if (closeBtn && !closeBtn._bound) {
+      closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        cerrarPaywallModal();
+      });
+      closeBtn._bound = true;
+    }
+    if (laterBtn && !laterBtn._bound) {
+      laterBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        cerrarPaywallModal();
+      });
+      laterBtn._bound = true;
+    }
+    if (ctaBtn && !ctaBtn._bound) {
+      ctaBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        cerrarPaywallModal();
+        if (typeof abrirStripeCheckout === 'function') abrirStripeCheckout('mensual');
+      });
+      ctaBtn._bound = true;
+    }
+    if (modal && !modal._bound) {
+      // Click en el fondo oscuro cierra
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) cerrarPaywallModal();
+      });
+      modal._bound = true;
+    }
+  }
+
+  // Instalar inmediatamente si el DOM ya está listo, o esperar
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install);
+  } else {
+    install();
+  }
+
+  // Tecla Escape cierra el paywall
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      const m = document.getElementById('paywallModal');
+      if (m && m.classList.contains('open')) cerrarPaywallModal();
+    }
+  });
+})();
 
 // ═══════════════════════════════════════════════════════════════
 // 💳 STRIPE EMBEDDED CHECKOUT — Portal VIP
