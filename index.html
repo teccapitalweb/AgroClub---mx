@@ -4428,6 +4428,396 @@
   </div>
 </div>
 
+<!-- 🏆 OVERLAY ÉPICO DE BIENVENIDA VIP (estilo Battle Pass) -->
+<style>
+  #vipEpicOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    background: radial-gradient(ellipse at center, #0a1a0f 0%, #000 70%);
+    display: none;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: #fff;
+  }
+  #vipEpicOverlay.show { display: block; animation: vipFadeIn .6s ease; }
+  @keyframes vipFadeIn { from {opacity:0;} to {opacity:1;} }
+
+  /* Rayo dorado que atraviesa */
+  .vip-lightning {
+    position: absolute;
+    top: 50%;
+    left: -100%;
+    width: 200%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent 0%, transparent 30%, #ffd700 45%, #fff 50%, #ffd700 55%, transparent 70%, transparent 100%);
+    box-shadow: 0 0 40px #ffd700, 0 0 80px #ffd700;
+    animation: vipLightning 1.2s ease-out forwards;
+    transform: translateY(-50%) rotate(-12deg);
+  }
+  @keyframes vipLightning {
+    0% { left: -100%; opacity: 0; }
+    30% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+  }
+
+  /* Fase 1: Título gigante */
+  .vip-stage1 {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    animation: vipStage1In .8s ease-out .6s forwards, vipStage1Out .6s ease-in 2.8s forwards;
+  }
+  @keyframes vipStage1In { from {opacity:0; transform:scale(.5);} to {opacity:1; transform:scale(1);} }
+  @keyframes vipStage1Out { to {opacity:0; transform:scale(1.3);} }
+
+  .vip-unlock-kicker {
+    font-size: 1rem;
+    letter-spacing: 8px;
+    color: #ffd700;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-shadow: 0 0 20px rgba(255,215,0,.8);
+  }
+  .vip-unlock-title {
+    font-size: clamp(2.2rem, 8vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: 3px;
+    background: linear-gradient(180deg, #fff 0%, #ffd700 50%, #ff9500 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    line-height: 1;
+    text-shadow: 0 0 60px rgba(255,215,0,.4);
+    filter: drop-shadow(0 4px 20px rgba(255,215,0,.6));
+  }
+  .vip-unlock-sub {
+    font-size: clamp(.9rem, 2.5vw, 1.3rem);
+    color: rgba(255,255,255,.85);
+    margin-top: 20px;
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+
+  /* Fase 2: Medalla */
+  .vip-stage2 {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    animation: vipStage2In .8s ease-out 3.2s forwards, vipStage2Out .6s ease-in 5.8s forwards;
+  }
+  @keyframes vipStage2In { from {opacity:0; transform:scale(.3) rotate(-180deg);} to {opacity:1; transform:scale(1) rotate(0);} }
+  @keyframes vipStage2Out { to {opacity:0; transform:translateY(-40px);} }
+
+  .vip-medal {
+    width: clamp(140px, 25vw, 220px);
+    height: clamp(140px, 25vw, 220px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff9c4 0%, #ffd700 30%, #ff9500 70%, #b45309 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(4rem, 10vw, 7rem);
+    box-shadow:
+      0 0 60px #ffd700,
+      0 0 120px rgba(255,215,0,.5),
+      inset 0 -20px 40px rgba(0,0,0,.3),
+      inset 0 10px 30px rgba(255,255,255,.4);
+    position: relative;
+    animation: vipMedalPulse 2s ease-in-out infinite;
+  }
+  @keyframes vipMedalPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 60px #ffd700, 0 0 120px rgba(255,215,0,.5), inset 0 -20px 40px rgba(0,0,0,.3), inset 0 10px 30px rgba(255,255,255,.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 80px #ffd700, 0 0 160px rgba(255,215,0,.7), inset 0 -20px 40px rgba(0,0,0,.3), inset 0 10px 30px rgba(255,255,255,.5); }
+  }
+  .vip-medal::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,215,0,.3);
+    animation: vipRingExpand 2s ease-out infinite;
+  }
+  @keyframes vipRingExpand {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  .vip-welcome-text {
+    margin-top: 40px;
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(255,215,0,.5);
+  }
+  .vip-welcome-name {
+    color: #ffd700;
+    text-transform: uppercase;
+  }
+
+  /* Fase 3: Carrusel de beneficios */
+  .vip-stage3 {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .vip-stage3.show { display: flex; animation: vipFadeIn .8s ease; }
+
+  .vip-benefit-counter {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: rgba(255,215,0,.12);
+    border: 2px solid rgba(255,215,0,.4);
+    color: #ffd700;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: 1px;
+    backdrop-filter: blur(10px);
+  }
+  .vip-benefit-counter span { color:#fff; font-weight:900; }
+
+  .vip-benefit-progress {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    display: flex;
+    gap: 8px;
+  }
+  .vip-benefit-dot {
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,.15);
+    transition: background .4s;
+  }
+  .vip-benefit-dot.active { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+  .vip-benefit-dot.done { background: rgba(255,215,0,.5); }
+
+  .vip-benefit-slide {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    animation: vipSlideIn .5s ease;
+  }
+  @keyframes vipSlideIn {
+    from { opacity: 0; transform: translateY(30px) scale(.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .vip-benefit-icon {
+    font-size: clamp(5rem, 12vw, 8rem);
+    margin-bottom: 24px;
+    filter: drop-shadow(0 0 30px rgba(255,215,0,.6));
+    animation: vipIconFloat 3s ease-in-out infinite;
+  }
+  @keyframes vipIconFloat {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+
+  .vip-benefit-kicker {
+    font-size: .85rem;
+    letter-spacing: 6px;
+    color: #10b981;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .vip-benefit-title {
+    font-size: clamp(1.6rem, 4.5vw, 2.8rem);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.1;
+    letter-spacing: 1px;
+  }
+  .vip-benefit-desc {
+    font-size: clamp(.95rem, 2vw, 1.15rem);
+    color: rgba(255,255,255,.75);
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .vip-benefit-nav {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .vip-benefit-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,215,0,.4);
+    background: rgba(0,0,0,.4);
+    color: #ffd700;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all .2s;
+    backdrop-filter: blur(10px);
+  }
+  .vip-benefit-btn:hover { background: rgba(255,215,0,.15); transform: scale(1.1); }
+  .vip-benefit-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+  .vip-enter-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 18px 50px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 0 40px rgba(16,185,129,.6), 0 10px 30px rgba(0,0,0,.4);
+    transition: all .3s;
+    animation: vipBtnPulse 2s ease-in-out infinite;
+    z-index: 10;
+  }
+  .vip-enter-btn:hover { transform: translateX(-50%) scale(1.05); box-shadow: 0 0 60px rgba(16,185,129,.9), 0 15px 40px rgba(0,0,0,.5); }
+  @keyframes vipBtnPulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(16,185,129,.6), 0 10px 30px rgba(0,0,0,.4); }
+    50% { box-shadow: 0 0 60px rgba(16,185,129,.9), 0 10px 30px rgba(0,0,0,.4); }
+  }
+
+  .vip-countdown-ring {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,0,0,.5);
+    border: 1px solid rgba(255,255,255,.15);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: .85rem;
+    color: rgba(255,255,255,.85);
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+  }
+  .vip-countdown-num { color: #ffd700; font-weight: 900; font-size: 1rem; }
+  .vip-countdown-skip {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,.5);
+    font-size: .8rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    margin-left: 6px;
+  }
+  .vip-countdown-skip:hover { color: #fff; }
+
+  /* Partículas doradas */
+  .vip-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffd700 0%, transparent 70%);
+    pointer-events: none;
+    animation: vipParticleFloat 4s linear infinite;
+  }
+  @keyframes vipParticleFloat {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+  }
+
+  /* Resplandor central */
+  .vip-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 800px;
+    max-width: 150vw;
+    max-height: 150vh;
+    background: radial-gradient(circle, rgba(255,215,0,.15) 0%, transparent 60%);
+    pointer-events: none;
+    animation: vipGlowPulse 4s ease-in-out infinite;
+  }
+  @keyframes vipGlowPulse {
+    0%, 100% { opacity: .5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  }
+
+  @media (max-width: 600px) {
+    .vip-benefit-counter, .vip-benefit-progress, .vip-countdown-ring { top: 16px; }
+    .vip-benefit-progress { left: 16px; }
+    .vip-countdown-ring { right: 16px; padding: 8px 14px; font-size: .75rem; }
+    .vip-benefit-dot { width: 22px; }
+    .vip-benefit-nav { bottom: 110px; gap: 10px; }
+    .vip-benefit-btn { width: 46px; height: 46px; }
+  }
+</style>
+
+<div id="vipEpicOverlay">
+  <div class="vip-glow"></div>
+  <div class="vip-lightning"></div>
+
+  <!-- FASE 1: Título gigante -->
+  <div class="vip-stage1">
+    <div class="vip-unlock-kicker">✦ PAGO CONFIRMADO ✦</div>
+    <div class="vip-unlock-title">MEMBRESÍA VIP<br>DESBLOQUEADA</div>
+    <div class="vip-unlock-sub">Bienvenido al club más chingón del agro 🌱</div>
+  </div>
+
+  <!-- FASE 2: Medalla -->
+  <div class="vip-stage2">
+    <div class="vip-medal">🏆</div>
+    <div class="vip-welcome-text">Bienvenido, <span class="vip-welcome-name" id="vipWelcomeName">Socio VIP</span></div>
+  </div>
+
+  <!-- FASE 3: Carrusel de beneficios -->
+  <div class="vip-stage3" id="vipStage3">
+    <div class="vip-benefit-progress" id="vipBenefitProgress"></div>
+    <div class="vip-countdown-ring">
+      Entrando en <span class="vip-countdown-num" id="vipCountdownNum">30</span>s
+      <button class="vip-countdown-skip" onclick="vipSkipCountdown()">saltar</button>
+    </div>
+
+    <div class="vip-benefit-slide" id="vipBenefitSlide">
+      <!-- Se rellena dinámicamente -->
+    </div>
+
+    <div class="vip-benefit-nav">
+      <button class="vip-benefit-btn" id="vipBenefitPrev" onclick="vipChangeBenefit(-1)">←</button>
+      <button class="vip-benefit-btn" id="vipBenefitNext" onclick="vipChangeBenefit(1)">→</button>
+    </div>
+
+    <button class="vip-enter-btn" onclick="vipEnterClub()">🌱 ENTRAR AL CLUB →</button>
+  </div>
+</div>
+
 <!-- 🔒 MODAL PAYWALL -->
 <div class="paywall-modal" id="paywallModal" onclick="cerrarPaywallBg(event)">
   <div class="paywall-modal__box" onclick="event.stopPropagation()">
@@ -8482,14 +8872,149 @@ document.addEventListener('click', function(e) {
     url.searchParams.delete('session_id');
     window.history.replaceState({}, '', url.toString());
 
-    // Mensaje de éxito y recarga suave después de 2s para que Firestore se sincronice
-    setTimeout(() => {
-      try { if (typeof confetti === 'function') confetti({ particleCount: 180, spread: 90, origin: { y: .6 } }); } catch(e) {}
-      alert('🎉 ¡Pago exitoso! Tu membresía VIP se está activando. Recargaremos la página para desbloquear todo.');
-      setTimeout(() => window.location.reload(), 1500);
-    }, 800);
+    // Lanzar el show épico
+    setTimeout(() => vipEpicShow(), 400);
   }
 })();
+
+// ═══════════════════════════════════════════════════════════════
+// 🏆 VIP EPIC WELCOME — Estilo Battle Pass
+// ═══════════════════════════════════════════════════════════════
+const VIP_BENEFITS = [
+  { icon: '🎓', kicker: 'BENEFICIO 1/6', title: 'Biblioteca Completa de Cursos', desc: 'Acceso ilimitado a TODA la biblioteca de cursos del agro: cultivos, plagas, suelos, riego, postcosecha y mucho más. Aprende a tu ritmo.' },
+  { icon: '📡', kicker: 'BENEFICIO 2/6', title: 'Webinars en Vivo y Grabados', desc: 'Sesiones en vivo con expertos agrónomos y acceso completo al archivo de webinars grabados. Pregunta, aprende, conecta.' },
+  { icon: '💬', kicker: 'BENEFICIO 3/6', title: 'Foro Privado con Expertos', desc: 'Una comunidad exclusiva donde productores, agrónomos y especialistas resuelven dudas reales del campo. Sube fotos, recibe respuestas.' },
+  { icon: '🛠️', kicker: 'BENEFICIO 4/6', title: 'Herramientas del Agro Exclusivas', desc: 'Calculadora de agroquímicos, costos por cultivo, clima en tiempo real, bitácora de parcelas, conversor de unidades y más.' },
+  { icon: '🏛️', kicker: 'BENEFICIO 5/6', title: 'Apoyos del Gobierno Curados', desc: 'Catálogo actualizado de programas, subsidios y apoyos del gobierno mexicano para productores. Todo filtrado y explicado.' },
+  { icon: '📜', kicker: 'BENEFICIO 6/6', title: 'Certificados Digitales Oficiales', desc: 'Cada curso que completas te da un certificado digital con QR verificable, listo para descargar y compartir en LinkedIn.' }
+];
+
+let vipCurrentBenefit = 0;
+let vipCountdownInterval = null;
+let vipCountdownSeconds = 30;
+let vipAutoAdvance = null;
+
+function vipEpicShow() {
+  const overlay = document.getElementById('vipEpicOverlay');
+  if (!overlay) return;
+
+  // Nombre del usuario
+  try {
+    const u = window.currentUser;
+    const nombre = (u && u.nombre) ? u.nombre.split(' ')[0].toUpperCase() : 'SOCIO VIP';
+    document.getElementById('vipWelcomeName').textContent = nombre;
+  } catch(e) {}
+
+  overlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  // Partículas doradas
+  vipSpawnParticles();
+
+  // Confetti dorado
+  try {
+    if (typeof confetti === 'function') {
+      confetti({ particleCount: 120, spread: 80, origin: { y: .5 }, colors: ['#ffd700','#ff9500','#fff','#10b981'] });
+      setTimeout(() => confetti({ particleCount: 100, spread: 100, origin: { y: .3 }, colors: ['#ffd700','#fff'] }), 600);
+      setTimeout(() => confetti({ particleCount: 150, spread: 120, origin: { y: .7 }, colors: ['#ffd700','#10b981'] }), 3500);
+    }
+  } catch(e) {}
+
+  // Después de 6s → pasar al carrusel de beneficios
+  setTimeout(() => {
+    document.getElementById('vipStage3').classList.add('show');
+    vipRenderBenefit(0);
+    vipStartCountdown();
+    vipStartAutoAdvance();
+  }, 6400);
+}
+
+function vipSpawnParticles() {
+  const overlay = document.getElementById('vipEpicOverlay');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'vip-particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 4 + 's';
+    p.style.animationDuration = (3 + Math.random() * 3) + 's';
+    p.style.width = p.style.height = (4 + Math.random() * 10) + 'px';
+    overlay.appendChild(p);
+  }
+}
+
+function vipRenderBenefit(idx) {
+  vipCurrentBenefit = idx;
+  const b = VIP_BENEFITS[idx];
+  const slide = document.getElementById('vipBenefitSlide');
+  slide.innerHTML = `
+    <div class="vip-benefit-icon">${b.icon}</div>
+    <div class="vip-benefit-kicker">${b.kicker}</div>
+    <div class="vip-benefit-title">${b.title}</div>
+    <div class="vip-benefit-desc">${b.desc}</div>
+  `;
+
+  // Progress dots
+  const prog = document.getElementById('vipBenefitProgress');
+  prog.innerHTML = VIP_BENEFITS.map((_, i) => {
+    let cls = 'vip-benefit-dot';
+    if (i === idx) cls += ' active';
+    else if (i < idx) cls += ' done';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  // Botones nav
+  document.getElementById('vipBenefitPrev').disabled = idx === 0;
+  document.getElementById('vipBenefitNext').disabled = idx === VIP_BENEFITS.length - 1;
+}
+
+window.vipChangeBenefit = function(dir) {
+  const next = vipCurrentBenefit + dir;
+  if (next < 0 || next >= VIP_BENEFITS.length) return;
+  vipRenderBenefit(next);
+  // Si el usuario navega manual, detener auto-avance pero mantener countdown de salida
+  clearInterval(vipAutoAdvance);
+  vipAutoAdvance = null;
+};
+
+function vipStartAutoAdvance() {
+  vipAutoAdvance = setInterval(() => {
+    if (vipCurrentBenefit < VIP_BENEFITS.length - 1) {
+      vipRenderBenefit(vipCurrentBenefit + 1);
+    } else {
+      clearInterval(vipAutoAdvance);
+      vipAutoAdvance = null;
+    }
+  }, 4500);
+}
+
+function vipStartCountdown() {
+  vipCountdownSeconds = 30;
+  document.getElementById('vipCountdownNum').textContent = vipCountdownSeconds;
+  vipCountdownInterval = setInterval(() => {
+    vipCountdownSeconds--;
+    const el = document.getElementById('vipCountdownNum');
+    if (el) el.textContent = vipCountdownSeconds;
+    if (vipCountdownSeconds <= 0) {
+      clearInterval(vipCountdownInterval);
+      vipEnterClub();
+    }
+  }, 1000);
+}
+
+window.vipSkipCountdown = function() {
+  clearInterval(vipCountdownInterval);
+  vipEnterClub();
+};
+
+window.vipEnterClub = function() {
+  clearInterval(vipCountdownInterval);
+  clearInterval(vipAutoAdvance);
+  // Fade out suave + recarga para activar modo VIP
+  const overlay = document.getElementById('vipEpicOverlay');
+  overlay.style.transition = 'opacity .6s ease';
+  overlay.style.opacity = '0';
+  setTimeout(() => window.location.reload(), 600);
+};
 
 // ═══════ INTERCEPTAR ACCIONES BLOQUEADAS ═══════
 // Usuario FREE puede VER TODO el portal, pero con candaditos encima.
