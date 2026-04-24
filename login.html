@@ -184,6 +184,85 @@
       if (user) window.location.href = "index.html";
     });
 
+    // ============================================
+    // AUTO-LOGIN desde agrotecamerican.com
+    // ============================================
+    (async function() {
+      const hash = window.location.hash;
+      if (!hash) return;
+
+      // Caso 1: #a=... (viene con email + password encriptados — auto-login silencioso)
+      const matchA = hash.match(/a=([^&]+)/);
+      if (matchA && matchA[1]) {
+        try {
+          const data = JSON.parse(atob(decodeURIComponent(matchA[1])));
+          // Limpiar hash al instante (no quede en historial)
+          history.replaceState(null, '', window.location.pathname);
+          // Verificar que no sea viejo (>5 minutos)
+          if (data.t && (Date.now() - data.t) > 5 * 60 * 1000) {
+            mostrarError('La sesión expiró. Ingresa manualmente.');
+            document.getElementById('loginEmail').value = data.e || '';
+            return;
+          }
+          // Mostrar overlay
+          document.body.insertAdjacentHTML('beforeend', `
+            <div id="_autologin" style="position:fixed;inset:0;background:#0d2b09;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;">
+              <div style="width:52px;height:52px;border:4px solid #a3e635;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+              <div style="color:#fff;font-size:1.1rem;font-weight:700;text-align:center;padding:0 20px;">✅ Entrando al portal...</div>
+              <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+            </div>
+          `);
+          // Login automático
+          try {
+            await signInWithEmailAndPassword(auth, data.e, data.p);
+            // onAuthStateChanged arriba redirige al index.html
+          } catch (e) {
+            // Si falla (por si ya expiró token o algo), pre-llenar para manual
+            document.getElementById('_autologin')?.remove();
+            document.getElementById('loginEmail').value = data.e || '';
+            mostrarError('Ingresa tu contraseña para continuar.');
+            document.getElementById('loginPassword').focus();
+          }
+        } catch(e) {
+          console.error('Auto-login error:', e);
+          history.replaceState(null, '', window.location.pathname);
+        }
+        return;
+      }
+
+      // Caso 2: #g=... (viene de Google — solo email, hay que hacer click en Google otra vez)
+      const matchG = hash.match(/g=([^&]+)/);
+      if (matchG && matchG[1]) {
+        const email = decodeURIComponent(matchG[1]);
+        history.replaceState(null, '', window.location.pathname);
+        setTimeout(() => {
+          document.getElementById('loginEmail').value = email;
+          const ok = document.getElementById('successMsg');
+          if (ok) {
+            ok.innerHTML = '✅ Ya te creamos tu cuenta con Google. Ingresa de nuevo con tu <strong>Google</strong> o usa contraseña si la creaste.';
+            ok.style.display = 'block';
+          }
+        }, 300);
+        return;
+      }
+
+      // Caso 3: #email=... (legacy — solo pre-llenar)
+      const matchE = hash.match(/email=([^&]+)/);
+      if (matchE && matchE[1]) {
+        const email = decodeURIComponent(matchE[1]);
+        history.replaceState(null, '', window.location.pathname);
+        setTimeout(() => {
+          document.getElementById('loginEmail').value = email;
+          const ok = document.getElementById('successMsg');
+          if (ok) {
+            ok.textContent = '✅ Cuenta creada. Ingresa tu contraseña.';
+            ok.style.display = 'block';
+          }
+          document.getElementById('loginPassword')?.focus();
+        }, 300);
+      }
+    })();
+
     // Cambiar entre login / registro
     window.cambiarTab = function(tab) {
       const tl = document.getElementById('tabLogin');
