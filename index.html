@@ -47,6 +47,8 @@
       --shadow-md: 0 8px 24px rgba(0,0,0,.4);
       --shadow-lg: 0 20px 48px rgba(0,0,0,.55);
     }
+
+    /* Fondos de tarjetas */
     body.dark-mode .main-header,
     body.dark-mode .section-card,
     body.dark-mode .stat-card,
@@ -54,7 +56,179 @@
     body.dark-mode .foro-post,
     body.dark-mode .herr-card,
     body.dark-mode .perfil-datos,
-    body.dark-mode .sus-card { background: var(--card); }
+    body.dark-mode .sus-card,
+    body.dark-mode .widget-pro,
+    body.dark-mode .widget-webinar,
+    body.dark-mode .widget-whatsapp,
+    body.dark-mode .widget-descuento,
+    body.dark-mode .widget-progreso,
+    body.dark-mode .course-card,
+    body.dark-mode .sesion-card,
+    body.dark-mode .apoyo-item,
+    body.dark-mode .parcela-card,
+    body.dark-mode .cert-card,
+    body.dark-mode .sus-info-card,
+    body.dark-mode .sus-plan-card,
+    body.dark-mode .tema-card,
+    body.dark-mode .noticia-card,
+    body.dark-mode .foro-composer,
+    body.dark-mode .foro-filtros,
+    body.dark-mode .herr-resultado__big,
+    body.dark-mode .widget-logro,
+    body.dark-mode .plagas-upload,
+    body.dark-mode .clima-dia,
+    body.dark-mode .conv-resultados,
+    body.dark-mode .costos-kpi { background: var(--card); border-color: var(--border); color: var(--text); }
+
+    /* Textos */
+    body.dark-mode h1, body.dark-mode h2, body.dark-mode h3,
+    body.dark-mode h4, body.dark-mode h5, body.dark-mode h6,
+    body.dark-mode p, body.dark-mode span, body.dark-mode label,
+    body.dark-mode div { color: var(--text); }
+
+    /* Excepciones: textos que deben mantener color (badges, botones, elementos con color propio) */
+    body.dark-mode .paywall-banner *,
+    body.dark-mode .hero-dashboard *,
+    body.dark-mode .foro-hero *,
+    body.dark-mode .herr-hero *,
+    body.dark-mode .sus-hero *,
+    body.dark-mode .streak-banner *,
+    body.dark-mode .herr-resultado *,
+    body.dark-mode .clima-hoy *,
+    body.dark-mode .widget-webinar *,
+    body.dark-mode .widget-whatsapp *,
+    body.dark-mode .widget-descuento *,
+    body.dark-mode .sus-plan-card__badge,
+    body.dark-mode .apoyo-item__monto,
+    body.dark-mode .apoyo-item__badge,
+    body.dark-mode .sidebar-item,
+    body.dark-mode .sidebar-subitem,
+    body.dark-mode .sidebar *,
+    body.dark-mode .btn-login,
+    body.dark-mode .herr-btn-pri,
+    body.dark-mode .foro-btn-pri,
+    body.dark-mode .sus-plan-card__btn,
+    body.dark-mode .free-cta-section__btn,
+    body.dark-mode .paywall-modal__cta { color: inherit; }
+
+    /* Textos con muted = más claros en dark */
+    body.dark-mode .muted,
+    body.dark-mode [class*="sub"],
+    body.dark-mode [class*="__desc"],
+    body.dark-mode [class*="__meta"],
+    body.dark-mode [class*="__hint"],
+    body.dark-mode .herr-hint,
+    body.dark-mode .hero-stat-label,
+    body.dark-mode .stat-label { color: var(--muted); }
+
+    /* Headers de sección */
+    body.dark-mode .section-header h3 { color: var(--text); }
+    body.dark-mode .section-header-tag { color: #a3e635; }
+
+    /* Inputs y selects */
+    body.dark-mode input,
+    body.dark-mode select,
+    body.dark-mode textarea {
+      background: #0f1411 !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+    body.dark-mode input::placeholder,
+    body.dark-mode textarea::placeholder { color: var(--muted); }
+    body.dark-mode input:focus,
+    body.dark-mode select:focus,
+    body.dark-mode textarea:focus { border-color: #52c97a !important; }
+
+    /* Hero del inicio */
+    body.dark-mode .hero-dashboard {
+      background: linear-gradient(135deg, #0a1410 0%, #1a2b1a 60%, #22372a 100%);
+    }
+
+    /* Cards de cursos - que el texto sea visible */
+    body.dark-mode .course-card h4,
+    body.dark-mode .course-card .course-title,
+    body.dark-mode .course-card__title { color: var(--text); }
+    body.dark-mode .course-card__meta,
+    body.dark-mode .course-card .course-category { color: var(--muted); }
+
+    /* Widget "Mi progreso" */
+    body.dark-mode .progreso-curso-item,
+    body.dark-mode .progreso-mini-curso {
+      background: #0f1411;
+      border-color: var(--border);
+    }
+    body.dark-mode .progreso-curso-titulo,
+    body.dark-mode .progreso-mini-curso__titulo { color: var(--text); }
+
+    /* Logros */
+    body.dark-mode .widget-logro__nombre,
+    body.dark-mode .widget-logro__desc { color: var(--text); }
+
+    /* Perfil */
+    body.dark-mode .perfil-datos-row,
+    body.dark-mode .perfil-datos-row__label,
+    body.dark-mode .perfil-datos-row__val { color: var(--text); }
+    body.dark-mode .perfil-datos-row { border-color: var(--border); }
+
+    /* Suscripción */
+    body.dark-mode .sus-info-label,
+    body.dark-mode .sus-info-val { color: var(--text); }
+    body.dark-mode .sus-item-text { color: var(--text); }
+    body.dark-mode .sus-item-sub { color: var(--muted); }
+    body.dark-mode .sus-privacidad { background: #0f1411; color: var(--muted); }
+    body.dark-mode .sus-privacidad strong { color: var(--text); }
+
+    /* Apoyos */
+    body.dark-mode .apoyo-item__titulo { color: var(--text); }
+    body.dark-mode .apoyo-item__desc { color: var(--text); }
+
+    /* Parcelas */
+    body.dark-mode .parcela-head__info h5,
+    body.dark-mode .parcela-stat__num { color: var(--text); }
+    body.dark-mode .parcela-stat,
+    body.dark-mode .evento-row { background: #0f1411; }
+    body.dark-mode .evento-row__desc { color: var(--text); }
+
+    /* Foro */
+    body.dark-mode .foro-post__titulo,
+    body.dark-mode .foro-post__body,
+    body.dark-mode .foro-post__user-nombre { color: var(--text); }
+    body.dark-mode .foro-comentario { background: #0f1411; border-color: var(--border); }
+    body.dark-mode .foro-comentario__texto { color: var(--text); }
+
+    /* Clima */
+    body.dark-mode .clima-ubic-bar {
+      background: linear-gradient(135deg, #0a1a33, #0f2147);
+      border-color: #1e3a8a;
+    }
+    body.dark-mode .clima-ubic-bar__info { color: #93c5fd; }
+    body.dark-mode .clima-dia__tmax { color: var(--text); }
+
+    /* Diag guiado (plagas fallback) */
+    body.dark-mode .diag-grupo {
+      background: #0f1411 !important;
+      border-color: #1e3a8a !important;
+    }
+    body.dark-mode .diag-label { color: #93c5fd !important; }
+    body.dark-mode .diag-opt {
+      background: #1a2419 !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+    body.dark-mode .diag-opt.active {
+      background: #3b82f6 !important;
+      color: #fff !important;
+      border-color: #3b82f6 !important;
+    }
+
+    /* Tabs de herramientas */
+    body.dark-mode .herr-tab {
+      background: var(--card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    /* Streak */
     body.dark-mode .streak-banner {
       background: linear-gradient(135deg, #2a1f0a, #3b2d10);
       border-color: #78350f;
@@ -62,12 +236,77 @@
     body.dark-mode .streak-banner__num { color: #fbbf24; }
     body.dark-mode .streak-banner__lbl { color: #fde68a; }
     body.dark-mode .streak-banner__msg { color: #fef3c7; }
+
+    /* Resultado herramientas */
     body.dark-mode .herr-resultado {
       background: linear-gradient(135deg, #0a1f15, #0f2b1e);
       border-color: #047857;
     }
     body.dark-mode .herr-resultado__big { background: #1a2419; }
     body.dark-mode .herr-resultado__warn { background: #2a1f0a; color: #fde68a; }
+    body.dark-mode .herr-resultado__row { color: var(--text); }
+    body.dark-mode .herr-resultado__row b { color: #52c97a; }
+
+    /* Plagas */
+    body.dark-mode .plagas-tips {
+      background: rgba(251,191,36,.08);
+      border-color: rgba(251,191,36,.2);
+      color: #fde68a;
+    }
+    body.dark-mode .plagas-tips strong { color: #fbbf24; }
+
+    /* Costos */
+    body.dark-mode .costos-grupo {
+      background: rgba(26,107,47,.12);
+      border-color: rgba(82,201,122,.2);
+    }
+    body.dark-mode .costos-grupo__titulo { color: #52c97a; border-color: rgba(82,201,122,.2); }
+    body.dark-mode .costos-kpi { background: #0f1411; }
+
+    /* Conversor */
+    body.dark-mode .conv-tipo-tab {
+      background: var(--card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    body.dark-mode .conv-tipo-tab--active {
+      background: #1a6b2f;
+      color: #fff;
+    }
+    body.dark-mode .conv-res-row b { color: #52c97a; }
+
+    /* Noticias */
+    body.dark-mode .noticia-card__title { color: var(--text); }
+    body.dark-mode .noticia-card__source { color: var(--muted); }
+
+    /* Paywall modal */
+    body.dark-mode .paywall-modal__box {
+      background: linear-gradient(135deg, #1a2419 0%, #0f2b1e 100%);
+    }
+    body.dark-mode .paywall-modal__title { color: var(--text); }
+    body.dark-mode .paywall-modal__desc { color: var(--muted); }
+    body.dark-mode .paywall-modal__feat { color: var(--text); }
+    body.dark-mode .paywall-modal__features {
+      background: rgba(251,191,36,.08);
+    }
+
+    /* Badges VIP / free */
+    body.dark-mode .perfil-badge {
+      background: rgba(82,201,122,.2);
+      color: #a3e635;
+    }
+
+    /* Botones planes suscripción */
+    body.dark-mode .sus-plan-card--destacado {
+      background: linear-gradient(135deg, #0a1f15 0%, #0f2b1e 100%);
+    }
+    body.dark-mode .sus-plan-card__feats li { color: var(--text); }
+    body.dark-mode .sus-plan-card__price * { color: var(--text); }
+    body.dark-mode .sus-plan-card__per { color: var(--muted); }
+
+    /* Empty states / skeletons */
+    body.dark-mode .noticias-skeleton { background: #0f1411; }
+    body.dark-mode .herr-empty { color: var(--muted); }
 
     /* TARJETA TEMA */
     .tema-card {
