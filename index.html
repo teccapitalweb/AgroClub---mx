@@ -3782,6 +3782,47 @@
       cursor: pointer;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
+    /* Examen desbloqueado */
+    .curso-completo-examen {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 2px solid #fbbf24;
+      border-radius: 14px; padding: 14px 16px;
+      margin: 6px 0 14px;
+      text-align: left;
+      animation: examenPop .6s ease both .3s;
+    }
+    @keyframes examenPop {
+      0% { transform: scale(.8); opacity: 0; }
+      60% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .curso-completo-examen__icon {
+      font-size: 2rem; flex-shrink: 0;
+      animation: bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .curso-completo-examen__title {
+      font-weight: 800; color: #78350f; font-size: 1rem;
+      margin-bottom: 2px;
+    }
+    .curso-completo-examen__desc {
+      font-size: .82rem; color: #92400e; line-height: 1.4;
+    }
+    .curso-completo-btn--examen {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(217,119,6,.35);
+      font-weight: 800;
+    }
+    .curso-completo-btn--examen:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(217,119,6,.5);
+    }
+
     .curso-completo-btn--primary {
       background: linear-gradient(135deg, var(--verde, #1a6b2f), #0d3d19);
       color: #fff;
@@ -5962,7 +6003,20 @@
     <h2 class="curso-completo-title">¡Felicidades, Maestro!</h2>
     <p class="curso-completo-subtitle">Has completado el 100% de este curso. Ya eres oficialmente un experto en el tema 🌾</p>
     <div class="curso-completo-curso-nombre" id="cursoCompletoNombre">—</div>
+
+    <!-- 📝 EXAMEN DESBLOQUEADO -->
+    <div class="curso-completo-examen" id="cursoCompletoExamen" style="display:none;">
+      <div class="curso-completo-examen__icon">📝</div>
+      <div class="curso-completo-examen__txt">
+        <div class="curso-completo-examen__title">¡Examen desbloqueado!</div>
+        <div class="curso-completo-examen__desc">Responde 10 preguntas, aprueba con 6/10 y <strong>desbloquea un logro especial</strong>.</div>
+      </div>
+    </div>
+
     <div class="curso-completo-actions">
+      <button class="curso-completo-btn curso-completo-btn--examen" id="cursoCompletoBtnExamen" style="display:none;" onclick="irAlExamenDesdeCurso()">
+        📝 Presentar examen ahora
+      </button>
       <button class="curso-completo-btn curso-completo-btn--primary" onclick="cerrarCursoCompleto()">
         🎉 ¡Seguir aprendiendo!
       </button>
@@ -10989,16 +11043,33 @@ function fiestaConfetti() {
 }
 
 // Mostrar modal "¡Curso completado!" + fiesta de confetti
-function celebrarCurso100(cursoId) {
+async function celebrarCurso100(cursoId) {
   const curso = CURSOS.find(c => c.id === cursoId);
   if (!curso) return;
 
-  // Guardar para el botón de compartir
+  // Guardar para el botón de compartir / examen
   window._ultimoCursoCompletado = curso;
 
   // Llenar datos del modal
   const nombreEl = document.getElementById('cursoCompletoNombre');
   if (nombreEl) nombreEl.textContent = `${curso.emoji || '🎓'} ${curso.titulo}`;
+
+  // Verificar si este curso tiene examen cargado en Firestore
+  const examenBox = document.getElementById('cursoCompletoExamen');
+  const examenBtn = document.getElementById('cursoCompletoBtnExamen');
+  if (examenBox) examenBox.style.display = 'none';
+  if (examenBtn) examenBtn.style.display = 'none';
+
+  try {
+    const snap = await getDoc(doc(db, 'examenes', cursoId));
+    if (snap.exists()) {
+      const data = snap.data();
+      if (Array.isArray(data.preguntas) && data.preguntas.length > 0) {
+        if (examenBox) examenBox.style.display = 'flex';
+        if (examenBtn) examenBtn.style.display = 'inline-flex';
+      }
+    }
+  } catch(e) { console.warn('[Examen check]', e); }
 
   // Abrir modal
   const overlay = document.getElementById('cursoCompletoOverlay');
@@ -11007,6 +11078,19 @@ function celebrarCurso100(cursoId) {
   // ¡FIESTA!
   fiestaConfetti();
 }
+
+// Ir al examen desde el modal de curso completado
+window.irAlExamenDesdeCurso = function() {
+  const curso = window._ultimoCursoCompletado;
+  cerrarCursoCompleto();
+  if (!curso) return;
+  // Ir a la página de exámenes
+  showPage('examenes', document.querySelector('[onclick*=examenes]'));
+  // Iniciar el examen directo (con pequeño delay para que cargue la página)
+  setTimeout(() => {
+    if (typeof iniciarExamen === 'function') iniciarExamen(curso.id);
+  }, 500);
+};
 
 function cerrarCursoCompleto() {
   const overlay = document.getElementById('cursoCompletoOverlay');
