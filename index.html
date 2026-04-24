@@ -6238,8 +6238,20 @@ onAuthStateChanged(auth, async (user) => {
     cargarHistorialPagos(user.email);
   } else {
     // Usuario autenticado pero SIN membresía → modo FREE con paywall
-    const nombre = user.displayName || user.email.split("@")[0];
-    currentUser = { uid: user.uid, email: user.email, nombre, esVIP: false, estadoMembresia: 'sin_membresia' };
+    let nombre = user.displayName || user.email.split("@")[0];
+    let whatsappFree = '';
+
+    // Leer datos del registro en agrotecamerican (si existen)
+    try {
+      const freeSnap = await getDoc(doc(db, 'usuarios_free', user.uid));
+      if (freeSnap.exists()) {
+        const freeData = freeSnap.data();
+        if (freeData.nombre && freeData.nombre.trim()) nombre = freeData.nombre;
+        if (freeData.whatsapp) whatsappFree = freeData.whatsapp;
+      }
+    } catch(e) { console.warn('usuarios_free no disponible:', e); }
+
+    currentUser = { uid: user.uid, email: user.email, nombre, whatsapp: whatsappFree, esVIP: false, estadoMembresia: 'sin_membresia' };
     window.currentUser = currentUser;
     mostrarPaywallGlobal();
     // Cambiar badge a FREE
@@ -6256,7 +6268,7 @@ onAuthStateChanged(auth, async (user) => {
     // Llenar campos del perfil con datos del registro
     if (document.getElementById("perfil-nombre")) document.getElementById("perfil-nombre").textContent = nombre;
     if (document.getElementById("perfil-email")) document.getElementById("perfil-email").textContent = user.email;
-    if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = '—';
+    if (document.getElementById("perfil-wa")) document.getElementById("perfil-wa").textContent = whatsappFree || '—';
     if (document.getElementById("perfil-fecha")) {
       const fecha = user.metadata?.creationTime
         ? new Date(user.metadata.creationTime).toLocaleDateString("es-MX", {day:"numeric",month:"long",year:"numeric"})
