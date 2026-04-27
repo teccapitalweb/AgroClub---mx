@@ -100,7 +100,6 @@
     body.dark-mode .widget-descuento *,
     body.dark-mode .sus-plan-card__badge,
     body.dark-mode .apoyo-item__monto,
-    body.dark-mode .apoyo-item__badge,
     body.dark-mode .sidebar-item,
     body.dark-mode .sidebar-subitem,
     body.dark-mode .sidebar *,
@@ -110,6 +109,9 @@
     body.dark-mode .sus-plan-card__btn,
     body.dark-mode .free-cta-section__btn,
     body.dark-mode .paywall-modal__cta { color: inherit; }
+    /* FIX #6: Badges de apoyos mantienen su color en dark mode para legibilidad */
+    body.dark-mode .apoyo-item__badge { background: #422006 !important; color: #fbbf24 !important; }
+    body.dark-mode .apoyo-item__badge--federal { background: #1e3a8a !important; color: #93c5fd !important; }
 
     /* Textos con muted = más claros en dark */
     body.dark-mode .muted,
@@ -402,6 +404,16 @@
       background: #9ca3af; cursor: not-allowed;
     }
     .examen-card__btn--bloqueado:hover { transform: none; box-shadow: none; }
+    /* FIX #4: Variante clickeable para "Continuar curso" */
+    .examen-card__btn--continuar {
+      background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+      cursor: pointer !important;
+      color: #fff !important;
+    }
+    .examen-card__btn--continuar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(245,158,11,.4);
+    }
 
     /* Modal del examen */
     .examen-modal {
@@ -1333,7 +1345,35 @@
     /* ══ MAIN ════════════════════════════════════════════════════════ */
     .main { flex: 1; margin-left: var(--sidebar-w); margin-right: var(--right-w); padding: 28px; min-width: 0; }
     .page { display: none; }
-    .page.active { display: block; }
+    .page.active {
+      display: block;
+      animation: pageFadeIn .25s ease;
+    }
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    /* Skeleton shimmer global por si algún render tarda */
+    .skeleton-shimmer {
+      background: linear-gradient(90deg,
+        rgba(0,0,0,0.04) 0%,
+        rgba(0,0,0,0.08) 50%,
+        rgba(0,0,0,0.04) 100%);
+      background-size: 200% 100%;
+      animation: skeletonShimmer 1.4s ease infinite;
+      border-radius: 8px;
+    }
+    body.dark-mode .skeleton-shimmer {
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0.04) 0%,
+        rgba(255,255,255,0.08) 50%,
+        rgba(255,255,255,0.04) 100%);
+      background-size: 200% 100%;
+    }
+    @keyframes skeletonShimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
 
     /* ══ HERO ════════════════════════════════════════════════════════ */
     .hero-banner {
@@ -5728,15 +5768,7 @@
         <div class="streak-banner__msg" id="streak-msg">¡Empieza tu racha hoy!</div>
       </div>
 
-      <!-- TABS -->
-      <div class="herr-tabs">
-        <button class="herr-tab herr-tab--active" data-tab="agroquimicos" onclick="cambiarHerrTab('agroquimicos',this)">🧪 Agroquímicos</button>
-        <button class="herr-tab" data-tab="plagas" onclick="cambiarHerrTab('plagas',this)">🔬 Detector IA</button>
-        <button class="herr-tab" data-tab="costos" onclick="cambiarHerrTab('costos',this)">💰 Costos</button>
-        <button class="herr-tab" data-tab="clima" onclick="cambiarHerrTab('clima',this)">☀️ Clima</button>
-        <button class="herr-tab" data-tab="bitacora" onclick="cambiarHerrTab('bitacora',this)">📓 Bitácora</button>
-        <button class="herr-tab" data-tab="conversor" onclick="cambiarHerrTab('conversor',this)">📏 Conversor</button>
-      </div>
+      <!-- TABS removidas — la navegación ya está en el sidebar izquierdo (Herramientas) -->
 
       <!-- ═══════ 1. AGROQUÍMICOS ═══════ -->
       <div class="herr-section" id="herr-agroquimicos">
@@ -8252,6 +8284,8 @@ async function loadNotificaciones() {
       renderNotificaciones(_NOTIF_CACHE);
       actualizarBadgeNotif();
     }, (err) => {
+      // Silenciar permission-denied que sucede durante logout (es esperado)
+      if (err && err.code === 'permission-denied') return;
       console.warn('Notificaciones listener error:', err);
     });
   } catch (e) {
@@ -9029,7 +9063,7 @@ window.irHerramienta = function(tab, el) {
   showPage('herramientas');
   setTimeout(() => {
     const btn = document.querySelector('.herr-tab[data-tab="'+tab+'"]');
-    if (btn) cambiarHerrTab(tab, btn);
+    cambiarHerrTab(tab, btn || null);
   }, 100);
   // Desmarcar ítems del sidebar principal
   document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
@@ -9051,7 +9085,7 @@ window.irHerramientaDrawer = function(tab) {
   showPage('herramientas');
   setTimeout(() => {
     const tabBtn = document.querySelector('.herr-tab[data-tab="'+tab+'"]');
-    if (tabBtn) cambiarHerrTab(tab, tabBtn);
+    cambiarHerrTab(tab, tabBtn || null);
   }, 100);
 };
 
@@ -9274,6 +9308,41 @@ document.addEventListener('click', function(e) {
 
     // Lanzar el show épico
     setTimeout(() => vipEpicShow(), 400);
+  }
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// 🚀 FIX #1: INTENT DE PAGO POST-REGISTRO
+// Si el usuario llegó aquí desde "Pagar ahora" en la landing,
+// abrir Stripe Checkout automáticamente (no esperar que él busque cómo pagar)
+// ═══════════════════════════════════════════════════════════════
+(function detectarIntentPago() {
+  const params = new URLSearchParams(window.location.search);
+  const intent = params.get('intent');
+  const plan = params.get('plan');
+
+  if (intent === 'pay' && (plan === 'mensual' || plan === 'anual')) {
+    // Limpiar URL al instante
+    const url = new URL(window.location.href);
+    url.searchParams.delete('intent');
+    url.searchParams.delete('plan');
+    window.history.replaceState({}, '', url.toString());
+
+    // Esperar a que window.currentUser esté disponible (auth completo)
+    let intentos = 0;
+    const intervalo = setInterval(() => {
+      intentos++;
+      if (window.currentUser && window.currentUser.email) {
+        clearInterval(intervalo);
+        // Abrir Stripe con el plan elegido
+        if (typeof abrirStripeCheckout === 'function') {
+          setTimeout(() => abrirStripeCheckout(plan), 500);
+        }
+      } else if (intentos > 30) {
+        // Después de 15 segundos sin user, abandonar
+        clearInterval(intervalo);
+      }
+    }, 500);
   }
 })();
 
@@ -9762,10 +9831,12 @@ const APOYOS_DB = [
 
 // ═══════ TABS ═══════
 window.cambiarHerrTab = function(tab, btn) {
+  // Las herr-tabs fueron removidas, pero conservamos compatibilidad si btn existe
   document.querySelectorAll('.herr-tab').forEach(b => b.classList.remove('herr-tab--active'));
-  btn.classList.add('herr-tab--active');
+  if (btn) btn.classList.add('herr-tab--active');
   document.querySelectorAll('.herr-section').forEach(s => s.style.display = 'none');
-  document.getElementById('herr-' + tab).style.display = 'block';
+  const sec = document.getElementById('herr-' + tab);
+  if (sec) sec.style.display = 'block';
 
   if (tab === 'bitacora') cargarParcelas();
   if (tab === 'apoyos') renderApoyos();
@@ -11429,8 +11500,8 @@ async function cargarExamenes() {
         estado = '<span class="examen-card__estado examen-card__estado--bloqueado">⏳ Próximamente</span>';
         btn = '<button class="examen-card__btn examen-card__btn--bloqueado" disabled>Sin examen</button>';
       } else if (!cursoCompleto) {
-        estado = `<span class="examen-card__estado examen-card__estado--bloqueado">🔒 Termina el curso primero (${vistas}/${totalClases} clases)</span>`;
-        btn = '<button class="examen-card__btn examen-card__btn--bloqueado" disabled>🔒 Bloqueado</button>';
+        estado = `<span class="examen-card__estado examen-card__estado--bloqueado">📚 Completa el curso primero (${vistas}/${totalClases} clases vistas)</span>`;
+        btn = `<button class="examen-card__btn examen-card__btn--continuar" onclick="verCurso('${curso.id}')">📖 Continuar curso →</button>`;
       } else if (aprobado) {
         const mejor = Math.max(...intentosCurso.filter(i => typeof i.porcentaje === 'number').map(i => i.porcentaje));
         estado = `<span class="examen-card__estado examen-card__estado--aprobado">✅ Aprobado · Mejor nota: ${mejor}%</span>`;
@@ -11661,9 +11732,15 @@ async function desbloquearLogroExamen(correctas, total) {
     if (typeof origShowPage2 === 'function') origShowPage2(id, el, bnId);
     if (id === 'herramientas') {
       actualizarStreak();
-      // Mostrar la pestaña activa (agroquímicos por defecto)
+      // Mostrar la pestaña activa (agroquímicos por defecto si no hay ninguna)
       const tabActivo = document.querySelector('.herr-tab--active');
-      if (tabActivo) cambiarHerrTab(tabActivo.dataset.tab, tabActivo);
+      if (tabActivo) {
+        cambiarHerrTab(tabActivo.dataset.tab, tabActivo);
+      } else {
+        // Si ninguna sección visible, mostrar agroquímicos
+        const algunaVisible = document.querySelector('.herr-section[style*="block"]');
+        if (!algunaVisible) cambiarHerrTab('agroquimicos', null);
+      }
     }
     if (id === 'apoyos') {
       renderApoyos();
@@ -12010,9 +12087,9 @@ function renderLogros() {
     const recien = unlocked && !yaVistos.includes(logro.id);
     if (unlocked && !yaVistos.includes(logro.id)) nuevosVistos.push(logro.id);
 
-    const iconHtml = unlocked ? logro.icon : '❓';
-    const tituloHtml = unlocked ? logro.titulo : '???';
-    const descHtml = unlocked ? logro.desc : 'Sigue avanzando para desbloquear';
+    const iconHtml = unlocked ? logro.icon : '🔒';
+    const tituloHtml = logro.titulo; // ← Siempre visible para motivar
+    const descHtml = unlocked ? logro.desc : (logro.descBloqueado || logro.desc);
 
     return `
       <div class="logro-medalla ${unlocked ? 'unlocked' : 'locked'} ${recien ? 'just-unlocked' : ''}"
@@ -12042,7 +12119,7 @@ function abrirLogroDetail(logroId) {
   const r = logro.check(ctx);
   const unlocked = !!r.unlocked;
 
-  document.getElementById('logroDetailIcon').textContent = unlocked ? logro.icon : '❓';
+  document.getElementById('logroDetailIcon').textContent = unlocked ? logro.icon : '🔒';
   document.getElementById('logroDetailIcon').className = 'logro-detail-modal__icon-big ' + (unlocked ? 'unlocked' : 'locked');
   document.getElementById('logroDetailStatus').textContent = unlocked ? '🏅 Desbloqueado' : '🔒 Por desbloquear';
   document.getElementById('logroDetailStatus').className = 'logro-detail-modal__status ' + (unlocked ? 'unlocked' : 'locked');
@@ -12396,7 +12473,7 @@ function parsearXmlRss(xmlText, fuente) {
   const parser = new DOMParser();
   const xml = parser.parseFromString(xmlText, 'text/xml');
   if (xml.querySelector('parsererror')) {
-    console.warn(`[Noticias] XML inválido de ${fuente.id}`);
+    if (window.DEBUG_NOTICIAS) console.warn(`[Noticias] XML inválido de ${fuente.id}`);
     return [];
   }
   const items = Array.from(xml.querySelectorAll('item, entry')).slice(0, 8);
@@ -12458,7 +12535,8 @@ async function fetchConProxy(url, proxyIndex = 0) {
     if (!text || text.length < 50) throw new Error('Respuesta vacía');
     return text;
   } catch (e) {
-    console.warn(`[Noticias] Proxy ${proxyIndex} falló:`, e.message, '→ probando siguiente');
+    // Mover a debug para no contaminar consola del usuario final
+    if (window.DEBUG_NOTICIAS) console.warn(`[Noticias] Proxy ${proxyIndex} falló:`, e.message, '→ probando siguiente');
     return fetchConProxy(url, proxyIndex + 1);
   }
 }
@@ -12467,10 +12545,10 @@ async function fetchFeed(fuente) {
   try {
     const xmlText = await fetchConProxy(fuente.rss);
     const items = parsearXmlRss(xmlText, fuente);
-    console.log(`[Noticias] ${fuente.id}: ${items.length} notas ✓`);
+    if (window.DEBUG_NOTICIAS) console.log(`[Noticias] ${fuente.id}: ${items.length} notas ✓`);
     return items;
   } catch (e) {
-    console.warn(`[Noticias] ${fuente.id} falló completamente:`, e.message);
+    if (window.DEBUG_NOTICIAS) console.warn(`[Noticias] ${fuente.id} falló completamente:`, e.message);
     return [];
   }
 }
@@ -12480,7 +12558,7 @@ async function cargarNoticiasAgro() {
   const btns = document.getElementById('noticias-source-btns');
   if (!grid) return;
 
-  console.log('[Noticias] Iniciando carga de', FUENTES_NOTICIAS.length, 'fuentes...');
+  if (window.DEBUG_NOTICIAS) console.log("[Noticias] Iniciando carga de", FUENTES_NOTICIAS.length, "fuentes...");
 
   const resultados = await Promise.all(FUENTES_NOTICIAS.map(f =>
     fetchFeed(f).then(items => ({ id: f.id, items }))
@@ -12489,7 +12567,7 @@ async function cargarNoticiasAgro() {
   resultados.forEach(r => { NOTICIAS_CACHE[r.id] = r.items; });
 
   const totalItems = Object.values(NOTICIAS_CACHE).reduce((a, arr) => a + arr.length, 0);
-  console.log(`[Noticias] Total cargadas: ${totalItems}`);
+  if (window.DEBUG_NOTICIAS) console.log(`[Noticias] Total cargadas: ${totalItems}`);
 
   const fuentesActivas = FUENTES_NOTICIAS.filter(f => (NOTICIAS_CACHE[f.id] || []).length > 0);
   if (btns) {
