@@ -5058,6 +5058,118 @@
     50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
   }
 
+  /* ═══ NUEVOS EFECTOS PREMIUM ═══ */
+
+  /* ⭐ Estrellas brillantes parpadeantes (cielo nocturno) */
+  .vip-star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: vipStarTwinkle var(--star-duration, 2s) ease-in-out infinite;
+    box-shadow: 0 0 8px #fff, 0 0 16px rgba(255,215,0,.6);
+  }
+  @keyframes vipStarTwinkle {
+    0%, 100% { opacity: 0; transform: scale(.4); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* 💫 Anillos concéntricos onda expansiva (al aparecer la medalla) */
+  .vip-shockwave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    border: 4px solid rgba(255,215,0,.5);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    animation: vipShockwave 2.5s ease-out infinite;
+  }
+  .vip-shockwave:nth-child(2) { animation-delay: .8s; }
+  .vip-shockwave:nth-child(3) { animation-delay: 1.6s; }
+  @keyframes vipShockwave {
+    0% { transform: scale(.3); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+
+  /* 🎆 Fuego artificial (explosión radial de partículas) */
+  .vip-firework {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, #fff 0%, #ffd700 40%, transparent 70%);
+    box-shadow: 0 0 12px #ffd700;
+    opacity: 0;
+    animation: vipFireworkBurst 1.4s ease-out forwards;
+  }
+  @keyframes vipFireworkBurst {
+    0% { transform: translate(0, 0) scale(.4); opacity: 1; }
+    50% { opacity: 1; }
+    100% { transform: translate(var(--fw-x), var(--fw-y)) scale(0); opacity: 0; }
+  }
+
+  /* ✨ Shimmer recorre el título épico */
+  .vip-unlock-title {
+    position: relative;
+    overflow: hidden;
+  }
+  .vip-unlock-title::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%);
+    animation: vipShimmer 2.4s ease-in-out infinite;
+    animation-delay: 1s;
+    pointer-events: none;
+  }
+  @keyframes vipShimmer {
+    0% { left: -60%; }
+    100% { left: 160%; }
+  }
+
+  /* 🎬 Zoom-in cinemático del overlay completo */
+  #vipEpicOverlay.show {
+    animation: vipFadeIn .6s ease, vipCinemaZoom 1.5s ease-out;
+  }
+  @keyframes vipCinemaZoom {
+    from { transform: scale(1.08); }
+    to   { transform: scale(1); }
+  }
+
+  /* 🌈 Aura de color rotando detrás del título */
+  .vip-aura {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120vmin;
+    height: 120vmin;
+    transform: translate(-50%, -50%);
+    background: conic-gradient(
+      from 0deg,
+      rgba(255,215,0,.0),
+      rgba(255,215,0,.18),
+      rgba(16,185,129,.15),
+      rgba(255,215,0,.18),
+      rgba(255,215,0,.0)
+    );
+    border-radius: 50%;
+    pointer-events: none;
+    animation: vipAuraRotate 12s linear infinite;
+    filter: blur(40px);
+    opacity: .7;
+  }
+  @keyframes vipAuraRotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
   @media (max-width: 600px) {
     .vip-benefit-counter, .vip-benefit-progress, .vip-countdown-ring { top: 16px; }
     .vip-benefit-progress { left: 16px; }
@@ -5069,14 +5181,18 @@
 </style>
 
 <div id="vipEpicOverlay">
+  <div class="vip-aura"></div>
   <div class="vip-glow"></div>
+  <div class="vip-shockwave"></div>
+  <div class="vip-shockwave"></div>
+  <div class="vip-shockwave"></div>
   <div class="vip-lightning"></div>
 
   <!-- FASE 1: Título gigante -->
   <div class="vip-stage1">
-    <div class="vip-unlock-kicker">✦ PAGO CONFIRMADO ✦</div>
+    <div class="vip-unlock-kicker">✦ ACCESO ACTIVADO ✦</div>
     <div class="vip-unlock-title">MEMBRESÍA VIP<br>DESBLOQUEADA</div>
-    <div class="vip-unlock-sub">Bienvenido al club más chingón del agro 🌱</div>
+    <div class="vip-unlock-sub">Bienvenido a la comunidad líder del agro mexicano 🌱</div>
   </div>
 
   <!-- FASE 2: Medalla -->
@@ -9595,17 +9711,32 @@ function vipEpicShow() {
   overlay.classList.add('show');
   document.body.style.overflow = 'hidden';
 
-  // Partículas doradas
+  // Partículas doradas + estrellas
   vipSpawnParticles();
+  vipSpawnStars();
 
-  // Confetti dorado
+  // 🎊 5 RÁFAGAS DE CONFETTI EN MOMENTOS CLAVE
   try {
     if (typeof confetti === 'function') {
-      confetti({ particleCount: 120, spread: 80, origin: { y: .5 }, colors: ['#ffd700','#ff9500','#fff','#10b981'] });
-      setTimeout(() => confetti({ particleCount: 100, spread: 100, origin: { y: .3 }, colors: ['#ffd700','#fff'] }), 600);
-      setTimeout(() => confetti({ particleCount: 150, spread: 120, origin: { y: .7 }, colors: ['#ffd700','#10b981'] }), 3500);
+      // Ráfaga 1: arranque (centro + amplio)
+      confetti({ particleCount: 140, spread: 90, origin: { y: .5 }, colors: ['#ffd700','#ff9500','#fff','#10b981'] });
+      // Ráfaga 2: lateral izquierdo (.6s)
+      setTimeout(() => confetti({ particleCount: 80, spread: 60, origin: { x: .15, y: .55 }, angle: 60, colors: ['#ffd700','#fff'] }), 600);
+      // Ráfaga 3: lateral derecho (1s)
+      setTimeout(() => confetti({ particleCount: 80, spread: 60, origin: { x: .85, y: .55 }, angle: 120, colors: ['#ffd700','#fff'] }), 1000);
+      // Ráfaga 4: medalla aparece (3.4s) — explosión grande dorada
+      setTimeout(() => confetti({ particleCount: 200, spread: 100, origin: { y: .5 }, colors: ['#ffd700','#ff9500','#fbbf24','#fff'], scalar: 1.2 }), 3400);
+      // Ráfaga 5: cascada continua justo antes del carrusel (5.5s)
+      setTimeout(() => confetti({ particleCount: 180, spread: 130, origin: { y: .7 }, colors: ['#ffd700','#10b981','#fff'], gravity: .6 }), 5500);
     }
   } catch(e) {}
+
+  // 🎆 Fuegos artificiales en momentos clave
+  setTimeout(() => vipSpawnFirework(0.25, 0.4), 700);
+  setTimeout(() => vipSpawnFirework(0.75, 0.4), 1100);
+  setTimeout(() => vipSpawnFirework(0.5, 0.5), 3500); // medalla
+  setTimeout(() => vipSpawnFirework(0.2, 0.3), 4200);
+  setTimeout(() => vipSpawnFirework(0.8, 0.3), 4700);
 
   // Después de 6s → pasar al carrusel de beneficios
   setTimeout(() => {
@@ -9618,7 +9749,7 @@ function vipEpicShow() {
 
 function vipSpawnParticles() {
   const overlay = document.getElementById('vipEpicOverlay');
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 35; i++) {
     const p = document.createElement('div');
     p.className = 'vip-particle';
     p.style.left = Math.random() * 100 + '%';
@@ -9626,6 +9757,54 @@ function vipSpawnParticles() {
     p.style.animationDuration = (3 + Math.random() * 3) + 's';
     p.style.width = p.style.height = (4 + Math.random() * 10) + 'px';
     overlay.appendChild(p);
+  }
+}
+
+// ⭐ Estrellas brillantes parpadeantes (cielo nocturno)
+function vipSpawnStars() {
+  const overlay = document.getElementById('vipEpicOverlay');
+  for (let i = 0; i < 50; i++) {
+    const s = document.createElement('div');
+    s.className = 'vip-star';
+    const size = 2 + Math.random() * 4;
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.width = s.style.height = size + 'px';
+    s.style.setProperty('--star-duration', (1.5 + Math.random() * 2.5) + 's');
+    s.style.animationDelay = (Math.random() * 3) + 's';
+    overlay.appendChild(s);
+  }
+}
+
+// 🎆 Fuegos artificiales (explosión radial de partículas)
+function vipSpawnFirework(xPct, yPct) {
+  const overlay = document.getElementById('vipEpicOverlay');
+  if (!overlay) return;
+  const cx = window.innerWidth * xPct;
+  const cy = window.innerHeight * yPct;
+  const numParticles = 18;
+
+  for (let i = 0; i < numParticles; i++) {
+    const angle = (i / numParticles) * Math.PI * 2;
+    const distance = 80 + Math.random() * 80;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+
+    const f = document.createElement('div');
+    f.className = 'vip-firework';
+    f.style.left = cx + 'px';
+    f.style.top = cy + 'px';
+    f.style.setProperty('--fw-x', dx + 'px');
+    f.style.setProperty('--fw-y', dy + 'px');
+    // Variación de color
+    const colors = ['#ffd700', '#ff9500', '#fff', '#10b981'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    f.style.background = `radial-gradient(circle, #fff 0%, ${color} 40%, transparent 70%)`;
+    f.style.boxShadow = `0 0 12px ${color}`;
+    overlay.appendChild(f);
+
+    // Limpiar después de animación
+    setTimeout(() => { try { f.remove(); } catch(e) {} }, 1500);
   }
 }
 
