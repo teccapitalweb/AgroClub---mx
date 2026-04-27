@@ -4615,6 +4615,107 @@
   }
 </style>
 
+<!-- 🎯 SELECTOR DE PLAN (paso intermedio antes de Stripe) -->
+<div id="planSelectorModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.78); z-index:99998; align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(8px); overflow-y:auto;">
+  <div id="planSelectorBox" style="background:linear-gradient(145deg, #ffffff 0%, #f9fafb 100%); border-radius:24px; max-width:760px; width:100%; padding:32px 28px; position:relative; box-shadow:0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(16,185,129,.15); animation:planSelIn .35s cubic-bezier(.34,1.56,.64,1); box-sizing:border-box; max-height:96vh; overflow-y:auto;">
+
+    <!-- Botón cerrar -->
+    <button id="planSelectorCloseBtn" type="button" aria-label="Cerrar" style="position:absolute; top:14px; right:14px; width:36px; height:36px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; font-size:1.1rem; color:#374151; display:flex; align-items:center; justify-content:center; z-index:10; padding:0; line-height:1; transition:all .18s;">✕</button>
+
+    <!-- Header -->
+    <div style="text-align:center; margin-bottom:24px;">
+      <div style="display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#dcfce7,#a7f3d0); color:#065f46; padding:5px 14px; border-radius:100px; font-size:.72rem; font-weight:800; letter-spacing:.08em; margin-bottom:10px;">⭐ ELIGE TU PLAN</div>
+      <h3 style="font-size:1.6rem; font-weight:900; color:#111827; margin:0 0 6px; line-height:1.15;">¿Mensual o Anual?</h3>
+      <p style="font-size:.92rem; color:#6b7280; margin:0;">Cancela cuando quieras · Pago seguro con Stripe</p>
+    </div>
+
+    <!-- Cards de planes -->
+    <div class="planSelector-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px;">
+
+      <!-- Plan Mensual -->
+      <div class="planSelector-card" data-plan="mensual" style="border:2px solid #e5e7eb; border-radius:18px; padding:22px 18px; cursor:pointer; transition:all .25s; background:#fff; position:relative; display:flex; flex-direction:column;">
+        <div style="font-size:1.6rem; margin-bottom:8px;">📅</div>
+        <div style="font-size:.72rem; font-weight:800; letter-spacing:.1em; color:#6b7280; margin-bottom:6px;">PLAN MENSUAL</div>
+        <div style="display:flex; align-items:baseline; gap:4px; margin-bottom:8px;">
+          <span style="font-size:2.1rem; font-weight:900; color:#111827; line-height:1;">$200</span>
+          <span style="font-size:.85rem; color:#6b7280; font-weight:600;">MXN/mes</span>
+        </div>
+        <div style="font-size:.82rem; color:#6b7280; line-height:1.45; margin-bottom:14px; flex:1;">Pago mes a mes. Sin compromiso. Cancela en un click cuando quieras.</div>
+        <button class="planSelector-btn" data-plan="mensual" style="width:100%; padding:13px 18px; background:#374151; color:#fff; border:none; border-radius:12px; font-size:.95rem; font-weight:800; cursor:pointer; transition:all .2s; font-family:inherit;">
+          Elegir mensual →
+        </button>
+      </div>
+
+      <!-- Plan Anual (destacado) -->
+      <div class="planSelector-card planSelector-card--featured" data-plan="anual" style="border:2.5px solid #10b981; border-radius:18px; padding:22px 18px; cursor:pointer; transition:all .25s; background:linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%); position:relative; display:flex; flex-direction:column; box-shadow:0 8px 24px rgba(16,185,129,.18);">
+        <div style="position:absolute; top:-12px; right:14px; background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#78350f; padding:4px 12px; border-radius:100px; font-size:.7rem; font-weight:900; letter-spacing:.05em; box-shadow:0 4px 10px rgba(245,158,11,.4);">🏆 -30% AHORRO</div>
+        <div style="font-size:1.6rem; margin-bottom:8px;">⭐</div>
+        <div style="font-size:.72rem; font-weight:800; letter-spacing:.1em; color:#065f46; margin-bottom:6px;">PLAN ANUAL</div>
+        <div style="display:flex; align-items:baseline; gap:4px; margin-bottom:4px;">
+          <span style="font-size:2.1rem; font-weight:900; color:#065f46; line-height:1;">$1,920</span>
+          <span style="font-size:.85rem; color:#047857; font-weight:600;">MXN/año</span>
+        </div>
+        <div style="display:inline-block; background:rgba(16,185,129,.18); color:#065f46; font-size:.72rem; font-weight:700; padding:2px 10px; border-radius:100px; margin-bottom:8px; align-self:flex-start;">Equivale a $160/mes</div>
+        <div style="font-size:.82rem; color:#047857; line-height:1.45; margin-bottom:14px; flex:1;"><strong>2 meses GRATIS</strong> + acceso prioritario y certificado anual especial.</div>
+        <button class="planSelector-btn planSelector-btn--featured" data-plan="anual" style="width:100%; padding:13px 18px; background:linear-gradient(135deg,#10b981,#059669); color:#fff; border:none; border-radius:12px; font-size:.95rem; font-weight:800; cursor:pointer; transition:all .2s; font-family:inherit; box-shadow:0 6px 16px rgba(16,185,129,.4);">
+          Elegir anual →
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Footer: volver -->
+    <div style="text-align:center; padding-top:6px;">
+      <button id="planSelectorBackBtn" type="button" style="background:transparent; border:none; color:#6b7280; font-size:.85rem; font-weight:600; cursor:pointer; padding:8px 14px; font-family:inherit; transition:color .18s;">← Volver a beneficios</button>
+    </div>
+
+    <!-- Trust footer -->
+    <div style="text-align:center; margin-top:14px; padding-top:14px; border-top:1px solid #e5e7eb; font-size:.74rem; color:#9ca3af;">
+      🔒 Pago seguro con Stripe · Cancela cuando quieras
+    </div>
+
+  </div>
+</div>
+
+<style>
+  @keyframes planSelIn { from { opacity:0; transform:scale(.92) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+  #planSelectorCloseBtn:hover { background:#e5e7eb !important; transform:scale(1.05); }
+  #planSelectorBackBtn:hover { color:#374151 !important; }
+  .planSelector-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(0,0,0,.12); }
+  .planSelector-card--featured:hover { box-shadow:0 14px 32px rgba(16,185,129,.28); }
+  .planSelector-btn:hover { transform:translateY(-1px); filter:brightness(1.08); }
+  .planSelector-btn--featured:hover { box-shadow:0 10px 22px rgba(16,185,129,.55); }
+
+  /* DARK MODE */
+  body.dark-mode #planSelectorBox {
+    background:linear-gradient(145deg, #1f2937 0%, #111827 100%) !important;
+    box-shadow:0 24px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(16,185,129,.25) !important;
+  }
+  body.dark-mode #planSelectorBox h3 { color:#f9fafb !important; }
+  body.dark-mode #planSelectorBox p { color:#9ca3af !important; }
+  body.dark-mode #planSelectorCloseBtn { background:#374151 !important; color:#e5e7eb !important; }
+  body.dark-mode #planSelectorCloseBtn:hover { background:#4b5563 !important; }
+  body.dark-mode #planSelectorBackBtn { color:#9ca3af !important; }
+  body.dark-mode #planSelectorBackBtn:hover { color:#e5e7eb !important; }
+  body.dark-mode .planSelector-card[data-plan="mensual"] {
+    background:#1f2937 !important; border-color:#374151 !important;
+  }
+  body.dark-mode .planSelector-card[data-plan="mensual"] * { color:#e5e7eb !important; }
+  body.dark-mode .planSelector-card[data-plan="mensual"] .planSelector-btn { background:#4b5563 !important; color:#fff !important; }
+  body.dark-mode .planSelector-card--featured {
+    background:linear-gradient(145deg, rgba(6,95,70,.3) 0%, rgba(16,185,129,.15) 100%) !important;
+    border-color:#10b981 !important;
+  }
+  body.dark-mode .planSelector-card--featured * { color:#a7f3d0 !important; }
+  body.dark-mode .planSelector-card--featured .planSelector-btn--featured { background:linear-gradient(135deg,#10b981,#059669) !important; color:#fff !important; }
+
+  /* RESPONSIVE MÓVIL */
+  @media (max-width: 600px) {
+    .planSelector-grid { grid-template-columns:1fr !important; gap:12px !important; }
+    #planSelectorBox { padding:24px 18px !important; }
+  }
+</style>
+
 <!-- 🏆 OVERLAY ÉPICO DE BIENVENIDA VIP (estilo Battle Pass) -->
 <style>
   #vipEpicOverlay {
@@ -9208,7 +9309,12 @@ window.cerrarPaywallBg = function(e) {
         e.preventDefault();
         e.stopPropagation();
         cerrarPaywallModal();
-        if (typeof abrirStripeCheckout === 'function') abrirStripeCheckout('mensual');
+        // Abrir selector de plan (mensual o anual) antes de Stripe
+        if (typeof abrirSelectorPlan === 'function') {
+          abrirSelectorPlan();
+        } else if (typeof abrirStripeCheckout === 'function') {
+          abrirStripeCheckout('mensual');
+        }
       });
       ctaBtn._bound = true;
     }
@@ -9244,6 +9350,95 @@ const STRIPE_PK = 'pk_test_51TMAchPBgqsOPfUYtBbalhoOLnnGz6LymFleli7OxTDbiK4FNYX0
 const WEBHOOK_URL = 'https://agroclub-webhook-production.up.railway.app';
 let stripeInstance = null;
 let checkoutInstance = null;
+
+// ═══════════════════════════════════════════════════════════════
+// 🎯 SELECTOR DE PLAN (paso intermedio antes de Stripe)
+// ═══════════════════════════════════════════════════════════════
+window.abrirSelectorPlan = function() {
+  const u = window.currentUser;
+  if (!u || !u.email) {
+    alert('Inicia sesión primero para suscribirte.');
+    return;
+  }
+  const modal = document.getElementById('planSelectorModal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  // Instalar listeners (idempotente)
+  instalarListenersPlanSelector();
+};
+
+window.cerrarSelectorPlan = function() {
+  const modal = document.getElementById('planSelectorModal');
+  if (modal) modal.style.display = 'none';
+  document.body.style.overflow = '';
+};
+
+function instalarListenersPlanSelector() {
+  const modal = document.getElementById('planSelectorModal');
+  const closeBtn = document.getElementById('planSelectorCloseBtn');
+  const backBtn = document.getElementById('planSelectorBackBtn');
+  const cards = document.querySelectorAll('.planSelector-card');
+  const btns = document.querySelectorAll('.planSelector-btn');
+
+  if (closeBtn && !closeBtn._psbound) {
+    closeBtn.addEventListener('click', function(e) {
+      e.preventDefault(); e.stopPropagation();
+      cerrarSelectorPlan();
+    });
+    closeBtn._psbound = true;
+  }
+  if (backBtn && !backBtn._psbound) {
+    backBtn.addEventListener('click', function(e) {
+      e.preventDefault(); e.stopPropagation();
+      cerrarSelectorPlan();
+      // Reabrir paywall (la vista anterior)
+      const paywall = document.getElementById('paywallModal');
+      if (paywall) paywall.classList.add('open');
+    });
+    backBtn._psbound = true;
+  }
+  if (modal && !modal._psbound) {
+    // Click fuera del box cierra el modal
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) cerrarSelectorPlan();
+    });
+    modal._psbound = true;
+  }
+  // Listener para cards (clickeable toda la card)
+  cards.forEach(card => {
+    if (!card._psbound) {
+      card.addEventListener('click', function(e) {
+        // Si el click fue en el botón, dejar que el listener del botón lo maneje
+        if (e.target.closest('.planSelector-btn')) return;
+        const plan = card.getAttribute('data-plan');
+        cerrarSelectorPlan();
+        if (typeof abrirStripeCheckout === 'function' && plan) abrirStripeCheckout(plan);
+      });
+      card._psbound = true;
+    }
+  });
+  // Listener para botones específicos
+  btns.forEach(btn => {
+    if (!btn._psbound) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        const plan = btn.getAttribute('data-plan');
+        cerrarSelectorPlan();
+        if (typeof abrirStripeCheckout === 'function' && plan) abrirStripeCheckout(plan);
+      });
+      btn._psbound = true;
+    }
+  });
+}
+
+// Tecla Escape cierra el selector
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' || e.key === 'Esc') {
+    const m = document.getElementById('planSelectorModal');
+    if (m && m.style.display === 'flex') cerrarSelectorPlan();
+  }
+});
 
 window.abrirStripeCheckout = async function(plan) {
   const u = window.currentUser;
