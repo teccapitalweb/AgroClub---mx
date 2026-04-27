@@ -113,6 +113,29 @@
     body.dark-mode .apoyo-item__badge { background: #422006 !important; color: #fbbf24 !important; }
     body.dark-mode .apoyo-item__badge--federal { background: #1e3a8a !important; color: #93c5fd !important; }
 
+    /* ═══ FIX V4: Contraste de botones/badges en DARK MODE ═══ */
+    /* 1) Botón "Abrir grupo" del widget WhatsApp: fondo blanco → texto verde WhatsApp */
+    body.dark-mode .widget-whatsapp__btn,
+    body.dark-mode .widget-whatsapp__btn * { color: #128C7E !important; }
+    body.dark-mode .widget-whatsapp__btn svg { fill: #128C7E !important; }
+
+    /* 2) Botón "Suscribirme" / "Canjear por WhatsApp" del widget descuento (fondo claro → texto oscuro) */
+    body.dark-mode .widget-descuento__btn,
+    body.dark-mode .widget-descuento__btn * { color: #78350f !important; }
+    /* Banner rojo "Suscribirme" arriba: fondo blanco → texto rojo */
+    body.dark-mode .paywall-banner__btn,
+    body.dark-mode .paywall-banner__btn * { color: #b91c1c !important; }
+
+    /* 3) Estados de exámenes: contraste correcto en dark mode */
+    body.dark-mode .examen-card__estado--disponible { background: rgba(22,101,52,.25) !important; color: #86efac !important; }
+    body.dark-mode .examen-card__estado--bloqueado { background: rgba(146,64,14,.25) !important; color: #fcd34d !important; }
+    body.dark-mode .examen-card__estado--aprobado { background: rgba(30,64,175,.25) !important; color: #93c5fd !important; }
+    body.dark-mode .examen-card__estado--reprobado { background: rgba(153,27,27,.25) !important; color: #fca5a5 !important; }
+
+    /* 4) Stats labels (Aprobados / Disponibles / Promedio) en dark mode */
+    body.dark-mode .examenes-stat__lbl { color: #d1d5db !important; }
+    body.dark-mode .examenes-stat__num { color: #fbbf24 !important; }
+
     /* Textos con muted = más claros en dark */
     body.dark-mode .muted,
     body.dark-mode [class*="sub"],
