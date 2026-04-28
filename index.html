@@ -140,11 +140,15 @@
     /* 5) Badge "PREGUNTA X DE Y" del examen — fondo amarillo claro, debe mantener texto café oscuro */
     body.dark-mode .examen-pregunta__num { color: #78350f !important; background: linear-gradient(135deg, #fde68a, #fcd34d) !important; }
 
-    /* 6) Título y subtítulos del certificado — fondo amarillo claro, mantener color café oscuro */
+    /* 6) Título y subtítulos del certificado — fondo verde sutil, mantener color verde oscuro */
+    body.dark-mode .cert-card__top {
+      background: linear-gradient(135deg, rgba(6,95,70,.25) 0%, rgba(16,185,129,.15) 100%) !important;
+      border-bottom-color: rgba(82,201,122,0.18) !important;
+    }
     body.dark-mode .cert-card__top *,
-    body.dark-mode .cert-card__top { color: #451a03 !important; }
-    body.dark-mode .cert-card__title { color: #451a03 !important; }
-    body.dark-mode .cert-card__kicker { color: #78350f !important; }
+    body.dark-mode .cert-card__top { color: #d1fae5 !important; }
+    body.dark-mode .cert-card__title { color: #ecfdf3 !important; }
+    body.dark-mode .cert-card__badge-cat { background: rgba(82,201,122,0.18) !important; color: #6ee7a3 !important; }
 
     /* 7) Clases completadas (tachadas) — mejorar contraste en dark mode */
     body.dark-mode .clase-item.completada-row {
@@ -1572,23 +1576,23 @@
     .cert-card__top {
       position: relative; padding: 24px 20px 18px;
       background:
-        linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+        linear-gradient(135deg, #f8faf7 0%, #ecfdf3 60%, #dcfce7 100%);
       display: flex; align-items: center; gap: 16px;
-      border-bottom: 3px solid #d97706;
+      border-bottom: 1px solid rgba(26,107,47,0.18);
     }
     .cert-card__top::before {
       content: ''; position: absolute; inset: 0;
       background:
-        radial-gradient(circle at 90% 30%, rgba(255,255,255,.5), transparent 50%),
-        radial-gradient(circle at 10% 80%, rgba(217,119,6,.15), transparent 50%);
+        radial-gradient(circle at 90% 30%, rgba(255,255,255,.45), transparent 50%),
+        radial-gradient(circle at 10% 80%, rgba(26,107,47,.08), transparent 50%);
       pointer-events: none;
     }
-    /* Cinta/listón lateral */
+    /* Cinta/listón lateral verde sobrio */
     .cert-card__ribbon {
       position: absolute; top: -2px; right: 16px; width: 22px; height: 52px;
-      background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+      background: linear-gradient(180deg, #1a6b2f 0%, #0d3d19 100%);
       clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
-      box-shadow: 0 4px 10px rgba(220,38,38,.3);
+      box-shadow: 0 4px 10px rgba(26,107,47,.3);
       z-index: 2;
     }
 
@@ -1598,21 +1602,21 @@
     }
     .cert-card__medal-svg {
       width: 100%; height: 100%;
-      filter: drop-shadow(0 4px 10px rgba(217,119,6,.35));
+      filter: drop-shadow(0 4px 10px rgba(26,107,47,.18));
     }
 
     .cert-card__info { position: relative; flex: 1; z-index: 1; min-width: 0; }
     .cert-card__badge-cat {
       display: inline-block;
-      background: rgba(217,119,6,.2); color: #78350f;
-      padding: 3px 10px; border-radius: 100px;
+      background: rgba(26,107,47,0.12); color: #155827;
+      padding: 3px 10px; border-radius: 6px;
       font-size: .64rem; font-weight: 800;
       letter-spacing: .1em; text-transform: uppercase;
       margin-bottom: 6px;
     }
     .cert-card__title {
       font-size: 1rem; font-weight: 800; line-height: 1.25;
-      color: #451a03;
+      color: #0d1813;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       overflow: hidden;
       font-family: 'Playfair Display', Georgia, serif;
@@ -3851,177 +3855,305 @@
     .curso-completo-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(8, 20, 10, 0.72);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(8, 12, 18, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       z-index: 100000;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      animation: cursoCompletoFadeIn 0.3s ease;
+      animation: cursoCompletoFadeIn 0.25s ease;
     }
     .curso-completo-overlay.is-open { display: flex; }
     @keyframes cursoCompletoFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .curso-completo-modal {
-      background: linear-gradient(145deg, #ffffff 0%, #fefce8 100%);
-      border-radius: 24px;
+      background: #ffffff;
+      border-radius: 20px;
       max-width: 440px;
       width: 100%;
-      padding: 40px 32px 32px;
+      padding: 36px 32px 28px;
       text-align: center;
       position: relative;
-      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
-      animation: cursoCompletoScaleIn 0.55s cubic-bezier(0.2, 1.3, 0.4, 1);
-      overflow: hidden;
+      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+      animation: cursoCompletoScaleIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @keyframes cursoCompletoScaleIn {
-      from { opacity: 0; transform: scale(0.7) translateY(20px); }
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .curso-completo-modal::before {
-      content: '';
+
+    .curso-completo-close {
       position: absolute;
-      inset: -2px;
-      background: linear-gradient(135deg, #f9a825, #52c97a, #f9a825);
-      background-size: 200% 200%;
-      animation: cursoCompletoBorder 3s linear infinite;
-      border-radius: 24px;
-      z-index: -1;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #94a3a0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
     }
-    @keyframes cursoCompletoBorder {
-      0%   { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
-    }
-
-    .curso-completo-trophy {
-      font-size: 5rem;
-      line-height: 1;
-      margin-bottom: 16px;
-      display: inline-block;
-      animation: cursoCompletoTrophyBounce 1.2s ease-in-out infinite;
-      filter: drop-shadow(0 6px 20px rgba(249, 168, 37, 0.5));
-    }
-    @keyframes cursoCompletoTrophyBounce {
-      0%, 100% { transform: translateY(0) rotate(-3deg); }
-      50%      { transform: translateY(-10px) rotate(3deg); }
+    .curso-completo-close:hover {
+      background: #f4f6f3;
+      color: #1a2010;
     }
 
-    .curso-completo-badge {
+    .curso-completo-icon-wrap {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: ccIconIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+    }
+    @keyframes ccIconIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .curso-completo-icon {
+      width: 100%;
+      height: 100%;
+    }
+    .curso-completo-icon path {
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: ccCheckDraw 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
+    }
+    @keyframes ccCheckDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .curso-completo-tag {
       display: inline-block;
-      background: linear-gradient(135deg, #f9a825, #ef6c00);
-      color: #fff;
-      padding: 6px 16px;
-      border-radius: 100px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.15em;
+      background: rgba(26, 107, 47, 0.08);
+      color: #1a6b2f;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       margin-bottom: 14px;
-      box-shadow: 0 4px 12px rgba(249, 168, 37, 0.35);
     }
+
     .curso-completo-title {
       font-family: var(--font-display, var(--font)), sans-serif;
-      font-size: 1.85rem;
-      font-weight: 900;
-      color: #1a2010;
-      line-height: 1.15;
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #0d1813;
+      line-height: 1.2;
       letter-spacing: -0.02em;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .curso-completo-subtitle {
       color: #5a6758;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       line-height: 1.5;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
+
     .curso-completo-curso-nombre {
-      background: rgba(26, 107, 47, 0.08);
-      border: 1px solid rgba(26, 107, 47, 0.2);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 24px;
-      color: var(--verde, #1a6b2f);
-      font-weight: 700;
-      font-size: 0.95rem;
+      background: #f8faf7;
+      border: 1px solid #e8ede5;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      color: #1a2010;
+      font-weight: 600;
+      font-size: 0.9rem;
+      line-height: 1.35;
     }
+
+    .curso-completo-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 14px 0;
+      margin-bottom: 18px;
+      border-top: 1px solid #eef1ec;
+      border-bottom: 1px solid #eef1ec;
+    }
+    .curso-completo-stat {
+      flex: 1;
+      text-align: center;
+    }
+    .curso-completo-stat__num {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #0d1813;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .curso-completo-stat__num span {
+      font-size: 0.85rem;
+      color: #94a3a0;
+      font-weight: 600;
+      margin-left: 1px;
+    }
+    .curso-completo-stat__lbl {
+      font-size: 0.7rem;
+      color: #94a3a0;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+    .curso-completo-stat-divider {
+      width: 1px;
+      height: 36px;
+      background: #eef1ec;
+    }
+
+    /* Examen disponible — sobrio, sin emojis bouncing */
+    .curso-completo-examen {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #fafbf9;
+      border: 1px solid #e8ede5;
+      border-left: 3px solid #1a6b2f;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      text-align: left;
+      animation: ccExamenIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+    }
+    @keyframes ccExamenIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .curso-completo-examen__indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1a6b2f;
+      margin-top: 6px;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(26,107,47,0.15);
+      animation: ccPulse 2s ease-in-out infinite;
+    }
+    @keyframes ccPulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(26,107,47,0.15); }
+      50%     { box-shadow: 0 0 0 6px rgba(26,107,47,0.05); }
+    }
+    .curso-completo-examen__title {
+      font-weight: 700;
+      color: #0d1813;
+      font-size: 0.92rem;
+      margin-bottom: 3px;
+    }
+    .curso-completo-examen__desc {
+      font-size: 0.82rem;
+      color: #5a6758;
+      line-height: 1.45;
+    }
+
     .curso-completo-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-direction: column;
     }
     .curso-completo-btn {
-      padding: 14px 20px;
-      border-radius: 100px;
+      padding: 12px 18px;
+      border-radius: 10px;
       font-family: var(--font), sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-weight: 600;
+      font-size: 0.92rem;
       border: none;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    /* Examen desbloqueado */
-    .curso-completo-examen {
-      display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-      border: 2px solid #fbbf24;
-      border-radius: 14px; padding: 14px 16px;
-      margin: 6px 0 14px;
-      text-align: left;
-      animation: examenPop .6s ease both .3s;
-    }
-    @keyframes examenPop {
-      0% { transform: scale(.8); opacity: 0; }
-      60% { transform: scale(1.05); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .curso-completo-examen__icon {
-      font-size: 2rem; flex-shrink: 0;
-      animation: bounce 1.6s ease-in-out infinite;
-    }
-    @keyframes bounce {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .curso-completo-examen__title {
-      font-weight: 800; color: #78350f; font-size: 1rem;
-      margin-bottom: 2px;
-    }
-    .curso-completo-examen__desc {
-      font-size: .82rem; color: #92400e; line-height: 1.4;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: -0.005em;
     }
     .curso-completo-btn--examen {
-      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+      background: #0d1813;
       color: #fff;
-      box-shadow: 0 6px 16px rgba(217,119,6,.35);
-      font-weight: 800;
+      font-weight: 700;
     }
     .curso-completo-btn--examen:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 22px rgba(217,119,6,.5);
+      background: #1a2820;
+      transform: translateY(-1px);
     }
-
     .curso-completo-btn--primary {
-      background: linear-gradient(135deg, var(--verde, #1a6b2f), #0d3d19);
+      background: #1a6b2f;
       color: #fff;
-      box-shadow: 0 6px 18px rgba(26, 107, 47, 0.35);
+      font-weight: 700;
     }
     .curso-completo-btn--primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(26, 107, 47, 0.45);
+      background: #155827;
+      transform: translateY(-1px);
     }
     .curso-completo-btn--ghost {
       background: transparent;
       color: #5a6758;
-      border: 1.5px solid #dfe5dc;
+      border: 1px solid #e8ede5;
     }
-    .curso-completo-btn--ghost:hover { background: #f4f6f3; color: #1a2010; }
+    .curso-completo-btn--ghost:hover {
+      background: #f4f6f3;
+      color: #0d1813;
+      border-color: #d6dcd1;
+    }
+
+    /* Dark mode del modal */
+    body.dark-mode .curso-completo-modal {
+      background: #1a2025;
+      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    body.dark-mode .curso-completo-close { color: #6b7a72; }
+    body.dark-mode .curso-completo-close:hover { background: #252e35; color: #f0f4ee; }
+    body.dark-mode .curso-completo-tag { background: rgba(82,201,122,0.12); color: #6ee7a3; }
+    body.dark-mode .curso-completo-title { color: #f0f4ee; }
+    body.dark-mode .curso-completo-subtitle { color: #94a3a0; }
+    body.dark-mode .curso-completo-curso-nombre {
+      background: #232a30;
+      border-color: #2e363d;
+      color: #f0f4ee;
+    }
+    body.dark-mode .curso-completo-stats {
+      border-color: #2e363d;
+    }
+    body.dark-mode .curso-completo-stat-divider { background: #2e363d; }
+    body.dark-mode .curso-completo-stat__num { color: #f0f4ee; }
+    body.dark-mode .curso-completo-stat__num span,
+    body.dark-mode .curso-completo-stat__lbl { color: #6b7a72; }
+    body.dark-mode .curso-completo-examen {
+      background: #232a30;
+      border-color: #2e363d;
+      border-left-color: #52c97a;
+    }
+    body.dark-mode .curso-completo-examen__indicator { background: #52c97a; }
+    body.dark-mode .curso-completo-examen__title { color: #f0f4ee; }
+    body.dark-mode .curso-completo-examen__desc { color: #94a3a0; }
+    body.dark-mode .curso-completo-btn--examen { background: #f0f4ee; color: #0d1813; }
+    body.dark-mode .curso-completo-btn--examen:hover { background: #fff; }
+    body.dark-mode .curso-completo-btn--primary { background: #1a6b2f; color: #fff; }
+    body.dark-mode .curso-completo-btn--primary:hover { background: #228340; }
+    body.dark-mode .curso-completo-btn--ghost {
+      background: transparent;
+      color: #94a3a0;
+      border-color: #2e363d;
+    }
+    body.dark-mode .curso-completo-btn--ghost:hover {
+      background: #232a30;
+      color: #f0f4ee;
+      border-color: #3a4249;
+    }
 
     @media (max-width: 480px) {
-      .curso-completo-modal { padding: 30px 22px 22px; }
-      .curso-completo-trophy { font-size: 4rem; }
-      .curso-completo-title { font-size: 1.5rem; }
+      .curso-completo-modal { padding: 28px 22px 22px; }
+      .curso-completo-icon-wrap { width: 60px; height: 60px; margin-bottom: 16px; }
+      .curso-completo-title { font-size: 1.3rem; }
     }
 
     /* ===== MEDALLAS DE LOGROS ===== */
@@ -5852,32 +5984,29 @@
         <div class="cert-hero__content">
           <div class="cert-hero__trophy">
             <div class="cert-hero__trophy-glow"></div>
-            <svg viewBox="0 0 100 100" class="cert-hero__trophy-svg">
+            <svg viewBox="0 0 64 64" class="cert-hero__trophy-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#fde68a"/>
-                  <stop offset="40%" stop-color="#fbbf24"/>
-                  <stop offset="80%" stop-color="#d97706"/>
-                  <stop offset="100%" stop-color="#92400e"/>
+                <linearGradient id="cert-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#52c97a"/>
+                  <stop offset="100%" stop-color="#1a6b2f"/>
                 </linearGradient>
-                <linearGradient id="gold-shine" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#fff" stop-opacity=".8"/>
-                  <stop offset="50%" stop-color="#fff" stop-opacity="0"/>
+                <linearGradient id="cert-grad-soft" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#86efac" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#1a6b2f" stop-opacity="0.05"/>
                 </linearGradient>
               </defs>
-              <!-- Base -->
-              <rect x="30" y="82" width="40" height="6" rx="1" fill="url(#gold-grad)"/>
-              <rect x="36" y="72" width="28" height="12" rx="2" fill="url(#gold-grad)"/>
-              <!-- Copa -->
-              <path d="M25 22 Q25 50 50 62 Q75 50 75 22 Z" fill="url(#gold-grad)"/>
-              <path d="M28 24 Q28 48 50 58 Q72 48 72 24 Z" fill="url(#gold-shine)" opacity=".6"/>
-              <!-- Asas -->
-              <path d="M25 28 Q12 30 14 44 Q16 50 25 48" fill="none" stroke="url(#gold-grad)" stroke-width="4" stroke-linecap="round"/>
-              <path d="M75 28 Q88 30 86 44 Q84 50 75 48" fill="none" stroke="url(#gold-grad)" stroke-width="4" stroke-linecap="round"/>
-              <!-- Borde superior -->
-              <rect x="22" y="18" width="56" height="6" rx="2" fill="url(#gold-grad)"/>
-              <!-- Estrella -->
-              <text x="50" y="46" font-size="20" text-anchor="middle" fill="#fff" opacity=".95" font-weight="bold">★</text>
+              <!-- Documento de fondo -->
+              <rect x="14" y="10" width="36" height="44" rx="3" fill="url(#cert-grad-soft)" stroke="url(#cert-grad)" stroke-width="1.8"/>
+              <!-- Líneas del documento -->
+              <line x1="20" y1="20" x2="44" y2="20" stroke="url(#cert-grad)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              <line x1="20" y1="26" x2="38" y2="26" stroke="url(#cert-grad)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+              <!-- Sello/medalla circular -->
+              <circle cx="44" cy="44" r="14" fill="#fff" stroke="url(#cert-grad)" stroke-width="2"/>
+              <circle cx="44" cy="44" r="10" fill="url(#cert-grad-soft)" stroke="url(#cert-grad)" stroke-width="1" opacity="0.5"/>
+              <!-- Checkmark dentro del sello -->
+              <path d="M39 44L42.5 47.5L49 41" stroke="url(#cert-grad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Cintilla del sello -->
+              <path d="M40 56L42 60L44 58L46 60L48 56" stroke="url(#cert-grad)" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
             </svg>
           </div>
           <div class="cert-hero__text">
@@ -6848,33 +6977,84 @@
   </div>
 </div>
 
-<!-- MODAL CURSO COMPLETADO (100%) -->
+<!-- MODAL CURSO COMPLETADO (100%) — Rediseño profesional estilo Notion/Stripe -->
 <div class="curso-completo-overlay" id="cursoCompletoOverlay" onclick="if(event.target===this)cerrarCursoCompleto()">
   <div class="curso-completo-modal">
-    <div class="curso-completo-trophy">🏆</div>
-    <div class="curso-completo-badge">🎓 Nuevo Logro</div>
-    <h2 class="curso-completo-title">¡Felicidades, Maestro!</h2>
-    <p class="curso-completo-subtitle">Has completado el 100% de este curso. Ya eres oficialmente un experto en el tema 🌾</p>
+
+    <!-- Botón cerrar discreto -->
+    <button class="curso-completo-close" onclick="cerrarCursoCompleto()" aria-label="Cerrar">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Ícono SVG sobrio: checkmark con detalles -->
+    <div class="curso-completo-icon-wrap">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="curso-completo-icon">
+        <circle cx="32" cy="32" r="28" stroke="url(#ccGrad)" stroke-width="2.5" fill="none"/>
+        <circle cx="32" cy="32" r="24" fill="url(#ccGradFill)" opacity="0.08"/>
+        <path d="M20 32.5L28.5 41L44 24" stroke="url(#ccGrad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="ccGrad" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0%" stop-color="#1a6b2f"/>
+            <stop offset="100%" stop-color="#0d3d19"/>
+          </linearGradient>
+          <linearGradient id="ccGradFill" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0%" stop-color="#52c97a"/>
+            <stop offset="100%" stop-color="#1a6b2f"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Etiqueta sobria -->
+    <div class="curso-completo-tag">CURSO COMPLETADO</div>
+
+    <!-- Título profesional -->
+    <h2 class="curso-completo-title">Has terminado este curso</h2>
+    <p class="curso-completo-subtitle">Completaste el 100% de las clases. Tu progreso ha sido registrado.</p>
+
+    <!-- Nombre del curso -->
     <div class="curso-completo-curso-nombre" id="cursoCompletoNombre">—</div>
 
-    <!-- 📝 EXAMEN DESBLOQUEADO -->
-    <div class="curso-completo-examen" id="cursoCompletoExamen" style="display:none;">
-      <div class="curso-completo-examen__icon">📝</div>
-      <div class="curso-completo-examen__txt">
-        <div class="curso-completo-examen__title">¡Examen desbloqueado!</div>
-        <div class="curso-completo-examen__desc">Responde 10 preguntas, aprueba con 6/10 y <strong>desbloquea un logro especial</strong>.</div>
+    <!-- Stats grid -->
+    <div class="curso-completo-stats">
+      <div class="curso-completo-stat">
+        <div class="curso-completo-stat__num">100<span>%</span></div>
+        <div class="curso-completo-stat__lbl">Progreso</div>
+      </div>
+      <div class="curso-completo-stat-divider"></div>
+      <div class="curso-completo-stat">
+        <div class="curso-completo-stat__num" id="cursoCompletoFecha">—</div>
+        <div class="curso-completo-stat__lbl">Finalizado</div>
       </div>
     </div>
 
+    <!-- Examen disponible (sin emoji bouncing, ahora sobrio) -->
+    <div class="curso-completo-examen" id="cursoCompletoExamen" style="display:none;">
+      <div class="curso-completo-examen__indicator"></div>
+      <div class="curso-completo-examen__txt">
+        <div class="curso-completo-examen__title">Examen disponible</div>
+        <div class="curso-completo-examen__desc">Responde 10 preguntas y aprueba con 6/10 para obtener tu certificado oficial.</div>
+      </div>
+    </div>
+
+    <!-- Acciones con jerarquía limpia -->
     <div class="curso-completo-actions">
       <button class="curso-completo-btn curso-completo-btn--examen" id="cursoCompletoBtnExamen" style="display:none;" onclick="irAlExamenDesdeCurso()">
-        📝 Presentar examen ahora
+        Presentar examen
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left:6px;">
+          <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
       <button class="curso-completo-btn curso-completo-btn--primary" onclick="cerrarCursoCompleto()">
-        🎉 ¡Seguir aprendiendo!
+        Continuar aprendiendo
       </button>
       <button class="curso-completo-btn curso-completo-btn--ghost" onclick="compartirLogro()">
-        📲 Compartir mi logro
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
+          <path d="M9.5 5L7 2.5M7 2.5L4.5 5M7 2.5V9.5M3 8V11C3 11.5523 3.44772 12 4 12H10C10.5523 12 11 11.5523 11 11V8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Compartir
       </button>
     </div>
   </div>
@@ -7799,30 +7979,26 @@ function renderCertificadosLista() {
       <div class="cert-card__ribbon"></div>
       <div class="cert-card__top">
         <div class="cert-card__medal">
-          <svg viewBox="0 0 80 100" class="cert-card__medal-svg">
+          <svg viewBox="0 0 64 80" class="cert-card__medal-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="medal-g-${c.folio}" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#fef3c7"/>
-                <stop offset="40%" stop-color="#fbbf24"/>
-                <stop offset="100%" stop-color="#b45309"/>
-              </linearGradient>
-              <linearGradient id="ribbon-g-${c.folio}" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#1a6b2f"/>
-                <stop offset="50%" stop-color="#2d8f42"/>
+              <linearGradient id="cert-seal-${c.folio}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#52c97a"/>
                 <stop offset="100%" stop-color="#1a6b2f"/>
               </linearGradient>
+              <linearGradient id="cert-seal-soft-${c.folio}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#86efac" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#1a6b2f" stop-opacity="0.04"/>
+              </linearGradient>
             </defs>
-            <!-- Listón verde arriba -->
-            <path d="M20 0 L60 0 L52 32 L28 32 Z" fill="url(#ribbon-g-${c.folio})"/>
-            <path d="M22 0 L30 0 L30 34 Z" fill="#0a3d1a" opacity=".3"/>
-            <path d="M58 0 L50 0 L50 34 Z" fill="#0a3d1a" opacity=".3"/>
-            <!-- Medalla circular -->
-            <circle cx="40" cy="62" r="28" fill="url(#medal-g-${c.folio})" stroke="#92400e" stroke-width="1.5"/>
-            <circle cx="40" cy="62" r="22" fill="none" stroke="#92400e" stroke-width=".8" opacity=".5"/>
-            <!-- Estrella/laurel central -->
-            <text x="40" y="70" font-size="22" text-anchor="middle" fill="#78350f" font-weight="bold">★</text>
-            <!-- Brillo -->
-            <ellipse cx="32" cy="52" rx="8" ry="4" fill="#fff" opacity=".4"/>
+            <!-- Cinta corta detrás (sutil) -->
+            <path d="M22 4 L42 4 L40 28 L24 28 Z" fill="url(#cert-seal-${c.folio})" opacity="0.22"/>
+            <!-- Sello circular principal -->
+            <circle cx="32" cy="40" r="22" fill="#fff" stroke="url(#cert-seal-${c.folio})" stroke-width="2"/>
+            <circle cx="32" cy="40" r="17" fill="url(#cert-seal-soft-${c.folio})" stroke="url(#cert-seal-${c.folio})" stroke-width="1" opacity="0.6"/>
+            <!-- Checkmark central -->
+            <path d="M24 40L29.5 45.5L41 34" stroke="url(#cert-seal-${c.folio})" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Cintilla del sello -->
+            <path d="M27 60 L29.5 67 L32 64 L34.5 67 L37 60" stroke="url(#cert-seal-${c.folio})" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
           </svg>
         </div>
         <div class="cert-card__info">
@@ -7835,13 +8011,27 @@ function renderCertificadosLista() {
           <span class="cert-card__folio-lbl">Folio oficial</span>
           <span class="cert-card__folio-val">${c.folio}</span>
         </div>
-        <div class="cert-card__date">📅 Emitido el <strong>${fecha}</strong></div>
+        <div class="cert-card__date">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:-2px;margin-right:4px;">
+            <rect x="2" y="3" width="10" height="9" rx="1.2" stroke="currentColor" stroke-width="1.4"/>
+            <line x1="2" y1="6" x2="12" y2="6" stroke="currentColor" stroke-width="1.4"/>
+            <line x1="5" y1="1.5" x2="5" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="9" y1="1.5" x2="9" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          Emitido el <strong>${fecha}</strong>
+        </div>
         <div class="cert-card__actions">
           <button class="cert-btn cert-btn--primary" onclick="window.open('ver-certificado.html?folio=${encodeURIComponent(c.folio)}','_blank')">
-            📄 Ver / Descargar
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
+              <path d="M7 1V9M7 9L4 6M7 9L10 6M2 11V12.5C2 12.7761 2.22386 13 2.5 13H11.5C11.7761 13 12 12.7761 12 12.5V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Ver / Descargar
           </button>
           <button class="cert-btn cert-btn--ghost" onclick="copiarLinkVerificacion('${c.folio}')">
-            🔗 Link público
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
+              <path d="M5.5 8.5L8.5 5.5M6 3L7.5 1.5C8.6 0.4 10.4 0.4 11.5 1.5C12.6 2.6 12.6 4.4 11.5 5.5L10 7M8 11L6.5 12.5C5.4 13.6 3.6 13.6 2.5 12.5C1.4 11.4 1.4 9.6 2.5 8.5L4 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Link público
           </button>
         </div>
       </div>
@@ -12605,35 +12795,35 @@ function miniConfetti() {
 // Fiesta completa al llegar al 100% (varias oleadas desde ambas esquinas)
 function fiestaConfetti() {
   if (typeof confetti !== 'function') return;
-  const duracion = 3500;
+  // Paleta sutil verde + blanco (estilo Stripe success)
+  const sutil = ['#1a6b2f', '#52c97a', '#86efac', '#ffffff', '#d1fae5'];
+  const duracion = 1800;
   const finTs = Date.now() + duracion;
-  const defaults = { startVelocity: 32, spread: 360, ticks: 80, zIndex: 100001, colors: CONFETTI_COLORS };
+  const defaults = { startVelocity: 25, spread: 70, ticks: 60, zIndex: 100001, colors: sutil, scalar: 0.85 };
 
-  // Explosión inicial gorda desde el centro
+  // Explosión inicial moderada
   confetti({
     ...defaults,
-    particleCount: 160,
-    spread: 100,
-    origin: { y: 0.6 },
-    startVelocity: 45
+    particleCount: 70,
+    spread: 80,
+    origin: { y: 0.55 },
+    startVelocity: 35
   });
 
-  // Lluvia continua de los costados
+  // Lluvia ligera de costados (más corta)
   const intervalo = setInterval(() => {
     const tiempoRestante = finTs - Date.now();
     if (tiempoRestante <= 0) return clearInterval(intervalo);
-    const particulas = 50 * (tiempoRestante / duracion);
-    // Desde la izquierda
-    confetti({ ...defaults, particleCount: particulas, origin: { x: Math.random() * 0.25, y: Math.random() - 0.2 } });
-    // Desde la derecha
-    confetti({ ...defaults, particleCount: particulas, origin: { x: 0.75 + Math.random() * 0.25, y: Math.random() - 0.2 } });
-  }, 250);
+    const particulas = 18 * (tiempoRestante / duracion);
+    confetti({ ...defaults, particleCount: particulas, origin: { x: Math.random() * 0.2, y: Math.random() - 0.1 } });
+    confetti({ ...defaults, particleCount: particulas, origin: { x: 0.8 + Math.random() * 0.2, y: Math.random() - 0.1 } });
+  }, 280);
 
-  // Disparo final al medio segundo
+  // Disparo final más pequeño
   setTimeout(() => {
-    confetti({ ...defaults, particleCount: 80, spread: 120, origin: { x: 0.2, y: 0.7 }, startVelocity: 55 });
-    confetti({ ...defaults, particleCount: 80, spread: 120, origin: { x: 0.8, y: 0.7 }, startVelocity: 55 });
-  }, 500);
+    confetti({ ...defaults, particleCount: 35, spread: 90, origin: { x: 0.3, y: 0.7 }, startVelocity: 40 });
+    confetti({ ...defaults, particleCount: 35, spread: 90, origin: { x: 0.7, y: 0.7 }, startVelocity: 40 });
+  }, 400);
 }
 
 // Mostrar modal "¡Curso completado!" + fiesta de confetti
@@ -12646,7 +12836,16 @@ async function celebrarCurso100(cursoId) {
 
   // Llenar datos del modal
   const nombreEl = document.getElementById('cursoCompletoNombre');
-  if (nombreEl) nombreEl.textContent = `${curso.emoji || '🎓'} ${curso.titulo}`;
+  if (nombreEl) nombreEl.textContent = curso.titulo;
+
+  // Setear fecha actual
+  const fechaEl = document.getElementById('cursoCompletoFecha');
+  if (fechaEl) {
+    const hoy = new Date();
+    const dia = hoy.getDate();
+    const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    fechaEl.innerHTML = `${dia} <span>${meses[hoy.getMonth()]}</span>`;
+  }
 
   // Verificar si este curso tiene examen cargado en Firestore
   const examenBox = document.getElementById('cursoCompletoExamen');
