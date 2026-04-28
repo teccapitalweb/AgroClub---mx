@@ -136,6 +136,37 @@
     body.dark-mode .examenes-stat__lbl { color: #d1d5db !important; }
     body.dark-mode .examenes-stat__num { color: #fbbf24 !important; }
 
+    /* ═══ FIX V5: Contraste en elementos sobre fondos claros (dark mode) ═══ */
+    /* 5) Badge "PREGUNTA X DE Y" del examen — fondo amarillo claro, debe mantener texto café oscuro */
+    body.dark-mode .examen-pregunta__num { color: #78350f !important; background: linear-gradient(135deg, #fde68a, #fcd34d) !important; }
+
+    /* 6) Título y subtítulos del certificado — fondo amarillo claro, mantener color café oscuro */
+    body.dark-mode .cert-card__top *,
+    body.dark-mode .cert-card__top { color: #451a03 !important; }
+    body.dark-mode .cert-card__title { color: #451a03 !important; }
+    body.dark-mode .cert-card__kicker { color: #78350f !important; }
+
+    /* 7) Clases completadas (tachadas) — mejorar contraste en dark mode */
+    body.dark-mode .clase-item.completada-row {
+      background: rgba(6,95,70,.15) !important;
+    }
+    body.dark-mode .clase-item.completada-row .clase-titulo {
+      color: #6ee7b7 !important;
+      text-decoration: line-through;
+      text-decoration-color: rgba(110,231,183,.6);
+      opacity: .75;
+    }
+    body.dark-mode .clase-item.completada-row .clase-meta {
+      color: #a7f3d0 !important;
+      opacity: .7;
+    }
+    body.dark-mode .clase-item.active {
+      background: rgba(26,107,47,.25) !important;
+      border-left: 3px solid var(--verde) !important;
+    }
+    body.dark-mode .clase-item.active .clase-titulo { color: #fff !important; opacity: 1; }
+    body.dark-mode .clase-item.active .clase-meta { color: #d1fae5 !important; opacity: 1; }
+
     /* Textos con muted = más claros en dark */
     body.dark-mode .muted,
     body.dark-mode [class*="sub"],
