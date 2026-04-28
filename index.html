@@ -171,6 +171,24 @@
     body.dark-mode .clase-item.active .clase-titulo { color: #fff !important; opacity: 1; }
     body.dark-mode .clase-item.active .clase-meta { color: #d1fae5 !important; opacity: 1; }
 
+    /* ═══ FIX V6: Notificaciones no leídas en dark mode ═══ */
+    body.dark-mode .notif-item.no-leida {
+      background: linear-gradient(135deg, rgba(6,95,70,.22) 0%, rgba(16,185,129,.10) 100%) !important;
+      border-color: rgba(82,201,122,.35) !important;
+    }
+    body.dark-mode .notif-item.no-leida .notif-tipo { color: #6ee7a3 !important; }
+    body.dark-mode .notif-item.no-leida .notif-titulo,
+    body.dark-mode .notif-item.no-leida .notif-mensaje,
+    body.dark-mode .notif-item.no-leida .notif-tiempo { color: #f0f4ee !important; }
+    body.dark-mode .notif-item.no-leida .notif-mensaje { color: #d1d5db !important; }
+    body.dark-mode .notif-item.no-leida .notif-tiempo { color: #94a3a0 !important; }
+    /* Iconos coloridos sobre fondos pasteles → en dark, hacer fondos translúcidos del mismo tono */
+    body.dark-mode .notif-icon--curso    { background: linear-gradient(135deg, rgba(82,201,122,.22), rgba(34,197,94,.15)) !important; }
+    body.dark-mode .notif-icon--clase    { background: linear-gradient(135deg, rgba(96,165,250,.22), rgba(59,130,246,.15)) !important; }
+    body.dark-mode .notif-icon--webinar  { background: linear-gradient(135deg, rgba(248,113,113,.22), rgba(239,68,68,.15)) !important; }
+    body.dark-mode .notif-icon--material { background: linear-gradient(135deg, rgba(252,211,77,.22), rgba(251,191,36,.15)) !important; }
+    body.dark-mode .notif-icon--aviso    { background: linear-gradient(135deg, rgba(196,181,253,.22), rgba(168,85,247,.15)) !important; }
+
     /* Textos con muted = más claros en dark */
     body.dark-mode .muted,
     body.dark-mode [class*="sub"],
@@ -2792,108 +2810,213 @@
     .widget-pro:hover { transform: translateY(-2px); }
 
     .widget-webinar {
-      background: linear-gradient(135deg, #0e1a0b 0%, #1a3a1f 50%, #0d3d19 100%);
+      background: linear-gradient(160deg, #0c1810 0%, #142a18 50%, #0c1f12 100%);
       color: #fff;
-      box-shadow: 0 8px 24px -8px rgba(14, 26, 11, 0.6), inset 0 1px 0 rgba(255,255,255,0.08);
+      box-shadow: 0 8px 24px -8px rgba(14, 26, 11, 0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+      padding: 20px;
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
     }
     .widget-webinar::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 15% 0%, rgba(82,201,122,0.25) 0%, transparent 50%),
-        radial-gradient(circle at 100% 100%, rgba(163,230,53,0.15) 0%, transparent 45%);
+        radial-gradient(circle at 12% -10%, rgba(82,201,122,0.22) 0%, transparent 55%),
+        radial-gradient(circle at 110% 105%, rgba(163,230,53,0.10) 0%, transparent 50%);
       pointer-events: none;
+    }
+    .widget-webinar::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(82,201,122,0.4), transparent);
     }
     .widget-webinar__tag {
       position: relative;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(82,201,122,0.15);
-      border: 1px solid rgba(82,201,122,0.3);
-      color: #a3e635;
-      font-size: 0.68rem;
+      background: rgba(82,201,122,0.13);
+      border: 1px solid rgba(82,201,122,0.28);
+      color: #86efac;
+      font-size: 0.66rem;
       font-weight: 800;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      padding: 4px 10px;
+      padding: 4px 11px 4px 9px;
       border-radius: 100px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      backdrop-filter: blur(4px);
     }
     .widget-webinar__tag-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #a3e635;
-      box-shadow: 0 0 8px #a3e635;
-      animation: widgetPulse 1.8s infinite;
+      background: #86efac;
+      box-shadow: 0 0 10px #86efac, 0 0 0 0 rgba(134,239,172,0.5);
+      animation: widgetDotPulse 1.8s infinite;
     }
-    @keyframes widgetPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes widgetDotPulse {
+      0%   { box-shadow: 0 0 10px #86efac, 0 0 0 0 rgba(134,239,172,0.5); }
+      50%  { box-shadow: 0 0 12px #86efac, 0 0 0 5px rgba(134,239,172,0); }
+      100% { box-shadow: 0 0 10px #86efac, 0 0 0 0 rgba(134,239,172,0); }
+    }
     .widget-webinar__title {
       position: relative;
       font-family: var(--font-display, var(--font)), sans-serif;
-      font-size: 1.1rem;
+      font-size: 1.18rem;
       font-weight: 800;
       line-height: 1.2;
-      margin-bottom: 6px;
-      letter-spacing: -0.01em;
+      margin: 0 0 12px;
+      letter-spacing: -0.015em;
+      color: #fff;
     }
-    .widget-webinar__meta {
+
+    /* Bloque del ponente */
+    .widget-webinar__ponente-row {
       position: relative;
-      color: rgba(255,255,255,0.7);
-      font-size: 0.82rem;
-      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 8px 10px 8px 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
     }
-    .widget-webinar__countdown {
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .widget-webinar__cd-item {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      padding: 10px 4px;
-      text-align: center;
-    }
-    .widget-webinar__cd-num {
-      font-family: var(--font-display, var(--font)), sans-serif;
-      font-size: 1.6rem;
-      font-weight: 900;
+    .widget-webinar__avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #52c97a, #1a6b2f);
       color: #fff;
-      line-height: 1;
-      letter-spacing: -0.03em;
-    }
-    .widget-webinar__cd-label {
-      font-size: 0.62rem;
-      color: rgba(255,255,255,0.55);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-    .widget-webinar__btn {
-      position: relative;
-      width: 100%;
-      padding: 12px;
-      border-radius: 100px;
-      border: none;
-      font-family: var(--font), sans-serif;
-      font-weight: 800;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(82,201,122,0.3);
+    }
+    .widget-webinar__ponente-txt { flex: 1; min-width: 0; }
+    .widget-webinar__ponente-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #f0f4ee;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .widget-webinar__ponente-rol {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-top: 1px;
+    }
+
+    .widget-webinar__meta {
+      position: relative;
+      color: rgba(255,255,255,0.65);
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
       gap: 6px;
+      font-weight: 500;
+    }
+
+    /* Contador estilo Stripe — cards prominentes */
+    .widget-webinar__countdown {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .widget-webinar__cd-label-top {
+      font-size: 0.66rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+    .widget-webinar__cd-grid {
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+    }
+    .widget-webinar__cd-item {
+      flex: 1;
+      background: linear-gradient(160deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      padding: 12px 4px 10px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px -4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: transform .25s ease;
+    }
+    .widget-webinar__cd-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(134,239,172,0.4), transparent);
+    }
+    .widget-webinar__cd-num {
+      font-family: var(--font-display, var(--font)), 'Space Grotesk', monospace;
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 2px 12px rgba(134,239,172,0.18);
+    }
+    .widget-webinar__cd-label {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .widget-webinar__cd-sep {
+      align-self: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: rgba(134,239,172,0.4);
+      line-height: 1;
+      padding-bottom: 4px;
+      animation: widgetSepBlink 1s infinite;
+    }
+    @keyframes widgetSepBlink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75%      { opacity: 0.3; }
+    }
+
+    .widget-webinar__btn {
+      position: relative;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      font-family: var(--font), sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
       text-decoration: none;
+      letter-spacing: -0.005em;
     }
     .widget-webinar__btn--live {
       background: linear-gradient(135deg, #ef4444, #b91c1c);
@@ -2901,18 +3024,34 @@
       box-shadow: 0 6px 16px rgba(239,68,68,0.4);
       animation: widgetBtnPulse 2s infinite;
     }
+    .widget-webinar__live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 8px #fff;
+      animation: widgetDotPulse 1s infinite;
+      margin-right: 6px;
+    }
     @keyframes widgetBtnPulse { 0%,100% { box-shadow: 0 6px 16px rgba(239,68,68,0.4); } 50% { box-shadow: 0 8px 24px rgba(239,68,68,0.7); } }
     .widget-webinar__btn--calendar {
       background: linear-gradient(135deg, #52c97a, #1a6b2f);
       color: #fff;
-      box-shadow: 0 6px 16px rgba(82,201,122,0.3);
+      box-shadow: 0 6px 16px -2px rgba(82,201,122,0.32), inset 0 1px 0 rgba(255,255,255,0.18);
     }
-    .widget-webinar__btn:hover { transform: translateY(-2px); }
+    .widget-webinar__btn--calendar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px -2px rgba(82,201,122,0.5), inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+    .widget-webinar__btn:hover { transform: translateY(-1px); }
     .widget-webinar__empty {
       position: relative;
       color: rgba(255,255,255,0.55);
-      font-size: 0.85rem;
-      padding: 4px 0;
+      font-size: 0.82rem;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(255,255,255,0.1);
+      border-radius: 8px;
+      text-align: center;
     }
 
     /* Widget WhatsApp */
@@ -5699,20 +5838,50 @@
       <div class="mobile-widgets">
         <div class="widget-pro widget-webinar" id="widget-webinar-m">
           <span class="widget-webinar__tag">
-            <span class="widget-webinar__tag-dot"></span> Próximo Webinar
+            <span class="widget-webinar__tag-dot"></span> PRÓXIMO WEBINAR
           </span>
           <h4 class="widget-webinar__title" id="pc-sesion-titulo-m">Sin webinars próximos</h4>
+          <div class="widget-webinar__ponente-row" id="pc-ponente-row-m" style="display:none;">
+            <div class="widget-webinar__avatar" id="pc-ponente-avatar-m">P</div>
+            <div class="widget-webinar__ponente-txt">
+              <div class="widget-webinar__ponente-name" id="pc-ponente-nombre-m">—</div>
+              <div class="widget-webinar__ponente-rol">Ponente invitado</div>
+            </div>
+          </div>
           <div class="widget-webinar__meta" id="pc-sesion-meta-m">—</div>
           <div class="widget-webinar__countdown" id="pc-countdown-m" style="display:none">
-            <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-d-m">--</div><div class="widget-webinar__cd-label">Días</div></div>
-            <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-h-m">--</div><div class="widget-webinar__cd-label">Horas</div></div>
-            <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-m-m">--</div><div class="widget-webinar__cd-label">Min</div></div>
+            <div class="widget-webinar__cd-label-top">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style="vertical-align:-1px;margin-right:4px;">
+                <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+              Comienza en
+            </div>
+            <div class="widget-webinar__cd-grid">
+              <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-d-m">--</div><div class="widget-webinar__cd-label">Días</div></div>
+              <div class="widget-webinar__cd-sep">:</div>
+              <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-h-m">--</div><div class="widget-webinar__cd-label">Horas</div></div>
+              <div class="widget-webinar__cd-sep">:</div>
+              <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-m-m">--</div><div class="widget-webinar__cd-label">Min</div></div>
+            </div>
           </div>
           <a id="pc-link-wrapper-m" href="#" target="_blank" style="display:none">
-            <button class="widget-webinar__btn widget-webinar__btn--live">🔴 Unirse ahora</button>
+            <button class="widget-webinar__btn widget-webinar__btn--live">
+              <span class="widget-webinar__live-dot"></span>
+              Unirse ahora
+            </button>
           </a>
-          <button class="widget-webinar__btn widget-webinar__btn--calendar" id="btn-agendar-pc-m" style="display:none" onclick="agendarCalendario()">📅 Agendar en calendario</button>
-          <div class="widget-webinar__empty" id="pc-empty-msg-m" style="display:none;">Todavía no hay webinars programados. Te avisaremos pronto 📣</div>
+          <button class="widget-webinar__btn widget-webinar__btn--calendar" id="btn-agendar-pc-m" style="display:none" onclick="agendarCalendario()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
+              <rect x="2" y="3" width="10" height="9" rx="1.2" stroke="currentColor" stroke-width="1.4"/>
+              <line x1="2" y1="6" x2="12" y2="6" stroke="currentColor" stroke-width="1.4"/>
+              <line x1="5" y1="1.5" x2="5" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <line x1="9" y1="1.5" x2="9" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="7" cy="9" r="1" fill="currentColor"/>
+            </svg>
+            Agendar en calendario
+          </button>
+          <div class="widget-webinar__empty" id="pc-empty-msg-m" style="display:none;">Todavía no hay webinars programados. Te avisaremos pronto.</div>
         </div>
 
         <div class="widget-pro widget-whatsapp">
@@ -6927,20 +7096,65 @@
     <!-- WEBINAR -->
     <div class="widget-pro widget-webinar" id="widget-webinar">
       <span class="widget-webinar__tag">
-        <span class="widget-webinar__tag-dot"></span> Próximo Webinar
+        <span class="widget-webinar__tag-dot"></span> PRÓXIMO WEBINAR
       </span>
       <h4 class="widget-webinar__title" id="pc-sesion-titulo">Sin webinars próximos</h4>
-      <div class="widget-webinar__meta" id="pc-sesion-meta">—</div>
-      <div class="widget-webinar__countdown" id="pc-countdown" style="display:none">
-        <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-d">--</div><div class="widget-webinar__cd-label">Días</div></div>
-        <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-h">--</div><div class="widget-webinar__cd-label">Horas</div></div>
-        <div class="widget-webinar__cd-item"><div class="widget-webinar__cd-num" id="cd-m">--</div><div class="widget-webinar__cd-label">Min</div></div>
+
+      <!-- Bloque del ponente (oculto si no hay webinar) -->
+      <div class="widget-webinar__ponente-row" id="pc-ponente-row" style="display:none;">
+        <div class="widget-webinar__avatar" id="pc-ponente-avatar">P</div>
+        <div class="widget-webinar__ponente-txt">
+          <div class="widget-webinar__ponente-name" id="pc-ponente-nombre">—</div>
+          <div class="widget-webinar__ponente-rol">Ponente invitado</div>
+        </div>
       </div>
+
+      <div class="widget-webinar__meta" id="pc-sesion-meta">—</div>
+
+      <!-- Contador (estilo Stripe — cards prominentes) -->
+      <div class="widget-webinar__countdown" id="pc-countdown" style="display:none">
+        <div class="widget-webinar__cd-label-top">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style="vertical-align:-1px;margin-right:4px;">
+            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          Comienza en
+        </div>
+        <div class="widget-webinar__cd-grid">
+          <div class="widget-webinar__cd-item">
+            <div class="widget-webinar__cd-num" id="cd-d">--</div>
+            <div class="widget-webinar__cd-label">Días</div>
+          </div>
+          <div class="widget-webinar__cd-sep">:</div>
+          <div class="widget-webinar__cd-item">
+            <div class="widget-webinar__cd-num" id="cd-h">--</div>
+            <div class="widget-webinar__cd-label">Horas</div>
+          </div>
+          <div class="widget-webinar__cd-sep">:</div>
+          <div class="widget-webinar__cd-item">
+            <div class="widget-webinar__cd-num" id="cd-m">--</div>
+            <div class="widget-webinar__cd-label">Min</div>
+          </div>
+        </div>
+      </div>
+
       <a id="pc-link-wrapper" href="#" target="_blank" style="display:none">
-        <button class="widget-webinar__btn widget-webinar__btn--live">🔴 Unirse ahora</button>
+        <button class="widget-webinar__btn widget-webinar__btn--live">
+          <span class="widget-webinar__live-dot"></span>
+          Unirse ahora
+        </button>
       </a>
-      <button class="widget-webinar__btn widget-webinar__btn--calendar" id="btn-agendar-pc" style="display:none" onclick="agendarCalendario()">📅 Agendar en calendario</button>
-      <div class="widget-webinar__empty" id="pc-empty-msg" style="display:none;">Todavía no hay webinars programados. Te avisaremos pronto 📣</div>
+      <button class="widget-webinar__btn widget-webinar__btn--calendar" id="btn-agendar-pc" style="display:none" onclick="agendarCalendario()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
+          <rect x="2" y="3" width="10" height="9" rx="1.2" stroke="currentColor" stroke-width="1.4"/>
+          <line x1="2" y1="6" x2="12" y2="6" stroke="currentColor" stroke-width="1.4"/>
+          <line x1="5" y1="1.5" x2="5" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="9" y1="1.5" x2="9" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="7" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        Agendar en calendario
+      </button>
+      <div class="widget-webinar__empty" id="pc-empty-msg" style="display:none;">Todavía no hay webinars programados. Te avisaremos pronto.</div>
     </div>
 
     <!-- WHATSAPP VIP -->
@@ -8240,7 +8454,7 @@ function actualizarWidget(s) {
 
   if (!s) {
     ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, 'Sin webinars próximos'));
-    ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, 'Te avisaremos apenas se agende uno 🌱'));
+    ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, 'Te avisaremos apenas se agende uno.'));
     ['pc-countdown','pc-countdown-m','pc-link-wrapper','pc-link-wrapper-m','btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setW(id, 'none'));
     ['pc-empty-msg','pc-empty-msg-m'].forEach(id => setW(id, 'block'));
     if (_countdownInterval) { clearInterval(_countdownInterval); _countdownInterval = null; }
@@ -8257,7 +8471,19 @@ function actualizarWidget(s) {
                  + ' · ' + dt.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
 
   ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, s.titulo));
-  ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, (s.instructor ? '👤 ' + s.instructor + ' · ' : '📅 ') + fechaStr));
+
+  // Llenar bloque del ponente con avatar e iniciales
+  if (s.instructor && s.instructor.trim()) {
+    const nombreLimpio = s.instructor.replace(/^(Ing\.|Lic\.|Dr\.|Dra\.|Mtro\.|Mtra\.|ING\.|LIC\.|DR\.|DRA\.)\s*/i, '').trim();
+    const iniciales = nombreLimpio.split(' ').filter(Boolean).slice(0,2).map(n => n.charAt(0).toUpperCase()).join('') || 'P';
+    ['pc-ponente-avatar','pc-ponente-avatar-m'].forEach(id => setW(id, iniciales));
+    ['pc-ponente-nombre','pc-ponente-nombre-m'].forEach(id => setW(id, s.instructor));
+    ['pc-ponente-row','pc-ponente-row-m'].forEach(id => setWStyle(id, 'display', 'flex'));
+    ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, fechaStr));
+  } else {
+    ['pc-ponente-row','pc-ponente-row-m'].forEach(id => setWStyle(id, 'display', 'none'));
+    ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, fechaStr));
+  }
 
   if (esVivo && s.link) {
     ['pc-countdown','pc-countdown-m'].forEach(id => setW(id, 'none'));
@@ -8265,7 +8491,7 @@ function actualizarWidget(s) {
     ['pc-link-wrapper','pc-link-wrapper-m'].forEach(id => { setW(id, 'block'); setWHref(id, s.link); });
   } else {
     ['pc-link-wrapper','pc-link-wrapper-m'].forEach(id => setW(id, 'none'));
-    ['pc-countdown','pc-countdown-m'].forEach(id => setWStyle(id, 'display', 'grid'));
+    ['pc-countdown','pc-countdown-m'].forEach(id => setWStyle(id, 'display', 'block'));
     ['btn-agendar-pc','btn-agendar-pc-m'].forEach(id => setWStyle(id, 'display', 'flex'));
     if (_countdownInterval) clearInterval(_countdownInterval);
     _countdownInterval = setInterval(function() { tickCountdown(dt); }, 1000);
