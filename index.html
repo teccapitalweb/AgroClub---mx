@@ -2813,18 +2813,19 @@
       background: linear-gradient(160deg, #0c1810 0%, #142a18 50%, #0c1f12 100%);
       color: #fff;
       box-shadow: 0 8px 24px -8px rgba(14, 26, 11, 0.6), inset 0 1px 0 rgba(255,255,255,0.06);
-      padding: 20px;
+      padding: 22px 20px;
       border-radius: 18px;
       position: relative;
       overflow: hidden;
+      text-align: center;
     }
     .widget-webinar::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 12% -10%, rgba(82,201,122,0.22) 0%, transparent 55%),
-        radial-gradient(circle at 110% 105%, rgba(163,230,53,0.10) 0%, transparent 50%);
+        radial-gradient(circle at 50% -20%, rgba(82,201,122,0.20) 0%, transparent 55%),
+        radial-gradient(circle at 50% 120%, rgba(163,230,53,0.08) 0%, transparent 50%);
       pointer-events: none;
     }
     .widget-webinar::after {
@@ -2866,67 +2867,50 @@
     .widget-webinar__title {
       position: relative;
       font-family: var(--font-display, var(--font)), sans-serif;
-      font-size: 1.18rem;
+      font-size: 1.22rem;
       font-weight: 800;
       line-height: 1.2;
-      margin: 0 0 12px;
+      margin: 0 0 14px;
       letter-spacing: -0.015em;
       color: #fff;
     }
 
-    /* Bloque del ponente */
+    /* Ponente: solo texto, centrado, sin avatar */
     .widget-webinar__ponente-row {
       position: relative;
-      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 2px;
       margin-bottom: 12px;
-      padding: 8px 10px 8px 8px;
+      padding: 12px 14px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
+      border-radius: 12px;
     }
-    .widget-webinar__avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #52c97a, #1a6b2f);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 0.85rem;
-      letter-spacing: -0.01em;
-      flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(82,201,122,0.3);
-    }
-    .widget-webinar__ponente-txt { flex: 1; min-width: 0; }
     .widget-webinar__ponente-name {
-      font-size: 0.82rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: #f0f4ee;
-      line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      line-height: 1.25;
+      text-align: center;
+      letter-spacing: -0.005em;
     }
     .widget-webinar__ponente-rol {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       color: rgba(255,255,255,0.5);
       font-weight: 600;
       letter-spacing: 0.04em;
-      margin-top: 1px;
+      margin-top: 3px;
+      text-align: center;
     }
 
     .widget-webinar__meta {
       position: relative;
-      color: rgba(255,255,255,0.65);
-      font-size: 0.8rem;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.86rem;
+      margin-bottom: 16px;
       font-weight: 500;
+      text-align: center;
     }
 
     /* Contador estilo Stripe — cards prominentes */
@@ -2943,11 +2927,13 @@
       margin-bottom: 8px;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
     .widget-webinar__cd-grid {
       display: flex;
       align-items: stretch;
       gap: 6px;
+      justify-content: center;
     }
     .widget-webinar__cd-item {
       flex: 1;
@@ -5480,6 +5466,180 @@
     .vip-benefit-nav { bottom: 110px; gap: 10px; }
     .vip-benefit-btn { width: 46px; height: 46px; }
   }
+
+  /* ═══════════════════════════════════════════════════════════════
+     💹 MERCADO VIP — Precios del agro (estilo Bloomberg/Stripe)
+     ═══════════════════════════════════════════════════════════════ */
+  .mercado-hero { position: relative; background: linear-gradient(135deg, #0d1f12 0%, #142a18 50%, #0a1810 100%); border-radius: 20px; padding: 28px; margin-bottom: 24px; color: #fff; overflow: hidden; }
+  .mercado-hero__bg { position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, rgba(82,201,122,0.18) 0%, transparent 50%), radial-gradient(circle at 0% 100%, rgba(134,239,172,0.10) 0%, transparent 50%); pointer-events: none; }
+  .mercado-hero__content { position: relative; display: flex; align-items: center; gap: 22px; }
+  .mercado-hero__icon { width: 76px; height: 76px; border-radius: 20px; background: linear-gradient(135deg, rgba(82,201,122,0.18), rgba(26,107,47,0.12)); border: 1px solid rgba(82,201,122,0.24); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .mercado-hero__icon-svg { width: 42px; height: 42px; }
+  .mercado-hero__text { flex: 1; min-width: 0; }
+  .mercado-hero__kicker { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #86efac; margin-bottom: 4px; }
+  .mercado-hero__title { font-family: var(--font-display, var(--font)), sans-serif; font-size: 1.7rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .mercado-hero__desc { font-size: 0.88rem; color: rgba(255,255,255,0.7); line-height: 1.5; margin: 0; max-width: 600px; }
+  .mercado-hero__updated { position: relative; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(255,255,255,0.6); }
+  .mercado-hero__updated-dot { width: 8px; height: 8px; border-radius: 50%; background: #86efac; box-shadow: 0 0 10px #86efac; animation: widgetDotPulse 1.8s infinite; }
+  .mercado-hero__updated strong { color: #fff; font-weight: 700; }
+  .mercado-filtros { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+  .mercado-search { position: relative; flex: 1; min-width: 240px; max-width: 360px; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: var(--card, #fff); border: 1px solid var(--border, #e8ede5); border-radius: 12px; color: #94a3a0; transition: border-color 0.15s ease; }
+  .mercado-search:focus-within { border-color: #1a6b2f; color: #1a6b2f; }
+  .mercado-search input { flex: 1; background: transparent; border: none; outline: none; padding: 12px 0; font-family: var(--font), sans-serif; font-size: 0.92rem; color: var(--text, #1a2010); }
+  .mercado-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .mercado-tab { padding: 10px 16px; background: var(--card, #fff); border: 1px solid var(--border, #e8ede5); border-radius: 100px; font-family: var(--font), sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--text, #1a2010); cursor: pointer; transition: all 0.15s ease; white-space: nowrap; }
+  .mercado-tab:hover { border-color: #1a6b2f; color: #1a6b2f; }
+  .mercado-tab--active { background: linear-gradient(135deg, #1a6b2f, #0d3d19); color: #fff; border-color: #1a6b2f; box-shadow: 0 4px 12px rgba(26,107,47,0.25); }
+  .mercado-tabla-wrap { background: var(--card, #fff); border: 1px solid var(--border, #e8ede5); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px -8px rgba(0,0,0,0.08); position: relative; }
+  .mercado-tabla { width: 100%; border-collapse: collapse; font-family: var(--font), sans-serif; }
+  .mercado-tabla thead { background: rgba(26,107,47,0.04); border-bottom: 1px solid var(--border, #e8ede5); }
+  .mercado-tabla th { padding: 14px 16px; text-align: left; font-size: 0.7rem; font-weight: 800; color: #5a6758; letter-spacing: 0.08em; text-transform: uppercase; }
+  .mercado-tabla__th--num { text-align: right; }
+  .mercado-tabla__th--trend { width: 130px; }
+  .mercado-tabla__th--cambio { text-align: right; width: 90px; }
+  .mercado-tabla__th--prod { width: 36%; }
+  .mercado-row { border-bottom: 1px solid var(--border, #e8ede5); cursor: pointer; transition: background 0.15s ease; }
+  .mercado-row:last-child { border-bottom: none; }
+  .mercado-row:hover { background: rgba(26,107,47,0.04); }
+  .mercado-row td { padding: 14px 16px; vertical-align: middle; }
+  .mercado-row__prod { display: flex; align-items: center; gap: 12px; }
+  .mercado-row__emoji { font-size: 1.6rem; flex-shrink: 0; width: 38px; height: 38px; background: rgba(26,107,47,0.06); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .mercado-row__nombre-wrap { min-width: 0; }
+  .mercado-row__nombre { font-weight: 700; color: var(--text, #1a2010); font-size: 0.95rem; line-height: 1.2; }
+  .mercado-row__variedad { font-size: 0.74rem; color: #94a3a0; margin-top: 2px; font-weight: 500; }
+  .mercado-row__precio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 800; font-size: 1.05rem; color: var(--text, #1a2010); font-variant-numeric: tabular-nums; }
+  .mercado-row__precio-sub { font-size: 0.7rem; color: #94a3a0; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
+  .mercado-row__precio-bloqueado { text-align: right; color: #94a3a0; font-size: 0.85rem; }
+  .mercado-row__spark { text-align: center; }
+  .mercado-row__spark-svg { width: 110px; height: 36px; display: block; margin: 0 auto; }
+  .mercado-row__cambio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 700; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+  .mercado-row__cambio--up { color: #16a34a; }
+  .mercado-row__cambio--down { color: #dc2626; }
+  .mercado-row__cambio--flat { color: #94a3a0; }
+  .mercado-row__cambio-arrow { font-size: 0.78rem; vertical-align: 1px; margin-right: 2px; }
+  .mercado-empty { text-align: center; padding: 60px 20px; }
+  .mercado-empty__icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+  .mercado-empty__title { font-size: 1.05rem; font-weight: 700; color: var(--text, #1a2010); margin-bottom: 4px; }
+  .mercado-empty__desc { font-size: 0.85rem; color: #94a3a0; max-width: 320px; margin: 0 auto; }
+  .mercado-disclaimer { margin-top: 20px; padding: 14px 18px; background: rgba(26,107,47,0.04); border: 1px solid rgba(26,107,47,0.12); border-radius: 12px; font-size: 0.8rem; color: #5a6758; line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; }
+  .mercado-disclaimer svg { flex-shrink: 0; margin-top: 2px; color: #1a6b2f; }
+  .mercado-modal { position: fixed; inset: 0; background: rgba(8, 12, 18, 0.65); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 100000; display: none; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; animation: cursoCompletoFadeIn 0.25s ease; }
+  .mercado-modal.is-open { display: flex; }
+  .mercado-modal__box { background: #ffffff; border-radius: 20px; max-width: 560px; width: 100%; padding: 28px 26px 24px; position: relative; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04); animation: cursoCompletoScaleIn 0.32s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 40px; }
+  .mercado-modal__close { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 8px; background: transparent; border: none; cursor: pointer; color: #94a3a0; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+  .mercado-modal__close:hover { background: #f4f6f3; color: #1a2010; }
+  .mercado-detalle-hero { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #eef1ec; margin-bottom: 18px; }
+  .mercado-detalle-emoji { font-size: 2.4rem; width: 56px; height: 56px; background: linear-gradient(135deg, rgba(26,107,47,0.10), rgba(82,201,122,0.05)); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .mercado-detalle-info { flex: 1; min-width: 0; }
+  .mercado-detalle-cat { display: inline-block; background: rgba(26,107,47,0.10); color: #155827; padding: 3px 9px; border-radius: 6px; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .mercado-detalle-nombre { font-family: var(--font-display, var(--font)), sans-serif; font-size: 1.4rem; font-weight: 800; color: #0d1813; margin: 0 0 2px; line-height: 1.2; }
+  .mercado-detalle-variedad { font-size: 0.82rem; color: #94a3a0; }
+  .mercado-detalle-fav { width: 38px; height: 38px; border-radius: 50%; background: transparent; border: 1px solid #e8ede5; cursor: pointer; color: #94a3a0; display: flex; align-items: center; justify-content: center; transition: all 0.15s ease; flex-shrink: 0; }
+  .mercado-detalle-fav:hover { border-color: #ef4444; color: #ef4444; }
+  .mercado-detalle-fav.is-active { background: rgba(239,68,68,0.10); border-color: #ef4444; color: #ef4444; }
+  .mercado-detalle-fav.is-active svg { fill: currentColor; }
+  .mercado-detalle-precio-main { text-align: center; padding: 14px 0 18px; margin-bottom: 18px; border-bottom: 1px solid #eef1ec; }
+  .mercado-detalle-precio-num { font-family: 'Space Grotesk', monospace, var(--font); font-size: 2.6rem; font-weight: 900; color: #0d1813; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .mercado-detalle-precio-meta { margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .mercado-detalle-precio-cambio { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-weight: 700; font-size: 0.8rem; }
+  .mercado-detalle-precio-cambio--up { background: rgba(22,163,74,0.10); color: #16a34a; }
+  .mercado-detalle-precio-cambio--down { background: rgba(220,38,38,0.10); color: #dc2626; }
+  .mercado-detalle-precio-cambio--flat { background: rgba(148,163,160,0.10); color: #94a3a0; }
+  .mercado-detalle-precio-actualizado { font-size: 0.78rem; color: #94a3a0; }
+  .mercado-detalle-precios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
+  .mercado-detalle-precio-card { background: #fafbf9; border: 1px solid #eef1ec; border-radius: 12px; padding: 12px 10px; text-align: center; }
+  .mercado-detalle-precio-card__lbl { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.08em; color: #5a6758; margin-bottom: 6px; }
+  .mercado-detalle-precio-card__val { font-family: 'Space Grotesk', monospace, var(--font); font-size: 1.25rem; font-weight: 800; color: #0d1813; line-height: 1; font-variant-numeric: tabular-nums; }
+  .mercado-detalle-precio-card__sub { font-size: 0.68rem; color: #94a3a0; margin-top: 3px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  .mercado-detalle-section { margin-bottom: 22px; }
+  .mercado-detalle-section__title { font-size: 0.74rem; font-weight: 800; color: #5a6758; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+  .mercado-detalle-centrales { display: flex; flex-direction: column; gap: 1px; background: #eef1ec; border-radius: 10px; overflow: hidden; border: 1px solid #eef1ec; }
+  .mercado-detalle-central { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #fff; }
+  .mercado-detalle-central__name { font-size: 0.86rem; color: #1a2010; font-weight: 600; }
+  .mercado-detalle-central__price { font-family: 'Space Grotesk', monospace, var(--font); font-size: 0.92rem; font-weight: 700; color: #1a6b2f; font-variant-numeric: tabular-nums; }
+  .mercado-detalle-chart { background: #fafbf9; border: 1px solid #eef1ec; border-radius: 12px; padding: 14px; position: relative; }
+  .mercado-detalle-chart svg { width: 100%; height: 110px; display: block; }
+  .mercado-detalle-chart-info { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.74rem; color: #94a3a0; font-weight: 600; }
+  .mercado-detalle-estacional { background: linear-gradient(135deg, rgba(26,107,47,0.06), rgba(82,201,122,0.04)); border: 1px solid rgba(26,107,47,0.15); border-radius: 12px; padding: 14px 16px; display: flex; gap: 14px; }
+  .mercado-detalle-estacional__icon { font-size: 1.4rem; flex-shrink: 0; }
+  .mercado-detalle-estacional__txt { flex: 1; min-width: 0; }
+  .mercado-detalle-estacional__title { font-size: 0.72rem; font-weight: 800; color: #155827; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .mercado-detalle-estacional__desc { font-size: 0.84rem; color: #1a2010; line-height: 1.45; }
+  .mercado-detalle-estacional__desc strong { color: #155827; }
+  .mercado-paywall-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.98) 100%); backdrop-filter: blur(2px); z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 24px; text-align: center; border-radius: 16px; }
+  .mercado-paywall-overlay__icon { width: 56px; height: 56px; background: linear-gradient(135deg, #1a6b2f, #0d3d19); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #fff; margin-bottom: 14px; box-shadow: 0 8px 22px rgba(26,107,47,0.3); }
+  .mercado-paywall-overlay__title { font-family: var(--font-display, var(--font)), sans-serif; font-size: 1.2rem; font-weight: 800; color: #0d1813; margin-bottom: 6px; }
+  .mercado-paywall-overlay__desc { font-size: 0.88rem; color: #5a6758; margin-bottom: 16px; max-width: 360px; line-height: 1.5; }
+  .mercado-paywall-overlay__btn { background: linear-gradient(135deg, #1a6b2f, #0d3d19); color: #fff; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 0.92rem; cursor: pointer; box-shadow: 0 6px 18px rgba(26,107,47,0.3); transition: transform 0.15s ease; font-family: var(--font), sans-serif; }
+  .mercado-paywall-overlay__btn:hover { transform: translateY(-1px); }
+  body.dark-mode .mercado-search,
+  body.dark-mode .mercado-tab { background: var(--card) !important; border-color: var(--border) !important; color: var(--text) !important; }
+  body.dark-mode .mercado-tab--active { background: linear-gradient(135deg, #1a6b2f, #0d3d19) !important; color: #fff !important; border-color: #1a6b2f !important; }
+  body.dark-mode .mercado-tabla-wrap { background: var(--card); border-color: var(--border); }
+  body.dark-mode .mercado-tabla thead { background: rgba(82,201,122,0.05); border-color: var(--border); }
+  body.dark-mode .mercado-tabla th { color: #94a3a0; }
+  body.dark-mode .mercado-row { border-color: var(--border); }
+  body.dark-mode .mercado-row:hover { background: rgba(82,201,122,0.06); }
+  body.dark-mode .mercado-row__nombre { color: #f0f4ee; }
+  body.dark-mode .mercado-row__precio { color: #f0f4ee; }
+  body.dark-mode .mercado-row__emoji { background: rgba(82,201,122,0.10); }
+  body.dark-mode .mercado-disclaimer { background: rgba(82,201,122,0.06); border-color: rgba(82,201,122,0.18); color: #d1d5db; }
+  body.dark-mode .mercado-disclaimer svg { color: #6ee7a3; }
+  body.dark-mode .mercado-modal__box { background: #1a2025; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06); }
+  body.dark-mode .mercado-modal__close { color: #6b7a72; }
+  body.dark-mode .mercado-modal__close:hover { background: #252e35; color: #f0f4ee; }
+  body.dark-mode .mercado-detalle-hero { border-color: #2e363d; }
+  body.dark-mode .mercado-detalle-emoji { background: rgba(82,201,122,0.10); }
+  body.dark-mode .mercado-detalle-cat { background: rgba(82,201,122,0.18); color: #6ee7a3; }
+  body.dark-mode .mercado-detalle-nombre { color: #f0f4ee; }
+  body.dark-mode .mercado-detalle-variedad { color: #94a3a0; }
+  body.dark-mode .mercado-detalle-fav { background: transparent; border-color: #2e363d; color: #94a3a0; }
+  body.dark-mode .mercado-detalle-precio-main { border-color: #2e363d; }
+  body.dark-mode .mercado-detalle-precio-num { color: #f0f4ee; }
+  body.dark-mode .mercado-detalle-precio-actualizado { color: #94a3a0; }
+  body.dark-mode .mercado-detalle-precio-card { background: #232a30; border-color: #2e363d; }
+  body.dark-mode .mercado-detalle-precio-card__lbl { color: #94a3a0; }
+  body.dark-mode .mercado-detalle-precio-card__val { color: #f0f4ee; }
+  body.dark-mode .mercado-detalle-precio-card__sub { color: #6b7a72; }
+  body.dark-mode .mercado-detalle-section__title { color: #94a3a0; }
+  body.dark-mode .mercado-detalle-centrales { background: #2e363d; border-color: #2e363d; }
+  body.dark-mode .mercado-detalle-central { background: #232a30; }
+  body.dark-mode .mercado-detalle-central__name { color: #f0f4ee; }
+  body.dark-mode .mercado-detalle-central__price { color: #6ee7a3; }
+  body.dark-mode .mercado-detalle-chart { background: #232a30; border-color: #2e363d; }
+  body.dark-mode .mercado-detalle-chart-info { color: #94a3a0; }
+  body.dark-mode .mercado-detalle-estacional { background: linear-gradient(135deg, rgba(82,201,122,0.10), rgba(26,107,47,0.06)); border-color: rgba(82,201,122,0.20); }
+  body.dark-mode .mercado-detalle-estacional__title { color: #6ee7a3; }
+  body.dark-mode .mercado-detalle-estacional__desc { color: #d1d5db; }
+  body.dark-mode .mercado-detalle-estacional__desc strong { color: #6ee7a3; }
+  body.dark-mode .mercado-paywall-overlay { background: linear-gradient(180deg, rgba(20,30,25,0) 0%, rgba(20,30,25,0.90) 50%, rgba(20,30,25,0.98) 100%); }
+  body.dark-mode .mercado-paywall-overlay__title { color: #f0f4ee; }
+  body.dark-mode .mercado-paywall-overlay__desc { color: #94a3a0; }
+  body.dark-mode .mercado-empty__title { color: #f0f4ee; }
+  body.dark-mode .mercado-empty__desc { color: #94a3a0; }
+  @media (max-width: 768px) {
+    .mercado-hero { padding: 22px 18px; }
+    .mercado-hero__content { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .mercado-hero__icon { width: 60px; height: 60px; }
+    .mercado-hero__icon-svg { width: 32px; height: 32px; }
+    .mercado-hero__title { font-size: 1.4rem; }
+    .mercado-tabla__th--hide-sm,
+    .mercado-row__hide-sm { display: none; }
+    .mercado-tabla th, .mercado-row td { padding: 12px 10px; }
+    .mercado-row__emoji { width: 32px; height: 32px; font-size: 1.3rem; }
+    .mercado-row__nombre { font-size: 0.88rem; }
+    .mercado-row__variedad { font-size: 0.7rem; }
+    .mercado-row__precio { font-size: 0.9rem; }
+    .mercado-row__spark-svg { width: 70px; height: 26px; }
+    .mercado-modal__box { padding: 22px 18px; margin-top: 20px; }
+    .mercado-detalle-precios { grid-template-columns: 1fr; }
+    .mercado-detalle-precio-num { font-size: 2.2rem; }
+  }
+  @media (max-width: 480px) {
+    .mercado-search { min-width: 100%; max-width: 100%; }
+    .mercado-tabs { width: 100%; }
+  }
+
 </style>
 
 <div id="vipEpicOverlay">
@@ -5701,6 +5861,16 @@
       <span class="mobile-drawer__item-label">Apoyos gob.</span>
     </button>
 
+    <button class="mobile-drawer__item" data-page="mercado" onclick="drawerIr('mercado')">
+      <span class="mobile-drawer__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+          <polyline points="16 7 22 7 22 13"/>
+        </svg>
+      </span>
+      <span class="mobile-drawer__item-label">Mercado</span>
+    </button>
+
     <div class="mobile-drawer__divider"></div>
 
     <div class="mobile-drawer__section-label">Mi cuenta</div>
@@ -5780,6 +5950,7 @@
         <div class="sidebar-subitem" onclick="irHerramienta('conversor',this)"><span>📏</span> Conversor</div>
       </div>
       <div class="sidebar-item" onclick="showPage('apoyos',this)"><div class="sidebar-item-left"><span>🏛️</span> Apoyos gob.</div></div>
+      <div class="sidebar-item" onclick="showPage('mercado',this)"><div class="sidebar-item-left"><span>💹</span> Mercado</div></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mi cuenta</div>
@@ -5842,11 +6013,8 @@
           </span>
           <h4 class="widget-webinar__title" id="pc-sesion-titulo-m">Sin webinars próximos</h4>
           <div class="widget-webinar__ponente-row" id="pc-ponente-row-m" style="display:none;">
-            <div class="widget-webinar__avatar" id="pc-ponente-avatar-m">P</div>
-            <div class="widget-webinar__ponente-txt">
-              <div class="widget-webinar__ponente-name" id="pc-ponente-nombre-m">—</div>
-              <div class="widget-webinar__ponente-rol">Ponente invitado</div>
-            </div>
+            <div class="widget-webinar__ponente-name" id="pc-ponente-nombre-m">—</div>
+            <div class="widget-webinar__ponente-rol">Ponente invitado</div>
           </div>
           <div class="widget-webinar__meta" id="pc-sesion-meta-m">—</div>
           <div class="widget-webinar__countdown" id="pc-countdown-m" style="display:none">
@@ -6658,6 +6826,179 @@
       </div>
     </div>
 
+    <!-- ═══════════════════════════════════════════════════════════════
+         💹 MERCADO VIP — Precios del agro en tiempo real
+         ═══════════════════════════════════════════════════════════════ -->
+    <div class="page" id="page-mercado">
+      <!-- Hero -->
+      <div class="mercado-hero">
+        <div class="mercado-hero__bg"></div>
+        <div class="mercado-hero__content">
+          <div class="mercado-hero__icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="mercado-hero__icon-svg">
+              <defs>
+                <linearGradient id="mercado-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#86efac"/>
+                  <stop offset="100%" stop-color="#1a6b2f"/>
+                </linearGradient>
+              </defs>
+              <polyline points="42 14 27 29 19 21 6 34" stroke="url(#mercado-grad)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <polyline points="32 14 42 14 42 24" stroke="url(#mercado-grad)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="6" cy="34" r="3" fill="url(#mercado-grad)"/>
+              <circle cx="19" cy="21" r="3" fill="url(#mercado-grad)"/>
+              <circle cx="27" cy="29" r="3" fill="url(#mercado-grad)"/>
+            </svg>
+          </div>
+          <div class="mercado-hero__text">
+            <div class="mercado-hero__kicker">PRECIOS DEL AGRO</div>
+            <h2 class="mercado-hero__title">Mercado en tiempo real</h2>
+            <p class="mercado-hero__desc">Precios actualizados de frutas y hortalizas en centrales de abasto nacionales, con tendencias y datos de importación/exportación.</p>
+          </div>
+        </div>
+        <div class="mercado-hero__updated">
+          <span class="mercado-hero__updated-dot"></span>
+          <span id="mercado-updated-txt">Actualizado: <strong>Hoy 06:00 AM</strong></span>
+        </div>
+      </div>
+
+      <!-- Filtros y búsqueda -->
+      <div class="mercado-filtros">
+        <div class="mercado-search">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M14 14L11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="text" id="mercado-search" placeholder="Buscar producto…" oninput="renderMercado()">
+        </div>
+        <div class="mercado-tabs">
+          <button class="mercado-tab mercado-tab--active" data-cat="todos" onclick="filtrarMercado('todos', this)">Todos</button>
+          <button class="mercado-tab" data-cat="fruta" onclick="filtrarMercado('fruta', this)">🍎 Frutas</button>
+          <button class="mercado-tab" data-cat="hortaliza" onclick="filtrarMercado('hortaliza', this)">🥬 Hortalizas</button>
+          <button class="mercado-tab" data-cat="favoritos" onclick="filtrarMercado('favoritos', this)">⭐ Favoritos</button>
+        </div>
+      </div>
+
+      <!-- Tabla principal de productos -->
+      <div class="mercado-tabla-wrap">
+        <table class="mercado-tabla" id="mercado-tabla">
+          <thead>
+            <tr>
+              <th class="mercado-tabla__th--prod">Producto</th>
+              <th class="mercado-tabla__th--num">Nacional</th>
+              <th class="mercado-tabla__th--num mercado-tabla__th--hide-sm">Importación</th>
+              <th class="mercado-tabla__th--trend">Tendencia 30d</th>
+              <th class="mercado-tabla__th--cambio">Cambio</th>
+            </tr>
+          </thead>
+          <tbody id="mercado-tabla-body">
+            <!-- Renderizado por JS -->
+          </tbody>
+        </table>
+        <div class="mercado-empty" id="mercado-empty" style="display:none;">
+          <div class="mercado-empty__icon">🔍</div>
+          <div class="mercado-empty__title">Sin resultados</div>
+          <div class="mercado-empty__desc">No encontramos productos con esos criterios. Prueba con otra categoría o búsqueda.</div>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="mercado-disclaimer">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M7 4V7.5M7 10H7.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Datos de referencia basados en SNIIM (SADER). Los precios pueden variar por región, calidad y temporada. Consulta con tu central de abasto local antes de cerrar operaciones comerciales.
+      </div>
+    </div>
+
+    <!-- Modal: Detalle de producto -->
+    <div class="mercado-modal" id="mercado-modal" onclick="if(event.target===this)cerrarMercadoDetalle()">
+      <div class="mercado-modal__box">
+        <button class="mercado-modal__close" onclick="cerrarMercadoDetalle()" aria-label="Cerrar">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <!-- Hero del producto -->
+        <div class="mercado-detalle-hero">
+          <div class="mercado-detalle-emoji" id="mercado-detalle-emoji">🥑</div>
+          <div class="mercado-detalle-info">
+            <div class="mercado-detalle-cat" id="mercado-detalle-cat">Fruta</div>
+            <h3 class="mercado-detalle-nombre" id="mercado-detalle-nombre">—</h3>
+            <div class="mercado-detalle-variedad" id="mercado-detalle-variedad">—</div>
+          </div>
+          <button class="mercado-detalle-fav" id="mercado-detalle-fav" onclick="toggleFavorito()" aria-label="Favorito">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M10 17l-1.45-1.32C5.4 12.36 3 10.28 3 7.5A4.5 4.5 0 017.5 3c1.74 0 3.41.81 4.5 2.09A5.99 5.99 0 0116.5 3 4.5 4.5 0 0121 7.5c0 2.78-2.4 4.86-5.55 8.18L10 17z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Precio principal -->
+        <div class="mercado-detalle-precio-main">
+          <div class="mercado-detalle-precio-num" id="mercado-detalle-precio-num">—</div>
+          <div class="mercado-detalle-precio-meta">
+            <span class="mercado-detalle-precio-cambio" id="mercado-detalle-cambio">—</span>
+            <span class="mercado-detalle-precio-actualizado">Última actualización: hoy 06:00 AM</span>
+          </div>
+        </div>
+
+        <!-- 3 Cards: Nacional / Import / Export -->
+        <div class="mercado-detalle-precios">
+          <div class="mercado-detalle-precio-card">
+            <div class="mercado-detalle-precio-card__lbl">🇲🇽 NACIONAL</div>
+            <div class="mercado-detalle-precio-card__val" id="mercado-detalle-nac">—</div>
+            <div class="mercado-detalle-precio-card__sub">MXN/kg</div>
+          </div>
+          <div class="mercado-detalle-precio-card">
+            <div class="mercado-detalle-precio-card__lbl">📥 IMPORTACIÓN</div>
+            <div class="mercado-detalle-precio-card__val" id="mercado-detalle-imp">—</div>
+            <div class="mercado-detalle-precio-card__sub">USD/kg</div>
+          </div>
+          <div class="mercado-detalle-precio-card">
+            <div class="mercado-detalle-precio-card__lbl">📤 EXPORTACIÓN</div>
+            <div class="mercado-detalle-precio-card__val" id="mercado-detalle-exp">—</div>
+            <div class="mercado-detalle-precio-card__sub">USD/kg</div>
+          </div>
+        </div>
+
+        <!-- Centrales de abasto -->
+        <div class="mercado-detalle-section">
+          <div class="mercado-detalle-section__title">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-right:6px;vertical-align:-2px;">
+              <path d="M2 12V6L7 2L12 6V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 12V8H9V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Precios por central de abasto
+          </div>
+          <div class="mercado-detalle-centrales" id="mercado-detalle-centrales">
+            <!-- Renderizado por JS -->
+          </div>
+        </div>
+
+        <!-- Gráfica 30 días -->
+        <div class="mercado-detalle-section">
+          <div class="mercado-detalle-section__title">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-right:6px;vertical-align:-2px;">
+              <polyline points="2 10 5 7 8 9 12 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="2" y1="12" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Tendencia últimos 30 días
+          </div>
+          <div class="mercado-detalle-chart" id="mercado-detalle-chart">
+            <!-- SVG sparkline renderizado por JS -->
+          </div>
+        </div>
+
+        <!-- Estacionalidad -->
+        <div class="mercado-detalle-estacional" id="mercado-detalle-estacional">
+          <!-- Renderizado por JS -->
+        </div>
+
+      </div>
+    </div>
+
     <!-- Modal nueva parcela -->
     <div class="foro-modal" id="modal-parcela" onclick="cerrarModalParcelaBg(event)">
       <div class="foro-modal__box" onclick="event.stopPropagation()">
@@ -7100,13 +7441,10 @@
       </span>
       <h4 class="widget-webinar__title" id="pc-sesion-titulo">Sin webinars próximos</h4>
 
-      <!-- Bloque del ponente (oculto si no hay webinar) -->
+      <!-- Ponente: solo texto centrado, sin avatar -->
       <div class="widget-webinar__ponente-row" id="pc-ponente-row" style="display:none;">
-        <div class="widget-webinar__avatar" id="pc-ponente-avatar">P</div>
-        <div class="widget-webinar__ponente-txt">
-          <div class="widget-webinar__ponente-name" id="pc-ponente-nombre">—</div>
-          <div class="widget-webinar__ponente-rol">Ponente invitado</div>
-        </div>
+        <div class="widget-webinar__ponente-name" id="pc-ponente-nombre">—</div>
+        <div class="widget-webinar__ponente-rol">Ponente invitado</div>
       </div>
 
       <div class="widget-webinar__meta" id="pc-sesion-meta">—</div>
@@ -8467,18 +8805,23 @@ function actualizarWidget(s) {
   const dt = new Date(s.fechaHora);
   const ahora = new Date();
   const esVivo = (ahora >= new Date(dt.getTime() - 15*60*1000)) && (ahora <= new Date(dt.getTime() + 60*60*1000));
-  const fechaStr = dt.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'})
-                 + ' · ' + dt.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+
+  // Fecha formal: "Lunes 27 de Abril · 7:00 PM"
+  const diasSemana = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const horas = dt.getHours();
+  const min = dt.getMinutes();
+  const ampm = horas >= 12 ? 'PM' : 'AM';
+  const horas12 = ((horas + 11) % 12) + 1;
+  const minStr = String(min).padStart(2, '0');
+  const fechaStr = `${diasSemana[dt.getDay()]} ${dt.getDate()} de ${meses[dt.getMonth()]} · ${horas12}:${minStr} ${ampm}`;
 
   ['pc-sesion-titulo','pc-sesion-titulo-m'].forEach(id => setW(id, s.titulo));
 
-  // Llenar bloque del ponente con avatar e iniciales
+  // Llenar bloque del ponente (solo texto centrado, sin avatar)
   if (s.instructor && s.instructor.trim()) {
-    const nombreLimpio = s.instructor.replace(/^(Ing\.|Lic\.|Dr\.|Dra\.|Mtro\.|Mtra\.|ING\.|LIC\.|DR\.|DRA\.)\s*/i, '').trim();
-    const iniciales = nombreLimpio.split(' ').filter(Boolean).slice(0,2).map(n => n.charAt(0).toUpperCase()).join('') || 'P';
-    ['pc-ponente-avatar','pc-ponente-avatar-m'].forEach(id => setW(id, iniciales));
     ['pc-ponente-nombre','pc-ponente-nombre-m'].forEach(id => setW(id, s.instructor));
-    ['pc-ponente-row','pc-ponente-row-m'].forEach(id => setWStyle(id, 'display', 'flex'));
+    ['pc-ponente-row','pc-ponente-row-m'].forEach(id => setWStyle(id, 'display', 'block'));
     ['pc-sesion-meta','pc-sesion-meta-m'].forEach(id => setW(id, fechaStr));
   } else {
     ['pc-ponente-row','pc-ponente-row-m'].forEach(id => setWStyle(id, 'display', 'none'));
@@ -12628,6 +12971,10 @@ async function desbloquearLogroExamen(correctas, total) {
     if (id === 'foro' && typeof renderForo === 'function') {
       renderForo();
     }
+    // 💹 Renderizar mercado cuando entra
+    if (id === 'mercado' && typeof renderMercado === 'function') {
+      renderMercado();
+    }
     if (id === 'notificaciones') {
       // 3 segundos: suficiente para leer lo nuevo antes de que desaparezcan
       setTimeout(() => {
@@ -13593,6 +13940,543 @@ document.addEventListener('DOMContentLoaded', () => {
 setInterval(() => {
   if (document.visibilityState === 'visible') cargarNoticiasAgro();
 }, 30 * 60 * 1000);
+
+// ═══════════════════════════════════════════════════════════════
+// 💹 MERCADO VIP — Precios del agro (estilo Bloomberg)
+// ═══════════════════════════════════════════════════════════════
+
+// Helper: generar historial 30 días con tendencia (subida/bajada/estable)
+function genHist30(precioBase, direccion) {
+  const arr = [];
+  let actual = precioBase * (direccion === 'subida' ? 0.92 : direccion === 'bajada' ? 1.08 : 0.98);
+  for (let i = 0; i < 30; i++) {
+    // Variación diaria suave + tendencia
+    const noise = (Math.random() - 0.5) * (precioBase * 0.04);
+    const trend = direccion === 'subida' ? (precioBase * 0.0035) :
+                  direccion === 'bajada' ? -(precioBase * 0.0035) : 0;
+    actual += noise + trend;
+    actual = Math.max(precioBase * 0.7, Math.min(precioBase * 1.3, actual));
+    arr.push(Math.round(actual * 100) / 100);
+  }
+  // Forzar que el último valor sea cercano al precio base
+  arr[29] = precioBase;
+  return arr;
+}
+
+// 15 productos AgroTec América con datos demo realistas (basados en SNIIM 2025-2026)
+const MERCADO_PRODUCTOS = [
+  {
+    id: 'aguacate_hass', nombre: 'Aguacate Hass', categoria: 'fruta', emoji: '🥑',
+    variedad: 'Hass · Michoacán',
+    precio_nacional: 65, precio_import: 2.80, precio_export: 3.20,
+    cambio_pct: 5.2, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 68 },
+      { nombre: 'Mercado de Abasto Guadalajara', precio: 63 },
+      { nombre: 'Central Monterrey', precio: 66 },
+      { nombre: 'Mercado Aguascalientes', precio: 62 },
+      { nombre: 'Central Puebla', precio: 64 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Octubre - Diciembre</strong>. Mes con menor precio: Junio - Agosto. Producción nacional pico en otoño.'
+  },
+  {
+    id: 'limon_persa', nombre: 'Limón Persa', categoria: 'fruta', emoji: '🍋',
+    variedad: 'Persa · Veracruz',
+    precio_nacional: 28, precio_import: 1.20, precio_export: 1.45,
+    cambio_pct: 12.4, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 30 },
+      { nombre: 'Mercado de Abasto Guadalajara', precio: 26 },
+      { nombre: 'Central Monterrey', precio: 29 },
+      { nombre: 'Central Puebla', precio: 27 },
+      { nombre: 'Mercado Veracruz', precio: 22 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Diciembre - Marzo</strong>. La sequía de invierno reduce oferta y dispara precios.'
+  },
+  {
+    id: 'mango_ataulfo', nombre: 'Mango Ataúlfo', categoria: 'fruta', emoji: '🥭',
+    variedad: 'Ataúlfo · Chiapas',
+    precio_nacional: 32, precio_import: 1.40, precio_export: 1.85,
+    cambio_pct: -3.1, direccion: 'bajada',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 35 },
+      { nombre: 'Mercado Tapachula', precio: 28 },
+      { nombre: 'Central Guadalajara', precio: 30 },
+      { nombre: 'Central Monterrey', precio: 34 },
+      { nombre: 'Mercado Mérida', precio: 33 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Marzo - Junio</strong>. Temporada nacional alta (50% de la cosecha del año).'
+  },
+  {
+    id: 'fresa', nombre: 'Fresa', categoria: 'fruta', emoji: '🍓',
+    variedad: 'Camino Real · Michoacán',
+    precio_nacional: 55, precio_import: 2.40, precio_export: 2.80,
+    cambio_pct: 8.0, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 58 },
+      { nombre: 'Mercado de Zamora', precio: 48 },
+      { nombre: 'Central Guadalajara', precio: 53 },
+      { nombre: 'Central Monterrey', precio: 56 },
+      { nombre: 'Central Puebla', precio: 54 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Noviembre - Febrero</strong>. Demanda fuerte por exportación a EE.UU. y Canadá.'
+  },
+  {
+    id: 'platano_tabasco', nombre: 'Plátano Tabasco', categoria: 'fruta', emoji: '🍌',
+    variedad: 'Cavendish · Tabasco',
+    precio_nacional: 14, precio_import: 0.55, precio_export: 0.72,
+    cambio_pct: -1.8, direccion: 'bajada',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 16 },
+      { nombre: 'Mercado Villahermosa', precio: 11 },
+      { nombre: 'Central Guadalajara', precio: 13 },
+      { nombre: 'Central Monterrey', precio: 15 },
+      { nombre: 'Mercado Mérida', precio: 14 }
+    ],
+    estacional: 'Producción estable todo el año. Precio más alto: <strong>Diciembre - Enero</strong> por demanda navideña.'
+  },
+  {
+    id: 'papaya_maradol', nombre: 'Papaya Maradol', categoria: 'fruta', emoji: '🫒',
+    variedad: 'Maradol · Veracruz',
+    precio_nacional: 18, precio_import: 0.85, precio_export: 1.10,
+    cambio_pct: 0.5, direccion: 'estable',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 20 },
+      { nombre: 'Mercado Veracruz', precio: 15 },
+      { nombre: 'Central Guadalajara', precio: 17 },
+      { nombre: 'Central Monterrey', precio: 19 },
+      { nombre: 'Central Puebla', precio: 18 }
+    ],
+    estacional: 'Disponible todo el año. Mejor precio: <strong>Mayo - Agosto</strong>. Alta demanda exportación a EE.UU.'
+  },
+  {
+    id: 'pina_md2', nombre: 'Piña MD-2', categoria: 'fruta', emoji: '🍍',
+    variedad: 'MD-2 · Veracruz',
+    precio_nacional: 16, precio_import: 0.80, precio_export: 1.15,
+    cambio_pct: 4.3, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 18 },
+      { nombre: 'Mercado Loma Bonita', precio: 12 },
+      { nombre: 'Central Guadalajara', precio: 15 },
+      { nombre: 'Central Monterrey', precio: 17 },
+      { nombre: 'Mercado Mérida', precio: 16 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Marzo - Mayo</strong> y <strong>Octubre - Noviembre</strong>. Veracruz produce 70% nacional.'
+  },
+  {
+    id: 'frambuesa', nombre: 'Frambuesa', categoria: 'fruta', emoji: '🫐',
+    variedad: 'Adelita · Jalisco',
+    precio_nacional: 145, precio_import: 6.80, precio_export: 8.50,
+    cambio_pct: 7.2, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 155 },
+      { nombre: 'Mercado de Zamora', precio: 130 },
+      { nombre: 'Central Guadalajara', precio: 140 },
+      { nombre: 'Central Monterrey', precio: 148 },
+      { nombre: 'Central Puebla', precio: 142 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Septiembre - Diciembre</strong>. Berry premium con margen de exportación a EE.UU./UE.'
+  },
+  {
+    id: 'tomate_saladette', nombre: 'Tomate Saladette', categoria: 'hortaliza', emoji: '🍅',
+    variedad: 'Saladette · Sinaloa',
+    precio_nacional: 22, precio_import: 0.95, precio_export: 1.35,
+    cambio_pct: -5.8, direccion: 'bajada',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 24 },
+      { nombre: 'Mercado Culiacán', precio: 18 },
+      { nombre: 'Central Guadalajara', precio: 21 },
+      { nombre: 'Central Monterrey', precio: 23 },
+      { nombre: 'Central Puebla', precio: 22 }
+    ],
+    estacional: 'Producción invernadero todo el año. Precio alto: <strong>Junio - Agosto</strong> (campo abierto bajo). EE.UU. mercado #1.'
+  },
+  {
+    id: 'chile_serrano', nombre: 'Chile Serrano', categoria: 'hortaliza', emoji: '🌶️',
+    variedad: 'Serrano · Veracruz',
+    precio_nacional: 42, precio_import: 1.85, precio_export: 2.20,
+    cambio_pct: 0.0, direccion: 'estable',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 45 },
+      { nombre: 'Mercado Xalapa', precio: 36 },
+      { nombre: 'Central Guadalajara', precio: 40 },
+      { nombre: 'Central Monterrey', precio: 43 },
+      { nombre: 'Central Puebla', precio: 42 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Diciembre - Marzo</strong> (oferta nacional baja). Veracruz e Hidalgo principales productores.'
+  },
+  {
+    id: 'chile_jalapeno', nombre: 'Chile Jalapeño', categoria: 'hortaliza', emoji: '🌶️',
+    variedad: 'Jalapeño · Chihuahua',
+    precio_nacional: 28, precio_import: 1.20, precio_export: 1.55,
+    cambio_pct: 3.5, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 30 },
+      { nombre: 'Mercado Delicias', precio: 22 },
+      { nombre: 'Central Guadalajara', precio: 26 },
+      { nombre: 'Central Monterrey', precio: 29 },
+      { nombre: 'Central Puebla', precio: 28 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Octubre - Febrero</strong>. Chihuahua y Sinaloa lideran. Industria conservera demanda 60%.'
+  },
+  {
+    id: 'cebolla_blanca', nombre: 'Cebolla Blanca', categoria: 'hortaliza', emoji: '🧅',
+    variedad: 'Blanca · Guanajuato',
+    precio_nacional: 18, precio_import: 0.75, precio_export: 1.05,
+    cambio_pct: -2.4, direccion: 'bajada',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 20 },
+      { nombre: 'Mercado Irapuato', precio: 14 },
+      { nombre: 'Central Guadalajara', precio: 17 },
+      { nombre: 'Central Monterrey', precio: 19 },
+      { nombre: 'Central Puebla', precio: 18 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Junio - Agosto</strong> (post-cosecha primavera). Chihuahua/Guanajuato/Tamaulipas principales.'
+  },
+  {
+    id: 'pepino_persa', nombre: 'Pepino Persa', categoria: 'hortaliza', emoji: '🥒',
+    variedad: 'Persa · Sinaloa',
+    precio_nacional: 24, precio_import: 1.05, precio_export: 1.40,
+    cambio_pct: 6.8, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 26 },
+      { nombre: 'Mercado Culiacán', precio: 20 },
+      { nombre: 'Central Guadalajara', precio: 23 },
+      { nombre: 'Central Monterrey', precio: 25 },
+      { nombre: 'Central Puebla', precio: 24 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Diciembre - Abril</strong>. Variedad premium con alta demanda exportación a EE.UU.'
+  },
+  {
+    id: 'calabacita', nombre: 'Calabacita', categoria: 'hortaliza', emoji: '🥒',
+    variedad: 'Italiana · Sonora',
+    precio_nacional: 16, precio_import: 0.70, precio_export: 0.95,
+    cambio_pct: -1.2, direccion: 'estable',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 18 },
+      { nombre: 'Mercado Hermosillo', precio: 12 },
+      { nombre: 'Central Guadalajara', precio: 15 },
+      { nombre: 'Central Monterrey', precio: 17 },
+      { nombre: 'Central Puebla', precio: 16 }
+    ],
+    estacional: 'Producción estable todo el año. Mejor precio: <strong>Mayo - Julio</strong>. Sonora/Sinaloa principales productores.'
+  },
+  {
+    id: 'brocoli', nombre: 'Brócoli', categoria: 'hortaliza', emoji: '🥦',
+    variedad: 'Avenger · Guanajuato',
+    precio_nacional: 28, precio_import: 1.30, precio_export: 1.65,
+    cambio_pct: 4.0, direccion: 'subida',
+    centrales: [
+      { nombre: 'Central de Abasto CDMX', precio: 30 },
+      { nombre: 'Mercado Celaya', precio: 22 },
+      { nombre: 'Central Guadalajara', precio: 26 },
+      { nombre: 'Central Monterrey', precio: 29 },
+      { nombre: 'Central Puebla', precio: 28 }
+    ],
+    estacional: 'Mejor mes para vender: <strong>Octubre - Abril</strong>. Guanajuato/Querétaro lideran. EE.UU. compra 80% exportación.'
+  }
+];
+
+// Generar historiales 30 días para cada producto
+MERCADO_PRODUCTOS.forEach(p => {
+  p.historial = genHist30(p.precio_nacional, p.direccion);
+});
+
+// Estado actual
+let _mercadoCatActual = 'todos';
+let _mercadoProductoActual = null;
+
+// Generar SVG sparkline (línea simple con color según tendencia)
+function generarSparkline(historial, direccion, ancho, alto) {
+  const w = ancho || 110;
+  const h = alto || 36;
+  const padY = 3;
+  const min = Math.min(...historial);
+  const max = Math.max(...historial);
+  const rango = max - min || 1;
+
+  // Construir puntos
+  const points = historial.map((v, i) => {
+    const x = (i / (historial.length - 1)) * w;
+    const y = h - padY - ((v - min) / rango) * (h - padY * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  const color = direccion === 'subida' ? '#16a34a' :
+                direccion === 'bajada' ? '#dc2626' : '#94a3a0';
+  const colorFill = direccion === 'subida' ? 'rgba(22,163,74,0.12)' :
+                    direccion === 'bajada' ? 'rgba(220,38,38,0.12)' : 'rgba(148,163,160,0.10)';
+
+  // Path para área (con relleno sutil)
+  const areaPath = `M0,${h} L${points.join(' L')} L${w},${h} Z`;
+  // Path para línea
+  const linePath = `M${points.join(' L')}`;
+
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" class="mercado-row__spark-svg" preserveAspectRatio="none">
+    <path d="${areaPath}" fill="${colorFill}" stroke="none"/>
+    <path d="${linePath}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+// Generar SVG sparkline GRANDE para el modal detalle (con ejes y info)
+function generarSparklineGrande(historial, direccion) {
+  const w = 500;
+  const h = 110;
+  const padX = 10;
+  const padY = 12;
+  const min = Math.min(...historial);
+  const max = Math.max(...historial);
+  const rango = max - min || 1;
+
+  const points = historial.map((v, i) => {
+    const x = padX + (i / (historial.length - 1)) * (w - padX * 2);
+    const y = h - padY - ((v - min) / rango) * (h - padY * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  const color = direccion === 'subida' ? '#16a34a' :
+                direccion === 'bajada' ? '#dc2626' : '#94a3a0';
+  const colorFill = direccion === 'subida' ? 'rgba(22,163,74,0.10)' :
+                    direccion === 'bajada' ? 'rgba(220,38,38,0.10)' : 'rgba(148,163,160,0.08)';
+
+  const areaPath = `M${padX},${h - padY} L${points.join(' L')} L${w - padX},${h - padY} Z`;
+  const linePath = `M${points.join(' L')}`;
+
+  // Punto inicial y final
+  const pInicio = points[0].split(',');
+  const pFinal = points[points.length - 1].split(',');
+
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="${areaPath}" fill="${colorFill}" stroke="none"/>
+    <path d="${linePath}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${pInicio[0]}" cy="${pInicio[1]}" r="3" fill="${color}" opacity="0.5"/>
+    <circle cx="${pFinal[0]}" cy="${pFinal[1]}" r="4" fill="${color}"/>
+    <circle cx="${pFinal[0]}" cy="${pFinal[1]}" r="7" fill="${color}" opacity="0.2"/>
+  </svg>`;
+}
+
+// Renderizar tabla de productos
+function renderMercado() {
+  const tbody = document.getElementById('mercado-tabla-body');
+  const tablaWrap = document.querySelector('#page-mercado .mercado-tabla-wrap');
+  const empty = document.getElementById('mercado-empty');
+  if (!tbody) return;
+
+  // Filtrar
+  const search = (document.getElementById('mercado-search')?.value || '').toLowerCase().trim();
+  const favoritos = JSON.parse(localStorage.getItem('mercado_favoritos') || '[]');
+
+  let lista = MERCADO_PRODUCTOS;
+  if (_mercadoCatActual === 'fruta') lista = lista.filter(p => p.categoria === 'fruta');
+  else if (_mercadoCatActual === 'hortaliza') lista = lista.filter(p => p.categoria === 'hortaliza');
+  else if (_mercadoCatActual === 'favoritos') lista = lista.filter(p => favoritos.includes(p.id));
+
+  if (search) {
+    lista = lista.filter(p =>
+      p.nombre.toLowerCase().includes(search) ||
+      p.variedad.toLowerCase().includes(search)
+    );
+  }
+
+  if (lista.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+  } else {
+    if (empty) empty.style.display = 'none';
+
+    // Determinar si es VIP o FREE
+    const esVIP = window.usuarioVIP === true || (typeof window.usuario !== 'undefined' && window.usuario && window.usuario.vip === true) || document.body.classList.contains('is-vip');
+
+    tbody.innerHTML = lista.map(p => {
+      const dir = p.direccion;
+      const cambioCls = dir === 'subida' ? 'mercado-row__cambio--up' :
+                        dir === 'bajada' ? 'mercado-row__cambio--down' : 'mercado-row__cambio--flat';
+      const arrow = dir === 'subida' ? '▲' : dir === 'bajada' ? '▼' : '─';
+      const cambioStr = (p.cambio_pct > 0 ? '+' : '') + p.cambio_pct.toFixed(1) + '%';
+
+      // Si es FREE, ocultar precios reales
+      const precioCelda = esVIP
+        ? `<div class="mercado-row__precio">$${p.precio_nacional}</div><div class="mercado-row__precio-sub">MXN/kg</div>`
+        : `<div class="mercado-row__precio-bloqueado">
+            <svg class="mercado-row__precio-bloqueado-icon" viewBox="0 0 16 16" fill="none">
+              <rect x="3" y="7" width="10" height="7" rx="1.4" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            $ ─ ─</div>`;
+
+      const importCelda = esVIP
+        ? `<div class="mercado-row__precio">$${p.precio_import.toFixed(2)}</div><div class="mercado-row__precio-sub">USD/kg</div>`
+        : `<div class="mercado-row__precio-bloqueado">$ ─ ─</div>`;
+
+      const cambioCelda = esVIP
+        ? `<span class="mercado-row__cambio ${cambioCls}"><span class="mercado-row__cambio-arrow">${arrow}</span>${cambioStr}</span>`
+        : `<span class="mercado-row__precio-bloqueado">─</span>`;
+
+      return `
+      <tr class="mercado-row" onclick="abrirMercadoDetalle('${p.id}')">
+        <td>
+          <div class="mercado-row__prod">
+            <div class="mercado-row__emoji">${p.emoji}</div>
+            <div class="mercado-row__nombre-wrap">
+              <div class="mercado-row__nombre">${p.nombre}</div>
+              <div class="mercado-row__variedad">${p.variedad}</div>
+            </div>
+          </div>
+        </td>
+        <td>${precioCelda}</td>
+        <td class="mercado-row__hide-sm">${importCelda}</td>
+        <td class="mercado-row__spark">${generarSparkline(p.historial, p.direccion)}</td>
+        <td>${cambioCelda}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Si es FREE, mostrar paywall sobre la tabla
+  const esVIP = window.usuarioVIP === true || (typeof window.usuario !== 'undefined' && window.usuario && window.usuario.vip === true) || document.body.classList.contains('is-vip');
+
+  // Limpiar paywall previo
+  const paywallExistente = tablaWrap?.querySelector('.mercado-paywall-overlay');
+  if (paywallExistente) paywallExistente.remove();
+
+  if (!esVIP && tablaWrap && lista.length > 0) {
+    const overlay = document.createElement('div');
+    overlay.className = 'mercado-paywall-overlay';
+    overlay.innerHTML = `
+      <div class="mercado-paywall-overlay__icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="6" y="13" width="16" height="11" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M10 13V9a4 4 0 018 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="mercado-paywall-overlay__title">Precios disponibles solo para VIP</div>
+      <div class="mercado-paywall-overlay__desc">Suscríbete para ver precios reales actualizados, tendencias 30 días y datos por central de abasto.</div>
+      <button class="mercado-paywall-overlay__btn" onclick="if(typeof abrirSelectorPlan==='function'){abrirSelectorPlan()}else{showPage('suscripcion')}">
+        Suscribirme — desde $200 MXN/mes
+      </button>
+    `;
+    tablaWrap.appendChild(overlay);
+  }
+}
+
+// Filtrar por categoría
+function filtrarMercado(cat, btn) {
+  _mercadoCatActual = cat;
+  document.querySelectorAll('.mercado-tab').forEach(t => t.classList.remove('mercado-tab--active'));
+  if (btn) btn.classList.add('mercado-tab--active');
+  renderMercado();
+}
+
+// Abrir modal de detalle
+function abrirMercadoDetalle(id) {
+  const esVIP = window.usuarioVIP === true || (typeof window.usuario !== 'undefined' && window.usuario && window.usuario.vip === true) || document.body.classList.contains('is-vip');
+
+  // Si es FREE, abrir paywall directo
+  if (!esVIP) {
+    if (typeof abrirSelectorPlan === 'function') return abrirSelectorPlan();
+    if (typeof showPage === 'function') return showPage('suscripcion');
+    return;
+  }
+
+  const p = MERCADO_PRODUCTOS.find(x => x.id === id);
+  if (!p) return;
+  _mercadoProductoActual = p;
+
+  document.getElementById('mercado-detalle-emoji').textContent = p.emoji;
+  document.getElementById('mercado-detalle-cat').textContent = p.categoria === 'fruta' ? 'Fruta' : 'Hortaliza';
+  document.getElementById('mercado-detalle-nombre').textContent = p.nombre;
+  document.getElementById('mercado-detalle-variedad').textContent = p.variedad;
+  document.getElementById('mercado-detalle-precio-num').textContent = `$${p.precio_nacional} MXN/kg`;
+
+  // Cambio %
+  const cambioEl = document.getElementById('mercado-detalle-cambio');
+  const dir = p.direccion;
+  const cls = dir === 'subida' ? 'mercado-detalle-precio-cambio--up' :
+              dir === 'bajada' ? 'mercado-detalle-precio-cambio--down' : 'mercado-detalle-precio-cambio--flat';
+  const arrow = dir === 'subida' ? '▲' : dir === 'bajada' ? '▼' : '─';
+  const cambioStr = (p.cambio_pct > 0 ? '+' : '') + p.cambio_pct.toFixed(1) + '%';
+  cambioEl.className = `mercado-detalle-precio-cambio ${cls}`;
+  cambioEl.innerHTML = `${arrow} ${cambioStr} <span style="opacity:0.7;margin-left:4px;font-weight:500;">vs hace 30 días</span>`;
+
+  // Cards Nacional / Import / Export
+  document.getElementById('mercado-detalle-nac').textContent = `$${p.precio_nacional}`;
+  document.getElementById('mercado-detalle-imp').textContent = `$${p.precio_import.toFixed(2)}`;
+  document.getElementById('mercado-detalle-exp').textContent = `$${p.precio_export.toFixed(2)}`;
+
+  // Centrales
+  const centralesEl = document.getElementById('mercado-detalle-centrales');
+  centralesEl.innerHTML = p.centrales.map(c => `
+    <div class="mercado-detalle-central">
+      <div class="mercado-detalle-central__name">${c.nombre}</div>
+      <div class="mercado-detalle-central__price">$${c.precio} MXN/kg</div>
+    </div>
+  `).join('');
+
+  // Gráfica grande
+  const chartEl = document.getElementById('mercado-detalle-chart');
+  const minHist = Math.min(...p.historial);
+  const maxHist = Math.max(...p.historial);
+  chartEl.innerHTML = `
+    ${generarSparklineGrande(p.historial, p.direccion)}
+    <div class="mercado-detalle-chart-info">
+      <span>Hace 30d · $${minHist}</span>
+      <span>Hoy · <strong style="color:#1a6b2f;">$${p.precio_nacional}</strong></span>
+    </div>
+  `;
+
+  // Estacionalidad
+  document.getElementById('mercado-detalle-estacional').innerHTML = `
+    <div class="mercado-detalle-estacional__icon">📅</div>
+    <div class="mercado-detalle-estacional__txt">
+      <div class="mercado-detalle-estacional__title">Estacionalidad y mercado</div>
+      <div class="mercado-detalle-estacional__desc">${p.estacional}</div>
+    </div>
+  `;
+
+  // Estado del favorito
+  actualizarBotonFavorito();
+
+  // Abrir modal
+  document.getElementById('mercado-modal').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarMercadoDetalle() {
+  document.getElementById('mercado-modal').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+function toggleFavorito() {
+  if (!_mercadoProductoActual) return;
+  const id = _mercadoProductoActual.id;
+  let favs = JSON.parse(localStorage.getItem('mercado_favoritos') || '[]');
+  if (favs.includes(id)) {
+    favs = favs.filter(f => f !== id);
+  } else {
+    favs.push(id);
+  }
+  localStorage.setItem('mercado_favoritos', JSON.stringify(favs));
+  actualizarBotonFavorito();
+}
+
+function actualizarBotonFavorito() {
+  if (!_mercadoProductoActual) return;
+  const favs = JSON.parse(localStorage.getItem('mercado_favoritos') || '[]');
+  const btn = document.getElementById('mercado-detalle-fav');
+  if (btn) {
+    if (favs.includes(_mercadoProductoActual.id)) {
+      btn.classList.add('is-active');
+    } else {
+      btn.classList.remove('is-active');
+    }
+  }
+}
+
+// Cerrar modal con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('mercado-modal')?.classList.contains('is-open')) {
+    cerrarMercadoDetalle();
+  }
+});
 </script>
   <!-- BOTTOM NAV (móvil) -->
   <nav class="bottom-nav">
