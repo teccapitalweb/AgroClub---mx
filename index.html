@@ -14284,8 +14284,8 @@ function renderMercado() {
   } else {
     if (empty) empty.style.display = 'none';
 
-    // Determinar si es VIP o FREE
-    const esVIP = window.usuarioVIP === true || (typeof window.usuario !== 'undefined' && window.usuario && window.usuario.vip === true) || document.body.classList.contains('is-vip');
+    // Determinar si es VIP usando la función oficial del portal
+    const esVIP = typeof esVIPActivo === 'function' ? esVIPActivo() : false;
 
     tbody.innerHTML = lista.map(p => {
       const dir = p.direccion;
@@ -14332,7 +14332,7 @@ function renderMercado() {
   }
 
   // Si es FREE, mostrar paywall sobre la tabla
-  const esVIP = window.usuarioVIP === true || (typeof window.usuario !== 'undefined' && window.usuario && window.usuario.vip === true) || document.body.classList.contains('is-vip');
+  const esVIP = typeof esVIPActivo === 'function' ? esVIPActivo() : false;
 
   // Limpiar paywall previo
   const paywallExistente = tablaWrap?.querySelector('.mercado-paywall-overlay');
@@ -14368,7 +14368,7 @@ function filtrarMercado(cat, btn) {
 
 // Abrir modal de detalle
 function abrirMercadoDetalle(id) {
-  const esVIP = window.usuarioVIP === true || (typeof window.usuario !== 'undefined' && window.usuario && window.usuario.vip === true) || document.body.classList.contains('is-vip');
+  const esVIP = typeof esVIPActivo === 'function' ? esVIPActivo() : false;
 
   // Si es FREE, abrir paywall directo
   if (!esVIP) {
