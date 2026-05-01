@@ -5892,6 +5892,294 @@
   }
   body.dark-mode .mercado-detalle-region-info strong { color: #6ee7a3; }
 
+  /* ═══ MEJORAS V2: Stats banner + Cards móvil + Animaciones ═══ */
+
+  /* Patrón decorativo del hero */
+  .mercado-hero__pattern {
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(134,239,172,0.10) 0%, transparent 70%),
+      conic-gradient(from 45deg at 50% 50%, transparent 0deg, rgba(82,201,122,0.08) 90deg, transparent 180deg, rgba(134,239,172,0.06) 270deg, transparent 360deg);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: mercadoHeroPatternRotate 60s linear infinite;
+  }
+  @keyframes mercadoHeroPatternRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Stats banner del hero */
+  .mercado-hero__stats {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    margin-top: 22px;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 14px;
+    backdrop-filter: blur(8px);
+  }
+  .mercado-stat {
+    flex: 1;
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  .mercado-stat:hover { transform: translateY(-2px); }
+  .mercado-stat__num {
+    font-family: 'Space Grotesk', monospace, var(--font);
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mercado-stat__num--up   { color: #6ee7a3; }
+  .mercado-stat__num--down { color: #fca5a5; }
+  .mercado-stat__num--flat { color: #cbd5e1; }
+  .mercado-stat__lbl {
+    font-size: 0.66rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .mercado-stat-sep {
+    width: 1px;
+    height: 32px;
+    background: rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+
+  /* Sparkline mejorado con glow */
+  .mercado-row__spark-svg path[stroke="#16a34a"] {
+    filter: drop-shadow(0 0 4px rgba(22,163,74,0.4));
+  }
+  .mercado-row__spark-svg path[stroke="#dc2626"] {
+    filter: drop-shadow(0 0 4px rgba(220,38,38,0.35));
+  }
+
+  /* Tabla mejorada con micro-interacciones */
+  .mercado-row {
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+  .mercado-row:hover {
+    transform: translateX(2px);
+  }
+  .mercado-row__emoji {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .mercado-row:hover .mercado-row__emoji {
+    transform: scale(1.1) rotate(-3deg);
+  }
+  .mercado-row__cambio {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .mercado-row__cambio--up   { background: rgba(22,163,74,0.10); color: #15803d; }
+  .mercado-row__cambio--down { background: rgba(220,38,38,0.10); color: #b91c1c; }
+  .mercado-row__cambio--flat { background: rgba(148,163,160,0.10); color: #64748b; }
+
+  /* Cards móvil */
+  .mercado-cards {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+  }
+  .mercado-card {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 12px;
+    padding: 14px;
+    background: var(--card, #fff);
+    border: 1px solid var(--border, #e8ede5);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .mercado-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.2s ease;
+  }
+  .mercado-card:hover { border-color: rgba(26,107,47,0.3); transform: translateY(-1px); box-shadow: 0 6px 18px -8px rgba(0,0,0,0.12); }
+  .mercado-card:hover::before { background: linear-gradient(180deg, #52c97a, #1a6b2f); }
+  .mercado-card__emoji {
+    font-size: 1.6rem;
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, rgba(26,107,47,0.08), rgba(82,201,122,0.04));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mercado-card__body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .mercado-card__nombre {
+    font-weight: 700;
+    color: var(--text, #1a2010);
+    font-size: 0.95rem;
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+  .mercado-card__variedad {
+    font-size: 0.74rem;
+    color: #94a3a0;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mercado-card__spark {
+    margin-top: 6px;
+  }
+  .mercado-card__spark svg {
+    width: 100%; height: 22px;
+  }
+  .mercado-card__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+  }
+  .mercado-card__precio {
+    font-family: 'Space Grotesk', monospace, var(--font);
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--text, #1a2010);
+    font-variant-numeric: tabular-nums;
+  }
+  .mercado-card__precio-sub {
+    font-size: 0.62rem;
+    color: #94a3a0;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .mercado-card__cambio {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'Space Grotesk', monospace, var(--font);
+  }
+  .mercado-card__cambio--up   { background: rgba(22,163,74,0.10); color: #15803d; }
+  .mercado-card__cambio--down { background: rgba(220,38,38,0.10); color: #b91c1c; }
+  .mercado-card__cambio--flat { background: rgba(148,163,160,0.10); color: #64748b; }
+  .mercado-card__precio-bloqueado {
+    color: #94a3a0;
+    font-size: 0.85rem;
+  }
+
+  /* Animación de entrada stagger */
+  @keyframes mercadoFadeInUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .mercado-row,
+  .mercado-card {
+    animation: mercadoFadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .mercado-row:nth-child(1),  .mercado-card:nth-child(1)  { animation-delay: 0.02s; }
+  .mercado-row:nth-child(2),  .mercado-card:nth-child(2)  { animation-delay: 0.04s; }
+  .mercado-row:nth-child(3),  .mercado-card:nth-child(3)  { animation-delay: 0.06s; }
+  .mercado-row:nth-child(4),  .mercado-card:nth-child(4)  { animation-delay: 0.08s; }
+  .mercado-row:nth-child(5),  .mercado-card:nth-child(5)  { animation-delay: 0.10s; }
+  .mercado-row:nth-child(6),  .mercado-card:nth-child(6)  { animation-delay: 0.12s; }
+  .mercado-row:nth-child(7),  .mercado-card:nth-child(7)  { animation-delay: 0.14s; }
+  .mercado-row:nth-child(8),  .mercado-card:nth-child(8)  { animation-delay: 0.16s; }
+  .mercado-row:nth-child(9),  .mercado-card:nth-child(9)  { animation-delay: 0.18s; }
+  .mercado-row:nth-child(n+10), .mercado-card:nth-child(n+10) { animation-delay: 0.20s; }
+
+  /* Empty state mejorado */
+  .mercado-empty__icon {
+    color: #94a3a0;
+    margin-bottom: 16px;
+  }
+  .mercado-empty__icon svg {
+    margin: 0 auto;
+    display: block;
+  }
+  .mercado-empty__btn {
+    margin-top: 18px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #1a6b2f, #0d3d19);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    font-family: var(--font), sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .mercado-empty__btn:hover { transform: translateY(-1px); }
+
+  /* Responsive: switch de tabla a cards en móvil */
+  @media (max-width: 720px) {
+    .mercado-tabla { display: none; }
+    .mercado-cards { display: flex; }
+    .mercado-tabla-wrap { padding: 0; }
+    .mercado-hero__stats {
+      padding: 12px 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .mercado-stat__num { font-size: 1.2rem; }
+    .mercado-stat__lbl { font-size: 0.6rem; letter-spacing: 0.05em; }
+    .mercado-stat-sep { display: none; }
+  }
+
+  /* Dark mode adicional */
+  body.dark-mode .mercado-card {
+    background: var(--card);
+    border-color: var(--border);
+  }
+  body.dark-mode .mercado-card:hover {
+    border-color: rgba(82,201,122,0.4);
+    box-shadow: 0 6px 18px -8px rgba(0,0,0,0.4);
+  }
+  body.dark-mode .mercado-card__emoji {
+    background: rgba(82,201,122,0.10);
+  }
+  body.dark-mode .mercado-card__nombre { color: #f0f4ee; }
+  body.dark-mode .mercado-card__variedad { color: #94a3a0; }
+  body.dark-mode .mercado-card__precio { color: #f0f4ee; }
+  body.dark-mode .mercado-row__cambio--up   { background: rgba(110,231,163,0.14); color: #6ee7a3; }
+  body.dark-mode .mercado-row__cambio--down { background: rgba(252,165,165,0.14); color: #fca5a5; }
+  body.dark-mode .mercado-row__cambio--flat { background: rgba(148,163,160,0.14); color: #cbd5e1; }
+  body.dark-mode .mercado-card__cambio--up   { background: rgba(110,231,163,0.14); color: #6ee7a3; }
+  body.dark-mode .mercado-card__cambio--down { background: rgba(252,165,165,0.14); color: #fca5a5; }
+  body.dark-mode .mercado-card__cambio--flat { background: rgba(148,163,160,0.14); color: #cbd5e1; }
+  body.dark-mode .mercado-empty__icon { color: #6b7a72; }
+
 </style>
 
 <div id="vipEpicOverlay">
@@ -7085,6 +7373,7 @@
       <!-- Hero -->
       <div class="mercado-hero">
         <div class="mercado-hero__bg"></div>
+        <div class="mercado-hero__pattern"></div>
         <div class="mercado-hero__content">
           <div class="mercado-hero__icon">
             <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="mercado-hero__icon-svg">
@@ -7104,9 +7393,48 @@
           <div class="mercado-hero__text">
             <div class="mercado-hero__kicker">PRECIOS DEL AGRO</div>
             <h2 class="mercado-hero__title">Mercado en tiempo real</h2>
-            <p class="mercado-hero__desc">Precios actualizados de frutas y hortalizas en centrales de abasto nacionales, con tendencias y datos de importación/exportación.</p>
+            <p class="mercado-hero__desc">Precios actualizados de frutas, verduras y granos en centrales de abasto nacionales, con tendencias y datos de importación/exportación.</p>
           </div>
         </div>
+
+        <!-- Stats banner -->
+        <div class="mercado-hero__stats" id="mercado-hero-stats">
+          <div class="mercado-stat">
+            <div class="mercado-stat__num" id="stat-total">19</div>
+            <div class="mercado-stat__lbl">Productos</div>
+          </div>
+          <div class="mercado-stat-sep"></div>
+          <div class="mercado-stat">
+            <div class="mercado-stat__num mercado-stat__num--up">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" style="vertical-align:1px;margin-right:2px;">
+                <path d="M6 2L11 8H1L6 2Z"/>
+              </svg>
+              <span id="stat-up">0</span>
+            </div>
+            <div class="mercado-stat__lbl">Subiendo</div>
+          </div>
+          <div class="mercado-stat-sep"></div>
+          <div class="mercado-stat">
+            <div class="mercado-stat__num mercado-stat__num--down">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" style="vertical-align:1px;margin-right:2px;">
+                <path d="M6 10L1 4H11L6 10Z"/>
+              </svg>
+              <span id="stat-down">0</span>
+            </div>
+            <div class="mercado-stat__lbl">Bajando</div>
+          </div>
+          <div class="mercado-stat-sep"></div>
+          <div class="mercado-stat">
+            <div class="mercado-stat__num mercado-stat__num--flat">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" style="vertical-align:1px;margin-right:2px;">
+                <rect x="2" y="5" width="8" height="2" rx="1"/>
+              </svg>
+              <span id="stat-flat">0</span>
+            </div>
+            <div class="mercado-stat__lbl">Estables</div>
+          </div>
+        </div>
+
         <div class="mercado-hero__updated">
           <span class="mercado-hero__updated-dot"></span>
           <span id="mercado-updated-txt">Actualizado: <strong>Hoy 06:00 AM</strong></span>
@@ -7188,7 +7516,7 @@
         </div>
       </div>
 
-      <!-- Tabla principal de productos -->
+      <!-- Tabla principal de productos (DESKTOP) -->
       <div class="mercado-tabla-wrap">
         <table class="mercado-tabla" id="mercado-tabla">
           <thead>
@@ -7204,10 +7532,23 @@
             <!-- Renderizado por JS -->
           </tbody>
         </table>
+        <!-- Cards (MÓVIL) -->
+        <div class="mercado-cards" id="mercado-cards">
+          <!-- Renderizado por JS -->
+        </div>
         <div class="mercado-empty" id="mercado-empty" style="display:none;">
-          <div class="mercado-empty__icon">🔍</div>
+          <div class="mercado-empty__icon">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <circle cx="28" cy="28" r="20" stroke="currentColor" stroke-width="2.5" opacity="0.4"/>
+              <path d="M44 44L56 56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+              <line x1="20" y1="28" x2="36" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+            </svg>
+          </div>
           <div class="mercado-empty__title">Sin resultados</div>
-          <div class="mercado-empty__desc">No encontramos productos con esos criterios. Prueba con otra categoría o búsqueda.</div>
+          <div class="mercado-empty__desc">No encontramos productos con esos criterios. Prueba con otra categoría o ajusta tus filtros.</div>
+          <button class="mercado-empty__btn" onclick="limpiarFiltrosAvanzados();filtrarMercado('todos',document.querySelector('.mercado-tab[data-cat=\u0022todos\u0022]'));document.getElementById('mercado-search').value='';renderMercado();">
+            Limpiar todo
+          </button>
         </div>
       </div>
 
@@ -14683,6 +15024,33 @@ function cambiarRegionMercado(region) {
   renderMercado();
 }
 
+// Actualizar stats globales del banner del hero
+function actualizarStatsMercado() {
+  const total = MERCADO_PRODUCTOS.length;
+  const subiendo = MERCADO_PRODUCTOS.filter(p => p.direccion === 'subida').length;
+  const bajando = MERCADO_PRODUCTOS.filter(p => p.direccion === 'bajada').length;
+  const estables = MERCADO_PRODUCTOS.filter(p => p.direccion === 'estable').length;
+
+  const elTotal = document.getElementById('stat-total');
+  const elUp    = document.getElementById('stat-up');
+  const elDown  = document.getElementById('stat-down');
+  const elFlat  = document.getElementById('stat-flat');
+
+  if (elTotal) elTotal.textContent = total;
+  if (elUp)    elUp.textContent = subiendo;
+  if (elDown)  elDown.textContent = bajando;
+  if (elFlat)  elFlat.textContent = estables;
+
+  // Actualizar fecha "Hoy"
+  const hoy = new Date();
+  const horas = hoy.getHours();
+  const minutos = String(hoy.getMinutes()).padStart(2, '0');
+  const ampm = horas >= 12 ? 'PM' : 'AM';
+  const horas12 = ((horas + 11) % 12) + 1;
+  const updEl = document.getElementById('mercado-updated-txt');
+  if (updEl) updEl.innerHTML = `Actualizado: <strong>Hoy ${horas12}:${minutos} ${ampm}</strong>`;
+}
+
 // Generar SVG sparkline (línea simple con color según tendencia)
 function generarSparkline(historial, direccion, ancho, alto) {
   const w = ancho || 110;
@@ -14755,9 +15123,13 @@ function generarSparklineGrande(historial, direccion) {
 // Renderizar tabla de productos
 function renderMercado() {
   const tbody = document.getElementById('mercado-tabla-body');
+  const cardsEl = document.getElementById('mercado-cards');
   const tablaWrap = document.querySelector('#page-mercado .mercado-tabla-wrap');
   const empty = document.getElementById('mercado-empty');
   if (!tbody) return;
+
+  // Actualizar stats globales (se calcula sobre TODOS los productos, no filtrados)
+  actualizarStatsMercado();
 
   // Filtrar
   const search = (document.getElementById('mercado-search')?.value || '').toLowerCase().trim();
@@ -14796,6 +15168,7 @@ function renderMercado() {
 
   if (lista.length === 0) {
     tbody.innerHTML = '';
+    if (cardsEl) cardsEl.innerHTML = '';
     if (empty) empty.style.display = 'block';
   } else {
     if (empty) empty.style.display = 'none';
@@ -14803,6 +15176,7 @@ function renderMercado() {
     // Determinar si es VIP usando la función oficial del portal
     const esVIP = typeof esVIPActivo === 'function' ? esVIPActivo() : false;
 
+    // Render tabla DESKTOP
     tbody.innerHTML = lista.map(p => {
       const dir = p.direccion;
       const cambioCls = dir === 'subida' ? 'mercado-row__cambio--up' :
@@ -14810,7 +15184,6 @@ function renderMercado() {
       const arrow = dir === 'subida' ? '▲' : dir === 'bajada' ? '▼' : '─';
       const cambioStr = (p.cambio_pct > 0 ? '+' : '') + p.cambio_pct.toFixed(1) + '%';
 
-      // Si es FREE, ocultar precios reales
       const precioCelda = esVIP
         ? `<div class="mercado-row__precio">$${p.precio_nacional}</div><div class="mercado-row__precio-sub">MXN/kg</div>`
         : `<div class="mercado-row__precio-bloqueado">
@@ -14825,7 +15198,7 @@ function renderMercado() {
         : `<div class="mercado-row__precio-bloqueado">$ ─ ─</div>`;
 
       const cambioCelda = esVIP
-        ? `<span class="mercado-row__cambio ${cambioCls}"><span class="mercado-row__cambio-arrow">${arrow}</span>${cambioStr}</span>`
+        ? `<span class="mercado-row__cambio ${cambioCls}"><span>${arrow}</span>${cambioStr}</span>`
         : `<span class="mercado-row__precio-bloqueado">─</span>`;
 
       return `
@@ -14845,6 +15218,40 @@ function renderMercado() {
         <td>${cambioCelda}</td>
       </tr>`;
     }).join('');
+
+    // Render cards MÓVIL
+    if (cardsEl) {
+      cardsEl.innerHTML = lista.map(p => {
+        const dir = p.direccion;
+        const cambioCls = dir === 'subida' ? 'mercado-card__cambio--up' :
+                          dir === 'bajada' ? 'mercado-card__cambio--down' : 'mercado-card__cambio--flat';
+        const arrow = dir === 'subida' ? '▲' : dir === 'bajada' ? '▼' : '─';
+        const cambioStr = (p.cambio_pct > 0 ? '+' : '') + p.cambio_pct.toFixed(1) + '%';
+
+        const precioBlock = esVIP
+          ? `<div class="mercado-card__precio">$${p.precio_nacional}</div>
+             <div class="mercado-card__precio-sub">MXN/kg</div>
+             <span class="mercado-card__cambio ${cambioCls}">${arrow} ${cambioStr}</span>`
+          : `<div class="mercado-card__precio-bloqueado">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="vertical-align:-2px;margin-right:3px;">
+                <rect x="3" y="7" width="10" height="7" rx="1.4" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>VIP</div>`;
+
+        return `
+        <div class="mercado-card" onclick="abrirMercadoDetalle('${p.id}')">
+          <div class="mercado-card__emoji">${p.emoji}</div>
+          <div class="mercado-card__body">
+            <div class="mercado-card__nombre">${p.nombre}</div>
+            <div class="mercado-card__variedad">${p.variedad}</div>
+            <div class="mercado-card__spark">${generarSparkline(p.historial, p.direccion, 200, 22)}</div>
+          </div>
+          <div class="mercado-card__right">
+            ${precioBlock}
+          </div>
+        </div>`;
+      }).join('');
+    }
   }
 
   // Si es FREE, mostrar paywall sobre la tabla
@@ -15107,6 +15514,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (select) select.value = _mercadoRegionActual;
   }
 });
+
+// 🔧 EXPORTAR FUNCIONES A WINDOW (necesario para onclick inline en HTML)
+window.cambiarRegionMercado    = cambiarRegionMercado;
+window.actualizarStatsMercado  = actualizarStatsMercado;
+window.renderMercado           = renderMercado;
+window.filtrarMercado          = filtrarMercado;
+window.abrirMercadoDetalle     = abrirMercadoDetalle;
+window.cerrarMercadoDetalle    = cerrarMercadoDetalle;
+window.toggleFavorito          = toggleFavorito;
+window.abrirFiltrosAvanzados   = abrirFiltrosAvanzados;
+window.cerrarFiltrosAvanzados  = cerrarFiltrosAvanzados;
+window.aplicarFiltrosAvanzados = aplicarFiltrosAvanzados;
+window.limpiarFiltrosAvanzados = limpiarFiltrosAvanzados;
+
 </script>
   <!-- BOTTOM NAV (móvil) -->
   <nav class="bottom-nav">
