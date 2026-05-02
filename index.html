@@ -5510,6 +5510,10 @@
   .mercado-row__precio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 800; font-size: 1.18rem; color: var(--text, #1a2010); font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -0.01em; }
   .mercado-row__precio-sub { text-align: right; font-size: 0.66rem; color: #94a3a0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; opacity: 0.75; }
   .mercado-row__precio-bloqueado { text-align: right; color: #94a3a0; font-size: 0.85rem; }
+  /* Alinear celdas numéricas a la derecha (Nacional, Importación, Cambio) */
+  .mercado-tabla td:nth-child(2),
+  .mercado-tabla td:nth-child(3),
+  .mercado-tabla td:nth-child(5) { text-align: right; }
   .mercado-row__spark { text-align: center; }
   .mercado-row__spark-svg { width: 110px; height: 36px; display: block; margin: 0 auto; }
   .mercado-row__cambio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 700; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
@@ -6536,7 +6540,7 @@
           <polyline points="16 7 22 7 22 13"/>
         </svg>
       </span>
-      <span class="mobile-drawer__item-label">Mercado</span>
+      <span class="mobile-drawer__item-label">Predicción</span>
     </button>
 
     <div class="mobile-drawer__divider"></div>
@@ -6618,7 +6622,7 @@
         <div class="sidebar-subitem" onclick="irHerramienta('conversor',this)"><span>📏</span> Conversor</div>
       </div>
       <div class="sidebar-item" onclick="showPage('apoyos',this)"><div class="sidebar-item-left"><span>🏛️</span> Apoyos gob.</div></div>
-      <div class="sidebar-item" onclick="showPage('mercado',this)"><div class="sidebar-item-left"><span>💹</span> Mercado</div></div>
+      <div class="sidebar-item" onclick="showPage('mercado',this)"><div class="sidebar-item-left"><span>💹</span> Predicción de mercado</div></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mi cuenta</div>
