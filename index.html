@@ -5494,10 +5494,17 @@
   .mercado-tabla { width: 100%; border-collapse: collapse; font-family: var(--font), sans-serif; }
   .mercado-tabla thead { background: rgba(26,107,47,0.04); border-bottom: 1px solid var(--border, #e8ede5); }
   .mercado-tabla th { padding: 14px 16px; text-align: left; font-size: 0.7rem; font-weight: 800; color: #5a6758; letter-spacing: 0.08em; text-transform: uppercase; }
-  .mercado-tabla__th--num { text-align: right; }
-  .mercado-tabla__th--trend { width: 130px; }
-  .mercado-tabla__th--cambio { text-align: right; width: 90px; }
+  .mercado-tabla__th--num { text-align: right !important; }
+  .mercado-tabla__th--trend { width: 130px; text-align: center !important; }
+  .mercado-tabla__th--cambio { text-align: right !important; width: 90px; }
   .mercado-tabla__th--prod { width: 36%; }
+  /* Alinear celdas numéricas a la derecha (Nacional, Importación, Cambio) */
+  .mercado-tabla td.mercado-row__nacional,
+  .mercado-tabla td.mercado-row__import,
+  .mercado-tabla td.mercado-row__cambio-cell {
+    text-align: right !important;
+  }
+  .mercado-tabla td.mercado-row__spark { text-align: center !important; }
   .mercado-row { border-bottom: 1px solid var(--border, #e8ede5); cursor: pointer; transition: background 0.15s ease; }
   .mercado-row:last-child { border-bottom: none; }
   .mercado-row:hover { background: rgba(26,107,47,0.04); }
@@ -5510,10 +5517,6 @@
   .mercado-row__precio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 800; font-size: 1.18rem; color: var(--text, #1a2010); font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -0.01em; }
   .mercado-row__precio-sub { text-align: right; font-size: 0.66rem; color: #94a3a0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; opacity: 0.75; }
   .mercado-row__precio-bloqueado { text-align: right; color: #94a3a0; font-size: 0.85rem; }
-  /* Alinear celdas numéricas a la derecha (Nacional, Importación, Cambio) */
-  .mercado-tabla td:nth-child(2),
-  .mercado-tabla td:nth-child(3),
-  .mercado-tabla td:nth-child(5) { text-align: right; }
   .mercado-row__spark { text-align: center; }
   .mercado-row__spark-svg { width: 110px; height: 36px; display: block; margin: 0 auto; }
   .mercado-row__cambio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 700; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
@@ -15517,10 +15520,10 @@ function renderMercado() {
             </div>
           </div>
         </td>
-        <td>${precioCelda}</td>
-        <td class="mercado-row__hide-sm">${importCelda}</td>
+        <td class="mercado-row__nacional">${precioCelda}</td>
+        <td class="mercado-row__import mercado-row__hide-sm">${importCelda}</td>
         <td class="mercado-row__spark">${generarSparkline(p.historial, p.direccion)}</td>
-        <td>${cambioCelda}</td>
+        <td class="mercado-row__cambio-cell">${cambioCelda}</td>
       </tr>`;
     }).join('');
 
