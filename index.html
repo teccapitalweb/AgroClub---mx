@@ -6180,6 +6180,47 @@
   body.dark-mode .mercado-card__cambio--flat { background: rgba(148,163,160,0.14); color: #cbd5e1; }
   body.dark-mode .mercado-empty__icon { color: #6b7a72; }
 
+  /* Estados — botón Ver más / Ver menos */
+  .mercado-filtros-options--mas {
+    margin-top: 8px;
+    animation: estadosMasExpand 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes estadosMasExpand {
+    from { opacity: 0; max-height: 0; }
+    to   { opacity: 1; max-height: 600px; }
+  }
+  .mercado-estados-mas-btn {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px dashed rgba(26,107,47,0.30);
+    border-radius: 100px;
+    font-family: var(--font), sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: #1a6b2f;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .mercado-estados-mas-btn:hover {
+    background: rgba(26,107,47,0.06);
+    border-color: rgba(26,107,47,0.50);
+    border-style: solid;
+  }
+  .mercado-estados-mas-btn--abierto svg { transform: rotate(180deg); }
+
+  body.dark-mode .mercado-estados-mas-btn {
+    color: #6ee7a3;
+    border-color: rgba(110,231,163,0.30);
+  }
+  body.dark-mode .mercado-estados-mas-btn:hover {
+    background: rgba(110,231,163,0.08);
+    border-color: rgba(110,231,163,0.50);
+  }
+
 </style>
 
 <div id="vipEpicOverlay">
@@ -7690,6 +7731,8 @@
         <!-- Filtro: Variedad/región -->
         <div class="mercado-filtros-section">
           <div class="mercado-filtros-section__title">🌎 Estado productor</div>
+
+          <!-- Top productores agrícolas (siempre visibles) -->
           <div class="mercado-filtros-options">
             <button class="mercado-filtro-opt mercado-filtro-opt--active" data-filtro="estado" data-val="todos">Todos</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Sinaloa">Sinaloa</button>
@@ -7704,6 +7747,39 @@
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Tamaulipas">Tamaulipas</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Zacatecas">Zacatecas</button>
           </div>
+
+          <!-- Estados restantes (ocultos por defecto, se expanden con el botón) -->
+          <div class="mercado-filtros-options mercado-filtros-options--mas" id="estados-mas" style="display:none;">
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Aguascalientes">Aguascalientes</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Baja California">Baja California</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Baja California Sur">Baja California Sur</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Campeche">Campeche</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Coahuila">Coahuila</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Colima">Colima</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Ciudad de México">Ciudad de México</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Durango">Durango</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Estado de México">Estado de México</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Guerrero">Guerrero</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Hidalgo">Hidalgo</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Morelos">Morelos</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Nayarit">Nayarit</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Nuevo León">Nuevo León</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Oaxaca">Oaxaca</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Puebla">Puebla</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Querétaro">Querétaro</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Quintana Roo">Quintana Roo</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="San Luis Potosí">San Luis Potosí</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Tlaxcala">Tlaxcala</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Yucatán">Yucatán</button>
+          </div>
+
+          <!-- Botón expandir/contraer -->
+          <button type="button" class="mercado-estados-mas-btn" id="btn-estados-mas" onclick="toggleEstadosMas()">
+            <span id="btn-estados-mas-txt">+ Ver los 32 estados</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" id="btn-estados-mas-icon" style="transition: transform 0.25s ease;">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
 
         <div class="mercado-filtros-modal__footer">
@@ -15447,6 +15523,21 @@ function abrirFiltrosAvanzados() {
       btn.classList.remove('mercado-filtro-opt--active');
     }
   });
+
+  // Si el estado seleccionado está dentro del bloque "más estados", abrirlo automáticamente
+  const estadoSel = _mercadoFiltros.estado;
+  const panel = document.getElementById('estados-mas');
+  if (panel && estadoSel && estadoSel !== 'todos') {
+    const estaEnPanel = panel.querySelector(`.mercado-filtro-opt[data-val="${estadoSel}"]`);
+    if (estaEnPanel) {
+      panel.style.display = 'flex';
+      const btn = document.getElementById('btn-estados-mas');
+      const txt = document.getElementById('btn-estados-mas-txt');
+      if (btn) btn.classList.add('mercado-estados-mas-btn--abierto');
+      if (txt) txt.textContent = '− Mostrar solo los principales';
+    }
+  }
+
   document.getElementById('mercado-filtros-modal').classList.add('is-open');
   document.body.style.overflow = 'hidden';
 }
@@ -15504,7 +15595,34 @@ function limpiarFiltrosAvanzados() {
   // Ocultar contador
   const countEl = document.getElementById('mercado-filtros-count');
   if (countEl) countEl.style.display = 'none';
+  // Cerrar panel de más estados si está abierto
+  const panel = document.getElementById('estados-mas');
+  const btn = document.getElementById('btn-estados-mas');
+  const txt = document.getElementById('btn-estados-mas-txt');
+  if (panel && panel.style.display !== 'none') {
+    panel.style.display = 'none';
+    if (btn) btn.classList.remove('mercado-estados-mas-btn--abierto');
+    if (txt) txt.textContent = '+ Ver los 32 estados';
+  }
   renderMercado();
+}
+
+// Toggle expandir/contraer los 21 estados restantes
+function toggleEstadosMas() {
+  const panel = document.getElementById('estados-mas');
+  const btn = document.getElementById('btn-estados-mas');
+  const txt = document.getElementById('btn-estados-mas-txt');
+  if (!panel || !btn || !txt) return;
+  const abierto = panel.style.display !== 'none';
+  if (abierto) {
+    panel.style.display = 'none';
+    btn.classList.remove('mercado-estados-mas-btn--abierto');
+    txt.textContent = '+ Ver los 32 estados';
+  } else {
+    panel.style.display = 'flex';
+    btn.classList.add('mercado-estados-mas-btn--abierto');
+    txt.textContent = '− Mostrar solo los principales';
+  }
 }
 
 // Restaurar región seleccionada al cargar
@@ -15527,6 +15645,7 @@ window.abrirFiltrosAvanzados   = abrirFiltrosAvanzados;
 window.cerrarFiltrosAvanzados  = cerrarFiltrosAvanzados;
 window.aplicarFiltrosAvanzados = aplicarFiltrosAvanzados;
 window.limpiarFiltrosAvanzados = limpiarFiltrosAvanzados;
+window.toggleEstadosMas        = toggleEstadosMas;
 
 </script>
   <!-- BOTTOM NAV (móvil) -->
