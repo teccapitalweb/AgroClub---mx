@@ -13761,9 +13761,16 @@ async function desbloquearLogroExamen(correctas, total) {
     if (id === 'foro' && typeof renderForo === 'function') {
       renderForo();
     }
-    // 💹 Renderizar mercado cuando entra
+    // 💹 Renderizar mercado cuando entra (cargar de Firestore primero)
     if (id === 'mercado' && typeof renderMercado === 'function') {
+      // Render inmediato con datos actuales (fallback o último cache)
       renderMercado();
+      // Cargar Firestore en background (si hay nuevos datos, refresca)
+      if (typeof cargarMercadoFirestore === 'function') {
+        cargarMercadoFirestore().then(actualizado => {
+          if (actualizado) renderMercado(); // Re-render con datos frescos
+        });
+      }
     }
     if (id === 'notificaciones') {
       // 3 segundos: suficiente para leer lo nuevo antes de que desaparezcan
@@ -14754,7 +14761,9 @@ function genHist30(precioBase, direccion) {
 }
 
 // 15 productos AgroTec América con datos demo realistas (basados en SNIIM 2025-2026)
-const MERCADO_PRODUCTOS = [
+// 🔄 FALLBACK: Productos hardcoded por si Firestore falla o está vacío
+// El scraper SNIIM (Sesión 2) actualizará Firestore diariamente
+const MERCADO_PRODUCTOS_FALLBACK = [
   {
     id: 'aguacate_hass', nombre: 'Aguacate Hass', categoria: 'fruta', emoji: '🥑',
     variedad: 'Hass · Michoacán',
@@ -15023,10 +15032,90 @@ const MERCADO_PRODUCTOS = [
   }
 ];
 
-// Generar historiales 30 días para cada producto
-MERCADO_PRODUCTOS.forEach(p => {
+// Generar historiales 30 días para cada producto del fallback
+MERCADO_PRODUCTOS_FALLBACK.forEach(p => {
   p.historial = genHist30(p.precio_nacional, p.direccion);
 });
+
+// 💹 MERCADO_PRODUCTOS: array activo que muestra el portal
+// Arranca con el fallback. Si Firestore tiene datos → se reemplaza con esos.
+let MERCADO_PRODUCTOS = [...MERCADO_PRODUCTOS_FALLBACK];
+let _mercadoFuente = 'fallback'; // 'fallback' | 'firestore'
+let _mercadoUpdatedAt = null;
+
+// 🔥 Cargar productos desde Firestore (con fallback automático)
+async function cargarMercadoFirestore() {
+  try {
+    if (typeof firebase === 'undefined' || !firebase.firestore) {
+      console.log('[Mercado] Firebase no disponible, usando fallback hardcoded');
+      return false;
+    }
+
+    const db = firebase.firestore();
+    const snap = await db.collection('mercado_productos')
+      .orderBy('orden', 'asc')
+      .get();
+
+    if (snap.empty) {
+      console.log('[Mercado] Firestore vacío, usando fallback hardcoded');
+      return false;
+    }
+
+    const productos = [];
+    let ultimaActualizacion = null;
+
+    snap.forEach(doc => {
+      const data = doc.data();
+      // Validar campos mínimos
+      if (!data.nombre || !data.categoria || typeof data.precio_nacional !== 'number') {
+        console.warn('[Mercado] Producto con datos incompletos, ignorando:', doc.id);
+        return;
+      }
+
+      // Construir producto en formato del portal
+      const producto = {
+        id: doc.id,
+        nombre: data.nombre,
+        categoria: data.categoria,
+        emoji: data.emoji || '📦',
+        variedad: data.variedad || '',
+        precio_nacional: data.precio_nacional,
+        precio_import: data.precio_import || 0,
+        precio_export: data.precio_export || 0,
+        cambio_pct: data.cambio_pct || 0,
+        direccion: data.direccion || 'estable',
+        centrales: Array.isArray(data.centrales) ? data.centrales : [],
+        estacional: data.estacional || 'Información de estacionalidad no disponible.',
+        historial: Array.isArray(data.historial_30d) && data.historial_30d.length > 0
+          ? data.historial_30d
+          : genHist30(data.precio_nacional, data.direccion || 'estable')
+      };
+
+      productos.push(producto);
+
+      // Track más reciente
+      if (data.updated_at && (!ultimaActualizacion || data.updated_at.seconds > ultimaActualizacion.seconds)) {
+        ultimaActualizacion = data.updated_at;
+      }
+    });
+
+    if (productos.length === 0) {
+      console.log('[Mercado] Sin productos válidos en Firestore, usando fallback');
+      return false;
+    }
+
+    // Reemplazar array activo
+    MERCADO_PRODUCTOS = productos;
+    _mercadoFuente = 'firestore';
+    _mercadoUpdatedAt = ultimaActualizacion;
+    console.log(`[Mercado] ✅ ${productos.length} productos cargados desde Firestore`);
+    return true;
+
+  } catch (error) {
+    console.warn('[Mercado] Error al cargar de Firestore, usando fallback:', error.message);
+    return false;
+  }
+}
 
 // Estado actual
 let _mercadoCatActual = 'todos';
@@ -15117,14 +15206,40 @@ function actualizarStatsMercado() {
   if (elDown)  elDown.textContent = bajando;
   if (elFlat)  elFlat.textContent = estables;
 
-  // Actualizar fecha "Hoy"
-  const hoy = new Date();
-  const horas = hoy.getHours();
-  const minutos = String(hoy.getMinutes()).padStart(2, '0');
-  const ampm = horas >= 12 ? 'PM' : 'AM';
-  const horas12 = ((horas + 11) % 12) + 1;
+  // Actualizar fecha "Actualizado" - usa Firestore si hay, si no la hora actual
   const updEl = document.getElementById('mercado-updated-txt');
-  if (updEl) updEl.innerHTML = `Actualizado: <strong>Hoy ${horas12}:${minutos} ${ampm}</strong>`;
+  if (updEl) {
+    if (_mercadoFuente === 'firestore' && _mercadoUpdatedAt) {
+      // Fecha real del scraper SNIIM
+      const fecha = _mercadoUpdatedAt.toDate ? _mercadoUpdatedAt.toDate() : new Date(_mercadoUpdatedAt.seconds * 1000);
+      const ahora = new Date();
+      const diffMs = ahora - fecha;
+      const diffHoras = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffMin = Math.floor(diffMs / (1000 * 60));
+
+      let textoFecha;
+      if (diffMin < 60) textoFecha = `hace ${diffMin} min`;
+      else if (diffHoras < 24) textoFecha = `hace ${diffHoras}h`;
+      else {
+        const horas = fecha.getHours();
+        const minutos = String(fecha.getMinutes()).padStart(2, '0');
+        const ampm = horas >= 12 ? 'PM' : 'AM';
+        const horas12 = ((horas + 11) % 12) + 1;
+        const dia = fecha.getDate();
+        const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+        textoFecha = `${dia} ${meses[fecha.getMonth()]} · ${horas12}:${minutos} ${ampm}`;
+      }
+      updEl.innerHTML = `Datos SNIIM oficiales · <strong>${textoFecha}</strong>`;
+    } else {
+      // Fallback: hora del usuario (datos demo)
+      const hoy = new Date();
+      const horas = hoy.getHours();
+      const minutos = String(hoy.getMinutes()).padStart(2, '0');
+      const ampm = horas >= 12 ? 'PM' : 'AM';
+      const horas12 = ((horas + 11) % 12) + 1;
+      updEl.innerHTML = `Actualizado: <strong>Hoy ${horas12}:${minutos} ${ampm}</strong>`;
+    }
+  }
 }
 
 // Generar SVG sparkline (línea simple con color según tendencia)
@@ -15636,6 +15751,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 🔧 EXPORTAR FUNCIONES A WINDOW (necesario para onclick inline en HTML)
 window.cambiarRegionMercado    = cambiarRegionMercado;
 window.actualizarStatsMercado  = actualizarStatsMercado;
+window.cargarMercadoFirestore  = cargarMercadoFirestore;
 window.renderMercado           = renderMercado;
 window.filtrarMercado          = filtrarMercado;
 window.abrirMercadoDetalle     = abrirMercadoDetalle;
