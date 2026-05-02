@@ -5507,8 +5507,8 @@
   .mercado-row__nombre-wrap { min-width: 0; }
   .mercado-row__nombre { font-weight: 700; color: var(--text, #1a2010); font-size: 0.95rem; line-height: 1.2; }
   .mercado-row__variedad { font-size: 0.74rem; color: #94a3a0; margin-top: 2px; font-weight: 500; }
-  .mercado-row__precio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 800; font-size: 1.05rem; color: var(--text, #1a2010); font-variant-numeric: tabular-nums; }
-  .mercado-row__precio-sub { font-size: 0.7rem; color: #94a3a0; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
+  .mercado-row__precio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 800; font-size: 1.18rem; color: var(--text, #1a2010); font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -0.01em; }
+  .mercado-row__precio-sub { text-align: right; font-size: 0.66rem; color: #94a3a0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; opacity: 0.75; }
   .mercado-row__precio-bloqueado { text-align: right; color: #94a3a0; font-size: 0.85rem; }
   .mercado-row__spark { text-align: center; }
   .mercado-row__spark-svg { width: 110px; height: 36px; display: block; margin: 0 auto; }
@@ -6179,6 +6179,93 @@
   body.dark-mode .mercado-card__cambio--down { background: rgba(252,165,165,0.14); color: #fca5a5; }
   body.dark-mode .mercado-card__cambio--flat { background: rgba(148,163,160,0.14); color: #cbd5e1; }
   body.dark-mode .mercado-empty__icon { color: #6b7a72; }
+
+  /* ═══ Fuentes consultadas (multi-fuente) ═══ */
+  .mercado-detalle-fuentes {
+    background: linear-gradient(135deg, rgba(26,107,47,0.04), rgba(82,201,122,0.02));
+    border: 1px solid rgba(26,107,47,0.12);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 22px;
+  }
+  .mercado-detalle-fuentes__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .mercado-detalle-fuentes__title {
+    font-size: 0.74rem;
+    font-weight: 800;
+    color: #155827;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+  }
+  .mercado-detalle-fuentes__confianza {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    background: rgba(22,163,74,0.10);
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #15803d;
+  }
+  .mercado-detalle-fuentes__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 8px rgba(22,163,74,0.5);
+    animation: widgetDotPulse 1.8s infinite;
+  }
+  .mercado-detalle-fuentes__lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .mercado-fuente-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 11px;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(26,107,47,0.10);
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #5a6758;
+    transition: all 0.18s ease;
+  }
+  .mercado-fuente-chip--active {
+    background: #fff;
+    border-color: rgba(26,107,47,0.30);
+    color: #155827;
+    box-shadow: 0 2px 6px -2px rgba(26,107,47,0.12);
+  }
+  body.dark-mode .mercado-detalle-fuentes {
+    background: linear-gradient(135deg, rgba(82,201,122,0.06), rgba(26,107,47,0.04));
+    border-color: rgba(82,201,122,0.18);
+  }
+  body.dark-mode .mercado-detalle-fuentes__title { color: #6ee7a3; }
+  body.dark-mode .mercado-detalle-fuentes__confianza {
+    background: rgba(110,231,163,0.12);
+    color: #6ee7a3;
+  }
+  body.dark-mode .mercado-fuente-chip {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(82,201,122,0.10);
+    color: #94a3a0;
+  }
+  body.dark-mode .mercado-fuente-chip--active {
+    background: rgba(82,201,122,0.10);
+    border-color: rgba(82,201,122,0.30);
+    color: #6ee7a3;
+  }
 
   /* Estados — botón Ver más / Ver menos */
   .mercado-filtros-options--mas {
@@ -7599,7 +7686,7 @@
           <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.4"/>
           <path d="M7 4V7.5M7 10H7.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        Datos de referencia basados en SNIIM (SADER). Los precios pueden variar por región, calidad y temporada. Consulta con tu central de abasto local antes de cerrar operaciones comerciales.
+        Datos consolidados de <strong>SNIIM (SADER), SIAP, USDA Market News, CME (Bolsa de Chicago) y Hortomallas</strong>. Predicción basada en tendencias multi-fuente. Los precios pueden variar por región, calidad y temporada. Consulta con tu central de abasto local antes de cerrar operaciones comerciales.
       </div>
     </div>
 
@@ -7652,6 +7739,29 @@
             <div class="mercado-detalle-precio-card__lbl">📤 EXPORTACIÓN</div>
             <div class="mercado-detalle-precio-card__val" id="mercado-detalle-exp">—</div>
             <div class="mercado-detalle-precio-card__sub">USD/kg</div>
+          </div>
+        </div>
+
+        <!-- Fuentes consultadas -->
+        <div class="mercado-detalle-fuentes">
+          <div class="mercado-detalle-fuentes__head">
+            <div class="mercado-detalle-fuentes__title">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:-2px;margin-right:5px;">
+                <path d="M7 1L9 5L13 5.5L10 8.5L11 13L7 11L3 13L4 8.5L1 5.5L5 5L7 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="currentColor" fill-opacity="0.15"/>
+              </svg>
+              Fuentes consultadas
+            </div>
+            <div class="mercado-detalle-fuentes__confianza" id="mercado-detalle-confianza">
+              <span class="mercado-detalle-fuentes__dot"></span>
+              <span>Alta confianza</span>
+            </div>
+          </div>
+          <div class="mercado-detalle-fuentes__lista" id="mercado-detalle-fuentes-lista">
+            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="sniim">🏛️ SNIIM</span>
+            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="siap">📊 SIAP</span>
+            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="usda">🇺🇸 USDA</span>
+            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="cme">💰 CME</span>
+            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="hortomallas">🌱 Hortomallas</span>
           </div>
         </div>
 
