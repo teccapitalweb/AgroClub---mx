@@ -9098,10 +9098,10 @@
         </div>
 
         <!-- CANCELAR SUSCRIPCIÓN -->
-        <div class="sus-cancelar-card">
-          <div style="font-size:.9rem;font-weight:800;color:#b91c1c;margin-bottom:6px;font-family:var(--font-display);">⚠️ Cancelar membresía</div>
-          <p style="font-size:.82rem;color:#7f1d1d;line-height:1.6;margin-bottom:16px;">Si deseas cancelar tu membresía, tu acceso se mantendrá activo hasta la fecha de vencimiento actual. No se realizan reembolsos parciales.</p>
-          <button onclick="window.solicitarCancelacion()"
+        <div class="sus-cancelar-card" id="sus-cancelar-card">
+          <div style="font-size:.9rem;font-weight:800;color:#b91c1c;margin-bottom:6px;font-family:var(--font-display);" id="sus-cancelar-titulo">⚠️ Cancelar membresía</div>
+          <p style="font-size:.82rem;color:#7f1d1d;line-height:1.6;margin-bottom:16px;" id="sus-cancelar-desc">Si deseas cancelar tu membresía, tu acceso se mantendrá activo hasta la fecha de vencimiento actual. No se realizan reembolsos parciales.</p>
+          <button id="btn-cancelar-membresia" onclick="window.solicitarCancelacion()"
             style="background:#ef4444;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;">
             Cancelar membresía
           </button>
@@ -11003,22 +11003,14 @@ window.solicitarCancelacion = function() {
         btnNo.textContent = 'Cerrar';
         btnNo.disabled = false;
 
-        // 🚨 NUEVO: Mostrar banner inmediatamente sin recargar la página
-        if (fechaVenceTexto !== '—' && typeof window.mostrarBannerCancelacion === 'function') {
-          window.mostrarBannerCancelacion(fechaVenceTexto);
+        // 🚨 Mostrar banner inmediato + deshabilitar card (la función incluye ambos)
+        if (typeof window.mostrarBannerCancelacion === 'function') {
+          window.mostrarBannerCancelacion(fechaVenceTexto !== '—' ? fechaVenceTexto : 'fin del periodo pagado');
         }
-        // Actualizar currentUser para que respete el estado cancelado
+        // Actualizar currentUser
         if (window.currentUser) {
           window.currentUser._cancelado = true;
           window.currentUser.estado = 'cancelado';
-        }
-        // Cambiar el botón "Cancelar membresía" del perfil para evitar confusión
-        const btnCancelarPerfil = document.querySelector('button[onclick*="solicitarCancelacion"]');
-        if (btnCancelarPerfil) {
-          btnCancelarPerfil.textContent = '✓ Membresía cancelada';
-          btnCancelarPerfil.disabled = true;
-          btnCancelarPerfil.style.background = '#94a3b8';
-          btnCancelarPerfil.style.cursor = 'not-allowed';
         }
       } else {
         status.style.color = '#dc2626';
@@ -12159,26 +12151,34 @@ window.mostrarBannerCancelacion = function(fechaVence) {
 
   const banner = document.createElement('div');
   banner.id = '_banner-cancelado';
-  banner.style.cssText = `
-    position:fixed; top:0; left:0; right:0; z-index:9000;
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border-bottom: 2px solid #f59e0b;
-    padding: 11px 16px;
-    text-align: center;
-    font-size: 0.86rem;
-    color: #422006;
-    font-weight: 700;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
-    display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
-    font-family: var(--font), sans-serif;
-  `;
+  // Usar !important en TODOS los estilos para evitar override del modo oscuro
+  banner.setAttribute('style', `
+    position:fixed !important;
+    top:0 !important; left:0 !important; right:0 !important;
+    z-index:9000 !important;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+    border-bottom: 2px solid #d97706 !important;
+    padding: 12px 16px !important;
+    text-align: center !important;
+    font-size: 0.86rem !important;
+    color: #422006 !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    font-family: var(--font), sans-serif !important;
+  `.replace(/\s+/g, ' ').trim());
+
   banner.innerHTML = `
-    <span style="display:inline-flex;align-items:center;gap:6px;">
-      <span style="font-size:1rem;">⚠️</span>
-      <span>Tu membresía está cancelada · Acceso VIP activo hasta el <strong style="color:#78350f;">${fechaVence}</strong></span>
+    <span style="display:inline-flex !important;align-items:center !important;gap:8px !important;color:#422006 !important;">
+      <span style="font-size:1.05rem;color:#d97706 !important;">⚠️</span>
+      <span style="color:#422006 !important;">Tu membresía está cancelada · Acceso VIP activo hasta el <strong style="color:#78350f !important;font-weight:900 !important;">${fechaVence}</strong></span>
     </span>
     <button onclick="window.reactivarMembresia && window.reactivarMembresia()"
-      style="background:#1a6b2f;color:#fff;border:none;padding:7px 18px;border-radius:100px;font-weight:800;font-size:.78rem;cursor:pointer;font-family:inherit;letter-spacing:.02em;box-shadow:0 2px 6px rgba(26,107,47,.3);transition:transform .15s ease;"
+      style="background:#1a6b2f !important;color:#fff !important;border:none !important;padding:8px 18px !important;border-radius:100px !important;font-weight:800 !important;font-size:.78rem !important;cursor:pointer !important;font-family:inherit !important;letter-spacing:.02em !important;box-shadow:0 2px 8px rgba(26,107,47,.35) !important;transition:transform .15s ease !important;"
       onmouseover="this.style.transform='translateY(-1px)'"
       onmouseout="this.style.transform='translateY(0)'">
       🔄 Reactivar
@@ -12187,7 +12187,32 @@ window.mostrarBannerCancelacion = function(fechaVence) {
   document.body.appendChild(banner);
   // Empujar el contenido hacia abajo
   document.body.style.paddingTop = (banner.offsetHeight) + 'px';
+
+  // 🚨 NUEVO: Deshabilitar card de cancelar si está visible
+  deshabilitarCardCancelar(fechaVence);
 };
+
+// Deshabilitar la card "Cancelar membresía" del perfil cuando ya está cancelada
+function deshabilitarCardCancelar(fechaVence) {
+  const btn = document.getElementById('btn-cancelar-membresia');
+  const titulo = document.getElementById('sus-cancelar-titulo');
+  const desc = document.getElementById('sus-cancelar-desc');
+  const card = document.getElementById('sus-cancelar-card');
+
+  if (btn) {
+    btn.textContent = '✓ Membresía ya cancelada';
+    btn.disabled = true;
+    btn.setAttribute('style', 'background:#94a3b8 !important;color:#fff !important;border:none !important;border-radius:10px !important;padding:11px 20px !important;font-size:.85rem !important;font-weight:700 !important;cursor:not-allowed !important;font-family:var(--font) !important;display:flex !important;align-items:center !important;gap:8px !important;opacity:.7 !important;');
+    btn.onclick = null;
+  }
+  if (titulo) titulo.innerHTML = '✓ Membresía cancelada';
+  if (desc) {
+    desc.innerHTML = `Tu membresía ha sido cancelada. Mantienes acceso VIP completo hasta el <strong>${fechaVence || 'fin del periodo pagado'}</strong>. Después tu cuenta pasará a modo gratuito.`;
+  }
+  if (card) {
+    card.style.opacity = '0.85';
+  }
+}
 
 // Reactivar membresía (placeholder, redirige a landing de pago)
 window.reactivarMembresia = function() {
