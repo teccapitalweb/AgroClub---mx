@@ -4739,6 +4739,461 @@
       .logro-toast__title { font-size: 1.2rem; }
     }
 
+    /* ═══════════════════════════════════════════════════════ */
+    /* 🎥 REDISEÑO WEBINARS — Hero + Próximas + Pasadas       */
+    /* ═══════════════════════════════════════════════════════ */
+    .webinar-page-header {
+      margin-bottom: 24px;
+      padding: 4px 0;
+    }
+    .webinar-page-header__title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--ink, #0d1813);
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+    .webinar-page-header__subtitle {
+      font-size: 0.92rem;
+      color: var(--muted, #5a6758);
+      margin: 0;
+      line-height: 1.5;
+    }
+    body.dark-mode .webinar-page-header__title { color: #f0f4ee; }
+
+    /* === HERO destacado del próximo webinar === */
+    .webinar-hero {
+      position: relative;
+      background: linear-gradient(135deg, #0d3d19 0%, #1a6b2f 50%, #0a2d12 100%);
+      border-radius: 28px;
+      padding: 32px 28px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      color: #fff;
+      box-shadow:
+        0 24px 60px rgba(13, 61, 25, 0.35),
+        0 0 0 1px rgba(82, 201, 122, 0.18),
+        0 0 100px rgba(82, 201, 122, 0.12);
+    }
+    .webinar-hero.is-live {
+      background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #7f1d1d 100%);
+      box-shadow:
+        0 24px 60px rgba(185, 28, 28, 0.35),
+        0 0 0 1px rgba(248, 113, 113, 0.25),
+        0 0 100px rgba(248, 113, 113, 0.18);
+    }
+    .webinar-hero__rays {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.06) 30deg, transparent 60deg, rgba(82,201,122,0.10) 90deg, transparent 120deg, rgba(255,255,255,0.06) 150deg, transparent 180deg, rgba(82,201,122,0.10) 210deg, transparent 240deg, rgba(255,255,255,0.06) 270deg, transparent 300deg, rgba(82,201,122,0.10) 330deg, transparent 360deg);
+      animation: webinarRaysRotate 25s linear infinite;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    @keyframes webinarRaysRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .webinar-hero__sparkles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .webinar-hero__sparkles span {
+      position: absolute;
+      top: 20%;
+      font-size: 1rem;
+      animation: webinarSparkle 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+      opacity: 0.6;
+    }
+    @keyframes webinarSparkle {
+      0%, 100% { opacity: 0; transform: translateY(0) scale(0.6); }
+      50%      { opacity: 0.8; transform: translateY(-20px) scale(1.2); }
+    }
+    .webinar-hero__inner {
+      position: relative;
+      z-index: 2;
+    }
+    .webinar-hero__kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #fcd34d;
+      background: rgba(0, 0, 0, 0.22);
+      padding: 7px 14px;
+      border-radius: 100px;
+      border: 1px solid rgba(252, 211, 77, 0.3);
+      margin-bottom: 16px;
+    }
+    .webinar-hero.is-live .webinar-hero__kicker {
+      color: #fff;
+      background: rgba(0, 0, 0, 0.35);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .webinar-hero__live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      animation: liveDotPulse 1.2s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    @keyframes liveDotPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+      50%      { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+    }
+    .webinar-hero__title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0 0 14px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .webinar-hero__instructor,
+    .webinar-hero__fecha {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.94rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 6px;
+    }
+    .webinar-hero__instructor span {
+      font-weight: 600;
+      color: #fff;
+    }
+    .webinar-hero__desc {
+      font-size: 0.88rem;
+      color: rgba(255, 255, 255, 0.78);
+      margin: 12px 0 0;
+      line-height: 1.55;
+    }
+    .webinar-hero__cd {
+      margin-top: 22px;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.28);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(4px);
+    }
+    .webinar-hero__cd-label {
+      font-size: 0.70rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .webinar-hero__cd-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .webinar-hero__cd-cell {
+      flex: 1;
+      max-width: 80px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 6px 10px;
+      text-align: center;
+    }
+    .webinar-hero__cd-num {
+      font-family: 'Space Grotesk', monospace, var(--font);
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .webinar-hero__cd-lbl {
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 5px;
+    }
+    .webinar-hero__cd-sep {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.35);
+      align-self: flex-start;
+      margin-top: 12px;
+    }
+    .webinar-hero__live {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.05em;
+      padding: 10px;
+    }
+    .webinar-hero__actions {
+      margin-top: 22px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .webinar-hero__btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 22px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 800;
+      font-size: 0.94rem;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.01em;
+    }
+    .webinar-hero__btn--primary {
+      background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+      color: #422006;
+      box-shadow: 0 10px 28px rgba(252, 211, 77, 0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+    .webinar-hero__btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(252, 211, 77, 0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+    .webinar-hero__btn--live {
+      background: #fff;
+      color: #b91c1c;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    }
+    .webinar-hero__btn--live:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+    }
+
+    /* === Sección (Próximas / Pasadas) === */
+    .webinar-section {
+      margin-bottom: 28px;
+    }
+    .webinar-section__header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 0 4px;
+    }
+    .webinar-section__title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--ink, #0d1813);
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+    body.dark-mode .webinar-section__title { color: #f0f4ee; }
+    .webinar-section__count {
+      background: var(--verde, #1a6b2f);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.04em;
+    }
+    .webinar-section__list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* === Cards de webinar (próximas y pasadas) === */
+    .webinar-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border, rgba(0,0,0,0.08));
+      border-radius: 16px;
+      padding: 14px 16px;
+      transition: all 0.15s ease;
+    }
+    .webinar-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      border-color: rgba(82, 201, 122, 0.4);
+    }
+    body.dark-mode .webinar-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    body.dark-mode .webinar-card:hover {
+      background: rgba(82, 201, 122, 0.06);
+      border-color: rgba(82, 201, 122, 0.3);
+    }
+    .webinar-card__date {
+      flex-shrink: 0;
+      width: 56px;
+      height: 60px;
+      background: linear-gradient(135deg, #1a6b2f, #0d3d19);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(26, 107, 47, 0.25);
+    }
+    .webinar-card__date--off {
+      background: rgba(0, 0, 0, 0.08);
+      color: var(--muted, #5a6758);
+      box-shadow: none;
+    }
+    body.dark-mode .webinar-card__date--off {
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .webinar-card__date-num {
+      font-family: 'Space Grotesk', monospace, var(--font);
+      font-size: 1.45rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .webinar-card__date-mes {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      margin-top: 2px;
+      opacity: 0.85;
+    }
+    .webinar-card__date-icon {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    .webinar-card__info {
+      flex: 1;
+      min-width: 0;
+    }
+    .webinar-card__title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--ink, #0d1813);
+      margin-bottom: 4px;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    body.dark-mode .webinar-card__title { color: #f0f4ee; }
+    .webinar-card--pasada .webinar-card__title { color: var(--muted, #5a6758); }
+    body.dark-mode .webinar-card--pasada .webinar-card__title { color: rgba(255,255,255,0.55); }
+    .webinar-card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--muted, #5a6758);
+    }
+    .webinar-card__meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .webinar-card__btn {
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #1a6b2f, #0d3d19);
+      color: #fff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      white-space: nowrap;
+    }
+    .webinar-card__btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26, 107, 47, 0.3); }
+    .webinar-card__finalizada {
+      flex-shrink: 0;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--muted, #5a6758);
+      background: rgba(0, 0, 0, 0.05);
+      padding: 5px 12px;
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+    }
+    body.dark-mode .webinar-card__finalizada {
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    /* === Empty state === */
+    .webinar-empty {
+      text-align: center;
+      padding: 50px 24px;
+      background: var(--card-bg, #fff);
+      border-radius: 20px;
+      border: 1px dashed var(--border, rgba(0,0,0,0.12));
+    }
+    .webinar-empty--mini { padding: 30px 20px; margin-bottom: 16px; }
+    body.dark-mode .webinar-empty {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .webinar-empty__icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+    .webinar-empty__title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink, #0d1813);
+      margin-bottom: 6px;
+    }
+    body.dark-mode .webinar-empty__title { color: #f0f4ee; }
+    .webinar-empty__desc {
+      font-size: 0.86rem;
+      color: var(--muted, #5a6758);
+      line-height: 1.5;
+    }
+
+    /* Responsive móvil */
+    @media (max-width: 600px) {
+      .webinar-page-header__title { font-size: 1.5rem; }
+      .webinar-hero { padding: 26px 20px; border-radius: 22px; }
+      .webinar-hero__title { font-size: 1.5rem; }
+      .webinar-hero__cd-cell { padding: 10px 4px 8px; }
+      .webinar-hero__cd-num { font-size: 1.4rem; }
+      .webinar-hero__cd-lbl { font-size: 0.6rem; }
+      .webinar-hero__cd-sep { font-size: 1.1rem; margin-top: 8px; }
+      .webinar-hero__btn { width: 100%; flex: 1 1 100%; }
+      .webinar-card { padding: 12px; gap: 10px; }
+      .webinar-card__date { width: 50px; height: 54px; }
+      .webinar-card__date-num { font-size: 1.25rem; }
+      .webinar-card__btn { padding: 8px 12px; font-size: 0.78rem; }
+    }
+
     /* Modal detalle de logro */
     .logro-detail-overlay {
       position: fixed;
@@ -7206,7 +7661,10 @@
 
     <!-- SESIONES EN VIVO -->
     <div class="page" id="page-sesiones">
-      <div class="section-header" style="margin-bottom:20px"><h3>🎥 Webinars</h3></div>
+      <div class="webinar-page-header">
+        <h2 class="webinar-page-header__title">🎥 Webinars VIP</h2>
+        <p class="webinar-page-header__subtitle">Sesiones en vivo con expertos del agro mexicano</p>
+      </div>
       <div id="lista-sesiones">
         <p style="color:var(--muted);font-size:.88rem;padding:20px;">Cargando sesiones...</p>
       </div>
@@ -10033,6 +10491,47 @@ function updateProgreso() {
 var _countdownInterval = null;
 var _proximaSesion = null;
 
+// 🔥 NUEVO: Sistema de countdown global para webinars
+let _webinarCountdownInterval = null;
+function formatearTiempoRestante(ms) {
+  if (ms <= 0) return null;
+  const seg = Math.floor(ms / 1000);
+  const dias = Math.floor(seg / 86400);
+  const horas = Math.floor((seg % 86400) / 3600);
+  const min = Math.floor((seg % 3600) / 60);
+  const segundos = seg % 60;
+  return { dias, horas, min, seg: segundos };
+}
+
+function actualizarCountdownHero() {
+  const heroEl = document.getElementById('webinar-hero-countdown');
+  if (!heroEl) return;
+  const fechaHoraIso = heroEl.getAttribute('data-fecha');
+  if (!fechaHoraIso) return;
+  const dt = new Date(fechaHoraIso);
+  const ahora = new Date();
+  const ms = dt - ahora;
+  if (ms <= 0) {
+    // Webinar ya empezó
+    heroEl.innerHTML = '<div class="webinar-hero__live">🔴 EN VIVO AHORA</div>';
+    return;
+  }
+  const t = formatearTiempoRestante(ms);
+  if (!t) return;
+  heroEl.innerHTML = `
+    <div class="webinar-hero__cd-label">⏰ COMIENZA EN</div>
+    <div class="webinar-hero__cd-grid">
+      <div class="webinar-hero__cd-cell"><div class="webinar-hero__cd-num">${String(t.dias).padStart(2,'0')}</div><div class="webinar-hero__cd-lbl">días</div></div>
+      <div class="webinar-hero__cd-sep">:</div>
+      <div class="webinar-hero__cd-cell"><div class="webinar-hero__cd-num">${String(t.horas).padStart(2,'0')}</div><div class="webinar-hero__cd-lbl">horas</div></div>
+      <div class="webinar-hero__cd-sep">:</div>
+      <div class="webinar-hero__cd-cell"><div class="webinar-hero__cd-num">${String(t.min).padStart(2,'0')}</div><div class="webinar-hero__cd-lbl">min</div></div>
+      <div class="webinar-hero__cd-sep">:</div>
+      <div class="webinar-hero__cd-cell"><div class="webinar-hero__cd-num">${String(t.seg).padStart(2,'0')}</div><div class="webinar-hero__cd-lbl">seg</div></div>
+    </div>
+  `;
+}
+
 function loadSesiones() {
   onSnapshot(collection(db, "sesiones"), (snap) => {
     var ahora = new Date();
@@ -10051,40 +10550,179 @@ function loadSesiones() {
     if (!lista) return;
 
     if (sesiones.length === 0) {
-      lista.innerHTML = '<p style="color:var(--muted);font-size:.88rem;padding:20px;">No hay sesiones programadas aún.</p>';
+      lista.innerHTML = `
+        <div class="webinar-empty">
+          <div class="webinar-empty__icon">🎥</div>
+          <div class="webinar-empty__title">No hay webinars programados aún</div>
+          <div class="webinar-empty__desc">Te avisaremos en cuanto agendemos uno nuevo.</div>
+        </div>`;
       actualizarWidget(null);
+      if (_webinarCountdownInterval) { clearInterval(_webinarCountdownInterval); _webinarCountdownInterval = null; }
       return;
     }
 
-    lista.innerHTML = sesiones.map(s => {
+    // 🚨 ZONA A: Separar en 3 grupos
+    const futuras = []; // todas las que aún no terminan
+    const enVivo = [];
+    const pasadas = [];
+    sesiones.forEach(s => {
       const dt = new Date(s.fechaHora);
-      const pasada = ahora > new Date(dt.getTime() + 60 * 60 * 1000); // pasada = 1 hora después
-      const esVivo = !pasada && (dt - ahora) < 15 * 60 * 1000; // en vivo: 15 min antes hasta 1h después
-      const fechaStr = dt.toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' })
-                     + ' · ' + dt.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
-      let dotClass = pasada ? 'proxima' : esVivo ? '' : 'proxima';
-      let metaIcon = pasada ? '✅' : esVivo ? '🔴' : '📅';
-      let metaTxt  = pasada ? 'Finalizada' : esVivo ? 'En vivo ahora' : 'Próxima · ' + fechaStr;
-      let accion = pasada
-        ? `<span style="font-size:.78rem;color:var(--muted);">Finalizada</span>`
-        : esVivo
-          ? `<a href="${s.link||'#'}" target="_blank"><button class="btn-unirse">🔴 Unirse</button></a>`
-          : `<button class="btn-proxima" onclick="agendarCalendario('${s.titulo}','${s.fechaHora}','${s.instructor||''}','${s.link||''}')">📅 Agendar</button>`;
-      return `
-        <div class="session-card" style="${pasada ? 'opacity:.55;' : ''}">
-          <div class="session-dot ${dotClass}"></div>
-          <div class="session-info">
-            <div class="session-titulo">${s.titulo}</div>
-            <div class="session-meta">${metaIcon} ${metaTxt}${s.instructor ? ' · '+s.instructor : ''}</div>
+      const pasada = ahora > new Date(dt.getTime() + 60 * 60 * 1000);
+      const esVivo = !pasada && (dt - ahora) < 15 * 60 * 1000;
+      if (pasada) pasadas.push(s);
+      else if (esVivo) enVivo.push(s);
+      else futuras.push(s);
+    });
+
+    // El próximo webinar es el primer "en vivo" o el primero futuro
+    const proximo = enVivo[0] || futuras[0] || null;
+    // El resto de futuras (sin contar el próximo)
+    const restoFuturas = enVivo.length > 0 ? futuras : futuras.slice(1);
+
+    let html = '';
+
+    // ═══ HERO: Próximo webinar (destacado) ═══
+    if (proximo) {
+      const dt = new Date(proximo.fechaHora);
+      const esVivo = (ahora >= new Date(dt.getTime() - 15*60*1000)) && (ahora <= new Date(dt.getTime() + 60*60*1000));
+      const diasSemana = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+      const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      const horas = dt.getHours();
+      const min = dt.getMinutes();
+      const ampm = horas >= 12 ? 'PM' : 'AM';
+      const horas12 = ((horas + 11) % 12) + 1;
+      const minStr = String(min).padStart(2, '0');
+      const fechaFmt = `${diasSemana[dt.getDay()]} ${dt.getDate()} de ${meses[dt.getMonth()]} · ${horas12}:${minStr} ${ampm}`;
+      const tituloEsc = String(proximo.titulo || 'Webinar').replace(/'/g, "\\'");
+      const fechaEsc = String(proximo.fechaHora || '').replace(/'/g, "\\'");
+      const instrEsc = String(proximo.instructor || '').replace(/'/g, "\\'");
+      const linkEsc = String(proximo.link || '').replace(/'/g, "\\'");
+
+      html += `
+        <div class="webinar-hero ${esVivo ? 'is-live' : ''}">
+          <div class="webinar-hero__rays"></div>
+          <div class="webinar-hero__sparkles">
+            ${Array.from({length:6}).map((_,i) => `<span style="left:${(15+i*15)}%;animation-delay:${(i*0.3).toFixed(1)}s;">✨</span>`).join('')}
           </div>
-          ${accion}
+          <div class="webinar-hero__inner">
+            <div class="webinar-hero__kicker">
+              ${esVivo
+                ? '<span class="webinar-hero__live-dot"></span> EN VIVO AHORA'
+                : '🎯 PRÓXIMO WEBINAR'}
+            </div>
+            <h2 class="webinar-hero__title">${escHtml(proximo.titulo || 'Webinar')}</h2>
+            ${proximo.instructor ? `<div class="webinar-hero__instructor">👤 <span>${escHtml(proximo.instructor)}</span></div>` : ''}
+            <div class="webinar-hero__fecha">📅 ${fechaFmt}</div>
+            ${proximo.descripcion ? `<div class="webinar-hero__desc">${escHtml(proximo.descripcion)}</div>` : ''}
+            <div class="webinar-hero__cd" id="webinar-hero-countdown" data-fecha="${escHtml(proximo.fechaHora)}"></div>
+            <div class="webinar-hero__actions">
+              ${esVivo
+                ? `<a href="${escHtml(proximo.link||'#')}" target="_blank" class="webinar-hero__btn webinar-hero__btn--live">🔴 Unirme ahora</a>`
+                : `<button class="webinar-hero__btn webinar-hero__btn--primary" onclick="agendarCalendario('${tituloEsc}','${fechaEsc}','${instrEsc}','${linkEsc}')">📅 Agendar en mi calendario</button>`}
+            </div>
+          </div>
         </div>`;
-    }).join("");
+
+      // Iniciar countdown en tiempo real
+      if (_webinarCountdownInterval) { clearInterval(_webinarCountdownInterval); }
+      setTimeout(() => {
+        actualizarCountdownHero();
+        _webinarCountdownInterval = setInterval(actualizarCountdownHero, 1000);
+      }, 50);
+    }
+
+    // ═══ ZONA: Próximas sesiones (sin el hero) ═══
+    if (restoFuturas.length > 0) {
+      html += `
+        <div class="webinar-section">
+          <div class="webinar-section__header">
+            <h3 class="webinar-section__title">📅 Próximas sesiones</h3>
+            <span class="webinar-section__count">${restoFuturas.length}</span>
+          </div>
+          <div class="webinar-section__list">
+            ${restoFuturas.map(s => renderWebinarCardFutura(s)).join('')}
+          </div>
+        </div>`;
+    }
+
+    // ═══ ZONA: Pasadas / Grabaciones ═══
+    if (pasadas.length > 0) {
+      html += `
+        <div class="webinar-section">
+          <div class="webinar-section__header">
+            <h3 class="webinar-section__title">🎬 Sesiones pasadas</h3>
+            <span class="webinar-section__count">${pasadas.length}</span>
+          </div>
+          <div class="webinar-section__list">
+            ${pasadas.slice().reverse().map(s => renderWebinarCardPasada(s)).join('')}
+          </div>
+        </div>`;
+    }
+
+    // Si no hay próximo (todas pasadas) y solo hay pasadas, mostrar mensaje arriba
+    if (!proximo && pasadas.length > 0) {
+      html = `
+        <div class="webinar-empty webinar-empty--mini">
+          <div class="webinar-empty__icon">📅</div>
+          <div class="webinar-empty__title">No hay webinars próximos</div>
+          <div class="webinar-empty__desc">Te avisaremos cuando se programe el siguiente.</div>
+        </div>` + html;
+    }
+
+    lista.innerHTML = html;
 
     // Próxima sesión futura para el widget
-    const proxima = sesiones.find(s => new Date(s.fechaHora) >= ahora);
-    actualizarWidget(proxima || null);
+    const proximaWidget = sesiones.find(s => new Date(s.fechaHora) >= ahora);
+    actualizarWidget(proximaWidget || null);
   });
+}
+
+// Render: card de sesión FUTURA (no destacada)
+function renderWebinarCardFutura(s) {
+  const dt = new Date(s.fechaHora);
+  const fechaStr = dt.toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' });
+  const horaStr = dt.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
+  const dia = dt.getDate();
+  const mesAbrev = dt.toLocaleDateString('es-MX', { month:'short' }).replace('.','');
+  const tituloEsc = String(s.titulo || 'Webinar').replace(/'/g, "\\'");
+  const fechaEsc = String(s.fechaHora || '').replace(/'/g, "\\'");
+  const instrEsc = String(s.instructor || '').replace(/'/g, "\\'");
+  const linkEsc = String(s.link || '').replace(/'/g, "\\'");
+  return `
+    <div class="webinar-card">
+      <div class="webinar-card__date">
+        <div class="webinar-card__date-num">${dia}</div>
+        <div class="webinar-card__date-mes">${mesAbrev}</div>
+      </div>
+      <div class="webinar-card__info">
+        <div class="webinar-card__title">${escHtml(s.titulo || 'Webinar')}</div>
+        <div class="webinar-card__meta">
+          ${s.instructor ? `<span>👤 ${escHtml(s.instructor)}</span>` : ''}
+          <span>🕒 ${horaStr}</span>
+        </div>
+      </div>
+      <button class="webinar-card__btn" onclick="agendarCalendario('${tituloEsc}','${fechaEsc}','${instrEsc}','${linkEsc}')">📅 Agendar</button>
+    </div>`;
+}
+
+// Render: card de sesión PASADA (finalizada, sin grabación según opción C)
+function renderWebinarCardPasada(s) {
+  const dt = new Date(s.fechaHora);
+  const fechaStr = dt.toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' });
+  return `
+    <div class="webinar-card webinar-card--pasada">
+      <div class="webinar-card__date webinar-card__date--off">
+        <div class="webinar-card__date-icon">✓</div>
+      </div>
+      <div class="webinar-card__info">
+        <div class="webinar-card__title">${escHtml(s.titulo || 'Webinar')}</div>
+        <div class="webinar-card__meta">
+          ${s.instructor ? `<span>👤 ${escHtml(s.instructor)}</span>` : ''}
+          <span>📅 ${fechaStr}</span>
+        </div>
+      </div>
+      <span class="webinar-card__finalizada">Finalizada</span>
+    </div>`;
 }
 
 function actualizarWidget(s) {
