@@ -4410,6 +4410,119 @@
       50%      { transform: scale(1.3) rotate(15deg); }
     }
 
+    /* ═══ FIX BUG 3: Toast celebratorio de logro desbloqueado ═══ */
+    #_logro-toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 360px;
+      background: linear-gradient(135deg, #fff 0%, #fffbeb 100%);
+      border: 2px solid #fcd34d;
+      border-radius: 24px;
+      padding: 30px 24px 24px;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25), 0 0 0 8px rgba(252, 211, 77, 0.15);
+      z-index: 999999;
+      animation: logroToastIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      overflow: hidden;
+    }
+    @keyframes logroToastIn {
+      0%   { opacity: 0; transform: translate(-50%, -40%) scale(0.7); }
+      60%  { opacity: 1; transform: translate(-50%, -52%) scale(1.05); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    .logro-toast__bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(252, 211, 77, 0.20) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .logro-toast__sparkles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .logro-toast__sparkles span {
+      position: absolute;
+      top: -10%;
+      font-size: 1.3rem;
+      animation: logroSparkleFall 2s ease-out infinite;
+    }
+    @keyframes logroSparkleFall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: translateY(400px) rotate(360deg); opacity: 0; }
+    }
+    .logro-toast__icon {
+      font-size: 4rem;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: logroIconBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+      filter: drop-shadow(0 6px 12px rgba(252, 211, 77, 0.5));
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes logroIconBounce {
+      0%   { transform: scale(0) rotate(-180deg); }
+      60%  { transform: scale(1.3) rotate(20deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .logro-toast__kicker {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #b45309;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 2;
+    }
+    .logro-toast__title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0d1813;
+      margin-bottom: 8px;
+      letter-spacing: -0.015em;
+      position: relative;
+      z-index: 2;
+    }
+    .logro-toast__desc {
+      font-size: 0.86rem;
+      color: #5a6758;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+    .logro-toast__btn {
+      background: linear-gradient(135deg, #1a6b2f, #0d3d19);
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(26, 107, 47, 0.3);
+      transition: transform 0.15s ease;
+      position: relative;
+      z-index: 2;
+    }
+    .logro-toast__btn:hover { transform: translateY(-1px); }
+    body.dark-mode #_logro-toast {
+      background: linear-gradient(135deg, #1a2025 0%, #1f1810 100%);
+      border-color: #fcd34d;
+      color: #f0f4ee;
+    }
+    body.dark-mode .logro-toast__title { color: #f0f4ee; }
+    body.dark-mode .logro-toast__desc { color: #94a3a0; }
+
     /* Modal detalle de logro */
     .logro-detail-overlay {
       position: fixed;
@@ -9072,9 +9185,25 @@ function renderCursos() {
     }
   }
 
-  // BIBLIOTECA: todos los cursos (desbloqueados + bloqueados con overlay)
+  // BIBLIOTECA: todos los cursos (desbloqueados primero, luego bloqueados por fecha)
+  // 🚨 FIX BUG 2: ordenar por desbloqueo + fecha
   const listaCursos = document.getElementById("lista-cursos");
-  if (listaCursos) listaCursos.innerHTML = CURSOS.map(renderCard).join("");
+  if (listaCursos) {
+    const cursosOrdenados = [...CURSOS].sort((a, b) => {
+      const aBloq = estaBloqueado(a);
+      const bBloq = estaBloqueado(b);
+      // 1. Desbloqueados primero
+      if (aBloq !== bBloq) return aBloq ? 1 : -1;
+      // 2. Dentro del mismo grupo, ordenar por fecha de desbloqueo (más cercana primero)
+      const fa = calcularFechaDesbloqueo(a);
+      const fb = calcularFechaDesbloqueo(b);
+      if (fa && fb) return fa - fb;
+      if (fa) return -1;
+      if (fb) return 1;
+      return 0;
+    });
+    listaCursos.innerHTML = cursosOrdenados.map(renderCard).join("");
+  }
 
   // Actualizar stats del hero
   const totalClases = CURSOS.reduce((acc, c) => acc + (c.clases?.length || 0), 0);
@@ -9088,6 +9217,15 @@ function renderCursos() {
 window.verCurso = function(cursoId) {
   const curso = CURSOS.find(c => c.id === cursoId);
   if (!curso) return;
+
+  // 🚨 FIX BUG 4: validar que el curso NO esté bloqueado (seguridad)
+  // Esto previene que alguien manipule el DOM o llame verCurso() desde consola
+  if (typeof estaCursoBloqueadoParaUsuario === 'function' && estaCursoBloqueadoParaUsuario(curso)) {
+    const fd = calcularFechaDesbloqueo(curso);
+    const fechaTexto = fd ? fd.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : 'próximamente';
+    alert(`🔒 Este curso aún no está disponible.\n\nSe desbloqueará el ${fechaTexto}.`);
+    return;
+  }
 
   // Header
   document.getElementById("detalle-header").innerHTML = `
@@ -9261,6 +9399,14 @@ window.reproducirClase = function(cursoId, numClase) {
   const curso = CURSOS.find(c => c.id === cursoId);
   const clase = curso?.clases.find(c => c.num === numClase);
   if (!clase) return;
+
+  // 🚨 FIX BUG 4: validar bloqueo antes de reproducir
+  if (curso && typeof estaCursoBloqueadoParaUsuario === 'function' && estaCursoBloqueadoParaUsuario(curso)) {
+    const fd = calcularFechaDesbloqueo(curso);
+    const fechaTexto = fd ? fd.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : 'próximamente';
+    alert(`🔒 Este curso aún no está disponible.\n\nSe desbloqueará el ${fechaTexto}.`);
+    return;
+  }
 
   // Update active class
   document.querySelectorAll(".clase-item").forEach(el => el.classList.remove("active"));
@@ -9860,6 +10006,29 @@ function cargarHistorialPagos(email) {
 window.solicitarCancelacion = function() {
   const email = currentUser ? currentUser.email : '';
 
+  // 🚨 FIX BUG 6: calcular fecha exacta hasta cuándo será VIP
+  let fechaVenceTexto = '—';
+  let diasRestantes = 0;
+  try {
+    // Buscar datos del usuario en cache (los mismos que muestra "perfil-vence")
+    const elVence = document.getElementById('sus-vence');
+    const elPerfilVence = document.getElementById('perfil-vence');
+    let venceTxt = (elVence && elVence.textContent && elVence.textContent !== '—') ? elVence.textContent.trim() : '';
+    if (!venceTxt && elPerfilVence) venceTxt = elPerfilVence.textContent.trim();
+
+    if (venceTxt && venceTxt !== '—' && venceTxt !== 'Procesando...') {
+      fechaVenceTexto = venceTxt;
+      // Intentar calcular días restantes (parsear formato "1 de mayo de 2026")
+      const meses = {'enero':0,'febrero':1,'marzo':2,'abril':3,'mayo':4,'junio':5,'julio':6,'agosto':7,'septiembre':8,'octubre':9,'noviembre':10,'diciembre':11};
+      const m = venceTxt.toLowerCase().match(/(\d+)\s+de\s+(\w+)\s+de\s+(\d+)/);
+      if (m) {
+        const fv = new Date(parseInt(m[3]), meses[m[2]], parseInt(m[1]));
+        const hoy = new Date(); hoy.setHours(0,0,0,0);
+        diasRestantes = Math.ceil((fv - hoy) / (1000*60*60*24));
+      }
+    }
+  } catch(e) { console.warn('[cancelar] No se pudo calcular fecha vence:', e); }
+
   // Crear modal de confirmación
   const old = document.getElementById('_modal-cancelar');
   if (old) old.remove();
@@ -9870,12 +10039,29 @@ window.solicitarCancelacion = function() {
     position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;
     display:flex;align-items:center;justify-content:center;padding:20px;
   `;
+
+  // Texto dinámico según si tenemos fecha o no
+  const infoFecha = fechaVenceTexto !== '—'
+    ? `
+      <div style="background:linear-gradient(135deg,#dbeafe,#eff6ff);border:1px solid #93c5fd;border-radius:12px;padding:14px 16px;margin-bottom:18px;text-align:left;">
+        <div style="font-size:.72rem;font-weight:800;color:#1e40af;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">📅 Tu acceso VIP continuará</div>
+        <div style="font-size:1.05rem;font-weight:800;color:#0c1d3d;margin-bottom:4px;">Hasta el ${fechaVenceTexto}</div>
+        ${diasRestantes > 0 ? `<div style="font-size:.78rem;color:#1e40af;font-weight:600;">Te quedan ${diasRestantes} ${diasRestantes === 1 ? 'día' : 'días'} de membresía premium</div>` : ''}
+      </div>
+    `
+    : `
+      <p style="font-size:.84rem;color:#555;line-height:1.6;margin-bottom:18px;">
+        Tu acceso VIP se mantendrá activo hasta la fecha de vencimiento actual.
+      </p>
+    `;
+
   modal.innerHTML = `
-    <div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:#fff;border-radius:20px;padding:28px 24px;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
       <div style="font-size:2.5rem;margin-bottom:12px;">⚠️</div>
-      <div style="font-size:1.05rem;font-weight:800;color:#b91c1c;margin-bottom:10px;font-family:var(--font-display);">¿Cancelar membresía?</div>
-      <p style="font-size:.84rem;color:#555;line-height:1.6;margin-bottom:20px;">
-        Tu acceso VIP se mantendrá activo hasta la fecha de vencimiento actual. <strong>No se realizan reembolsos parciales.</strong>
+      <div style="font-size:1.15rem;font-weight:800;color:#b91c1c;margin-bottom:10px;font-family:var(--font-display);">¿Cancelar membresía?</div>
+      ${infoFecha}
+      <p style="font-size:.78rem;color:#666;line-height:1.5;margin-bottom:18px;">
+        Podrás seguir usando todas las funciones VIP hasta la fecha indicada. <strong>No se realizan reembolsos parciales.</strong>
       </p>
       <div id="_cancel-status" style="font-size:.82rem;color:#666;margin-bottom:14px;min-height:18px;"></div>
       <div style="display:flex;gap:10px;justify-content:center;">
@@ -9913,7 +10099,11 @@ window.solicitarCancelacion = function() {
 
       if (res.ok) {
         status.style.color = '#16a34a';
-        status.textContent = '✅ Membresía cancelada. Tu acceso continúa hasta la fecha de vencimiento.';
+        if (fechaVenceTexto !== '—') {
+          status.innerHTML = `✅ Membresía cancelada.<br><strong>Sigues siendo VIP hasta el ${fechaVenceTexto}</strong>`;
+        } else {
+          status.textContent = '✅ Membresía cancelada. Tu acceso continúa hasta la fecha de vencimiento.';
+        }
         btnSi.style.display = 'none';
         btnNo.textContent = 'Cerrar';
         btnNo.disabled = false;
@@ -12375,8 +12565,16 @@ function renderApoyos() {
   const filtroTipo = document.getElementById('apoyo-filtro-tipo').value;
 
   let apoyos = APOYOS_DB.slice();
-  if (filtroEstado === 'federal') apoyos = apoyos.filter(a => a.nivel === 'federal');
-  else if (filtroEstado) apoyos = apoyos.filter(a => a.estado === filtroEstado || a.nivel === 'federal');
+
+  // 🚨 FIX BUG 5: filtro de estado ahora separa federales y estatales
+  if (filtroEstado === 'federal') {
+    apoyos = apoyos.filter(a => a.nivel === 'federal');
+  } else if (filtroEstado) {
+    // Si seleccionó un estado específico: solo apoyos de ese estado + federales
+    apoyos = apoyos.filter(a => a.estado === filtroEstado || a.nivel === 'federal');
+  }
+  // Si no hay filtro: muestra todos
+
   if (filtroTipo) apoyos = apoyos.filter(a => a.tipo === filtroTipo);
 
   if (apoyos.length === 0) {
@@ -12384,24 +12582,49 @@ function renderApoyos() {
     return;
   }
 
-  cont.innerHTML = apoyos.map(a => {
-    const badgeClass = a.nivel === 'federal' ? ' apoyo-item__badge--federal' : '';
-    const badgeTxt = a.nivel === 'federal' ? '🇲🇽 FEDERAL' : '📍 ' + escHtml(a.estado);
-    return `
-      <div class="apoyo-item">
-        <div class="apoyo-item__head">
-          <div class="apoyo-item__titulo">${escHtml(a.titulo)}</div>
-          <span class="apoyo-item__badge${badgeClass}">${badgeTxt}</span>
-        </div>
-        <div class="apoyo-item__monto">💰 ${escHtml(a.monto)}</div>
-        <div class="apoyo-item__desc">${escHtml(a.desc)}</div>
-        <div class="apoyo-item__meta">
-          <div><b>Requisitos:</b> ${escHtml(a.requisitos)}</div>
-          <div><b>📅 Fecha:</b> ${escHtml(a.fecha)}</div>
-        </div>
-        <a class="apoyo-item__link" href="${escHtml(a.link)}" target="_blank" rel="noopener">Ver info oficial →</a>
-      </div>`;
-  }).join('');
+  // Separar federales y estatales si seleccionó estado específico
+  const mostrarSeparado = filtroEstado && filtroEstado !== 'federal';
+  if (mostrarSeparado) {
+    const estatales = apoyos.filter(a => a.nivel === 'estatal');
+    const federales = apoyos.filter(a => a.nivel === 'federal');
+
+    let html = '';
+    // Estatales primero (los más relevantes)
+    if (estatales.length > 0) {
+      html += `<div style="margin-bottom:12px;font-size:.78rem;font-weight:800;color:#1a6b2f;letter-spacing:0.06em;text-transform:uppercase;">📍 Apoyos exclusivos de ${filtroEstado} (${estatales.length})</div>`;
+      html += estatales.map(renderApoyoCard).join('');
+    } else {
+      html += `<div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:.84rem;color:#92400e;">⚠️ No tenemos apoyos estatales registrados para <strong>${filtroEstado}</strong> aún. Mientras tanto, revisa los apoyos federales (aplican para todo México).</div>`;
+    }
+
+    if (federales.length > 0) {
+      html += `<div style="margin-top:18px;margin-bottom:12px;font-size:.78rem;font-weight:800;color:#5a6758;letter-spacing:0.06em;text-transform:uppercase;">🇲🇽 Apoyos federales (${federales.length})</div>`;
+      html += federales.map(renderApoyoCard).join('');
+    }
+
+    cont.innerHTML = html;
+  } else {
+    cont.innerHTML = apoyos.map(renderApoyoCard).join('');
+  }
+}
+
+function renderApoyoCard(a) {
+  const badgeClass = a.nivel === 'federal' ? ' apoyo-item__badge--federal' : '';
+  const badgeTxt = a.nivel === 'federal' ? '🇲🇽 FEDERAL' : '📍 ' + escHtml(a.estado);
+  return `
+    <div class="apoyo-item">
+      <div class="apoyo-item__head">
+        <div class="apoyo-item__titulo">${escHtml(a.titulo)}</div>
+        <span class="apoyo-item__badge${badgeClass}">${badgeTxt}</span>
+      </div>
+      <div class="apoyo-item__monto">💰 ${escHtml(a.monto)}</div>
+      <div class="apoyo-item__desc">${escHtml(a.desc)}</div>
+      <div class="apoyo-item__meta">
+        <div><b>Requisitos:</b> ${escHtml(a.requisitos)}</div>
+        <div><b>📅 Fecha:</b> ${escHtml(a.fecha)}</div>
+      </div>
+      <a class="apoyo-item__link" href="${escHtml(a.link)}" target="_blank" rel="noopener">Ver info oficial →</a>
+    </div>`;
 }
 
 document.addEventListener('change', (e) => {
@@ -14183,6 +14406,7 @@ function renderLogros() {
   // Para detectar "recién desbloqueado" (✨)
   const yaVistos = JSON.parse(localStorage.getItem('logros_vistos') || '[]');
   const nuevosVistos = [...yaVistos];
+  const reciendDesbloqueados = []; // 🚨 FIX BUG 3: track de logros nuevos
 
   const html = CATALOGO_LOGROS.map(logro => {
     const r = logro.check(ctx);
@@ -14190,10 +14414,13 @@ function renderLogros() {
     if (unlocked) desbloqueados++;
 
     const recien = unlocked && !yaVistos.includes(logro.id);
-    if (unlocked && !yaVistos.includes(logro.id)) nuevosVistos.push(logro.id);
+    if (unlocked && !yaVistos.includes(logro.id)) {
+      nuevosVistos.push(logro.id);
+      reciendDesbloqueados.push(logro);
+    }
 
     const iconHtml = unlocked ? logro.icon : '🔒';
-    const tituloHtml = logro.titulo; // ← Siempre visible para motivar
+    const tituloHtml = logro.titulo;
     const descHtml = unlocked ? logro.desc : (logro.descBloqueado || logro.desc);
 
     return `
@@ -14208,13 +14435,60 @@ function renderLogros() {
   grid.innerHTML = html;
   if (counter) counter.textContent = `${desbloqueados} / ${CATALOGO_LOGROS.length} desbloqueados`;
 
+  // 🚨 FIX BUG 3: si hay logros recién desbloqueados, mostrar animación celebratoria
+  // (solo el primero, para no saturar)
+  if (reciendDesbloqueados.length > 0) {
+    setTimeout(() => mostrarLogroDesbloqueado(reciendDesbloqueados[0]), 400);
+  }
+
   // Guardar los nuevos vistos (para quitar el ✨ la próxima vez)
-  // Solo guardamos si cambió, para dar unos segundos de brillo antes de "marcarlos" como vistos
   if (nuevosVistos.length !== yaVistos.length) {
     setTimeout(() => {
       localStorage.setItem('logros_vistos', JSON.stringify(nuevosVistos));
     }, 6000);
   }
+}
+
+// 🎉 ANIMACIÓN ÉPICA: toast celebratorio cuando se desbloquea un logro
+function mostrarLogroDesbloqueado(logro) {
+  // Evitar duplicados
+  const old = document.getElementById('_logro-toast');
+  if (old) old.remove();
+
+  const toast = document.createElement('div');
+  toast.id = '_logro-toast';
+  toast.innerHTML = `
+    <div class="logro-toast__bg"></div>
+    <div class="logro-toast__sparkles">
+      <span style="left:10%;animation-delay:0s;">✨</span>
+      <span style="left:25%;animation-delay:0.3s;">⭐</span>
+      <span style="left:60%;animation-delay:0.5s;">✨</span>
+      <span style="left:80%;animation-delay:0.2s;">⭐</span>
+      <span style="left:45%;animation-delay:0.7s;">✨</span>
+    </div>
+    <div class="logro-toast__icon">${logro.icon}</div>
+    <div class="logro-toast__kicker">🎉 ¡LOGRO DESBLOQUEADO!</div>
+    <div class="logro-toast__title">${logro.titulo}</div>
+    <div class="logro-toast__desc">${logro.desc}</div>
+    <button class="logro-toast__btn" onclick="document.getElementById('_logro-toast').remove()">¡Genial!</button>
+  `;
+  document.body.appendChild(toast);
+
+  // Confetti si está disponible
+  if (typeof confetti === 'function') {
+    setTimeout(() => {
+      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 }, colors: ['#1a6b2f', '#52c97a', '#fcd34d', '#fff'] });
+    }, 300);
+  }
+
+  // Auto-cerrar después de 6s
+  setTimeout(() => {
+    if (document.getElementById('_logro-toast')) {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translate(-50%, -60%) scale(0.9)';
+      setTimeout(() => toast.remove(), 400);
+    }
+  }, 6000);
 }
 
 function abrirLogroDetail(logroId) {
@@ -14716,8 +14990,20 @@ const NOTICIAS_TOTAL_MAX = 12;
 // Cache en memoria para imágenes extraídas
 const OG_IMG_CACHE = {};
 
-// Hidrata las miniaturas usando microlink.io con embed (no requiere CORS)
-// microlink devuelve la imagen directa como <img src> sin necesidad de fetch/proxy
+// 🚨 FIX BUG 1: múltiples servicios para extraer og:image
+// Si microlink.io falla por rate-limit, prueba alternativas
+function getOgImageUrls(pageUrl) {
+  const enc = encodeURIComponent(pageUrl);
+  return [
+    // 1. Microlink (50 req/día gratis, devuelve imagen directa)
+    `https://api.microlink.io/?url=${enc}&embed=image.url`,
+    // 2. WordPress mShot (gratuito, sin límite, screenshot del sitio)
+    `https://s.wordpress.com/mshots/v1/${enc}?w=400`,
+    // 3. Image proxy de Tinypic alternativo
+    `https://image.thum.io/get/width/400/${pageUrl}`,
+  ];
+}
+
 async function hydrateImagesNoticias() {
   const thumbs = document.querySelectorAll('.noticia-thumb[data-needs-img="1"]');
   if (!thumbs.length) return;
@@ -14726,24 +15012,38 @@ async function hydrateImagesNoticias() {
     const link = thumb.getAttribute('data-link');
     if (!link || link === '#') return;
 
-    // URL que devuelve directamente la imagen og:image
-    // ?meta=false mejora rapidez, &embed=image.url hace que responda con la imagen
-    const microUrl = 'https://api.microlink.io/?url=' + encodeURIComponent(link) + '&embed=image.url';
+    // Si ya tenemos la imagen en cache, usarla directo
+    if (OG_IMG_CACHE[link]) {
+      thumb.innerHTML = `<img src="${OG_IMG_CACHE[link]}" alt="" loading="lazy">`;
+      thumb.removeAttribute('data-needs-img');
+      return;
+    }
 
-    // Crear img element y reemplazar al cargar
-    const tempImg = new Image();
-    tempImg.onload = function() {
-      // Verificar que sea una imagen real (no un placeholder 1x1)
-      if (this.naturalWidth > 50 && this.naturalHeight > 50) {
-        thumb.innerHTML = `<img src="${microUrl}" alt="" loading="lazy">`;
-        thumb.removeAttribute('data-needs-img');
-        OG_IMG_CACHE[link] = microUrl;
-      }
-    };
-    tempImg.onerror = function() {
-      // No hacer nada — dejar el placeholder 📰
-    };
-    tempImg.src = microUrl;
+    const urls = getOgImageUrls(link);
+    let intentoActual = 0;
+
+    function probarSiguiente() {
+      if (intentoActual >= urls.length) return; // sin más opciones, dejar 📰
+      const microUrl = urls[intentoActual];
+      const tempImg = new Image();
+      tempImg.onload = function() {
+        if (this.naturalWidth > 50 && this.naturalHeight > 50) {
+          thumb.innerHTML = `<img src="${microUrl}" alt="" loading="lazy">`;
+          thumb.removeAttribute('data-needs-img');
+          OG_IMG_CACHE[link] = microUrl;
+        } else {
+          intentoActual++;
+          probarSiguiente();
+        }
+      };
+      tempImg.onerror = function() {
+        intentoActual++;
+        probarSiguiente();
+      };
+      tempImg.src = microUrl;
+    }
+
+    probarSiguiente();
   });
 }
 
