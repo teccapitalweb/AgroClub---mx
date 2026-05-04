@@ -9145,8 +9145,40 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!snap.empty) {
     const data = snap.docs[0].data();
-    if (data.estado !== "activo") {
-      // Membresía existe pero NO activa (pausada, cancelada, etc.)
+
+    // 🚨 FIX CRÍTICO: si está cancelado PERO la fecha vence aún no llega → sigue siendo VIP
+    // Esto respeta el estándar Netflix/Spotify: cancelas pero usas hasta el fin del ciclo pagado
+    let sigueSiendoVIP = data.estado === "activo";
+    if (!sigueSiendoVIP && data.estado && data.estado !== "activo") {
+      // Calcular fecha vence usando el helper existente
+      try {
+        const venceTxt = calcularVenceFallback(data); // retorna "1 de mayo de 2026" o "—"
+        if (venceTxt && venceTxt !== '—' && venceTxt !== 'Procesando...') {
+          // Parsear "1 de mayo de 2026" a Date
+          const meses = {'enero':0,'febrero':1,'marzo':2,'abril':3,'mayo':4,'junio':5,'julio':6,'agosto':7,'septiembre':8,'octubre':9,'noviembre':10,'diciembre':11};
+          const m = venceTxt.toLowerCase().match(/(\d+)\s+de\s+(\w+)\s+de\s+(\d+)/);
+          if (m) {
+            const fv = new Date(parseInt(m[3]), meses[m[2]], parseInt(m[1]));
+            // Si la fecha vence es FUTURA, sigue siendo VIP aunque haya cancelado
+            if (fv > new Date()) {
+              sigueSiendoVIP = true;
+              console.log('[Auth] Membresía cancelada pero acceso VIP activo hasta:', venceTxt);
+            }
+          }
+        }
+        // Fallback adicional: si data.vence está como string ISO o Date directo
+        if (!sigueSiendoVIP && data.vence) {
+          const fvDirecto = new Date(data.vence);
+          if (!isNaN(fvDirecto.getTime()) && fvDirecto > new Date()) {
+            sigueSiendoVIP = true;
+            console.log('[Auth] Membresía cancelada pero data.vence aún futuro:', data.vence);
+          }
+        }
+      } catch(e) { console.warn('[Auth] Error validando fecha vence:', e); }
+    }
+
+    if (!sigueSiendoVIP) {
+      // Membresía existe pero NO activa Y la fecha vence ya pasó (o no hay fecha)
       currentUser = { uid: user.uid, email: user.email, nombre: data.nombre || user.email.split('@')[0], esVIP: false, estadoMembresia: data.estado || 'inactivo' };
       window.currentUser = currentUser;
       mostrarPaywallGlobal();
@@ -9163,7 +9195,10 @@ onAuthStateChanged(auth, async (user) => {
       loadConfig();
       return;
     }
-    currentUser = { uid: user.uid, ...data, esVIP: true };
+    // 🚨 Si llegamos aquí: es VIP (activo O cancelado-con-fecha-vigente)
+    // Marcar bandera para mostrar aviso "tu acceso termina el [fecha]" si está cancelado
+    const cancelado = data.estado && data.estado !== 'activo';
+    currentUser = { uid: user.uid, ...data, esVIP: true, _cancelado: cancelado };
     window.currentUser = currentUser;
     // Cargar certificados del usuario
     if (typeof cargarCertificadosUsuario === 'function') cargarCertificadosUsuario();
@@ -9189,6 +9224,12 @@ onAuthStateChanged(auth, async (user) => {
     if (document.getElementById("sus-vence")) document.getElementById("sus-vence").textContent = venceCalculado;
     if (document.getElementById("sus-plan-info")) document.getElementById("sus-plan-info").textContent = data.plan || "VIP Mensual";
     if (document.getElementById("sus-proximo-cobro")) document.getElementById("sus-proximo-cobro").textContent = venceCalculado;
+
+    // 🚨 NUEVO: Si está cancelado pero acceso VIP activo, mostrar banner discreto
+    if (cancelado) {
+      mostrarBannerCancelacion(venceCalculado);
+    }
+
     actualizarEstadisticasPerfil();
     cargarHistorialPagos(user.email);
   } else {
@@ -11452,6 +11493,46 @@ window.ocultarPaywallGlobal = function() {
 };
 window.esVIPActivo = function() {
   return !!(window.currentUser && window.currentUser.esVIP === true);
+};
+
+// 🚨 NUEVO: Banner discreto cuando membresía está cancelada pero acceso VIP sigue activo
+window.mostrarBannerCancelacion = function(fechaVence) {
+  // Evitar duplicados
+  const old = document.getElementById('_banner-cancelado');
+  if (old) old.remove();
+
+  const banner = document.createElement('div');
+  banner.id = '_banner-cancelado';
+  banner.style.cssText = `
+    position:fixed; top:0; left:0; right:0; z-index:9000;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-bottom: 1px solid #f59e0b;
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 0.84rem;
+    color: #78350f;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+    display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+  `;
+  banner.innerHTML = `
+    <span>⚠️ Tu membresía está cancelada · Acceso VIP activo hasta el <strong>${fechaVence}</strong></span>
+    <button onclick="window.reactivarMembresia && window.reactivarMembresia()"
+      style="background:#1a6b2f;color:#fff;border:none;padding:5px 14px;border-radius:100px;font-weight:700;font-size:.78rem;cursor:pointer;font-family:inherit;">
+      🔄 Reactivar
+    </button>
+    <button onclick="document.getElementById('_banner-cancelado').remove()"
+      style="background:transparent;border:none;color:#78350f;font-size:1.1rem;cursor:pointer;padding:0 4px;line-height:1;" title="Cerrar">✕</button>
+  `;
+  document.body.appendChild(banner);
+  // Empujar el contenido hacia abajo
+  document.body.style.paddingTop = (banner.offsetHeight) + 'px';
+};
+
+// Reactivar membresía (placeholder, redirige a landing de pago)
+window.reactivarMembresia = function() {
+  alert('Para reactivar tu membresía contáctanos por WhatsApp o suscríbete de nuevo.');
+  // TODO: integrar con flujo de re-suscripción Stripe
 };
 window.requiereVIP = function(funcion, titulo, desc) {
   // Retorna true si puede proceder, false si está bloqueado (y muestra paywall)
