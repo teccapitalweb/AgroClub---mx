@@ -1055,7 +1055,8 @@
       margin-bottom: 14px;
     }
     .costos-kpi {
-      background: #fff; padding: 16px; border-radius: 12px;
+      background: #fff !important;
+      padding: 16px; border-radius: 12px;
       text-align: center; border: 1px dashed;
     }
     .costos-kpi__num {
@@ -1065,8 +1066,26 @@
     .costos-kpi__lbl {
       font-size: .72rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: .05em;
-      margin-top: 4px; opacity: .8;
+      margin-top: 4px; opacity: .85;
     }
+    /* 🚨 FIX: forzar fondo blanco en modo oscuro para que los colores oscuros sean legibles */
+    body.dark-mode .costos-kpi {
+      background: #fff !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    body.dark-mode .herr-resultado__big {
+      background: linear-gradient(135deg, #fff, #f0fdf4) !important;
+      color: #0d1813 !important;
+    }
+    body.dark-mode .herr-resultado__big-num,
+    body.dark-mode .herr-resultado__big-lbl { color: inherit !important; }
+    body.dark-mode #costos-resultado {
+      background: linear-gradient(135deg, #fff, #f0fdf4) !important;
+      color: #0d1813 !important;
+    }
+    body.dark-mode #costos-resultado .herr-resultado__row span { color: #5a6758 !important; }
+    body.dark-mode #costos-resultado .herr-resultado__row b { color: #0d1813 !important; }
+    body.dark-mode #costos-resultado .herr-resultado__row { border-color: rgba(0,0,0,.08) !important; }
 
     /* ══════════ ☀️ CLIMA ══════════ */
     .clima-ubic-bar {
