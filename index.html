@@ -4740,6 +4740,174 @@
     }
 
     /* ═══════════════════════════════════════════════════════ */
+    /* 🔒 MODAL CURSO BLOQUEADO                                */
+    /* ═══════════════════════════════════════════════════════ */
+    #_curso-bloqueado-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 999998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: opacity 0.25s ease;
+    }
+    .curso-bloq-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      animation: cursoBloqFade 0.3s ease;
+      cursor: pointer;
+    }
+    @keyframes cursoBloqFade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .curso-bloq-card {
+      position: relative;
+      max-width: 380px;
+      width: 100%;
+      background: linear-gradient(160deg, #1a1f2e 0%, #0f1420 100%);
+      border: 1px solid rgba(252, 211, 77, 0.25);
+      border-radius: 24px;
+      padding: 36px 28px 26px;
+      text-align: center;
+      box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(252, 211, 77, 0.12),
+        0 0 80px rgba(252, 211, 77, 0.10);
+      animation: cursoBloqIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      color: #fff;
+      overflow: hidden;
+    }
+    @keyframes cursoBloqIn {
+      0%   { opacity: 0; transform: scale(0.7) translateY(30px); }
+      60%  { opacity: 1; transform: scale(1.04) translateY(-6px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .curso-bloq-rays {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(252,211,77,0.06) 30deg, transparent 60deg, rgba(252,211,77,0.06) 90deg, transparent 120deg, rgba(252,211,77,0.06) 150deg, transparent 180deg, rgba(252,211,77,0.06) 210deg, transparent 240deg, rgba(252,211,77,0.06) 270deg, transparent 300deg, rgba(252,211,77,0.06) 330deg, transparent 360deg);
+      animation: cursoBloqRays 18s linear infinite;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    @keyframes cursoBloqRays {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .curso-bloq-icon-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 16px;
+      z-index: 2;
+    }
+    .curso-bloq-icon {
+      font-size: 3.6rem;
+      display: inline-block;
+      animation: cursoBloqIconBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+      filter: drop-shadow(0 6px 18px rgba(252, 211, 77, 0.3));
+    }
+    @keyframes cursoBloqIconBounce {
+      0%   { transform: scale(0); }
+      60%  { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    .curso-bloq-kicker {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: #fcd34d;
+      margin-bottom: 12px;
+      text-shadow: 0 0 20px rgba(252, 211, 77, 0.5);
+      position: relative;
+      z-index: 2;
+    }
+    .curso-bloq-titulo {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 6px;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      position: relative;
+      z-index: 2;
+    }
+    .curso-bloq-categoria {
+      font-size: 0.84rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 22px;
+      font-weight: 600;
+      position: relative;
+      z-index: 2;
+    }
+    .curso-bloq-fecha-card {
+      background: rgba(252, 211, 77, 0.10);
+      border: 1px solid rgba(252, 211, 77, 0.3);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+    .curso-bloq-fecha-label {
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: #fcd34d;
+      margin-bottom: 6px;
+      opacity: 0.85;
+    }
+    .curso-bloq-fecha {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .curso-bloq-desc {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.55;
+      margin: 0 0 22px;
+      position: relative;
+      z-index: 2;
+    }
+    .curso-bloq-btn {
+      background: linear-gradient(135deg, #1a6b2f, #0d3d19);
+      color: #fff;
+      border: none;
+      padding: 13px 38px;
+      border-radius: 100px;
+      font-family: var(--font), sans-serif;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(26, 107, 47, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      letter-spacing: 0.02em;
+      position: relative;
+      z-index: 2;
+    }
+    .curso-bloq-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(26, 107, 47, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    @media (max-width: 480px) {
+      .curso-bloq-card { padding: 30px 22px 22px; }
+      .curso-bloq-icon { font-size: 3rem; }
+      .curso-bloq-titulo { font-size: 1.15rem; }
+      .curso-bloq-fecha { font-size: 0.98rem; }
+    }
+
+    /* ═══════════════════════════════════════════════════════ */
     /* 🎥 REDISEÑO WEBINARS — Hero + Próximas + Pasadas       */
     /* ═══════════════════════════════════════════════════════ */
     .webinar-page-header {
@@ -9938,7 +10106,7 @@ window.verCurso = function(cursoId) {
   if (typeof estaCursoBloqueadoParaUsuario === 'function' && estaCursoBloqueadoParaUsuario(curso)) {
     const fd = calcularFechaDesbloqueo(curso);
     const fechaTexto = fd ? fd.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : 'próximamente';
-    alert(`🔒 Este curso aún no está disponible.\n\nSe desbloqueará el ${fechaTexto}.`);
+    mostrarCursoBloqueadoModal(curso, fechaTexto);
     return;
   }
 
@@ -10119,7 +10287,7 @@ window.reproducirClase = function(cursoId, numClase) {
   if (curso && typeof estaCursoBloqueadoParaUsuario === 'function' && estaCursoBloqueadoParaUsuario(curso)) {
     const fd = calcularFechaDesbloqueo(curso);
     const fechaTexto = fd ? fd.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : 'próximamente';
-    alert(`🔒 Este curso aún no está disponible.\n\nSe desbloqueará el ${fechaTexto}.`);
+    mostrarCursoBloqueadoModal(curso, fechaTexto);
     return;
   }
 
@@ -15523,6 +15691,51 @@ function renderLogros() {
     }, 6000);
   }
 }
+
+// 🔒 Modal bonito cuando el usuario intenta abrir un curso bloqueado
+window.mostrarCursoBloqueadoModal = function(curso, fechaTexto) {
+  // Eliminar viejo si existe
+  const old = document.getElementById('_curso-bloqueado-modal');
+  if (old) old.remove();
+
+  const tituloCurso = (curso && curso.titulo) ? curso.titulo : 'Este curso';
+  const emojiCurso = (curso && curso.emoji) ? curso.emoji : '📚';
+  const categoriaCurso = (curso && curso.categoria) ? curso.categoria : '';
+
+  const modal = document.createElement('div');
+  modal.id = '_curso-bloqueado-modal';
+  modal.innerHTML = `
+    <div class="curso-bloq-overlay" onclick="cerrarCursoBloqueadoModal()"></div>
+    <div class="curso-bloq-card">
+      <div class="curso-bloq-rays"></div>
+      <div class="curso-bloq-icon-wrap">
+        <div class="curso-bloq-icon">🔒</div>
+      </div>
+      <div class="curso-bloq-kicker">PRÓXIMAMENTE</div>
+      <h3 class="curso-bloq-titulo">${escHtml(tituloCurso)}</h3>
+      ${categoriaCurso ? `<div class="curso-bloq-categoria">${emojiCurso} ${escHtml(categoriaCurso)}</div>` : ''}
+      <div class="curso-bloq-fecha-card">
+        <div class="curso-bloq-fecha-label">📅 SE DESBLOQUEARÁ EL</div>
+        <div class="curso-bloq-fecha">${escHtml(fechaTexto)}</div>
+      </div>
+      <p class="curso-bloq-desc">Estamos preparando este curso para ti. Te avisaremos cuando esté disponible.</p>
+      <button class="curso-bloq-btn" onclick="cerrarCursoBloqueadoModal()">Entendido</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+};
+
+window.cerrarCursoBloqueadoModal = function() {
+  const m = document.getElementById('_curso-bloqueado-modal');
+  if (m) {
+    m.style.opacity = '0';
+    setTimeout(() => {
+      m.remove();
+      document.body.style.overflow = '';
+    }, 250);
+  }
+};
 
 // 🎉 ANIMACIÓN ÉPICA: toast celebratorio cuando se desbloquea un logro
 function mostrarLogroDesbloqueado(logro) {
