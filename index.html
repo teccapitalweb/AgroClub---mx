@@ -1144,21 +1144,36 @@
       padding: 14px 16px; border-radius: 12px;
       display: flex; align-items: flex-start; gap: 12px;
       font-size: .88rem;
+      line-height: 1.5;
     }
     .clima-alerta__icon { font-size: 1.6rem; flex-shrink: 0; }
-    .clima-alerta__body strong { display: block; margin-bottom: 2px; font-size: .95rem; }
+    .clima-alerta__body strong { display: block; margin-bottom: 4px; font-size: .95rem; font-weight: 800; }
     .clima-alerta--helada {
-      background: linear-gradient(135deg, #dbeafe, #eff6ff);
-      border: 1px solid #3b82f6; color: #1e40af;
+      background: linear-gradient(135deg, #dbeafe, #eff6ff) !important;
+      border: 1.5px solid #3b82f6 !important;
+      color: #1e3a8a !important;
     }
+    .clima-alerta--helada strong { color: #1e3a8a !important; }
     .clima-alerta--lluvia {
-      background: linear-gradient(135deg, #cffafe, #ecfeff);
-      border: 1px solid #06b6d4; color: #0e7490;
+      background: linear-gradient(135deg, #cffafe, #ecfeff) !important;
+      border: 1.5px solid #06b6d4 !important;
+      color: #164e63 !important;
     }
+    .clima-alerta--lluvia strong { color: #164e63 !important; }
     .clima-alerta--calor {
-      background: linear-gradient(135deg, #fef3c7, #fef9c3);
-      border: 1px solid #ef4444; color: #991b1b;
+      background: linear-gradient(135deg, #fef3c7, #fef9c3) !important;
+      border: 1.5px solid #ef4444 !important;
+      color: #7f1d1d !important;
     }
+    .clima-alerta--calor strong { color: #7f1d1d !important; }
+    /* Modo oscuro: forzar mismo contraste */
+    body.dark-mode .clima-alerta { color: #1f2937 !important; }
+    body.dark-mode .clima-alerta--helada { color: #1e3a8a !important; }
+    body.dark-mode .clima-alerta--helada strong { color: #1e3a8a !important; }
+    body.dark-mode .clima-alerta--lluvia { color: #164e63 !important; }
+    body.dark-mode .clima-alerta--lluvia strong { color: #164e63 !important; }
+    body.dark-mode .clima-alerta--calor { color: #7f1d1d !important; }
+    body.dark-mode .clima-alerta--calor strong { color: #7f1d1d !important; }
 
     /* ═══════ SUSCRIPCIÓN — VISTA FREE ═══════ */
     .sus-hero-free {
