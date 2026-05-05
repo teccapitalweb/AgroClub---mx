@@ -10694,9 +10694,17 @@ window.actualizarHeroPlan = function() {
   const card = document.getElementById('hs-plan-card');
   const num = document.getElementById('hs-plan-num');
   const lbl = document.getElementById('hs-plan-lbl');
-  if (!card || !num || !lbl) return;
 
   const esVIP = typeof esVIPActivo === 'function' ? esVIPActivo() : false;
+
+  // 🚨 GARANTIZAR coherencia: si es VIP, body NO debe tener is-free (evita bloqueos visuales fantasma)
+  if (esVIP) {
+    document.body.classList.remove('is-free');
+  } else {
+    document.body.classList.add('is-free');
+  }
+
+  if (!card || !num || !lbl) return;
 
   if (esVIP) {
     card.classList.remove('hero-stat--cta-free');
@@ -11812,11 +11820,17 @@ window.solicitarCancelacion = function() {
         if (typeof window.mostrarBannerCancelacion === 'function') {
           window.mostrarBannerCancelacion(fechaVenceTexto !== '—' ? fechaVenceTexto : 'fin del periodo pagado');
         }
-        // Actualizar currentUser
+        // Actualizar currentUser - SIGUE SIENDO VIP (solo está marcado como cancelado)
         if (window.currentUser) {
           window.currentUser._cancelado = true;
           window.currentUser.estado = 'cancelado';
+          window.currentUser.esVIP = true; // 🚨 IMPORTANTE: sigue VIP hasta fin del ciclo
         }
+        // 🚨 GARANTIZAR que NO se active el paywall global (sigue navegando como VIP)
+        if (typeof window.ocultarPaywallGlobal === 'function') {
+          window.ocultarPaywallGlobal();
+        }
+        document.body.classList.remove('is-free');
       } else {
         status.style.color = '#dc2626';
         status.textContent = '❌ Error al cancelar. Intenta de nuevo o contacta soporte.';
@@ -12990,8 +13004,21 @@ window.mostrarBannerCancelacion = function(fechaVence) {
     </button>
   `;
   document.body.appendChild(banner);
-  // Empujar el contenido hacia abajo
-  document.body.style.paddingTop = (banner.offsetHeight) + 'px';
+  // Empujar el contenido hacia abajo (recalcular para móvil multilínea)
+  const aplicarPadding = () => {
+    document.body.style.paddingTop = (banner.offsetHeight || 50) + 'px';
+  };
+  aplicarPadding();
+  // Re-aplicar tras un tick por si el render no terminó
+  setTimeout(aplicarPadding, 100);
+  // Re-aplicar al rotar pantalla / resize
+  if (!window._bannerResizeListenerAdded) {
+    window.addEventListener('resize', () => {
+      const b = document.getElementById('_banner-cancelado');
+      if (b) document.body.style.paddingTop = (b.offsetHeight || 50) + 'px';
+    });
+    window._bannerResizeListenerAdded = true;
+  }
 
   // 🚨 NUEVO: Deshabilitar card de cancelar si está visible
   deshabilitarCardCancelar(fechaVence);
