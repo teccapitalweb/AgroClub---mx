@@ -128,6 +128,212 @@
 
     /* 3) Estados de exámenes: contraste correcto en dark mode */
     body.dark-mode .examen-card__estado--disponible { background: rgba(22,101,52,.25) !important; color: #86efac !important; }
+
+    /* ═══════════════════════════════════════════════════════════ */
+    /* 🚨 FIX MASIVO DARK MODE — Forzar contraste sobre fondos claros */
+    /* ═══════════════════════════════════════════════════════════ */
+
+    /* Sidebar items en modo oscuro (los que se ven gris claro en captura 1) */
+    body.dark-mode .sidebar-item,
+    body.dark-mode .sidebar-subitem,
+    body.dark-mode .sidebar-item-left,
+    body.dark-mode .sidebar-item *,
+    body.dark-mode .sidebar-subitem * {
+      color: #e8f0e5 !important;
+    }
+    body.dark-mode .sidebar-item.active,
+    body.dark-mode .sidebar-subitem.active,
+    body.dark-mode .sidebar-item.active *,
+    body.dark-mode .sidebar-subitem.active * {
+      color: #6ee7a3 !important;
+    }
+    body.dark-mode .sidebar-section-title {
+      color: rgba(255,255,255,0.55) !important;
+    }
+
+    /* Header "Biblioteca de cursos" — fondo verde claro con texto que se pierde */
+    body.dark-mode .biblioteca-hero,
+    body.dark-mode .biblioteca-hero *,
+    body.dark-mode .biblioteca-cs,
+    body.dark-mode .biblioteca-cs *,
+    body.dark-mode .biblioteca-header,
+    body.dark-mode .biblioteca-header *,
+    body.dark-mode .page-bibliot__title,
+    body.dark-mode .page-bibliot__subtitle,
+    body.dark-mode #page-cursos > h2,
+    body.dark-mode #page-cursos > h3,
+    body.dark-mode #page-cursos > p:first-of-type {
+      color: #0d1813 !important;
+    }
+
+    /* Header "Notificaciones" — fondo amarillo/verde claro */
+    body.dark-mode .notif-hero,
+    body.dark-mode .notif-hero *,
+    body.dark-mode .notif-header,
+    body.dark-mode .notif-header * {
+      color: #0d1813 !important;
+    }
+
+    /* Header "Noticias del agro" + filtros */
+    body.dark-mode .noticias-hub__title,
+    body.dark-mode .noticias-hub__subtitle,
+    body.dark-mode .noticias-toolbar,
+    body.dark-mode .noticias-toolbar *,
+    body.dark-mode .noticias-source-btn {
+      color: #f0f4ee !important;
+    }
+    body.dark-mode .noticias-source-btn {
+      background: rgba(255,255,255,0.06) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+    }
+    body.dark-mode .noticias-source-btn.active {
+      background: linear-gradient(135deg, #1a6b2f, #0d3d19) !important;
+      color: #fff !important;
+    }
+
+    /* Headers de pages en general (titulos de sección sobre fondos claros) */
+    body.dark-mode .page > h2:first-of-type,
+    body.dark-mode .page-header,
+    body.dark-mode .page-header * {
+      color: #f0f4ee !important;
+    }
+
+    /* Bitácora / parcela form labels */
+    body.dark-mode .parcela-form label,
+    body.dark-mode .parcela-form-row label,
+    body.dark-mode .parcela-card label,
+    body.dark-mode .conv-row label,
+    body.dark-mode .costos-row label,
+    body.dark-mode label {
+      color: #e8f0e5 !important;
+    }
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="number"],
+    body.dark-mode input[type="email"],
+    body.dark-mode input[type="tel"],
+    body.dark-mode input[type="search"],
+    body.dark-mode input[type="date"],
+    body.dark-mode select,
+    body.dark-mode textarea {
+      background: rgba(255,255,255,0.05) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: #f0f4ee !important;
+    }
+    body.dark-mode input::placeholder,
+    body.dark-mode textarea::placeholder {
+      color: rgba(255,255,255,0.4) !important;
+    }
+
+    /* "Próximo Webinar" del widget móvil — header de webinar */
+    body.dark-mode .widget-webinar__tag,
+    body.dark-mode .widget-webinar__title,
+    body.dark-mode .widget-webinar__meta,
+    body.dark-mode .widget-webinar__empty {
+      color: #f0f4ee !important;
+    }
+
+    /* "Sesiones pasadas" header en webinars */
+    body.dark-mode .webinar-section__title,
+    body.dark-mode .webinar-page-header__title,
+    body.dark-mode .webinar-page-header__subtitle,
+    body.dark-mode .webinar-card__title,
+    body.dark-mode .webinar-card__meta,
+    body.dark-mode .webinar-card__meta * {
+      color: #f0f4ee !important;
+    }
+    body.dark-mode .webinar-card--pasada .webinar-card__title,
+    body.dark-mode .webinar-card--pasada .webinar-card__meta {
+      color: rgba(240,244,238,0.55) !important;
+    }
+    body.dark-mode .webinar-card__finalizada {
+      color: rgba(240,244,238,0.6) !important;
+    }
+
+    /* Apoyos - filtros de estado */
+    body.dark-mode .apoyo-filtros,
+    body.dark-mode .apoyo-filtros *,
+    body.dark-mode .apoyo-form *,
+    body.dark-mode #apoyo-filtro-estado,
+    body.dark-mode #apoyo-filtro-tipo {
+      color: #f0f4ee !important;
+    }
+
+    /* Hero del Inicio — el texto debería seguir blanco (fondo verde oscuro) */
+    body.dark-mode .hero-text h2,
+    body.dark-mode .hero-text p,
+    body.dark-mode #hero-greeting,
+    body.dark-mode #hero-bienvenida {
+      color: #fff !important;
+    }
+    body.dark-mode .hero-stat-num { color: #fff !important; }
+    body.dark-mode .hero-stat-label { color: rgba(255,255,255,0.6) !important; }
+    body.dark-mode .hero-stat--cta-free .hero-stat-num,
+    body.dark-mode .hero-stat--cta-free .hero-stat-label {
+      color: #422006 !important;
+    }
+
+    /* Continúa aprendiendo — header */
+    body.dark-mode .section-header h3,
+    body.dark-mode .section-header,
+    body.dark-mode .section-header-tag {
+      color: #f0f4ee !important;
+    }
+    body.dark-mode .section-header-tag {
+      color: #6ee7a3 !important;
+    }
+
+    /* Course cards — título y categoría */
+    body.dark-mode .course-card__categoria,
+    body.dark-mode .course-card__titulo,
+    body.dark-mode .course-card__meta,
+    body.dark-mode .course-card__meta * {
+      color: #f0f4ee !important;
+    }
+    body.dark-mode .course-card__categoria {
+      color: rgba(240,244,238,0.6) !important;
+    }
+
+    /* Cancelar membresía card en suscripción */
+    body.dark-mode .sus-cancelar-card {
+      background: rgba(239, 68, 68, 0.08) !important;
+      border-color: rgba(239, 68, 68, 0.3) !important;
+    }
+    body.dark-mode #sus-cancelar-titulo {
+      color: #fca5a5 !important;
+    }
+    body.dark-mode #sus-cancelar-desc {
+      color: rgba(255, 200, 200, 0.85) !important;
+    }
+
+    /* Form generalizado en bitácora/parcelas — Nombre de la parcela, Cultivo principal */
+    body.dark-mode .parcela-form-grid label,
+    body.dark-mode .form-group label,
+    body.dark-mode .form-row label,
+    body.dark-mode .form-field label {
+      color: #f0f4ee !important;
+      font-weight: 700 !important;
+    }
+
+    /* Headers genericos h1-h6 sobre fondo claro */
+    body.dark-mode .section-card h1,
+    body.dark-mode .section-card h2,
+    body.dark-mode .section-card h3,
+    body.dark-mode .section-card h4 {
+      color: #f0f4ee !important;
+    }
+
+    /* Notificaciones bell + header */
+    body.dark-mode .notif-card__titulo,
+    body.dark-mode .notif-card__msg,
+    body.dark-mode .notif-card__fecha,
+    body.dark-mode .notif-empty,
+    body.dark-mode .notif-empty * {
+      color: #f0f4ee !important;
+    }
+    body.dark-mode .notif-card__msg,
+    body.dark-mode .notif-card__fecha {
+      color: rgba(240,244,238,0.7) !important;
+    }
     body.dark-mode .examen-card__estado--bloqueado { background: rgba(146,64,14,.25) !important; color: #fcd34d !important; }
     body.dark-mode .examen-card__estado--aprobado { background: rgba(30,64,175,.25) !important; color: #93c5fd !important; }
     body.dark-mode .examen-card__estado--reprobado { background: rgba(153,27,27,.25) !important; color: #fca5a5 !important; }
