@@ -5179,6 +5179,257 @@
     }
 
     /* ═══════════════════════════════════════════════════════ */
+    /* 🌱 MODAL REACTIVAR MEMBRESÍA — cálido y motivador        */
+    /* ═══════════════════════════════════════════════════════ */
+    #_reactivar-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: opacity 0.25s ease;
+    }
+    .reactivar-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      animation: histFadeIn 0.3s ease;
+      cursor: pointer;
+    }
+    .reactivar-card {
+      position: relative;
+      max-width: 460px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: linear-gradient(160deg, #0d2f17 0%, #1a4d28 50%, #0a1f10 100%);
+      border: 1px solid rgba(252, 211, 77, 0.3);
+      border-radius: 28px;
+      padding: 36px 28px 26px;
+      text-align: center;
+      color: #fff;
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(82, 201, 122, 0.18),
+        0 0 100px rgba(82, 201, 122, 0.18);
+      animation: reactivarIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes reactivarIn {
+      0%   { opacity: 0; transform: scale(0.7) translateY(40px); }
+      60%  { opacity: 1; transform: scale(1.04) translateY(-8px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .reactivar-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.10);
+      border: none;
+      color: #fff;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      z-index: 4;
+    }
+    .reactivar-close:hover { background: rgba(255, 255, 255, 0.22); }
+    .reactivar-rays {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: conic-gradient(from 0deg,
+        transparent 0deg, rgba(252,211,77,0.10) 30deg, transparent 60deg,
+        rgba(82,201,122,0.10) 90deg, transparent 120deg, rgba(252,211,77,0.10) 150deg,
+        transparent 180deg, rgba(82,201,122,0.10) 210deg, transparent 240deg,
+        rgba(252,211,77,0.10) 270deg, transparent 300deg, rgba(82,201,122,0.10) 330deg,
+        transparent 360deg);
+      animation: webinarRaysRotate 18s linear infinite;
+      pointer-events: none;
+    }
+    .reactivar-sparkles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .reactivar-sparkles span {
+      position: absolute;
+      top: 15%;
+      font-size: 1rem;
+      animation: webinarSparkle 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px rgba(252, 211, 77, 0.6));
+    }
+    .reactivar-icon {
+      font-size: 3.6rem;
+      display: inline-block;
+      margin-bottom: 14px;
+      animation: cursoBloqIconBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+      filter: drop-shadow(0 6px 20px rgba(82, 201, 122, 0.5));
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-kicker {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: #fcd34d;
+      margin-bottom: 12px;
+      text-shadow: 0 0 18px rgba(252, 211, 77, 0.5);
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-title {
+      font-family: var(--font-display, var(--font)), sans-serif;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-desc {
+      font-size: 0.92rem;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.55;
+      margin: 0 0 22px;
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-benefits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-benefit {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 12px;
+      padding: 10px 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+    }
+    .reactivar-plans-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-plans {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-plan {
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 16px 10px 14px;
+      cursor: pointer;
+      color: #fff;
+      font-family: var(--font), sans-serif;
+      transition: all 0.18s ease;
+      text-align: center;
+    }
+    .reactivar-plan:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.10);
+      border-color: rgba(252, 211, 77, 0.5);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    }
+    .reactivar-plan--anual {
+      border-color: rgba(252, 211, 77, 0.55);
+      background: linear-gradient(135deg, rgba(252,211,77,0.10), rgba(252,211,77,0.04));
+    }
+    .reactivar-plan--anual:hover {
+      border-color: #fcd34d;
+      background: linear-gradient(135deg, rgba(252,211,77,0.18), rgba(252,211,77,0.08));
+      box-shadow: 0 12px 28px rgba(252,211,77,0.18);
+    }
+    .reactivar-plan__badge {
+      position: absolute;
+      top: -10px; left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #fcd34d, #f59e0b);
+      color: #422006;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 100px;
+      box-shadow: 0 4px 10px rgba(252,211,77,0.4);
+      white-space: nowrap;
+    }
+    .reactivar-plan__nombre {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 6px;
+    }
+    .reactivar-plan__precio {
+      font-family: 'Space Grotesk', monospace, var(--font);
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .reactivar-plan__precio span {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.02em;
+      margin-left: 2px;
+    }
+    .reactivar-plan__nota {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 6px;
+      font-weight: 600;
+    }
+    .reactivar-cancel {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: var(--font), sans-serif;
+      font-weight: 600;
+      padding: 8px;
+      transition: color 0.15s ease;
+      position: relative;
+      z-index: 2;
+    }
+    .reactivar-cancel:hover { color: #fff; }
+    @media (max-width: 480px) {
+      .reactivar-card { padding: 30px 22px 22px; }
+      .reactivar-icon { font-size: 3rem; }
+      .reactivar-title { font-size: 1.35rem; }
+      .reactivar-plan__precio { font-size: 1.4rem; }
+      .reactivar-plans { gap: 8px; }
+    }
+
+    /* ═══════════════════════════════════════════════════════ */
     /* 🎥 REDISEÑO WEBINARS — Hero + Próximas + Pasadas       */
     /* ═══════════════════════════════════════════════════════ */
     .webinar-page-header {
@@ -12653,10 +12904,85 @@ function deshabilitarCardCancelar(fechaVence) {
   }
 }
 
-// Reactivar membresía (placeholder, redirige a landing de pago)
+// Reactivar membresía: modal cálido con selector de plan
 window.reactivarMembresia = function() {
-  alert('Para reactivar tu membresía contáctanos por WhatsApp o suscríbete de nuevo.');
-  // TODO: integrar con flujo de re-suscripción Stripe
+  const old = document.getElementById('_reactivar-modal');
+  if (old) old.remove();
+
+  const nombre = (window.currentUser && window.currentUser.nombre)
+    ? window.currentUser.nombre.split(' ')[0]
+    : '';
+  const saludo = nombre ? `, ${nombre}` : '';
+
+  const modal = document.createElement('div');
+  modal.id = '_reactivar-modal';
+  modal.innerHTML = `
+    <div class="reactivar-overlay" onclick="cerrarReactivarModal()"></div>
+    <div class="reactivar-card">
+      <button class="reactivar-close" onclick="cerrarReactivarModal()">✕</button>
+      <div class="reactivar-rays"></div>
+      <div class="reactivar-sparkles">
+        ${Array.from({length: 8}).map((_, i) => `<span style="left:${10+i*11}%;animation-delay:${(i*0.25).toFixed(1)}s;">✨</span>`).join('')}
+      </div>
+
+      <div class="reactivar-icon">🌱</div>
+      <div class="reactivar-kicker">¡QUÉ BUENO VERTE DE NUEVO${saludo ? ' · '+nombre.toUpperCase() : ''}!</div>
+      <h2 class="reactivar-title">Bienvenido de regreso${saludo}</h2>
+      <p class="reactivar-desc">
+        Tu lugar en la comunidad agro #1 de México sigue esperándote. Reactiva tu membresía y vuelve a disfrutar de todos los beneficios VIP.
+      </p>
+
+      <div class="reactivar-benefits">
+        <div class="reactivar-benefit">📚 +20 cursos premium</div>
+        <div class="reactivar-benefit">🎥 Webinars en vivo</div>
+        <div class="reactivar-benefit">💹 Predicción de mercado</div>
+        <div class="reactivar-benefit">🛠️ Herramientas pro</div>
+      </div>
+
+      <div class="reactivar-plans-title">Elige tu plan:</div>
+      <div class="reactivar-plans">
+        <button class="reactivar-plan reactivar-plan--mensual" onclick="reactivarConPlan('mensual')">
+          <div class="reactivar-plan__nombre">Mensual</div>
+          <div class="reactivar-plan__precio">$200<span>/mes</span></div>
+          <div class="reactivar-plan__nota">Cancela cuando quieras</div>
+        </button>
+        <button class="reactivar-plan reactivar-plan--anual" onclick="reactivarConPlan('anual')">
+          <div class="reactivar-plan__badge">⭐ AHORRAS 20%</div>
+          <div class="reactivar-plan__nombre">Anual</div>
+          <div class="reactivar-plan__precio">$1,920<span>/año</span></div>
+          <div class="reactivar-plan__nota">Equivale a $160/mes</div>
+        </button>
+      </div>
+
+      <button class="reactivar-cancel" onclick="cerrarReactivarModal()">Quizás más tarde</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+};
+
+window.cerrarReactivarModal = function() {
+  const m = document.getElementById('_reactivar-modal');
+  if (m) {
+    m.style.opacity = '0';
+    setTimeout(() => {
+      m.remove();
+      document.body.style.overflow = '';
+    }, 250);
+  }
+};
+
+window.reactivarConPlan = function(plan) {
+  cerrarReactivarModal();
+  // Esperar el cierre del modal antes de abrir Stripe
+  setTimeout(() => {
+    if (typeof abrirStripeCheckout === 'function') {
+      abrirStripeCheckout(plan);
+    } else {
+      // Fallback: navegar a landing si no está la función
+      window.location.href = '/landing-index.html?plan=' + plan;
+    }
+  }, 300);
 };
 window.requiereVIP = function(funcion, titulo, desc) {
   // Retorna true si puede proceder, false si está bloqueado (y muestra paywall)
