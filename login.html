@@ -148,9 +148,111 @@
       margin-bottom: 14px; text-align: center;
       font-weight: 600;
     }
-  </style>
+  
+/* AgroClub login a dos columnas con carrusel */
+.ac-split{display:grid;grid-template-columns:1.05fr .95fr;min-height:100vh;width:100%;max-width:1200px;margin:0 auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.ac-hero{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:22px;padding:44px 48px;background:linear-gradient(157deg,#0d2b09 0%,#16401a 55%,#1a6b2f 100%);color:#eafdf0;overflow:hidden}
+.ac-hero::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(to right,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.04) 1px,transparent 1px);background-size:34px 34px;opacity:.5}
+.ac-hero>*{position:relative;z-index:1}
+.ac-hero__logo{display:flex;align-items:center;gap:12px}
+.ac-hero__badge{width:46px;height:46px;border-radius:12px;background:#fff;color:#16401a;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.ac-hero__name{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.ac-hero__sub{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#8fd6a3;font-family:'JetBrains Mono',monospace}
+.ac-hero__title{font-size:1.9rem;line-height:1.18;font-weight:800;letter-spacing:-.8px;margin:0 0 8px}
+.ac-hero__title em{font-style:normal;color:#7fe6a0}
+.ac-hero__desc{font-size:.9rem;color:#bfe6cb;line-height:1.55;margin:0}
+.ac-marquee{margin:22px 0 4px;max-width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ac-track{display:flex;gap:12px;width:max-content;animation:acSlide 60s linear infinite}
+.ac-marquee:hover .ac-track{animation-play-state:paused}
+@keyframes acSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ac-marquee img{width:104px;height:104px;object-fit:cover;border-radius:12px;flex:none;border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.ac-hook{margin:18px 0 10px;font-size:.95rem;font-weight:700;color:#eafdf0}
+.ac-hook b{color:#7fe6a0}
+.ac-benefits{list-style:none;display:flex;flex-direction:column;gap:9px;margin:0 0 6px;padding:0}
+.ac-benefits li{display:flex;gap:9px;align-items:flex-start;font-size:.86rem;color:#bfe6cb;line-height:1.45}
+.ac-benefits li b{color:#eafdf0;font-weight:600}
+.ac-benefits svg{width:17px;height:17px;flex:none;margin-top:2px;stroke:#7fe6a0;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ac-price{display:flex;gap:10px;margin:10px 0 14px;flex-wrap:wrap}
+.ac-opt{flex:1;min-width:150px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;position:relative}
+.ac-opt--star{border-color:#34d399}
+.ac-opt b{display:block;font-size:1.5rem;font-weight:800;color:#fff;line-height:1}
+.ac-opt small{display:block;margin-top:5px;font-size:.72rem;color:#bfe6cb;line-height:1.5}
+.ac-opt small strong{color:#7fe6a0}
+.ac-tachado{text-decoration:line-through;color:#6f9a7c;margin-right:4px}
+.ac-badge{position:absolute;top:-9px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:#04130d;background:#7fe6a0;border-radius:6px;padding:3px 8px}
+.ac-refs-title{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:#6f9a7c;margin:6px 0 8px}
+.ac-refs{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.ac-ref{display:flex;gap:9px}
+.ac-avi{width:34px;height:34px;flex:none;border-radius:50%;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.ac-avi--b{background:linear-gradient(135deg,#0d9488,#0f766e)}
+.ac-bub{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:9px 12px}
+.ac-bub>b{font-size:.8rem;color:#eafdf0}
+.ac-bub>b small{color:#bfe6cb;font-weight:400}
+.ac-bub p{margin:3px 0 0;font-size:.8rem;color:#bfe6cb;line-height:1.45}
+.ac-lk{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:.7rem;color:#7fe6a0}
+.ac-lk svg{width:12px;height:12px;fill:currentColor}
+.ac-meta{display:flex;gap:12px;margin-top:5px;font-size:.68rem;color:#6f9a7c}
+.ac-meta b{color:#bfe6cb;font-weight:600}
+.ac-trust{font-size:.72rem;color:#6f9a7c;margin-top:2px}
+.ac-stats{display:flex;gap:32px}
+.ac-stat-v{font-size:1.6rem;font-weight:800;color:#7fe6a0}
+.ac-stat-l{font-size:.66rem;letter-spacing:1.4px;text-transform:uppercase;color:#8fd6a3;font-family:'JetBrains Mono',monospace}
+.ac-split .login-card{max-width:none;border-radius:0;box-shadow:none;display:flex;flex-direction:column;justify-content:center;padding:48px 52px}
+@media (max-width:900px){
+  body{display:block!important;padding:0!important}
+  .ac-split{grid-template-columns:1fr;border-radius:0;min-height:100dvh;box-shadow:none}
+  .ac-hero{padding:34px 24px 22px;align-items:stretch}
+  .ac-hero__mid{max-width:360px;margin:0 auto;width:100%}
+  .ac-hero__title,.ac-hero__desc{text-align:center}
+  .ac-stats{display:none}
+  .ac-split .login-card{padding:28px 22px 48px}
+}
+</style>
 </head>
 <body>
+  <div class="ac-split">
+  <aside class="ac-hero">
+    <div class="ac-hero__logo">
+      <div class="ac-hero__badge">AC</div>
+      <div><div class="ac-hero__name">AgroClub MX</div><div class="ac-hero__sub">Capacitación agrícola profesional</div></div>
+    </div>
+    <div class="ac-hero__mid">
+      <h1 class="ac-hero__title">Domina el campo que tu <em>producción te está pidiendo</em>.</h1>
+      <p class="ac-hero__desc">Cursos de agricultura, agrotecnología y manejo de cultivos, clases en vivo con expertos y certificados con folio oficial.</p>
+      <div class="ac-marquee" aria-hidden="true"><div class="ac-track"><img src="cursos-mini/curso-01.webp" alt="" loading="lazy"><img src="cursos-mini/curso-02.webp" alt="" loading="lazy"><img src="cursos-mini/curso-03.webp" alt="" loading="lazy"><img src="cursos-mini/curso-04.webp" alt="" loading="lazy"><img src="cursos-mini/curso-05.webp" alt="" loading="lazy"><img src="cursos-mini/curso-06.webp" alt="" loading="lazy"><img src="cursos-mini/curso-07.webp" alt="" loading="lazy"><img src="cursos-mini/curso-08.webp" alt="" loading="lazy"><img src="cursos-mini/curso-09.webp" alt="" loading="lazy"><img src="cursos-mini/curso-10.webp" alt="" loading="lazy"><img src="cursos-mini/curso-11.webp" alt="" loading="lazy"><img src="cursos-mini/curso-12.webp" alt="" loading="lazy"><img src="cursos-mini/curso-13.webp" alt="" loading="lazy"><img src="cursos-mini/curso-14.webp" alt="" loading="lazy"><img src="cursos-mini/curso-15.webp" alt="" loading="lazy"><img src="cursos-mini/curso-01.webp" alt="" loading="lazy"><img src="cursos-mini/curso-02.webp" alt="" loading="lazy"><img src="cursos-mini/curso-03.webp" alt="" loading="lazy"><img src="cursos-mini/curso-04.webp" alt="" loading="lazy"><img src="cursos-mini/curso-05.webp" alt="" loading="lazy"><img src="cursos-mini/curso-06.webp" alt="" loading="lazy"><img src="cursos-mini/curso-07.webp" alt="" loading="lazy"><img src="cursos-mini/curso-08.webp" alt="" loading="lazy"><img src="cursos-mini/curso-09.webp" alt="" loading="lazy"><img src="cursos-mini/curso-10.webp" alt="" loading="lazy"><img src="cursos-mini/curso-11.webp" alt="" loading="lazy"><img src="cursos-mini/curso-12.webp" alt="" loading="lazy"><img src="cursos-mini/curso-13.webp" alt="" loading="lazy"><img src="cursos-mini/curso-14.webp" alt="" loading="lazy"><img src="cursos-mini/curso-15.webp" alt="" loading="lazy"></div></div>
+      <p class="ac-hook">Todo esto por <b>menos de $7 al día</b>:</p>
+      <ul class="ac-benefits">
+        <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Biblioteca completa</b> de cursos: cultivos, suelos, agrotech y mercados</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Clases en vivo</b> con ingenieros agrónomos y especialistas</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Material descargable premium</b> listo para aplicar en tu parcela</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Certificados con folio oficial</b> verificables</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Asesoría personalizada</b> y canal VIP · sin permanencia</span></li>
+      </ul>
+      <div class="ac-price">
+        <div class="ac-opt">
+          <b>$200</b>
+          <small>MXN al mes · menos de $7 al día<br>Cancela cuando quieras</small>
+        </div>
+        <div class="ac-opt ac-opt--star">
+          <span class="ac-badge">Ahorras $480</span>
+          <b>$1,920</b>
+          <small>MXN al año · sale en <span class="ac-tachado">$200</span><strong>$160/mes</strong><br>Acceso completo los 365 días</small>
+        </div>
+      </div>
+      <!-- BORRADORES: reemplazar con testimonios REALES antes de pautar fuerte -->
+      <p class="ac-refs-title">Referencias</p>
+      <div class="ac-refs">
+        <div class="ac-ref"><span class="ac-avi">JM</span><div style="flex:1;"><div class="ac-bub"><b>Ing. Javier Morales <small>· Agrónomo de campo</small></b><p>El curso de manejo de suelos y el de fertirriego me cambiaron el rendimiento de la parcela. El certificado lo presenté sin problema</p><span class="ac-lk"><svg viewBox="0 0 24 24"><path d="M2 10h4v12H2zM22 11c0-1.1-.9-2-2-2h-5.2l.9-4.4v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9c0 1.1.9 2 2 2h7c.8 0 1.5-.5 1.8-1.2l2.1-5c.1-.2.1-.5.1-.8v-2z"/></svg>12</span></div><div class="ac-meta"><b>Me gusta</b><b>Responder</b><span>2 sem</span></div></div></div>
+        <div class="ac-ref"><span class="ac-avi ac-avi--b">RC</span><div style="flex:1;"><div class="ac-bub"><b>Rosa Campos <small>· Productora de hortalizas</small></b><p>Las clases en vivo de control de plagas valen oro. Ya le ofrezco asesoría a otros productores de mi zona</p><span class="ac-lk"><svg viewBox="0 0 24 24"><path d="M2 10h4v12H2zM22 11c0-1.1-.9-2-2-2h-5.2l.9-4.4v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9c0 1.1.9 2 2 2h7c.8 0 1.5-.5 1.8-1.2l2.1-5c.1-.2.1-.5.1-.8v-2z"/></svg>9</span></div><div class="ac-meta"><b>Me gusta</b><b>Responder</b><span>1 mes</span></div></div></div>
+      </div>
+      <p class="ac-trust">Pago seguro con Stripe · Acceso inmediato · Sin permanencia</p>
+    </div>
+    <div class="ac-stats">
+      <div><div class="ac-stat-v">20+</div><div class="ac-stat-l">Cursos</div></div>
+      <div><div class="ac-stat-v">24/7</div><div class="ac-stat-l">Acceso</div></div>
+      <div><div class="ac-stat-v">100%</div><div class="ac-stat-l">Certificable</div></div>
+    </div>
+  </aside>
   <div class="login-card">
     <div class="login-logo">
       <div class="logo-icon">AC</div>
@@ -245,6 +347,7 @@
       </div>
     </div>
   </div>
+</div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
