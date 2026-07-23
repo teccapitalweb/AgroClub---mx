@@ -13,17 +13,9 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <title>AgroClub MX — Portal VIP</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
-  <!-- MODIFICADO: fuentes locales (antes Google Fonts CDN) -->
-  <link rel="preload" href="fonts/bricolage-800.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/hanken-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* MODIFICADO: fuentes locales, reemplazan a Plus Jakarta Sans / Space Grotesk vía CDN */
-    @font-face{font-family:'Bricolage Grotesque';src:url('fonts/bricolage-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
-    @font-face{font-family:'Bricolage Grotesque';src:url('fonts/bricolage-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap;}
-    @font-face{font-family:'Hanken Grotesk';src:url('fonts/hanken-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
-    @font-face{font-family:'Hanken Grotesk';src:url('fonts/hanken-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
-    @font-face{font-family:'Hanken Grotesk';src:url('fonts/hanken-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
-
     :root {
       --verde:       #1a6b2f;
       --verde-medio: #2d9e4f;
@@ -35,41 +27,20 @@
       --morado:      #8b5cf6;
       --rojo:        #ef4444;
       --bg:          #f0f4ee;
-      --sidebar-bg:  #23402B; /* MODIFICADO: antes #0e1a0b — ahora el "verde profundo" del sistema unificado */
+      --sidebar-bg:  #0e1a0b;
       --white:       #ffffff;
       --text:        #161d14;
       --muted:       #6b7a65;
       --border:      #dde8d8;
       --card:        #ffffff;
-      /* MODIFICADO: repuntados a las fuentes nuevas (ver sistema de diseño unificado abajo).
-         Se dejan los mismos NOMBRES de variable para no romper el resto del portal,
-         que todavía no se ha migrado a los tokens nuevos (fase 4.2). */
-      --font:        'Hanken Grotesk', sans-serif;
-      --font-display:'Bricolage Grotesque', sans-serif;
+      --font:        'Plus Jakarta Sans', sans-serif;
+      --font-display:'Space Grotesk', sans-serif;
       --sidebar-w:   230px;
       --right-w:     288px;
       --radius:      16px;
       --shadow-sm:   0 2px 8px rgba(0,0,0,.06);
       --shadow-md:   0 8px 24px rgba(0,0,0,.1);
       --shadow-lg:   0 20px 48px rgba(0,0,0,.14);
-
-      /* MODIFICADO: sistema de diseño unificado (mismo del landing AGROTEC-AMERICAN).
-         Convive con los tokens viejos de arriba; no se borra nada todavía (fase 4.2). */
-      --cream:   #FAF5EA;
-      --card-2:  #FFFEFB;
-      --field:   #5C8C3A;
-      --field-d: #4A7C2E;
-      --deep:    #23402B;
-      --deep-2:  #345239;
-      --orange:  #E5852F;
-      --honey:   #D9A43C;
-      --ink:     #2A2A22;
-      --muted-2: #6B6A5C;
-      --line:    #E6E0CD;
-      --green-t: #EAF0DC;
-      --honey-t: #F6E7CE;
-      --blue-t:  #DCEAF0;
-      --clay-t:  #F0E4E0;
     }
 
     /* 🌙 MODO OSCURO */
@@ -780,7 +751,7 @@
     }
     .examen-progress {
       font-size: .85rem; font-weight: 700; color: var(--muted);
-      font-family: 'Bricolage Grotesque', monospace; /* MODIFICADO: antes 'Space Grotesk' (Google Fonts) */
+      font-family: 'Space Grotesk', monospace;
     }
     .examen-progress span:first-child {
       color: #d97706; font-size: 1.1rem; font-weight: 900;
@@ -1626,38 +1597,12 @@
     .layout { display: flex; margin-top: 56px; min-height: calc(100vh - 56px); }
 
     /* ══ SIDEBAR ══════════════════════════════════════════════════════ */
-    /* MODIFICADO: layout flex-column para poder fijar el bloque de usuario abajo; el menú scrollea aparte en .sidebar-scroll */
     .sidebar {
       width: var(--sidebar-w); flex-shrink: 0; background: var(--sidebar-bg);
-      position: fixed; top: 56px; left: 0; bottom: 0;
-      display: flex; flex-direction: column;
+      position: fixed; top: 56px; left: 0; bottom: 0; overflow-y: auto; padding: 24px 0;
     }
-    .sidebar-scroll { flex: 1; overflow-y: auto; padding: 24px 0; min-height: 0; }
-    .sidebar-scroll::-webkit-scrollbar { width: 0; }
+    .sidebar::-webkit-scrollbar { width: 0; }
     .sidebar-section { padding: 0 16px; margin-bottom: 28px; }
-    /* MODIFICADO: bloque de usuario fijo al fondo del sidebar */
-    .sidebar-user {
-      flex-shrink: 0; display: flex; align-items: center; gap: 10px;
-      padding: 14px 16px; border-top: 1px solid rgba(255,255,255,.08);
-    }
-    .sidebar-user__avatar {
-      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--field), var(--field-d));
-      color: #fff; display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: .85rem; font-family: var(--font-display);
-    }
-    .sidebar-user__info { min-width: 0; }
-    .sidebar-user__name {
-      font-size: .82rem; font-weight: 700; color: rgba(255,255,255,.92);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .sidebar-user__plan { font-size: .68rem; color: var(--honey); font-weight: 600; }
-    .sidebar-icon {
-      width: 18px; height: 18px; flex-shrink: 0;
-      fill: none; stroke: currentColor; stroke-width: 2;
-      stroke-linecap: round; stroke-linejoin: round;
-    }
-    .sidebar-icon--sub { width: 16px; height: 16px; }
     .sidebar-label {
       font-size: .62rem; font-weight: 700; letter-spacing: .12em;
       text-transform: uppercase; color: rgba(255,255,255,.25);
@@ -1692,9 +1637,8 @@
       color: #fff;
     }
     .sidebar-subitem.active {
-      /* MODIFICADO: antes rgba(82,201,122,.2) / #a3e635 (verde-claro/lima viejos) */
-      background: rgba(92,140,58,.28);
-      color: #cfe6b0;
+      background: rgba(82,201,122,.2);
+      color: #a3e635;
       font-weight: 700;
     }
     .sidebar-subitem span:first-child { font-size: 1rem; }
@@ -1737,10 +1681,9 @@
     }
     .sidebar-item:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
     .sidebar-item.active {
-      /* MODIFICADO: ítem activo en verde campo (--field), antes rgba(82,201,122,..)/--verde-claro */
-      background: var(--field);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(135deg, rgba(82,201,122,.2), rgba(82,201,122,.08));
+      color: var(--verde-claro);
+      border: 1px solid rgba(82,201,122,.15);
     }
     .sidebar-item-left { display: flex; align-items: center; gap: 10px; }
     .sidebar-badge {
@@ -5053,7 +4996,7 @@
       animation: examenTextFadeUp 0.6s ease 0.5s both;
     }
     .examen-epico__score {
-      font-family: 'Bricolage Grotesque', monospace, var(--font);
+      font-family: 'Space Grotesk', monospace, var(--font);
       font-size: 4rem;
       font-weight: 900;
       color: #fff;
@@ -5401,7 +5344,7 @@
       text-transform: uppercase;
     }
     .hist-stat__val {
-      font-family: 'Bricolage Grotesque', monospace, var(--font);
+      font-family: 'Space Grotesk', monospace, var(--font);
       font-size: 0.95rem;
       font-weight: 800;
       letter-spacing: -0.01em;
@@ -5475,7 +5418,7 @@
       word-break: break-word;
     }
     .hist-evento__monto {
-      font-family: 'Bricolage Grotesque', monospace, var(--font);
+      font-family: 'Space Grotesk', monospace, var(--font);
       font-size: 0.84rem;
       font-weight: 800;
       letter-spacing: -0.01em;
@@ -5702,7 +5645,7 @@
       margin-bottom: 6px;
     }
     .reactivar-plan__precio {
-      font-family: 'Bricolage Grotesque', monospace, var(--font);
+      font-family: 'Space Grotesk', monospace, var(--font);
       font-size: 1.7rem;
       font-weight: 900;
       color: #fff;
@@ -5919,7 +5862,7 @@
       text-align: center;
     }
     .webinar-hero__cd-num {
-      font-family: 'Bricolage Grotesque', monospace, var(--font);
+      font-family: 'Space Grotesk', monospace, var(--font);
       font-size: 1.85rem;
       font-weight: 900;
       color: #fff;
@@ -6079,7 +6022,7 @@
       color: rgba(255, 255, 255, 0.4);
     }
     .webinar-card__date-num {
-      font-family: 'Bricolage Grotesque', monospace, var(--font);
+      font-family: 'Space Grotesk', monospace, var(--font);
       font-size: 1.45rem;
       font-weight: 900;
       line-height: 1;
@@ -6497,7 +6440,7 @@
       border-bottom: 1px dashed var(--border); font-size: .92rem;
     }
     .conv-res-row:last-child { border: none; }
-    .conv-res-row .conv-res-val { font-weight: 800; color: #1a6b2f; font-family: 'Bricolage Grotesque', monospace; } /* MODIFICADO: antes 'Space Grotesk' */
+    .conv-res-row .conv-res-val { font-weight: 800; color: #1a6b2f; font-family: 'Space Grotesk', monospace; }
     .conv-res-row .conv-res-lbl { color: var(--muted); }
 
     /* APOYOS */
@@ -6626,29 +6569,6 @@
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-
-<!-- MODIFICADO: sprite de íconos de línea para sidebar/bottom-nav (reemplaza emoji). Solo presentación, sin lógica. -->
-<svg style="display:none" aria-hidden="true">
-  <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></symbol>
-  <symbol id="icon-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M17 9h4M3 15h4M17 15h4"/></symbol>
-  <symbol id="icon-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5 21 7v10l-5-3.5z"/></symbol>
-  <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 21a2 2 0 0 0 4 0"/></symbol>
-  <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 1 1-3.5-6.6L21 4l-1.2 4A8 8 0 0 1 21 12z"/><path d="M8 10h8M8 13h5"/></symbol>
-  <symbol id="icon-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="m9 13.5-1.5 7L12 18l4.5 2.5L15 13.5"/></symbol>
-  <symbol id="icon-file-text" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M8 13h8M8 17h8M8 9h2"/></symbol>
-  <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 5H4a3 3 0 0 0 3 4M17 5h3a3 3 0 0 1-3 4"/><path d="M12 14v3M9 21h6M9.5 21c0-2 .8-3 2.5-3s2.5 1 2.5 3"/></symbol>
-  <symbol id="icon-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.7 2.7-2-2z"/></symbol>
-  <symbol id="icon-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5.5 9a2 2 0 0 0 1.7 3h11.6a2 2 0 0 0 1.7-3L14 9V3"/><path d="M7.5 15h9"/></symbol>
-  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
-  <symbol id="icon-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.2 1-2 2.5-2s2.5.8 2.5 2-1 1.7-2.5 2-2.5.8-2.5 2 1 2 2.5 2 2.5-.8 2.5-2"/></symbol>
-  <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
-  <symbol id="icon-notebook" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 3v18M4 8h4M4 13h4M4 18h4"/></symbol>
-  <symbol id="icon-ruler" viewBox="0 0 24 24"><path d="M3 16.5 7.5 21l13.5-13.5L16.5 3z"/><path d="m14 5 2 2M11 8l2 2M8 11l2 2M5 14l2 2"/></symbol>
-  <symbol id="icon-landmark" viewBox="0 0 24 24"><path d="M3 21h18M4 21V10M20 21V10M2 10l10-6 10 6M6 10v7M10 10v7M14 10v7M18 10v7"/></symbol>
-  <symbol id="icon-trending-up" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
-  <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
-  <symbol id="icon-credit-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></symbol>
-</svg>
 
 <!-- 🔒 BANNER PAYWALL (solo visible si es usuario FREE) -->
 <div class="paywall-banner" id="paywallBanner">
@@ -7326,12 +7246,12 @@
   .mercado-row__nombre-wrap { min-width: 0; }
   .mercado-row__nombre { font-weight: 700; color: var(--text, #1a2010); font-size: 0.95rem; line-height: 1.2; }
   .mercado-row__variedad { font-size: 0.74rem; color: #94a3a0; margin-top: 2px; font-weight: 500; }
-  .mercado-row__precio { text-align: right; font-family: 'Bricolage Grotesque', monospace, var(--font); font-weight: 800; font-size: 1.18rem; color: var(--text, #1a2010); font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -0.01em; }
+  .mercado-row__precio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 800; font-size: 1.18rem; color: var(--text, #1a2010); font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -0.01em; }
   .mercado-row__precio-sub { text-align: right; font-size: 0.66rem; color: #94a3a0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; opacity: 0.75; }
   .mercado-row__precio-bloqueado { text-align: right; color: #94a3a0; font-size: 0.85rem; }
   .mercado-row__spark { text-align: center; }
   .mercado-row__spark-svg { width: 110px; height: 36px; display: block; margin: 0 auto; }
-  .mercado-row__cambio { text-align: right; font-family: 'Bricolage Grotesque', monospace, var(--font); font-weight: 700; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+  .mercado-row__cambio { text-align: right; font-family: 'Space Grotesk', monospace, var(--font); font-weight: 700; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
   .mercado-row__cambio--up { color: #16a34a; }
   .mercado-row__cambio--down { color: #dc2626; }
   .mercado-row__cambio--flat { color: #94a3a0; }
@@ -7358,7 +7278,7 @@
   .mercado-detalle-fav.is-active { background: rgba(239,68,68,0.10); border-color: #ef4444; color: #ef4444; }
   .mercado-detalle-fav.is-active svg { fill: currentColor; }
   .mercado-detalle-precio-main { text-align: center; padding: 14px 0 18px; margin-bottom: 18px; border-bottom: 1px solid #eef1ec; }
-  .mercado-detalle-precio-num { font-family: 'Bricolage Grotesque', monospace, var(--font); font-size: 2.6rem; font-weight: 900; color: #0d1813; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .mercado-detalle-precio-num { font-family: 'Space Grotesk', monospace, var(--font); font-size: 2.6rem; font-weight: 900; color: #0d1813; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
   .mercado-detalle-precio-meta { margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
   .mercado-detalle-precio-cambio { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-weight: 700; font-size: 0.8rem; }
   .mercado-detalle-precio-cambio--up { background: rgba(22,163,74,0.10); color: #16a34a; }
@@ -7368,14 +7288,14 @@
   .mercado-detalle-precios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
   .mercado-detalle-precio-card { background: #fafbf9; border: 1px solid #eef1ec; border-radius: 12px; padding: 12px 10px; text-align: center; }
   .mercado-detalle-precio-card__lbl { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.08em; color: #5a6758; margin-bottom: 6px; }
-  .mercado-detalle-precio-card__val { font-family: 'Bricolage Grotesque', monospace, var(--font); font-size: 1.25rem; font-weight: 800; color: #0d1813; line-height: 1; font-variant-numeric: tabular-nums; }
+  .mercado-detalle-precio-card__val { font-family: 'Space Grotesk', monospace, var(--font); font-size: 1.25rem; font-weight: 800; color: #0d1813; line-height: 1; font-variant-numeric: tabular-nums; }
   .mercado-detalle-precio-card__sub { font-size: 0.68rem; color: #94a3a0; margin-top: 3px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
   .mercado-detalle-section { margin-bottom: 22px; }
   .mercado-detalle-section__title { font-size: 0.74rem; font-weight: 800; color: #5a6758; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
   .mercado-detalle-centrales { display: flex; flex-direction: column; gap: 1px; background: #eef1ec; border-radius: 10px; overflow: hidden; border: 1px solid #eef1ec; }
   .mercado-detalle-central { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #fff; }
   .mercado-detalle-central__name { font-size: 0.86rem; color: #1a2010; font-weight: 600; }
-  .mercado-detalle-central__price { font-family: 'Bricolage Grotesque', monospace, var(--font); font-size: 0.92rem; font-weight: 700; color: #1a6b2f; font-variant-numeric: tabular-nums; }
+  .mercado-detalle-central__price { font-family: 'Space Grotesk', monospace, var(--font); font-size: 0.92rem; font-weight: 700; color: #1a6b2f; font-variant-numeric: tabular-nums; }
   .mercado-detalle-chart { background: #fafbf9; border: 1px solid #eef1ec; border-radius: 12px; padding: 14px; position: relative; }
   .mercado-detalle-chart svg { width: 100%; height: 110px; display: block; }
   .mercado-detalle-chart-info { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.74rem; color: #94a3a0; font-weight: 600; }
@@ -7751,7 +7671,7 @@
   }
   .mercado-stat:hover { transform: translateY(-2px); }
   .mercado-stat__num {
-    font-family: 'Bricolage Grotesque', monospace, var(--font);
+    font-family: 'Space Grotesk', monospace, var(--font);
     font-size: 1.45rem;
     font-weight: 800;
     color: #fff;
@@ -7886,7 +7806,7 @@
     gap: 4px;
   }
   .mercado-card__precio {
-    font-family: 'Bricolage Grotesque', monospace, var(--font);
+    font-family: 'Space Grotesk', monospace, var(--font);
     font-weight: 800;
     font-size: 1.05rem;
     color: var(--text, #1a2010);
@@ -7907,7 +7827,7 @@
     border-radius: 100px;
     font-size: 0.72rem;
     font-weight: 700;
-    font-family: 'Bricolage Grotesque', monospace, var(--font);
+    font-family: 'Space Grotesk', monospace, var(--font);
   }
   .mercado-card__cambio--up   { background: rgba(22,163,74,0.10); color: #15803d; }
   .mercado-card__cambio--down { background: rgba(220,38,38,0.10); color: #b91c1c; }
@@ -8233,8 +8153,7 @@
           <line x1="7" y1="2" x2="7" y2="6"/><line x1="17" y1="2" x2="17" y2="6"/>
         </svg>
       </span>
-      <!-- MODIFICADO: texto alineado con el sidebar (antes "Biblioteca") -->
-      <span class="mobile-drawer__item-label">Biblioteca de cursos</span>
+      <span class="mobile-drawer__item-label">Biblioteca</span>
       <span class="mobile-drawer__item-badge" id="drawer-badge-cursos" style="display:none;">0</span>
     </button>
 
@@ -8356,8 +8275,7 @@
           <polyline points="16 7 22 7 22 13"/>
         </svg>
       </span>
-      <!-- MODIFICADO: texto alineado con el sidebar (antes "Predicción") -->
-      <span class="mobile-drawer__item-label">Predicción de mercado</span>
+      <span class="mobile-drawer__item-label">Predicción</span>
     </button>
 
     <div class="mobile-drawer__divider"></div>
@@ -8414,50 +8332,37 @@
 
 <div class="layout">
   <!-- SIDEBAR -->
-  <!-- MODIFICADO: mismos textos, onclick y ids que antes. Solo cambia el markup del ícono (emoji -> <svg><use>) y clases nuevas de color. -->
-  <!-- MODIFICADO: se envuelve el menú en .sidebar-scroll para que el bloque de usuario quede fijo abajo -->
   <div class="sidebar">
-   <div class="sidebar-scroll">
     <div class="sidebar-section">
       <div class="sidebar-label">Principal</div>
-      <div class="sidebar-item active" onclick="showPage('inicio',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-home"/></svg> Inicio</div></div>
-      <div class="sidebar-item" onclick="showPage('cursos',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-film"/></svg> Biblioteca de cursos</div><span class="sidebar-badge" id="badge-cursos" style="display:none;">0</span></div>
-      <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-video"/></svg> Webinars</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
-      <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-film"/></svg> Videos</div><span class="sidebar-badge" style="background:#8b5cf6;color:#fff;">Pronto</span></div>
-      <div class="sidebar-item" onclick="showPage('notificaciones',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-bell"/></svg> Notificaciones</div><span class="sidebar-badge" id="badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span></div>
-      <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-chat"/></svg> Foro VIP</div></div>
-      <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-award"/></svg> Certificados</div></div>
-      <div class="sidebar-item" onclick="showPage('examenes',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-file-text"/></svg> Exámenes</div></div>
-      <div class="sidebar-item" onclick="showPage('logros',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-trophy"/></svg> Logros</div></div>
+      <div class="sidebar-item active" onclick="showPage('inicio',this)"><div class="sidebar-item-left"><span>🏠</span> Inicio</div></div>
+      <div class="sidebar-item" onclick="showPage('cursos',this)"><div class="sidebar-item-left"><span>🎬</span> Biblioteca de cursos</div><span class="sidebar-badge" id="badge-cursos" style="display:none;">0</span></div>
+      <div class="sidebar-item" onclick="showPage('sesiones',this)"><div class="sidebar-item-left"><span>🎥</span> Webinars</div><span class="sidebar-badge" id="badge-sesiones" style="background:var(--naranja);color:#fff;display:none;">0</span></div>
+      <div class="sidebar-item" onclick="showPage('materiales',this)"><div class="sidebar-item-left"><span>🎬</span> Videos</div><span class="sidebar-badge" style="background:#8b5cf6;color:#fff;">Pronto</span></div>
+      <div class="sidebar-item" onclick="showPage('notificaciones',this)"><div class="sidebar-item-left"><span>🔔</span> Notificaciones</div><span class="sidebar-badge" id="badge-notif" style="background:#ef4444;color:#fff;display:none;">0</span></div>
+      <div class="sidebar-item" onclick="showPage('foro',this)"><div class="sidebar-item-left"><span>💬</span> Foro VIP</div></div>
+      <div class="sidebar-item" onclick="showPage('certificados',this)"><div class="sidebar-item-left"><span>🎓</span> Certificados</div></div>
+      <div class="sidebar-item" onclick="showPage('examenes',this)"><div class="sidebar-item-left"><span>📝</span> Exámenes</div></div>
+      <div class="sidebar-item" onclick="showPage('logros',this)"><div class="sidebar-item-left"><span>🏆</span> Logros</div></div>
       <div class="sidebar-item sidebar-item--expand" onclick="toggleHerrMenu(this)">
-        <div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-tool"/></svg> Herramientas</div>
+        <div class="sidebar-item-left"><span>🛠️</span> Herramientas</div>
         <span class="sidebar-arrow">▸</span>
       </div>
       <div class="sidebar-submenu" id="sidebar-herr-submenu">
-        <div class="sidebar-subitem" onclick="irHerramienta('agroquimicos',this)"><svg class="sidebar-icon sidebar-icon--sub"><use href="#icon-flask"/></svg> Agroquímicos</div>
-        <div class="sidebar-subitem" onclick="irHerramienta('plagas',this)"><svg class="sidebar-icon sidebar-icon--sub"><use href="#icon-search"/></svg> Detector IA</div>
-        <div class="sidebar-subitem" onclick="irHerramienta('costos',this)"><svg class="sidebar-icon sidebar-icon--sub"><use href="#icon-coin"/></svg> Costos</div>
-        <div class="sidebar-subitem" onclick="irHerramienta('clima',this)"><svg class="sidebar-icon sidebar-icon--sub"><use href="#icon-sun"/></svg> Clima</div>
-        <div class="sidebar-subitem" onclick="irHerramienta('bitacora',this)"><svg class="sidebar-icon sidebar-icon--sub"><use href="#icon-notebook"/></svg> Bitácora</div>
-        <div class="sidebar-subitem" onclick="irHerramienta('conversor',this)"><svg class="sidebar-icon sidebar-icon--sub"><use href="#icon-ruler"/></svg> Conversor</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('agroquimicos',this)"><span>🧪</span> Agroquímicos</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('plagas',this)"><span>🔬</span> Detector IA</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('costos',this)"><span>💰</span> Costos</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('clima',this)"><span>☀️</span> Clima</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('bitacora',this)"><span>📓</span> Bitácora</div>
+        <div class="sidebar-subitem" onclick="irHerramienta('conversor',this)"><span>📏</span> Conversor</div>
       </div>
-      <div class="sidebar-item" onclick="showPage('apoyos',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-landmark"/></svg> Apoyos gob.</div></div>
-      <div class="sidebar-item" onclick="showPage('mercado',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-trending-up"/></svg> Predicción de mercado</div></div>
+      <div class="sidebar-item" onclick="showPage('apoyos',this)"><div class="sidebar-item-left"><span>🏛️</span> Apoyos gob.</div></div>
+      <div class="sidebar-item" onclick="showPage('mercado',this)"><div class="sidebar-item-left"><span>💹</span> Predicción de mercado</div></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mi cuenta</div>
-      <div class="sidebar-item" onclick="showPage('perfil',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-user"/></svg> Mi perfil</div></div>
-      <div class="sidebar-item" onclick="showPage('suscripcion',this)"><div class="sidebar-item-left"><svg class="sidebar-icon"><use href="#icon-credit-card"/></svg> Suscripción</div></div>
-    </div>
-   </div>
-
-    <!-- MODIFICADO: bloque de usuario (avatar + nombre + plan), fijo abajo. Mismos datos que el topbar (#userAvatar/#userName), solo espejeados por JS — igual que ya se hace con el drawer móvil. -->
-    <div class="sidebar-user">
-      <div class="sidebar-user__avatar" id="sidebarUserAvatar">M</div>
-      <div class="sidebar-user__info">
-        <div class="sidebar-user__name" id="sidebarUserName">Miembro</div>
-        <div class="sidebar-user__plan">⭐ VIP</div>
-      </div>
+      <div class="sidebar-item" onclick="showPage('perfil',this)"><div class="sidebar-item-left"><span>👤</span> Mi perfil</div></div>
+      <div class="sidebar-item" onclick="showPage('suscripcion',this)"><div class="sidebar-item-left"><span>💳</span> Suscripción</div></div>
     </div>
   </div>
 
@@ -10419,14 +10324,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// MODIFICADO: espeja nombre/avatar del topbar al bloque de usuario nuevo del sidebar (mismo patrón que ya usa el drawer móvil)
-function syncSidebarUser(nombre) {
-  const a = document.getElementById('sidebarUserAvatar');
-  const n = document.getElementById('sidebarUserName');
-  if (a) a.textContent = nombre[0].toUpperCase();
-  if (n) n.textContent = nombre.split(' ')[0];
-}
-
 // ── CURSOS DATA — se carga de Firebase ──
 let CURSOS = [];
 
@@ -10587,7 +10484,7 @@ onAuthStateChanged(auth, async (user) => {
             // Mostrar overlay SOLO si no existe
             if (!document.getElementById('_autologin-overlay')) {
               document.body.insertAdjacentHTML('beforeend', `
-                <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Hanken Grotesk',sans-serif;"> <!-- MODIFICADO: antes 'Plus Jakarta Sans' -->
+                <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Plus Jakarta Sans',sans-serif;">
                   <div style="width:52px;height:52px;border:4px solid #a3e635;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
                   <div style="color:#fff;font-size:1.1rem;font-weight:700;text-align:center;padding:0 20px;">✅ Entrando al portal...</div>
                   <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
@@ -10629,7 +10526,7 @@ onAuthStateChanged(auth, async (user) => {
           if (data.t && (Date.now() - data.t) < 5 * 60 * 1000 && data.e && data.p) {
             // Mostrar overlay
             document.body.insertAdjacentHTML('beforeend', `
-              <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Hanken Grotesk',sans-serif;"> <!-- MODIFICADO: antes 'Plus Jakarta Sans' -->
+              <div id="_autologin-overlay" style="position:fixed;inset:0;background:#0d2b09;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:'Plus Jakarta Sans',sans-serif;">
                 <div style="width:52px;height:52px;border:4px solid #a3e635;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
                 <div style="color:#fff;font-size:1.1rem;font-weight:700;text-align:center;padding:0 20px;">✅ Entrando al portal...</div>
                 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
@@ -10709,7 +10606,6 @@ onAuthStateChanged(auth, async (user) => {
       const nombre = data.nombre || user.email.split('@')[0];
       document.getElementById("userName").textContent = nombre.split(" ")[0];
       document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
-      syncSidebarUser(nombre); /* MODIFICADO */
       if (document.getElementById("hero-greeting")) document.getElementById("hero-greeting").textContent = saludoPorHora(nombre.split(" ")[0]);
       if (document.getElementById("perfil-nombre-hero")) document.getElementById("perfil-nombre-hero").textContent = nombre;
       if (document.getElementById("perfil-email-hero")) document.getElementById("perfil-email-hero").textContent = user.email;
@@ -10732,7 +10628,6 @@ onAuthStateChanged(auth, async (user) => {
     const nombre = data.nombre || user.email;
     document.getElementById("userName").textContent = nombre.split(" ")[0];
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
-    syncSidebarUser(nombre); /* MODIFICADO */
     document.getElementById("hero-greeting").textContent = saludoPorHora(nombre.split(" ")[0]);
     document.getElementById("perfil-nombre").textContent = data.nombre || "—";
     document.getElementById("perfil-email").textContent = user.email;
@@ -10790,7 +10685,6 @@ onAuthStateChanged(auth, async (user) => {
     }
     document.getElementById("userName").textContent = nombre.split(" ")[0];
     document.getElementById("userAvatar").textContent = nombre[0].toUpperCase();
-    syncSidebarUser(nombre); /* MODIFICADO */
     if (document.getElementById("hero-greeting")) document.getElementById("hero-greeting").textContent = saludoPorHora(nombre.split(" ")[0]);
     // Llenar campos del perfil con datos del registro
     if (document.getElementById("perfil-nombre")) document.getElementById("perfil-nombre").textContent = nombre;
@@ -12045,8 +11939,6 @@ function cargarHistorialPagos(email) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 window.solicitarCancelacion = function() {
-  const email = currentUser ? currentUser.email : '';
-
   // 🚨 FIX BUG 6: calcular fecha exacta hasta cuándo será VIP
   let fechaVenceTexto = '—';
   let diasRestantes = 0;
@@ -12132,10 +12024,26 @@ window.solicitarCancelacion = function() {
     status.textContent = '⏳ Enviando solicitud...';
 
     try {
+      // El backend ya no acepta el email a secas: exige el idToken de Firebase
+      // y cancela SOLO la membresía del dueño del token.
+      const usuarioAuth = auth.currentUser;
+      if (!usuarioAuth) {
+        status.style.color = '#dc2626';
+        status.textContent = '❌ Tu sesión expiró. Vuelve a iniciar sesión e intenta de nuevo.';
+        btnSi.disabled = false;
+        btnNo.disabled = false;
+        btnSi.textContent = 'Reintentar';
+        return;
+      }
+      const idToken = await usuarioAuth.getIdToken();
+
       const res = await fetch('https://agroclub-webhook-production.up.railway.app/cancelar-membresia', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        },
+        body: JSON.stringify({})
       });
 
       if (res.ok) {
@@ -12235,7 +12143,6 @@ window.guardarCampo = async function(campo) {
       document.getElementById('userAvatar').textContent        = val[0].toUpperCase();
       document.getElementById('perfil-avatar-big').textContent = val[0].toUpperCase();
       document.getElementById('userName').textContent          = val.split(' ')[0];
-      syncSidebarUser(val); /* MODIFICADO */
     }
     window.cancelarEdicion(campo);
     window.showToast('✅ ' + (campo === 'nombre' ? 'Nombre' : 'WhatsApp') + ' actualizado');
