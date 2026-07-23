@@ -12615,8 +12615,6 @@ function cargarHistorialPagos(email) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 window.solicitarCancelacion = function() {
-  const email = currentUser ? currentUser.email : '';
-
   // 🚨 FIX BUG 6: calcular fecha exacta hasta cuándo será VIP
   let fechaVenceTexto = '—';
   let diasRestantes = 0;
@@ -12702,10 +12700,26 @@ window.solicitarCancelacion = function() {
     status.textContent = '⏳ Enviando solicitud...';
 
     try {
+      // El backend ya no acepta el email a secas: exige el idToken de Firebase
+      // y cancela SOLO la membresía del dueño del token.
+      const usuarioAuth = auth.currentUser;
+      if (!usuarioAuth) {
+        status.style.color = '#dc2626';
+        status.textContent = '❌ Tu sesión expiró. Vuelve a iniciar sesión e intenta de nuevo.';
+        btnSi.disabled = false;
+        btnNo.disabled = false;
+        btnSi.textContent = 'Reintentar';
+        return;
+      }
+      const idToken = await usuarioAuth.getIdToken();
+
       const res = await fetch('https://agroclub-webhook-production.up.railway.app/cancelar-membresia', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        },
+        body: JSON.stringify({})
       });
 
       if (res.ok) {
