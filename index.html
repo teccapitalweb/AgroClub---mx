@@ -1103,7 +1103,8 @@
     body.is-free .widget-logro {
       position: relative;
     }
-    body.is-free .course-card::after,
+    /* MODIFICADO: candado de paywall de .course-card separado del resto (foro/apoyos/herramientas/certificados/sesiones
+       siguen con el candado ámbar sin cambios — esta fase es solo tarjetas de curso + dashboard) */
     body.is-free .sesion-card::after,
     body.is-free .foro-post::after,
     body.is-free .apoyo-item::after,
@@ -1123,6 +1124,27 @@
       z-index: 5;
       pointer-events: none;
       animation: lockPulse 2.2s ease-in-out infinite;
+    }
+    /* MODIFICADO: candado de paywall de la tarjeta de curso — verde profundo + texto corto (antes círculo ámbar solo-icono) */
+    body.is-free .course-card::after {
+      content: '🔒 VIP';
+      position: absolute;
+      top: 10px; right: 10px;
+      padding: 5px 12px;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      color: #fff;
+      border-radius: 100px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 4px; font-size: .68rem; font-weight: 800; letter-spacing: .02em;
+      box-shadow: 0 4px 12px rgba(35,64,43,.45), 0 0 0 3px #fff;
+      backdrop-filter: blur(4px);
+      z-index: 5;
+      pointer-events: none;
+      animation: lockPulseVerde 2.2s ease-in-out infinite; /* MODIFICADO: keyframes propio para no heredar el color ámbar del pulso viejo */
+    }
+    @keyframes lockPulseVerde {
+      0%,100% { transform: scale(1); box-shadow: 0 4px 12px rgba(35,64,43,.45), 0 0 0 3px #fff; }
+      50%     { transform: scale(1.08); box-shadow: 0 6px 18px rgba(35,64,43,.65), 0 0 0 3px #fff; }
     }
     @keyframes lockPulse {
       0%,100% { transform: scale(1); box-shadow: 0 4px 12px rgba(251,191,36,.55), 0 0 0 3px #fff; }
@@ -1852,6 +1874,51 @@
       50%      { box-shadow: 0 10px 28px rgba(252, 211, 77, 0.5), 0 0 0 8px rgba(252, 211, 77, 0); }
     }
 
+    /* MODIFICADO: fila de stats como tarjetas blancas (antes chips dentro del hero verde).
+       Mismos 5 datos/ids de siempre (hs-cursos, hs-clases, hs-webinars, hs-productos, hs-plan-*);
+       hs-plan-card conserva la clase hero-stat--cta y actualizarHeroPlan()/heroPlanClick() sin tocar. */
+    .dashboard-stats {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+      margin-bottom: 32px;
+    }
+    .dstat {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 16px; text-align: center; box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .dstat:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .dstat-icon {
+      width: 40px; height: 40px; border-radius: 12px; margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dstat-svg { width: 20px; height: 20px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .dstat-icon--verde { background: var(--green-t); } .dstat-icon--verde .dstat-svg { stroke: var(--field); }
+    .dstat-icon--azul  { background: var(--blue-t);  } .dstat-icon--azul  .dstat-svg { stroke: var(--azul); }
+    .dstat-icon--honey { background: var(--honey-t); } .dstat-icon--honey .dstat-svg { stroke: var(--honey); }
+    .dstat-icon--clay  { background: var(--clay-t);  } .dstat-icon--clay  .dstat-svg { stroke: var(--orange); }
+    .dstat-num { font-size: 1.5rem; font-weight: 900; font-family: var(--font-display); color: var(--ink); line-height: 1; }
+    .dstat-label { font-size: .7rem; color: var(--muted-2); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+    .dstat--cta { cursor: pointer; }
+    /* Estado VIP: tarjeta normal con acento honey */
+    .dstat--cta.hero-stat--cta-vip { border-color: var(--honey); background: var(--honey-t); }
+    .dstat--cta.hero-stat--cta-vip .dstat-icon { background: var(--honey); }
+    .dstat--cta.hero-stat--cta-vip .dstat-icon .dstat-svg { stroke: #fff; }
+    .dstat--cta.hero-stat--cta-vip .dstat-num { color: #92650f; }
+    .dstat--cta.hero-stat--cta-vip .dstat-label { color: #92650f; font-weight: 700; }
+    /* Estado FREE: CTA llamativo para invitar a suscribirse */
+    .dstat--cta.hero-stat--cta-free {
+      background: linear-gradient(135deg, var(--honey), var(--orange));
+      border: 1.5px solid #fff; box-shadow: 0 8px 20px rgba(217,164,60,.4);
+      animation: heroCtaPulse 2.4s ease-in-out infinite;
+    }
+    .dstat--cta.hero-stat--cta-free:hover { transform: translateY(-3px) scale(1.03); }
+    .dstat--cta.hero-stat--cta-free .dstat-icon { background: rgba(255,255,255,.3); }
+    .dstat--cta.hero-stat--cta-free .dstat-icon .dstat-svg { stroke: #422006; }
+    .dstat--cta.hero-stat--cta-free .dstat-num,
+    .dstat--cta.hero-stat--cta-free .dstat-label { color: #422006; font-weight: 800; }
+    @media (max-width: 1100px) { .dashboard-stats { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px)  { .dashboard-stats { grid-template-columns: repeat(2, 1fr); } }
+
     /* ══ SECTION HEADER ═══════════════════════════════════════════════ */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
     .section-header h3 { font-size: 1rem; font-weight: 800; font-family: var(--font-display); letter-spacing: -.01em; }
@@ -1861,9 +1928,10 @@
     /* ══ COURSE CARDS ════════════════════════════════════════════════ */
     .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px; }
     .course-card {
-      background: var(--card); border-radius: 20px; overflow: hidden;
+      /* MODIFICADO: borde 16px y color --line del sistema unificado (antes 20px / --border) */
+      background: var(--card); border-radius: 16px; overflow: hidden;
       cursor: pointer; transition: transform .2s, box-shadow .2s;
-      box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm); border: 1px solid var(--line);
       animation: cardIn .4s ease forwards; opacity: 0;
     }
     .course-card:nth-child(1) { animation-delay: .05s; }
@@ -1871,7 +1939,8 @@
     .course-card:nth-child(3) { animation-delay: .15s; }
     .course-card:nth-child(4) { animation-delay: .2s; }
     @keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-    .course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    /* MODIFICADO: lift más suave (antes -6px) */
+    .course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 
     /* ══ 🏆 CERTIFICADOS — HERO + CARDS PREMIUM ══════════════════════════ */
     .cert-hero {
@@ -2747,9 +2816,10 @@
       .video-cs__badge { margin-bottom: 22px; }
     }
     /* ══ FIN VIDEOS ══════════════════════════════════════════════════════ */
+    /* MODIFICADO: cabecera ~104px (antes 190px), emoji más chico para la nueva proporción */
     .course-thumb {
-      height: 190px; display: flex; align-items: center; justify-content: center;
-      font-size: 4.5rem; position: relative; overflow: hidden; background: #e8f5e9;
+      height: 104px; display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem; position: relative; overflow: hidden; background: #e8f5e9;
     }
     .course-thumb img {
       position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
@@ -2759,14 +2829,27 @@
       background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,.35)); z-index:1;
     }
     .course-thumb .course-badge, .course-thumb .course-progress-bar { z-index: 2; }
+    /* MODIFICADO: chip de categoría real, arriba a la izquierda de la cabecera */
+    .course-thumb-chip {
+      position: absolute; top: 10px; left: 10px; z-index: 2;
+      font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+      color: #fff; background: rgba(0,0,0,.4); backdrop-filter: blur(4px);
+      padding: 4px 10px; border-radius: 100px; border: 1px solid rgba(255,255,255,.2);
+    }
+    /* MODIFICADO: overlay con blur suave + círculo verde profundo (antes fondo negro sólido + emoji suelto) */
     .course-locked-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,.55);
+      position: absolute; inset: 0; background: rgba(35,64,43,.5); backdrop-filter: blur(5px);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       z-index: 3; gap: 8px;
     }
-    .course-locked-overlay .lock-icon { font-size: 2.2rem; }
+    .course-locked-overlay .lock-circle {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; box-shadow: 0 4px 12px rgba(0,0,0,.35);
+    }
     .course-locked-overlay .lock-date {
-      font-size: .75rem; font-weight: 700; color: #fff;
+      font-size: .72rem; font-weight: 700; color: #fff;
       background: rgba(255,255,255,.15); padding: 5px 14px; border-radius: 100px;
       border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(4px);
     }
@@ -3180,7 +3263,8 @@
     .widget-pro:hover { transform: translateY(-2px); }
 
     .widget-webinar {
-      background: linear-gradient(160deg, #0c1810 0%, #142a18 50%, #0c1f12 100%);
+      /* MODIFICADO: verde profundo del sistema unificado (antes gradiente propio #0c1810→#0c1f12) */
+      background: linear-gradient(160deg, var(--deep) 0%, var(--deep-2) 100%);
       color: #fff;
       box-shadow: 0 8px 24px -8px rgba(14, 26, 11, 0.6), inset 0 1px 0 rgba(255,255,255,0.06);
       padding: 22px 20px;
@@ -3478,11 +3562,11 @@
     }
     .widget-whatsapp__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.18); }
 
-    /* Widget Descuento VIP */
+    /* Widget Descuento VIP — MODIFICADO: tonos honey/orange del sistema unificado (mismo "20%" hardcodeado, sin tocar el valor ni su fuente) */
     .widget-descuento {
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 60%, #fcd34d 100%);
-      border: 1px solid #f59e0b;
-      box-shadow: 0 8px 20px -6px rgba(245, 158, 11, 0.3);
+      background: linear-gradient(135deg, var(--honey-t) 0%, var(--honey-t) 60%, var(--honey) 100%);
+      border: 1px solid var(--honey);
+      box-shadow: 0 8px 20px -6px rgba(217,164,60,.3);
     }
     .widget-descuento::before {
       content: '🎁';
@@ -3500,7 +3584,7 @@
       gap: 5px;
       background: rgba(146, 64, 14, 0.1);
       border: 1px solid rgba(146, 64, 14, 0.2);
-      color: #92400e;
+      color: #92400e; /* MODIFICADO: solo el marco/fondo de arriba se movió a honey; este texto se deja legible como estaba */
       font-size: 0.65rem;
       font-weight: 800;
       letter-spacing: 0.12em;
@@ -3530,7 +3614,7 @@
     .widget-descuento__btn {
       position: relative;
       width: 100%;
-      background: linear-gradient(135deg, #d97706, #b45309);
+      background: linear-gradient(135deg, var(--honey), var(--orange)); /* MODIFICADO: antes #d97706→#b45309 */
       color: #fff;
       border: none;
       padding: 11px;
@@ -6632,6 +6716,7 @@
   <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></symbol>
   <symbol id="icon-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M17 9h4M3 15h4M17 15h4"/></symbol>
   <symbol id="icon-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5 21 7v10l-5-3.5z"/></symbol>
+  <symbol id="icon-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z" fill="currentColor" stroke="none"/></symbol>
   <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 21a2 2 0 0 0 4 0"/></symbol>
   <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 1 1-3.5-6.6L21 4l-1.2 4A8 8 0 0 1 21 12z"/><path d="M8 10h8M8 13h5"/></symbol>
   <symbol id="icon-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="m9 13.5-1.5 7L12 18l4.5 2.5L15 13.5"/></symbol>
@@ -8488,24 +8573,45 @@
         </div>
       </div>
 
+      <!-- MODIFICADO: el hero-banner ahora solo lleva el saludo; las stats se movieron a .dashboard-stats abajo (mismos ids/clases, misma lógica de actualizarHeroPlan/heroPlanClick, solo cambia dónde viven visualmente) -->
       <div class="hero-banner">
         <div class="hero-inner">
           <div class="hero-text">
             <h2 id="hero-greeting">¡Bienvenido! 🌱</h2>
             <p id="hero-bienvenida">Tienes acceso completo a todos los cursos y materiales</p>
           </div>
-          <div class="hero-stats">
-            <div class="hero-stat"><div class="hero-stat-num" id="hs-cursos">2</div><div class="hero-stat-label">Cursos</div></div>
-            <div class="hero-stat"><div class="hero-stat-num" id="hs-clases">9</div><div class="hero-stat-label">Clases</div></div>
-            <div class="hero-stat"><div class="hero-stat-num" id="hs-webinars">5</div><div class="hero-stat-label">Webinars</div></div>
-            <div class="hero-stat"><div class="hero-stat-num" id="hs-productos">30</div><div class="hero-stat-label">Mercado</div></div>
-            <div class="hero-stat hero-stat--cta" id="hs-plan-card" onclick="window.heroPlanClick && window.heroPlanClick()">
-              <div class="hero-stat-num" id="hs-plan-num">VIP</div>
-              <div class="hero-stat-label" id="hs-plan-lbl">Plan</div>
-            </div>
-          </div>
         </div>
       </div>
+
+      <!-- MODIFICADO: fila de 5 stats como tarjetas blancas con icono en cuadro de color suave -->
+      <div class="dashboard-stats">
+        <div class="dstat">
+          <div class="dstat-icon dstat-icon--verde"><svg class="dstat-svg"><use href="#icon-film"/></svg></div>
+          <div class="dstat-num" id="hs-cursos">2</div>
+          <div class="dstat-label">Cursos</div>
+        </div>
+        <div class="dstat">
+          <div class="dstat-icon dstat-icon--azul"><svg class="dstat-svg"><use href="#icon-play"/></svg></div>
+          <div class="dstat-num" id="hs-clases">9</div>
+          <div class="dstat-label">Clases</div>
+        </div>
+        <div class="dstat">
+          <div class="dstat-icon dstat-icon--honey"><svg class="dstat-svg"><use href="#icon-video"/></svg></div>
+          <div class="dstat-num" id="hs-webinars">5</div>
+          <div class="dstat-label">Webinars</div>
+        </div>
+        <div class="dstat">
+          <div class="dstat-icon dstat-icon--clay"><svg class="dstat-svg"><use href="#icon-trending-up"/></svg></div>
+          <div class="dstat-num" id="hs-productos">30</div>
+          <div class="dstat-label">Mercado</div>
+        </div>
+        <div class="dstat dstat--cta hero-stat--cta" id="hs-plan-card" onclick="window.heroPlanClick && window.heroPlanClick()">
+          <div class="dstat-icon dstat-icon--honey"><svg class="dstat-svg"><use href="#icon-award"/></svg></div>
+          <div class="dstat-num" id="hs-plan-num">VIP</div>
+          <div class="dstat-label" id="hs-plan-lbl">Plan</div>
+        </div>
+      </div>
+
       <div class="section-header">
         <h3>🎬 Continúa aprendiendo</h3>
         <span class="section-header-tag" onclick="showPage('cursos', document.querySelector('[onclick*=cursos]'))">Ver todos →</span>
@@ -10912,13 +11018,17 @@ function renderCursos() {
 
     const thumbBg = c.foto ? '' : `background:linear-gradient(135deg,${c.color||'#1a6b2f'}33,${c.color||'#1a6b2f'}66);`;
 
+    /* MODIFICADO: markup de presentación de la tarjeta (chip de categoría en la cabecera,
+       candado de calendario con círculo). Ningún dato ni cálculo cambia: mismos c.categoria,
+       c.titulo, c.descripcion, totalClases, pct, bloqueado, fechaTexto de siempre. */
     return `
     <div class="course-card" onclick="${bloqueado ? '' : `verCurso('${c.id}')`}" style="${bloqueado ? 'cursor:default;' : ''}">
       <div class="course-thumb" style="${thumbBg}">
         ${imgTag}
+        ${c.categoria ? `<span class="course-thumb-chip">${c.categoria}</span>` : ''}
         ${bloqueado ? `
           <div class="course-locked-overlay">
-            <span class="lock-icon">🔒</span>
+            <span class="lock-circle">🔒</span>
             <span class="lock-date">Disponible el ${fechaTexto}</span>
           </div>
         ` : `
@@ -10929,7 +11039,6 @@ function renderCursos() {
         `}
       </div>
       <div class="course-info">
-        <div class="course-category">${c.categoria || ''}</div>
         <div class="course-title">${c.titulo}</div>
         <div class="course-desc">${c.descripcion || ''}</div>
         <div class="course-meta">
