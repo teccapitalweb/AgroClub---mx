@@ -2889,9 +2889,10 @@
     .btn-ver-curso:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(26,107,47,.4); }
 
     /* ══ COURSE DETAIL ════════════════════════════════════════════════ */
+    /* MODIFICADO: verde profundo del sistema unificado (antes gradiente propio #0d2e0a→#1a5e14), radio 16px */
     .course-detail-header {
-      background: linear-gradient(135deg, #0d2e0a, #1a5e14);
-      border-radius: 20px; padding: 32px; margin-bottom: 24px; color: #fff;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      border-radius: 16px; padding: 32px; margin-bottom: 24px; color: #fff;
       position: relative; overflow: hidden;
     }
     .course-detail-header::before {
@@ -2899,17 +2900,25 @@
       width: 180px; height: 180px; border-radius: 50%;
       background: rgba(163,230,53,.08);
     }
+    /* MODIFICADO: chip de categoría real (antes texto suelto uppercase) */
+    .course-detail-header__chip {
+      display: inline-block; font-size: .68rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .08em; color: #fff;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+      padding: 4px 12px; border-radius: 100px; margin-bottom: 10px;
+    }
     .course-detail-header h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; font-family: var(--font-display); }
     .course-detail-header p { color: rgba(255,255,255,.7); font-size: .9rem; margin-bottom: 16px; }
+    /* MODIFICADO: "volver a la biblioteca" como enlace discreto (antes botón con fondo/borde) */
     .btn-back {
-      background: rgba(255,255,255,.12); color: #fff;
-      border: 1px solid rgba(255,255,255,.2); border-radius: 10px;
-      padding: 8px 16px; font-size: .82rem; font-weight: 600; cursor: pointer;
-      font-family: var(--font); margin-bottom: 16px;
+      background: none; color: var(--muted-2);
+      border: none; padding: 0; margin-bottom: 16px;
+      font-size: .85rem; font-weight: 600; cursor: pointer;
+      font-family: var(--font);
       display: inline-flex; align-items: center; gap: 6px;
-      transition: background .15s;
+      transition: color .15s;
     }
-    .btn-back:hover { background: rgba(255,255,255,.2); }
+    .btn-back:hover { color: var(--field); text-decoration: underline; }
 
     /* ══ VIDEO PLAYER ════════════════════════════════════════════════ */
     .video-player-wrap {
@@ -2942,25 +2951,31 @@
       transition: background .15s;
     }
     .clase-item:last-child { border-bottom: none; }
-    .clase-item:hover { background: #f6faf4; }
-    .clase-item.active { background: rgba(26,107,47,.05); border-left: 3px solid var(--verde); }
+    /* MODIFICADO: verde campo del sistema unificado (antes var(--verde) viejo) */
+    .clase-item:hover { background: var(--green-t); }
+    .clase-item.active { background: var(--green-t); border-left: 3px solid var(--field); }
     .clase-num {
       width: 34px; height: 34px; border-radius: 50%;
-      background: rgba(26,107,47,.08); color: var(--verde);
+      background: var(--green-t); color: var(--field-d);
       display: flex; align-items: center; justify-content: center;
       font-size: .8rem; font-weight: 800; flex-shrink: 0;
       font-family: var(--font-display);
     }
-    .clase-item.active .clase-num { background: var(--verde); color: #fff; }
+    .clase-item.active .clase-num { background: var(--field); color: #fff; }
+    /* MODIFICADO: bug de contraste preexistente (no introducido por mí) — un selector genérico
+       "body.dark-mode div" gana por especificidad y volvía invisible el número en modo oscuro.
+       Se fuerza aquí para que el círculo se mantenga legible en ambos temas. */
+    body.dark-mode .clase-num { color: var(--field-d); }
     .clase-check {
       width: 24px; height: 24px; border-radius: 50%;
-      border: 2px solid var(--border); cursor: pointer;
+      border: 2px solid var(--line); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; transition: background .2s, border-color .2s; font-size: .8rem;
     }
-    .clase-check:hover { border-color: var(--verde-claro); background: rgba(82,201,122,.1); }
-    .clase-check.completada { background: var(--verde); border-color: var(--verde); color: #fff; }
-    .clase-item.completada-row { background: #f6fdf8; }
+    .clase-check svg { width: 13px; height: 13px; stroke: #fff; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .clase-check:hover { border-color: var(--field); background: var(--green-t); }
+    .clase-check.completada { background: var(--field); border-color: var(--field); color: #fff; }
+    .clase-item.completada-row { background: var(--green-t); } /* MODIFICADO: antes #f6fdf8 */
     .clase-item.completada-row .clase-titulo { color: var(--muted); text-decoration: line-through; }
     .clase-info { flex: 1; }
     .clase-titulo { font-size: .88rem; font-weight: 600; margin-bottom: 3px; }
@@ -2968,27 +2983,55 @@
 
     /* ══ MATERIALES ══════════════════════════════════════════════════ */
     .materiales-list {
-      background: var(--card); border: 1px solid var(--border);
+      background: var(--card); border: 1px solid var(--line); /* MODIFICADO: antes --border */
       border-radius: 16px; overflow: hidden; margin-bottom: 20px;
       box-shadow: var(--shadow-sm);
     }
-    .material-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .material-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--line); }
     .material-item:last-child { border-bottom: none; }
-    .material-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-    .icon-pdf { background: rgba(239,68,68,.1); }
+    .material-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .material-icon svg { width: 20px; height: 20px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-pdf { background: var(--clay-t); } .icon-pdf svg { stroke: var(--orange); } /* MODIFICADO: antes rgba(239,68,68,.1) + emoji 📄 */
     .material-info { flex: 1; }
     .material-titulo { font-size: .88rem; font-weight: 600; }
     .material-tipo { font-size: .74rem; color: var(--muted); }
-    .btn-descargar { background: rgba(26,107,47,.08); color: var(--verde); border: none; border-radius: 8px; padding: 7px 14px; font-size: .78rem; font-weight: 700; cursor: pointer; font-family: var(--font); transition: background .15s; }
-    .btn-descargar:hover { background: var(--verde); color: #fff; }
+    .btn-descargar { background: var(--green-t); color: var(--field-d); border: none; border-radius: 8px; padding: 7px 14px; font-size: .78rem; font-weight: 700; cursor: pointer; font-family: var(--font); transition: background .15s, color .15s; }
+    .btn-descargar:hover { background: var(--field); color: #fff; }
 
-    .temario-card { display:flex; align-items:center; gap:14px; padding:16px 20px; background:linear-gradient(135deg,#f0fdf4,#dcfce7); border:1.5px solid #86efac; border-radius:14px; margin:8px 0; }
-    .temario-card-icon { width:44px; height:44px; background:var(--verde); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; box-shadow:0 4px 12px rgba(26,107,47,.25); }
+    /* MODIFICADO: tokens verde del sistema unificado (antes verde propio #f0fdf4/#86efac/var(--verde)) */
+    .temario-card { display:flex; align-items:center; gap:14px; padding:16px 20px; background:var(--green-t); border:1.5px solid var(--field); border-radius:14px; margin:8px 0; }
+    .temario-card-icon { width:44px; height:44px; background:var(--field); border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 4px 12px rgba(92,140,58,.25); }
+    .temario-card-icon svg { width:22px; height:22px; fill:none; stroke:#fff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
     .temario-card-info { flex:1; }
-    .temario-card-titulo { font-size:.9rem; font-weight:700; color:var(--text); }
-    .temario-card-sub { font-size:.75rem; color:var(--muted); margin-top:2px; }
-    .btn-ver-temario { background:var(--verde); color:#fff; border:none; border-radius:10px; padding:9px 18px; font-size:.82rem; font-weight:700; cursor:pointer; font-family:var(--font); white-space:nowrap; transition:transform .15s, box-shadow .15s; box-shadow:0 4px 12px rgba(26,107,47,.3); }
-    .btn-ver-temario:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(26,107,47,.4); }
+    /* MODIFICADO: color explícito en vez de var(--text)/var(--muted) — el fondo de la tarjeta
+       (--green-t) es un verde pálido fijo que no cambia con el tema, así que el texto tampoco debe
+       cambiar (evita el mismo bug de contraste preexistente que --field-d arriba). */
+    .temario-card-titulo { font-size:.9rem; font-weight:700; color: var(--deep); }
+    .temario-card-sub { font-size:.75rem; color: var(--field-d); margin-top:2px; }
+    body.dark-mode .temario-card-titulo { color: var(--deep); }
+    body.dark-mode .temario-card-sub { color: var(--field-d); }
+    .btn-ver-temario { background:var(--field); color:#fff; border:none; border-radius:10px; padding:9px 18px; font-size:.82rem; font-weight:700; cursor:pointer; font-family:var(--font); white-space:nowrap; transition:transform .15s, box-shadow .15s; box-shadow:0 4px 12px rgba(92,140,58,.3); }
+    .btn-ver-temario:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(92,140,58,.4); }
+
+    /* MODIFICADO: banner de certificado — mismo id/onclick/estado (display:none via JS), estilos movidos del inline al sistema unificado */
+    .cert-banner {
+      margin: 16px 0; background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      color: #fff; border-radius: 16px; padding: 22px;
+      box-shadow: 0 10px 30px rgba(35,64,43,.3);
+    }
+    .cert-banner__head { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+    .cert-banner__icon { font-size: 2.6rem; }
+    .cert-banner__text { flex: 1; }
+    .cert-banner__kicker { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; opacity: .85; }
+    .cert-banner__title { font-size: 1.15rem; font-weight: 800; margin-top: 2px; font-family: var(--font-display); }
+    .cert-banner__sub { font-size: .85rem; opacity: .9; margin-top: 2px; }
+    .cert-banner__btn {
+      width: 100%; padding: 14px; border-radius: 12px; border: none;
+      background: #fff; color: var(--deep); font-size: .92rem; font-weight: 800;
+      font-family: var(--font); cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      transition: transform .15s;
+    }
+    .cert-banner__btn:hover { transform: translateY(-1px); }
 
     /* ══ SESIONES EN VIVO ════════════════════════════════════════════ */
     .session-card {
@@ -4301,8 +4344,8 @@
       grid-template-columns: 220px 1fr;
       gap: 20px;
       background: var(--card, #fff);
-      border: 1px solid var(--border, #e8ede5);
-      border-radius: 18px;
+      border: 1px solid var(--line, #e8ede5); /* MODIFICADO: antes --border */
+      border-radius: 16px; /* MODIFICADO: antes 18px */
       padding: 20px;
       margin-bottom: 24px;
       animation: statsIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -4392,36 +4435,39 @@
       margin-top: 4px;
       letter-spacing: 0.02em;
     }
+    /* MODIFICADO: tokens honey del sistema unificado (antes ámbar propio #fefce8/#92400e) */
     .course-stat-card--highlight {
-      background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
-      border-color: #fde68a;
+      background: var(--honey-t);
+      border-color: var(--honey);
     }
-    .course-stat-card--highlight .course-stat-card__value { color: #92400e; }
-    .course-stat-card--highlight .course-stat-card__label { color: #b45309; }
+    .course-stat-card--highlight .course-stat-card__value { color: #92650f; }
+    .course-stat-card--highlight .course-stat-card__label { color: #92650f; }
 
+    /* MODIFICADO: tokens verde del sistema unificado (antes verde propio #ecfdf5/#065f46) */
     .course-stat-card--success {
-      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-      border-color: #a7f3d0;
+      background: var(--green-t);
+      border-color: var(--field);
     }
-    .course-stat-card--success .course-stat-card__value { color: #065f46; }
-    .course-stat-card--success .course-stat-card__label { color: #047857; }
+    .course-stat-card--success .course-stat-card__value { color: var(--field-d); }
+    .course-stat-card--success .course-stat-card__label { color: var(--field-d); }
 
-    /* Motivación / racha */
+    /* Motivación / racha — MODIFICADO: verde campo del sistema unificado (antes --verde viejo) */
     .course-stats__motiv {
       grid-column: 1 / -1;
       margin-top: 6px;
-      background: linear-gradient(135deg, rgba(26,107,47,0.08), rgba(82,201,122,0.12));
-      border-left: 3px solid var(--verde, #1a6b2f);
+      background: var(--green-t);
+      border-left: 3px solid var(--field);
       border-radius: 10px;
       padding: 12px 16px;
       font-size: 0.88rem;
-      color: var(--text);
+      color: var(--field-d); /* MODIFICADO: antes var(--text) — fondo claro fijo, texto oscuro fijo (mismo bug de contraste que arriba) */
       display: flex;
       align-items: center;
       gap: 10px;
     }
+    body.dark-mode .course-stats__motiv { color: var(--field-d); }
     .course-stats__motiv-icon { font-size: 1.3rem; flex-shrink: 0; }
-    .course-stats__motiv strong { color: var(--verde-oscuro, #0d3d19); font-weight: 700; }
+    .course-stats__motiv strong { color: var(--deep); font-weight: 700; }
 
     @media (max-width: 640px) {
       .course-stats {
@@ -6733,6 +6779,7 @@
   <symbol id="icon-trending-up" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
   <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
   <symbol id="icon-credit-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6"/></symbol>
 </svg>
 
 <!-- 🔒 BANNER PAYWALL (solo visible si es usuario FREE) -->
@@ -8781,18 +8828,17 @@
         <div class="video-placeholder"><span>▶️</span><p>Selecciona una clase para reproducir</p></div>
       </div>
 
-      <!-- 🎓 BANNER DE CERTIFICADO (aparece cuando se completa el curso al 100%) -->
-      <div id="cert-banner" style="display:none;margin:16px 0;background:linear-gradient(135deg,#1a6b2f,#2d8f42);color:#fff;border-radius:16px;padding:22px;box-shadow:0 10px 30px rgba(26,107,47,.3);">
-        <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
-          <div style="font-size:2.6rem;">🎓</div>
-          <div style="flex:1;">
-            <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;opacity:.85;">¡Felicidades!</div>
-            <div style="font-size:1.15rem;font-weight:800;margin-top:2px;">Completaste el curso al 100%</div>
-            <div style="font-size:.85rem;opacity:.9;margin-top:2px;" id="cert-banner-sub">Tu certificado oficial está listo</div>
+      <!-- 🎓 BANNER DE CERTIFICADO (aparece cuando se completa el curso al 100%) — MODIFICADO: mismo id/onclick, estilos movidos a clases del sistema unificado -->
+      <div id="cert-banner" class="cert-banner" style="display:none;">
+        <div class="cert-banner__head">
+          <div class="cert-banner__icon">🎓</div>
+          <div class="cert-banner__text">
+            <div class="cert-banner__kicker">¡Felicidades!</div>
+            <div class="cert-banner__title">Completaste el curso al 100%</div>
+            <div class="cert-banner__sub" id="cert-banner-sub">Tu certificado oficial está listo</div>
           </div>
         </div>
-        <button id="btn-generar-cert" onclick="generarOVerCertificado()"
-          style="width:100%;padding:14px;border-radius:12px;border:none;background:#fff;color:#1a6b2f;font-size:.92rem;font-weight:800;font-family:var(--font);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);">
+        <button id="btn-generar-cert" class="cert-banner__btn" onclick="generarOVerCertificado()">
           🎓 Generar mi certificado
         </button>
       </div>
@@ -11193,9 +11239,9 @@ window.verCurso = function(cursoId) {
     return;
   }
 
-  // Header
+  // Header — MODIFICADO: mismos datos reales (categoria/emoji/titulo/descripcion/clases.length), solo cambia el markup a la clase .course-detail-header__chip
   document.getElementById("detalle-header").innerHTML = `
-    <div style="font-size:.78rem;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:8px;">${curso.categoria}</div>
+    <div class="course-detail-header__chip">${curso.categoria}</div>
     <h2>${curso.emoji} ${curso.titulo}</h2>
     <p>${curso.descripcion}</p>
     <span style="background:rgba(255,255,255,.15);padding:4px 12px;border-radius:100px;font-size:.8rem;">📹 ${curso.clases.length} clases</span>
@@ -11215,7 +11261,7 @@ window.verCurso = function(cursoId) {
       <div class="clase-check ${visto ? 'completada' : ''}" id="check-${cl.num}"
            onclick="event.stopPropagation(); marcarClase('${cursoId}', ${cl.num})"
            title="${visto ? 'Marcar como no completada' : 'Marcar como completada'}">
-        ${visto ? '✓' : ''}
+        ${visto ? '<svg><use href="#icon-check"/></svg>' : ''}
       </div>
     </div>`;
   }).join("");
@@ -11229,13 +11275,13 @@ window.verCurso = function(cursoId) {
     document.getElementById("temario-curso").style.display = "block";
     document.getElementById("lista-temario-curso").innerHTML = temarios.map(m => `
       <div class="temario-card">
-        <div class="temario-card-icon">📋</div>
+        <div class="temario-card-icon"><svg><use href="#icon-file-text"/></svg></div>
         <div class="temario-card-info">
           <div class="temario-card-titulo">${m.titulo}</div>
           <div class="temario-card-sub">Descarga el temario completo del curso</div>
         </div>
         <a href="${m.url}" target="_blank"><button class="btn-ver-temario">↓ Ver temario</button></a>
-      </div>`).join("");
+      </div>`).join(""); /* MODIFICADO: icono SVG en vez de emoji, mismo m.titulo/m.url reales */
   } else {
     document.getElementById("temario-curso").style.display = "none";
   }
@@ -11245,13 +11291,13 @@ window.verCurso = function(cursoId) {
     document.getElementById("materiales-curso").style.display = "block";
     document.getElementById("lista-materiales-curso").innerHTML = otrosMats.map(m => `
       <div class="material-item">
-        <div class="material-icon icon-pdf">📄</div>
+        <div class="material-icon icon-pdf"><svg><use href="#icon-file-text"/></svg></div>
         <div class="material-info">
           <div class="material-titulo">${m.titulo}</div>
           <div class="material-tipo">${m.tipo}</div>
         </div>
         <a href="${m.url}" target="_blank"><button class="btn-descargar">↓ Descargar</button></a>
-      </div>`).join("");
+      </div>`).join(""); /* MODIFICADO: icono SVG en vez de emoji, mismo m.titulo/m.tipo/m.url reales */
   } else {
     document.getElementById("materiales-curso").style.display = "none";
   }
@@ -11630,13 +11676,14 @@ window.renderCertificadosLista = renderCertificadosLista;
 function actualizarBtnCompletar(cursoId, numClase, completada) {
   const btn = document.getElementById("btn-completar");
   if (!btn) return;
+  /* MODIFICADO: mismos 2 estados de siempre, solo colores del sistema unificado (antes #f0fdf4/#16a34a/var(--verde)) */
   if (completada) {
-    btn.style.background = "#f0fdf4";
-    btn.style.color = "#16a34a";
-    btn.style.border = "2px solid #86efac";
+    btn.style.background = "var(--green-t)";
+    btn.style.color = "var(--field-d)";
+    btn.style.border = "2px solid var(--field)";
     btn.textContent = "✅ Clase completada — clic para desmarcar";
   } else {
-    btn.style.background = "var(--verde)";
+    btn.style.background = "var(--field)";
     btn.style.color = "#fff";
     btn.style.border = "none";
     btn.textContent = "✅ Marcar clase como completada";
@@ -11671,7 +11718,7 @@ function marcarClase(cursoId, numClase) {
   const row   = document.getElementById(`clase-${numClase}`);
   const check = document.getElementById(`check-${numClase}`);
   if (row)   row.classList.toggle("completada-row", completada);
-  if (check) { check.classList.toggle("completada", completada); check.textContent = completada ? "✓" : ""; }
+  if (check) { check.classList.toggle("completada", completada); check.innerHTML = completada ? '<svg><use href="#icon-check"/></svg>' : ""; } /* MODIFICADO: mismo toggle de siempre, solo cambia el ícono de texto a SVG */
 
   // 🎉 FIESTA si llegó al 100%
   if (llegaAl100) {
