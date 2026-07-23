@@ -159,9 +159,9 @@
     /* 2) Botón "Suscribirme" / "Canjear por WhatsApp" del widget descuento (fondo claro → texto oscuro) */
     body.dark-mode .widget-descuento__btn,
     body.dark-mode .widget-descuento__btn * { color: #78350f !important; }
-    /* Banner rojo "Suscribirme" arriba: fondo blanco → texto rojo */
+    /* MODIFICADO: banner ahora verde profundo con CTA honey (antes ámbar→rojo con texto rojo) */
     body.dark-mode .paywall-banner__btn,
-    body.dark-mode .paywall-banner__btn * { color: #b91c1c !important; }
+    body.dark-mode .paywall-banner__btn * { color: #fff !important; }
 
     /* 3) Estados de exámenes: contraste correcto en dark mode */
     body.dark-mode .examen-card__estado--disponible { background: rgba(22,101,52,.25) !important; color: #86efac !important; }
@@ -606,9 +606,11 @@
     }
     body.dark-mode .paywall-modal__title { color: var(--text); }
     body.dark-mode .paywall-modal__desc { color: var(--muted); }
-    body.dark-mode .paywall-modal__feat { color: var(--text); }
+    /* MODIFICADO: misma tarjeta clara + texto oscuro en ambos temas (igual que .temario-card en la fase 4.3) —
+       evita el mismo bug de contraste: si el fondo se oscurece pero el texto se queda oscuro, se vuelve ilegible. */
+    body.dark-mode .paywall-modal__feat { color: var(--deep); }
     body.dark-mode .paywall-modal__features {
-      background: rgba(251,191,36,.08);
+      background: var(--green-t);
     }
 
     /* Badges VIP / free */
@@ -940,9 +942,10 @@
     /* ═══════════════════════════════════════════════════════
        🔒 PAYWALL GLOBAL (para usuarios sin suscripción)
        ═══════════════════════════════════════════════════════ */
+    /* MODIFICADO: verde profundo del sistema unificado (antes gradiente ámbar→rojo). Mismo sticky/z-index/display:none-por-defecto/trigger is-free de siempre. */
     .paywall-banner {
       position: sticky; top: 0; z-index: 500;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #ef4444 100%);
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
       color: #fff;
       padding: 12px 20px;
       display: none;
@@ -954,12 +957,13 @@
     }
     body.is-free .paywall-banner { display: flex; }
     .paywall-banner__icon { font-size: 1.3rem; }
+    /* MODIFICADO: CTA en honey (antes fondo blanco/texto rojo) */
     .paywall-banner__btn {
-      background: #fff; color: #b91c1c;
+      background: linear-gradient(135deg, var(--honey), var(--orange)); color: #fff;
       padding: 7px 18px; border-radius: 100px;
       font-weight: 800; font-size: .84rem;
       border: none; cursor: pointer; font-family: inherit;
-      box-shadow: 0 4px 10px rgba(0,0,0,.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,.25);
       transition: transform .15s;
     }
     .paywall-banner__btn:hover { transform: translateY(-1px) scale(1.03); }
@@ -973,15 +977,24 @@
     }
     .paywall-modal.open { display: flex; animation: pwFadeIn .3s ease; }
     @keyframes pwFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    /* MODIFICADO: fondo --card + glow honey arriba-derecha (antes gradiente #fff→#fefce8). Border-radius 22px ya estaba correcto. */
     .paywall-modal__box {
-      background: linear-gradient(135deg, #fff 0%, #fefce8 100%);
+      background: var(--card);
       border-radius: 22px; max-width: 460px; width: 100%;
       padding: 32px 28px;
       box-shadow: 0 30px 80px rgba(0,0,0,.4);
       text-align: center;
       animation: pwSlideIn .35s cubic-bezier(.34,1.56,.64,1);
       position: relative;
+      overflow: hidden;
     }
+    .paywall-modal__box::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(217,164,60,.25), transparent 70%);
+      pointer-events: none;
+    }
+    .paywall-modal__box > * { position: relative; z-index: 1; }
     @keyframes pwSlideIn { from { transform: translateY(40px) scale(.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
     .paywall-modal__close {
       position: absolute; top: 14px; right: 14px;
@@ -996,74 +1009,81 @@
     }
     .paywall-modal__close:hover { background: rgba(0,0,0,.18); transform: scale(1.08); color: #111; }
     .paywall-modal__close:active { transform: scale(.94); }
+    /* MODIFICADO: "No por ahora" como enlace discreto (antes botón con borde/caja). Mismo id/comportamiento (cerrarPaywallModal). */
     .paywall-modal__later {
-      margin-top: 10px;
-      background: transparent;
-      border: 1.5px solid rgba(0,0,0,.12);
-      color: #6b7280;
-      padding: 10px 20px;
-      border-radius: 12px;
-      font-size: .88rem;
+      margin-top: 12px;
+      background: none;
+      border: none;
+      color: var(--muted-2);
+      padding: 6px;
+      font-size: .85rem;
       font-weight: 600;
       cursor: pointer;
       width: 100%;
       font-family: inherit;
-      transition: all .18s ease;
+      transition: color .15s;
     }
-    .paywall-modal__later:hover { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.2); color: #374151; }
+    .paywall-modal__later:hover { color: var(--field); text-decoration: underline; }
     body.dark-mode .paywall-modal__close { background: rgba(255,255,255,.1); color: #e5e7eb; }
     body.dark-mode .paywall-modal__close:hover { background: rgba(255,255,255,.2); }
-    body.dark-mode .paywall-modal__later { border-color: rgba(255,255,255,.15); color: #9ca3af; }
-    body.dark-mode .paywall-modal__later:hover { background: rgba(255,255,255,.05); color: #e5e7eb; }
+    body.dark-mode .paywall-modal__later { color: var(--muted-2); }
+    body.dark-mode .paywall-modal__later:hover { color: var(--field); }
+    /* MODIFICADO: mismo ícono 🔒 de siempre, ahora en cuadro honey-t (antes flotando suelto) */
     .paywall-modal__icon {
-      font-size: 3.5rem; margin-bottom: 16px;
-      filter: drop-shadow(0 6px 12px rgba(251,191,36,.4));
+      width: 76px; height: 76px; margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem; border-radius: 20px;
+      background: var(--honey-t);
       animation: pwLock 2s ease-in-out infinite;
     }
     @keyframes pwLock {
       0%,100% { transform: rotate(-5deg) scale(1); }
       50% { transform: rotate(5deg) scale(1.08); }
     }
+    /* MODIFICADO: honey del sistema unificado (antes #b45309 ámbar propio) */
     .paywall-modal__kicker {
       font-size: .72rem; font-weight: 800; letter-spacing: .2em;
-      color: #b45309; text-transform: uppercase; margin-bottom: 8px;
+      color: var(--honey); text-transform: uppercase; margin-bottom: 8px;
     }
+    /* MODIFICADO: Bricolage Grotesque del sistema unificado (antes 'Playfair Display' — fuente ajena al sistema) */
     .paywall-modal__title {
       font-size: 1.6rem; font-weight: 800;
-      color: #161d14; margin-bottom: 10px;
-      font-family: 'Playfair Display', Georgia, serif;
+      color: var(--ink); margin-bottom: 10px;
+      font-family: var(--font-display);
       line-height: 1.15;
     }
     .paywall-modal__desc {
-      font-size: .95rem; color: #4b5563; line-height: 1.55;
+      font-size: .95rem; color: var(--muted-2); line-height: 1.55;
       margin-bottom: 22px;
     }
+    /* MODIFICADO: tinte verde del sistema unificado (antes ámbar) para acompañar las palomitas verdes */
     .paywall-modal__features {
       text-align: left;
-      background: rgba(251,191,36,.08);
+      background: var(--green-t);
       border-radius: 14px; padding: 16px 18px;
       margin-bottom: 22px;
       display: flex; flex-direction: column; gap: 8px;
     }
     .paywall-modal__feat {
       display: flex; align-items: center; gap: 10px;
-      font-size: .88rem; color: #161d14;
+      font-size: .88rem; color: var(--deep);
     }
     .paywall-modal__feat::before {
       content: '✅'; font-size: .95rem;
     }
+    /* MODIFICADO: botón principal honey (antes verde esmeralda #10b981→#047857). Mismo id/onclick de siempre (paywallCtaBtn), sin tocar. */
     .paywall-modal__cta {
       display: block; width: 100%;
-      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      background: linear-gradient(135deg, var(--honey) 0%, var(--orange) 100%);
       color: #fff; border: none; border-radius: 14px;
       padding: 16px; font-weight: 800; font-size: 1.02rem;
       cursor: pointer; font-family: inherit;
-      box-shadow: 0 8px 20px rgba(16,185,129,.35);
+      box-shadow: 0 8px 20px rgba(217,164,60,.4);
       transition: transform .15s;
       text-decoration: none;
       text-align: center;
     }
-    .paywall-modal__cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(16,185,129,.45); }
+    .paywall-modal__cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(217,164,60,.5); }
     .paywall-modal__small {
       margin-top: 12px; font-size: .76rem; color: #6b7280;
     }
@@ -1071,19 +1091,7 @@
     body.is-free .widget-descuento {
       position: relative;
     }
-    body.is-free .widget-descuento::after {
-      content: '🔒';
-      position: absolute;
-      top: 10px; right: 10px;
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: #fff; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.05rem;
-      box-shadow: 0 4px 12px rgba(251,191,36,.55), 0 0 0 3px #fff;
-      z-index: 5; pointer-events: none;
-      animation: lockPulse 2.2s ease-in-out infinite;
-    }
+    /* MODIFICADO: mismo candado verde profundo unificado (ver bloque de tarjetas más abajo) */
     body.is-free .widget-descuento__btn {
       opacity: .75;
     }
@@ -1103,29 +1111,16 @@
     body.is-free .widget-logro {
       position: relative;
     }
-    /* MODIFICADO: candado de paywall de .course-card separado del resto (foro/apoyos/herramientas/certificados/sesiones
-       siguen con el candado ámbar sin cambios — esta fase es solo tarjetas de curso + dashboard) */
+    /* MODIFICADO: fase 4.4 — ahora TODAS las tarjetas usan el mismo candado verde profundo + texto corto
+       (en la 4.2 solo se hizo para .course-card; aquí se extiende a foro/apoyos/herramientas/certificados/sesiones
+       para que sea coherente en todo el portal, tal como se pidió). Mismo trigger body.is-free de siempre. */
     body.is-free .sesion-card::after,
     body.is-free .foro-post::after,
     body.is-free .apoyo-item::after,
     body.is-free .parcela-card::after,
     body.is-free .herr-card::after,
-    body.is-free .cert-card::after {
-      content: '🔒';
-      position: absolute;
-      top: 10px; right: 10px;
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: #fff;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.05rem;
-      box-shadow: 0 4px 12px rgba(251,191,36,.55), 0 0 0 3px #fff;
-      z-index: 5;
-      pointer-events: none;
-      animation: lockPulse 2.2s ease-in-out infinite;
-    }
-    /* MODIFICADO: candado de paywall de la tarjeta de curso — verde profundo + texto corto (antes círculo ámbar solo-icono) */
+    body.is-free .cert-card::after,
+    body.is-free .widget-descuento::after,
     body.is-free .course-card::after {
       content: '🔒 VIP';
       position: absolute;
@@ -1163,9 +1158,11 @@
     }
 
     /* Secciones completas con un overlay en "modo candado" */
+    /* MODIFICADO: blur suave agregado (antes solo degradado blanco). Mismo trigger/display:none-por-defecto de siempre. */
     .section-locked-overlay {
       position: absolute; inset: 0; z-index: 3;
       background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 60%, rgba(255,255,255,.7) 100%);
+      backdrop-filter: blur(1.5px);
       pointer-events: none;
       display: none;
     }
@@ -1206,7 +1203,8 @@
       pointer-events: none;
       opacity: .65;
       cursor: not-allowed;
-      background-image: linear-gradient(45deg, transparent 48%, rgba(251,191,36,.2) 48%, rgba(251,191,36,.2) 52%, transparent 52%);
+      /* MODIFICADO: tono honey del sistema unificado (antes rgba(251,191,36,.2)) */
+      background-image: linear-gradient(45deg, transparent 48%, rgba(217,164,60,.22) 48%, rgba(217,164,60,.22) 52%, transparent 52%);
       background-size: 10px 10px;
     }
     body.is-free #page-herramientas .herr-btn-pri,
