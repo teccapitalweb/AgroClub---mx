@@ -614,14 +614,18 @@
     }
 
     /* Badges VIP / free */
+    /* MODIFICADO: fase 4.5 — el badge vive sobre el hero verde profundo, que no cambia con el tema;
+       se mantiene el chip de vidrio blanco en ambos modos (antes verde lima suelto). */
     body.dark-mode .perfil-badge {
-      background: rgba(82,201,122,.2);
-      color: #a3e635;
+      background: rgba(255,255,255,.15);
+      color: #fff;
     }
 
     /* Botones planes suscripción */
+    /* MODIFICADO: fase 4.5 — misma tarjeta que en claro, el destacado se distingue por su borde
+       verde campo y la cinta honey (antes degradado verde propio #0a1f15→#0f2b1e). */
     body.dark-mode .sus-plan-card--destacado {
-      background: linear-gradient(135deg, #0a1f15 0%, #0f2b1e 100%);
+      background: var(--card);
     }
     body.dark-mode .sus-plan-card__feats li { color: var(--text); }
     body.dark-mode .sus-plan-card__price * { color: var(--text); }
@@ -896,21 +900,30 @@
     }
 
     /* TARJETA TEMA */
+    /* MODIFICADO: fase 4.5 — tokens del sistema unificado (antes --border / radio 14px). */
     .tema-card {
       display: flex; align-items: center; justify-content: space-between;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 14px 18px; margin-bottom: 14px;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 14px 18px; margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
       transition: background .3s;
     }
     .tema-card__left { display: flex; align-items: center; gap: 12px; }
-    .tema-card__icon {
-      font-size: 1.6rem; width: 42px; height: 42px; border-radius: 12px;
+    /* MODIFICADO: el emoji 🌞/🌙 lo escribe actualizarUITema() por textContent, así que NO se toca
+       esa función: #tema-icon se deja en el DOM (oculto) y el ícono visible son dos SVG del sprite
+       que alternan por CSS con body.dark-mode. Cero lógica tocada. */
+    .tema-card__icon { display: none; }
+    .tema-card__iconbox {
+      width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, rgba(251,191,36,.2), rgba(249,115,22,.12));
+      background: var(--honey-t);
     }
-    body.dark-mode .tema-card__icon {
-      background: linear-gradient(135deg, rgba(139,92,246,.25), rgba(59,130,246,.15));
-    }
+    .tema-card__iconbox svg { width: 21px; height: 21px; fill: none; stroke: var(--honey); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .tema-card__moon { display: none; }
+    body.dark-mode .tema-card__iconbox { background: rgba(139,92,246,.22); }
+    body.dark-mode .tema-card__iconbox svg { stroke: #a78bfa; }
+    body.dark-mode .tema-card__sun { display: none; }
+    body.dark-mode .tema-card__moon { display: block; }
     .tema-card__txt strong { display: block; font-size: .95rem; color: var(--text); }
     .tema-card__txt span { font-size: .78rem; color: var(--muted); }
 
@@ -934,7 +947,9 @@
 
     @media (max-width: 640px) {
       .tema-card { padding: 12px 14px; }
-      .tema-card__icon { width: 36px; height: 36px; font-size: 1.3rem; }
+      /* MODIFICADO: fase 4.5 — el tamaño móvil ahora aplica al cuadro visible, no al #tema-icon oculto */
+      .tema-card__iconbox { width: 36px; height: 36px; }
+      .tema-card__iconbox svg { width: 18px; height: 18px; }
       .tema-card__txt strong { font-size: .88rem; }
       .tema-card__txt span { font-size: .72rem; }
     }
@@ -1484,46 +1499,52 @@
     }
 
     /* ═══════ SUSCRIPCIÓN — VISTA FREE ═══════ */
+    /* MODIFICADO: fase 4.5 — hero FREE en verde profundo con acento honey (antes degradado ámbar
+       #fef3c7→#fcd34d con texto café), igual criterio que el paywall de la fase 4. */
     .sus-hero-free {
       position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
-      border: 2px solid #fbbf24;
-      border-radius: 22px; padding: 36px 28px; margin-bottom: 22px;
-      text-align: center;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      border: none;
+      border-radius: 16px; padding: 36px 28px; margin-bottom: 22px;
+      text-align: center; color: #fff;
+      box-shadow: var(--shadow-md);
     }
     .sus-hero-free__bg {
       position: absolute; inset: 0;
       background:
-        radial-gradient(circle at 20% 20%, rgba(251,191,36,.4) 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(239,68,68,.15) 0%, transparent 50%);
+        radial-gradient(circle at 20% 20%, rgba(217,164,60,.22) 0%, transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(163,230,53,.08) 0%, transparent 50%);
       pointer-events: none;
     }
     .sus-hero-free__icon {
-      font-size: 3.5rem; margin-bottom: 14px;
-      filter: drop-shadow(0 6px 12px rgba(180,83,9,.4));
+      width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 20px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
+      display: flex; align-items: center; justify-content: center;
       animation: lockPulse 2.5s ease-in-out infinite;
     }
+    .sus-hero-free__icon svg { width: 32px; height: 32px; fill: none; stroke: var(--honey); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
     .sus-hero-free__title {
-      font-size: 1.8rem; font-weight: 800; color: #78350f;
-      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.8rem; font-weight: 900; color: #fff;
+      font-family: var(--font-display); /* MODIFICADO: antes 'Playfair Display' (fuente no cargada) */
       line-height: 1.15; margin-bottom: 10px;
     }
     .sus-hero-free__desc {
-      font-size: 1rem; color: #92400e; line-height: 1.55;
+      font-size: 1rem; color: rgba(255,255,255,.75); line-height: 1.55;
       max-width: 520px; margin: 0 auto 18px;
     }
     .sus-hero-free__badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(185,28,28,.1); color: #991b1b;
+      background: rgba(255,255,255,.12); color: #fff;
       padding: 8px 18px; border-radius: 100px;
       font-size: .82rem; font-weight: 700;
-      border: 1px solid rgba(185,28,28,.3);
+      border: 1px solid rgba(255,255,255,.22);
     }
     .sus-hero-free__dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: #dc2626;
+      background: var(--honey);
       animation: pulse-dot 2s infinite;
     }
+    body.dark-mode .sus-hero-free__title, body.dark-mode .sus-hero-free__badge { color: #fff; }
 
     /* Grid de planes */
     .sus-planes {
@@ -1533,71 +1554,97 @@
     @media (max-width: 720px) {
       .sus-planes { grid-template-columns: 1fr; }
     }
+    /* MODIFICADO: fase 4.5 — tarjetas de plan con tokens del sistema unificado (antes --border 2px,
+       verdes propios #1a6b2f/#047857/#10b981). Precios, textos y onclick de Stripe intactos. */
     .sus-plan-card {
-      background: var(--card); border: 2px solid var(--border);
-      border-radius: 18px; padding: 26px 22px;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 26px 22px;
       display: flex; flex-direction: column;
       position: relative;
-      transition: all .2s;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
     }
-    .sus-plan-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+    .sus-plan-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
     .sus-plan-card--destacado {
-      border-color: #1a6b2f;
-      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-      box-shadow: 0 8px 24px rgba(26,107,47,.15);
+      border: 1.5px solid var(--field);
+      background: var(--card);
+      box-shadow: 0 8px 24px rgba(92,140,58,.15);
     }
+    /* El destacado se marca con la cinta honey del sistema (mismo criterio que el CTA de la fase 4) */
     .sus-plan-card__badge {
       position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      background: linear-gradient(135deg, #1a6b2f, #047857); color: #fff;
+      background: linear-gradient(135deg, var(--honey), var(--orange)); color: #422006;
       padding: 6px 16px; border-radius: 100px;
       font-size: .72rem; font-weight: 800; white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(26,107,47,.35);
+      box-shadow: 0 4px 12px rgba(217,164,60,.4);
     }
     .sus-plan-card__kicker {
       font-size: .72rem; font-weight: 800; letter-spacing: .2em;
-      color: var(--muted); text-transform: uppercase; margin-bottom: 10px;
+      color: var(--muted-2); text-transform: uppercase; margin-bottom: 10px;
     }
     .sus-plan-card__price {
       display: flex; align-items: baseline; gap: 4px;
       margin-bottom: 6px;
     }
-    .sus-plan-card__moneda { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+    .sus-plan-card__moneda { font-size: 1.3rem; font-weight: 700; color: var(--ink); }
     .sus-plan-card__num {
-      font-size: 2.6rem; font-weight: 900; color: var(--text);
-      font-family: 'Playfair Display', Georgia, serif; line-height: 1;
+      font-size: 2.6rem; font-weight: 900; color: var(--ink);
+      font-family: var(--font-display); line-height: 1; /* MODIFICADO: antes 'Playfair Display' */
     }
-    .sus-plan-card__per { font-size: .88rem; color: var(--muted); margin-left: 4px; }
+    body.dark-mode .sus-plan-card__moneda, body.dark-mode .sus-plan-card__num { color: var(--text); }
+    .sus-plan-card__per { font-size: .88rem; color: var(--muted-2); margin-left: 4px; }
+    /* align-self evita que el flex-column de la tarjeta estire el chip a todo el ancho
+       (el inline-block por sí solo no basta dentro de un contenedor flex). */
     .sus-plan-card__equivale {
-      display: inline-block; background: rgba(16,185,129,.15);
-      color: #047857; padding: 3px 10px; border-radius: 100px;
+      display: inline-block; align-self: flex-start; background: var(--green-t);
+      color: var(--field-d); padding: 3px 10px; border-radius: 100px;
       font-size: .72rem; font-weight: 700; margin-bottom: 12px;
     }
+    body.dark-mode .sus-plan-card__equivale { color: var(--field-d); }
     .sus-plan-card__feats {
       list-style: none; margin: 18px 0; padding: 0;
-      display: flex; flex-direction: column; gap: 8px;
+      display: flex; flex-direction: column; gap: 10px;
     }
+    /* MODIFICADO: la palomita "✓" pasa a ícono SVG del sprite en un cuadro verde suave */
     .sus-plan-card__feats li {
       font-size: .88rem; color: var(--text); line-height: 1.4;
+      display: flex; align-items: flex-start; gap: 9px;
+    }
+    .sus-plan-card__feats li svg {
+      width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px;
+      padding: 3px; border-radius: 50%; background: var(--green-t);
+      fill: none; stroke: var(--field); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round;
     }
     .sus-plan-card__btn {
       margin-top: auto;
-      background: linear-gradient(135deg, #1a6b2f, #047857);
+      background: var(--field);
       color: #fff; border: none; border-radius: 12px;
       padding: 14px; font-weight: 800; font-size: .95rem;
-      cursor: pointer; font-family: inherit;
-      transition: all .15s;
-      box-shadow: 0 4px 12px rgba(26,107,47,.25);
+      cursor: pointer; font-family: var(--font);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 12px rgba(92,140,58,.28);
     }
-    .sus-plan-card__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,107,47,.4); }
+    .sus-plan-card__btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sus-plan-card__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(92,140,58,.4); }
+    /* El plan anual (destacado) usa el CTA honey, como el paywall de la fase 4 */
     .sus-plan-card__btn--pri {
-      background: linear-gradient(135deg, #10b981 0%, #047857 50%, #064e3b 100%);
-      box-shadow: 0 6px 16px rgba(16,185,129,.4);
+      background: linear-gradient(135deg, var(--honey), var(--orange));
+      color: #422006;
+      box-shadow: 0 6px 16px rgba(217,164,60,.4);
     }
+    .sus-plan-card__btn--pri:hover { box-shadow: 0 8px 20px rgba(217,164,60,.5); }
+    /* MODIFICADO: la excepción global "body.dark-mode .sus-plan-card__btn { color: inherit }" volvía
+       el texto claro sobre el CTA honey. Se fija el color de cada botón en oscuro. */
+    body.dark-mode .sus-plan-card__btn { color: #fff; }
+    body.dark-mode .sus-plan-card__btn--pri { color: #422006; }
 
     .sus-free-nota {
-      text-align: center; font-size: .8rem; color: var(--muted);
+      text-align: center; font-size: .8rem; color: var(--muted-2);
       padding: 12px; margin-bottom: 22px;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
     }
+    .sus-free-nota svg { width: 14px; height: 14px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     a { text-decoration: none; color: inherit; }
@@ -1941,17 +1988,19 @@
     .course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 
     /* ══ 🏆 CERTIFICADOS — HERO + CARDS PREMIUM ══════════════════════════ */
+    /* MODIFICADO: fase 4.5 — verde profundo del sistema unificado (antes #0a3d1a→#2d8f42),
+       radio 16px y acento honey en vez del ámbar propio. */
     .cert-hero {
       position: relative; overflow: hidden; margin-bottom: 24px;
-      background: linear-gradient(135deg, #0a3d1a 0%, #1a6b2f 50%, #2d8f42 100%);
-      border-radius: 24px; padding: 28px 26px 0;
-      box-shadow: 0 20px 50px rgba(10,61,26,.25);
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      border-radius: 16px; padding: 28px 26px 0;
+      box-shadow: var(--shadow-md);
       color: #fff; animation: cardIn .4s ease both;
     }
     .cert-hero__bg {
       position: absolute; inset: 0;
       background:
-        radial-gradient(circle at 85% 20%, rgba(251,191,36,.18), transparent 50%),
+        radial-gradient(circle at 85% 20%, rgba(217,164,60,.20), transparent 50%),
         radial-gradient(circle at 15% 80%, rgba(255,255,255,.06), transparent 40%);
       pointer-events: none;
     }
@@ -1964,7 +2013,7 @@
     }
     .cert-hero__trophy-glow {
       position: absolute; inset: -20px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(251,191,36,.35) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(217,164,60,.35) 0%, transparent 60%); /* MODIFICADO: honey */
       animation: trophyPulse 3s ease-in-out infinite;
     }
     @keyframes trophyPulse {
@@ -1982,25 +2031,26 @@
     .cert-hero__text { flex: 1; min-width: 0; }
     .cert-hero__kicker {
       font-size: .68rem; text-transform: uppercase; letter-spacing: .18em;
-      color: #fbbf24; font-weight: 800; margin-bottom: 6px;
+      color: var(--honey); font-weight: 800; margin-bottom: 6px; /* MODIFICADO: honey del sistema */
     }
     .cert-hero__title {
-      font-size: 1.6rem; font-weight: 800; line-height: 1.1;
+      font-size: 1.6rem; font-weight: 900; line-height: 1.1;
       margin-bottom: 6px; color: #fff;
+      font-family: var(--font-display); /* MODIFICADO: Bricolage del sistema unificado */
     }
     .cert-hero__desc { font-size: .84rem; line-height: 1.5; opacity: .85; max-width: 440px; }
     .cert-hero__stats {
       position: relative; z-index: 2; margin-top: 22px;
       background: rgba(0,0,0,.2); backdrop-filter: blur(8px);
-      border-top: 1px solid rgba(251,191,36,.3);
+      border-top: 1px solid rgba(217,164,60,.3);
       margin-left: -26px; margin-right: -26px;
       padding: 14px 26px;
       display: flex; align-items: center; justify-content: space-around;
     }
     .cert-hero__stat { text-align: center; flex: 1; }
     .cert-hero__stat-num {
-      font-size: 1.4rem; font-weight: 800; color: #fbbf24;
-      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.4rem; font-weight: 900; color: var(--honey);
+      font-family: var(--font-display); /* MODIFICADO: antes 'Playfair Display' (fuente no cargada) */
       line-height: 1;
     }
     .cert-hero__stat-lbl {
@@ -2008,7 +2058,7 @@
       opacity: .75; margin-top: 4px; font-weight: 700;
     }
     .cert-hero__stat-sep {
-      width: 1px; height: 28px; background: rgba(251,191,36,.3);
+      width: 1px; height: 28px; background: rgba(217,164,60,.3);
     }
 
     /* Grid de certificados */
@@ -2016,8 +2066,8 @@
 
     /* Cada tarjeta = MEDALLA/TROFEO */
     .cert-card {
-      position: relative; background: var(--card); border-radius: 18px;
-      overflow: hidden; border: 1px solid var(--border);
+      position: relative; background: var(--card); border-radius: 16px;
+      overflow: hidden; border: 1px solid var(--line); /* MODIFICADO: --line y radio 16px */
       box-shadow: var(--shadow-sm);
       transition: transform .2s, box-shadow .2s;
       animation: cardIn .4s ease both;
@@ -2028,107 +2078,109 @@
     .cert-card:nth-child(4) { animation-delay: .2s; }
     .cert-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 
+    /* MODIFICADO: fase 4.5 — cabecera de la tarjeta en verde profundo del sistema unificado
+       (antes degradado verde pálido #f8faf7→#dcfce7 con texto oscuro). Ahora lleva sello + folio
+       + título, y el cuerpo queda para la meta y las acciones. */
     .cert-card__top {
-      position: relative; padding: 24px 20px 18px;
-      background:
-        linear-gradient(135deg, #f8faf7 0%, #ecfdf3 60%, #dcfce7 100%);
+      position: relative; padding: 20px; color: #fff;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
       display: flex; align-items: center; gap: 16px;
-      border-bottom: 1px solid rgba(26,107,47,0.18);
     }
     .cert-card__top::before {
-      content: ''; position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 90% 30%, rgba(255,255,255,.45), transparent 50%),
-        radial-gradient(circle at 10% 80%, rgba(26,107,47,.08), transparent 50%);
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 150px; height: 150px; border-radius: 50%;
+      background: rgba(163,230,53,.08);
       pointer-events: none;
     }
-    /* Cinta/listón lateral verde sobrio */
+    /* Cinta/listón: ahora en honey para destacar sobre el verde profundo */
     .cert-card__ribbon {
-      position: absolute; top: -2px; right: 16px; width: 22px; height: 52px;
-      background: linear-gradient(180deg, #1a6b2f 0%, #0d3d19 100%);
+      position: absolute; top: -2px; right: 16px; width: 20px; height: 46px;
+      background: linear-gradient(180deg, var(--honey) 0%, var(--orange) 100%);
       clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
-      box-shadow: 0 4px 10px rgba(26,107,47,.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,.25);
       z-index: 2;
     }
 
     .cert-card__medal {
-      position: relative; width: 64px; height: 64px; flex-shrink: 0;
+      position: relative; width: 60px; height: 60px; flex-shrink: 0;
       z-index: 1;
     }
     .cert-card__medal-svg {
       width: 100%; height: 100%;
-      filter: drop-shadow(0 4px 10px rgba(26,107,47,.18));
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.28));
     }
 
     .cert-card__info { position: relative; flex: 1; z-index: 1; min-width: 0; }
-    .cert-card__badge-cat {
-      display: inline-block;
-      background: rgba(26,107,47,0.12); color: #155827;
-      padding: 3px 10px; border-radius: 6px;
-      font-size: .64rem; font-weight: 800;
-      letter-spacing: .1em; text-transform: uppercase;
-      margin-bottom: 6px;
+    /* Folio en la cabecera (antes vivía en el cuerpo) */
+    .cert-card__folio-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+      border-radius: 100px; padding: 3px 10px; margin-bottom: 7px;
+      font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+      font-size: .68rem; font-weight: 800; letter-spacing: .04em; color: #fff;
     }
+    .cert-card__folio-chip svg { width: 11px; height: 11px; fill: none; stroke: var(--honey); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .cert-card__title {
-      font-size: 1rem; font-weight: 800; line-height: 1.25;
-      color: #0d1813;
+      font-size: 1rem; font-weight: 900; line-height: 1.25;
+      color: #fff;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       overflow: hidden;
-      font-family: 'Playfair Display', Georgia, serif;
+      font-family: var(--font-display); /* MODIFICADO: antes 'Playfair Display' (fuente no cargada) */
     }
+    body.dark-mode .cert-card__title, body.dark-mode .cert-card__folio-chip { color: #fff; }
 
     .cert-card__body {
       padding: 16px 20px;
     }
-    .cert-card__folio-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 12px; border-bottom: 1px dashed var(--border);
-      margin-bottom: 12px;
+    /* Meta real del certificado: categoría · fecha de emisión · total de clases */
+    .cert-card__meta { display: flex; flex-direction: column; gap: 9px; margin-bottom: 14px; }
+    .cert-card__meta-row { display: flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--muted-2); }
+    .cert-card__meta-row svg { width: 15px; height: 15px; fill: none; stroke: var(--field); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .cert-card__meta-row strong { color: var(--ink); font-weight: 700; }
+    body.dark-mode .cert-card__meta-row strong { color: var(--text); }
+    .cert-card__badge-cat {
+      display: inline-block;
+      background: var(--green-t); color: var(--field-d);
+      padding: 3px 10px; border-radius: 6px;
+      font-size: .64rem; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
     }
-    .cert-card__folio-lbl {
-      font-size: .62rem; text-transform: uppercase; letter-spacing: .12em;
-      color: var(--muted); font-weight: 700;
-    }
-    .cert-card__folio-val {
-      font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
-      font-size: .82rem; font-weight: 800; color: #1a6b2f;
-      letter-spacing: .05em;
-    }
-    .cert-card__date {
-      font-size: .78rem; color: var(--muted); margin-bottom: 14px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .cert-card__date strong { color: var(--text); font-weight: 700; }
+    body.dark-mode .cert-card__badge-cat { color: var(--field-d); }
 
     .cert-card__actions { display: flex; gap: 8px; }
     .cert-btn {
       flex: 1; border: none; border-radius: 10px;
       padding: 11px 10px; font-size: .78rem; font-weight: 800;
       font-family: var(--font); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      transition: transform .15s, box-shadow .15s, background .15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: transform .15s, box-shadow .15s, background .15s, color .15s;
     }
+    .cert-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    /* MODIFICADO: verde campo del sistema unificado (antes gradiente #1a6b2f→#2d8f42) */
     .cert-btn--primary {
-      background: linear-gradient(135deg, #1a6b2f, #2d8f42); color: #fff;
-      box-shadow: 0 4px 12px rgba(26,107,47,.3);
+      background: var(--field); color: #fff;
+      box-shadow: 0 4px 12px rgba(92,140,58,.3);
     }
-    .cert-btn--primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(26,107,47,.4); }
+    .cert-btn--primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(92,140,58,.4); }
     .cert-btn--ghost {
-      background: var(--bg); color: var(--verde);
-      border: 1.5px solid rgba(26,107,47,.2);
+      background: var(--green-t); color: var(--field-d);
+      border: 1px solid var(--line);
     }
-    .cert-btn--ghost:hover { background: rgba(26,107,47,.06); }
+    .cert-btn--ghost:hover { background: var(--field); color: #fff; border-color: var(--field); }
 
     /* Empty state */
+    /* MODIFICADO: var(--surface) no existe en el portal (la tarjeta quedaba transparente) → --card */
     .cert-empty {
       grid-column: 1 / -1;
-      background: var(--surface); border: 1.5px dashed var(--border);
-      border-radius: 18px; padding: 40px 24px; text-align: center;
+      background: var(--card); border: 1.5px dashed var(--line);
+      border-radius: 16px; padding: 40px 24px; text-align: center;
     }
     .cert-empty__icon {
-      font-size: 3rem; margin-bottom: 12px; opacity: .45;
-      filter: grayscale(.3);
+      width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 18px;
+      background: var(--green-t);
+      display: flex; align-items: center; justify-content: center;
     }
+    .cert-empty__icon svg { width: 30px; height: 30px; fill: none; stroke: var(--field); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .cert-empty__title { font-weight: 800; color: var(--text); margin-bottom: 6px; font-size: 1rem; }
     .cert-empty__desc { color: var(--muted); font-size: .88rem; line-height: 1.5; max-width: 360px; margin: 0 auto; }
 
@@ -3063,130 +3115,239 @@
     .btn-abrir:hover { background: var(--naranja); color: #fff; border-color: var(--naranja); }
 
     /* ══ PERFIL ══════════════════════════════════════════════════════ */
+    /* MODIFICADO: fase 4.5 — verde profundo del sistema unificado (antes gradiente propio
+       #0d2e0a→#1a5e14) y radio 16px, igual que .course-detail-header de la fase 3. */
     .perfil-hero {
-      background: linear-gradient(135deg, #0d2e0a, #1a5e14);
-      border-radius: 20px; padding: 36px; margin-bottom: 20px;
-      display: flex; align-items: center; gap: 24px; color: #fff;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      border-radius: 16px; padding: 32px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 22px; color: #fff;
       position: relative; overflow: hidden;
     }
     .perfil-hero::before {
-      content: ''; position: absolute; top: -50px; right: -50px;
-      width: 200px; height: 200px; border-radius: 50%;
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 180px; height: 180px; border-radius: 50%;
       background: rgba(163,230,53,.08);
     }
     .perfil-avatar-big {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: rgba(255,255,255,.15); backdrop-filter: blur(10px);
-      border: 3px solid rgba(255,255,255,.3);
+      width: 76px; height: 76px; border-radius: 50%;
+      background: rgba(255,255,255,.14);
+      border: 2px solid rgba(255,255,255,.28);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; font-weight: 900; flex-shrink: 0;
-      font-family: var(--font-display);
+      font-size: 1.9rem; font-weight: 900; flex-shrink: 0;
+      font-family: var(--font-display); position: relative; z-index: 1;
     }
-    .perfil-hero-info h3 { font-size: 1.4rem; font-weight: 900; font-family: var(--font-display); margin-bottom: 6px; }
-    .perfil-hero-info p { color: rgba(255,255,255,.6); font-size: .88rem; }
-    .perfil-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(82,201,122,.2); border: 1px solid rgba(82,201,122,.3); color: var(--verde-claro); border-radius: 100px; padding: 4px 14px; font-size: .78rem; font-weight: 700; }
+    .perfil-hero-info { position: relative; z-index: 1; min-width: 0; }
+    .perfil-hero-info h3 { font-size: 1.4rem; font-weight: 900; font-family: var(--font-display); margin-bottom: 4px; }
+    .perfil-hero-info p { color: rgba(255,255,255,.65); font-size: .88rem; }
+    /* MODIFICADO: mismo chip de vidrio que .course-detail-header__chip (antes verde-claro suelto).
+       OJO: en modo FREE el JS de auth reescribe innerHTML y pisa background/border/color con
+       tonos ámbar en línea — eso sigue mandando y no se toca. */
+    .perfil-badge {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+      color: #fff; border-radius: 100px; padding: 5px 14px;
+      font-size: .76rem; font-weight: 700;
+    }
 
     /* 📱 FIX C: BANNER WHATSAPP VACÍO */
+    /* MODIFICADO: fase 4.5 — tokens verde del sistema unificado (antes #d1fae5→#a7f3d0 / #10b981).
+       Sigue siendo display:flex porque mostrarBannerWaSiFalta() lo enciende con style.display='flex'. */
     .perfil-wa-banner {
       display: flex; align-items: center; gap: 16px;
-      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-      border: 1.5px solid #10b981;
+      background: var(--green-t);
+      border: 1.5px solid var(--field);
       border-radius: 16px;
       padding: 16px 18px;
       margin-bottom: 20px;
       position: relative;
-      box-shadow: 0 4px 12px rgba(16,185,129,.15);
+      box-shadow: var(--shadow-sm);
       animation: waBannerIn .4s ease;
     }
     @keyframes waBannerIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
     .perfil-wa-banner__icon {
-      font-size: 1.8rem; flex-shrink: 0;
-      width: 46px; height: 46px; border-radius: 50%;
-      background: #fff;
+      flex-shrink: 0;
+      width: 46px; height: 46px; border-radius: 12px;
+      background: var(--field);
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      box-shadow: 0 4px 12px rgba(92,140,58,.25);
     }
+    .perfil-wa-banner__icon svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
     .perfil-wa-banner__body { flex: 1; min-width: 0; }
+    /* Fondo --green-t es un verde pálido fijo (no cambia con el tema) → texto oscuro fijo,
+       mismo criterio que .temario-card de la fase 3. */
     .perfil-wa-banner__body strong {
       display: block; font-size: .95rem; font-weight: 700;
-      color: #065f46; margin-bottom: 2px;
+      color: var(--deep); margin-bottom: 2px;
     }
     .perfil-wa-banner__body p {
-      font-size: .82rem; color: #047857; margin: 0; line-height: 1.35;
+      font-size: .82rem; color: var(--field-d); margin: 0; line-height: 1.35;
     }
     .perfil-wa-banner__btn {
-      background: #10b981; color: #fff; border: none;
+      background: var(--field); color: #fff; border: none;
       padding: 10px 16px; border-radius: 10px;
       font-size: .85rem; font-weight: 700; cursor: pointer;
-      transition: all .2s; white-space: nowrap; flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(16,185,129,.3);
+      transition: transform .15s, box-shadow .15s; white-space: nowrap; flex-shrink: 0;
+      font-family: var(--font);
+      box-shadow: 0 4px 12px rgba(92,140,58,.3);
     }
-    .perfil-wa-banner__btn:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(16,185,129,.4); }
+    .perfil-wa-banner__btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(92,140,58,.4); }
     .perfil-wa-banner__close {
       position: absolute; top: 8px; right: 10px;
       background: transparent; border: none;
       width: 24px; height: 24px; border-radius: 50%;
-      font-size: .85rem; color: #065f46;
+      color: var(--field-d);
       cursor: pointer; opacity: .6;
       display: flex; align-items: center; justify-content: center;
       padding: 0; line-height: 1;
     }
+    .perfil-wa-banner__close svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
     .perfil-wa-banner__close:hover { opacity: 1; background: rgba(0,0,0,.08); }
-    /* Dark mode del banner */
-    body.dark-mode .perfil-wa-banner {
-      background: linear-gradient(135deg, rgba(16,185,129,.15) 0%, rgba(6,95,70,.2) 100%);
-      border-color: rgba(16,185,129,.4);
-    }
-    body.dark-mode .perfil-wa-banner__icon { background: #1f2937; }
-    body.dark-mode .perfil-wa-banner__body strong { color: #a7f3d0; }
-    body.dark-mode .perfil-wa-banner__body p { color: #6ee7b7; }
-    body.dark-mode .perfil-wa-banner__close { color: #a7f3d0; }
+    /* Dark mode del banner — el fondo pálido y su texto se conservan a propósito (contraste fijo) */
+    body.dark-mode .perfil-wa-banner__body strong { color: var(--deep); }
+    body.dark-mode .perfil-wa-banner__body p { color: var(--field-d); }
+    body.dark-mode .perfil-wa-banner__close { color: var(--field-d); }
     /* Responsive mobile */
     @media (max-width: 640px) {
       .perfil-wa-banner { flex-direction: column; align-items: flex-start; text-align: left; padding: 18px 16px; }
       .perfil-wa-banner__btn { width: 100%; padding: 12px 16px; }
     }
-    .perfil-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    /* MODIFICADO: fase 4.5 — panel "Datos de mi cuenta" unificado (antes .perfil-datos no tenía
+       estilo propio en claro: era un div suelto y solo se veían las líneas divisorias). */
+    .perfil-datos {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm);
+    }
+    .perfil-datos__header {
+      padding: 16px 20px; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; gap: 10px;
+      font-size: .88rem; font-weight: 800; font-family: var(--font-display);
+    }
+    .perfil-datos__header svg { width: 18px; height: 18px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    /* display:flex obligatorio: editarCampo()/cancelarEdicion() alternan estas filas con
+       style.display='flex' / 'none'. No cambiar a grid. */
+    .perfil-row { padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .perfil-row:last-child { border-bottom: none; }
-    .perfil-label { font-size: .8rem; color: var(--muted); font-weight: 600; flex-shrink: 0; }
-    .perfil-val { font-size: .9rem; font-weight: 600; }
-    .perfil-edit-input { font-size: .9rem; font-weight: 600; border: 1.5px solid var(--verde-claro); border-radius: 8px; padding: 6px 12px; font-family: var(--font); outline: none; width: 220px; }
-    .btn-editar { font-size: .75rem; font-weight: 700; color: var(--verde-medio); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background .15s; }
-    .btn-editar:hover { background: rgba(82,201,122,.1); }
-    .perfil-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-    .perfil-stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 14px; text-align: center; box-shadow: var(--shadow-sm); }
-    .perfil-stat-num { font-size: 1.8rem; font-weight: 900; color: var(--verde); font-family: var(--font-display); line-height: 1; }
-    .perfil-stat-label { font-size: .72rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+    .perfil-label { font-size: .8rem; color: var(--muted-2); font-weight: 600; flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; }
+    .perfil-label svg { width: 16px; height: 16px; fill: none; stroke: var(--muted-2); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .perfil-val { font-size: .9rem; font-weight: 700; color: var(--ink); text-align: right; word-break: break-word; }
+    body.dark-mode .perfil-val { color: var(--text); }
+    /* Chip "solo lectura" del correo */
+    .perfil-row__ro { display: inline-flex; align-items: center; gap: 5px; font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted-2); background: var(--bg); border: 1px solid var(--line); border-radius: 100px; padding: 3px 9px; flex-shrink: 0; }
+    .perfil-row__ro svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .perfil-edit-input { font-size: .9rem; font-weight: 600; border: 1.5px solid var(--field); border-radius: 10px; padding: 8px 12px; font-family: var(--font); outline: none; width: 220px; max-width: 100%; background: var(--card); color: var(--text); }
+    .perfil-edit-input:focus { box-shadow: 0 0 0 3px rgba(92,140,58,.18); }
+    /* MODIFICADO: "Editar" como enlace discreto con ícono (antes emoji ✏️ + verde-medio viejo) */
+    .btn-editar { font-size: .78rem; font-weight: 700; color: var(--field-d); background: none; border: none; cursor: pointer; padding: 5px 8px; border-radius: 8px; transition: background .15s, color .15s; font-family: var(--font); display: inline-flex; align-items: center; gap: 5px; }
+    .btn-editar svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .btn-editar:hover { background: var(--green-t); color: var(--deep); }
+    /* En oscuro --field-d queda muy tenue sobre el panel; se sube a un verde legible */
+    body.dark-mode .btn-editar { color: #9dcc6b; }
+    body.dark-mode .btn-editar:hover { color: var(--deep); }
+    body.dark-mode .perfil-row__ro { background: rgba(255,255,255,.05); color: var(--muted); }
+    .btn-guardar-campo { background: var(--field); color: #fff; border: none; border-radius: 10px; padding: 8px 16px; font-size: .8rem; font-weight: 700; cursor: pointer; font-family: var(--font); white-space: nowrap; transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 12px rgba(92,140,58,.3); }
+    .btn-guardar-campo:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(92,140,58,.4); }
+    /* MODIFICADO: fase 4.5 — stats del perfil con el mismo patrón .dstat del dashboard (fase 2) */
+    .perfil-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    .perfil-stat-card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 16px 14px; text-align: center; box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .perfil-stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .perfil-stat-icon { width: 40px; height: 40px; border-radius: 12px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+    .perfil-stat-icon svg { width: 20px; height: 20px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .perfil-stat-icon--verde { background: var(--green-t); } .perfil-stat-icon--verde svg { stroke: var(--field); }
+    .perfil-stat-icon--azul  { background: var(--blue-t);  } .perfil-stat-icon--azul  svg { stroke: var(--azul); }
+    .perfil-stat-icon--honey { background: var(--honey-t); } .perfil-stat-icon--honey svg { stroke: var(--honey); }
+    .perfil-stat-num { font-size: 1.5rem; font-weight: 900; color: var(--ink); font-family: var(--font-display); line-height: 1; }
+    body.dark-mode .perfil-stat-num { color: var(--text); }
+    .perfil-stat-label { font-size: .7rem; color: var(--muted-2); margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+    @media (max-width: 640px) {
+      .perfil-hero { padding: 22px 20px; gap: 16px; }
+      .perfil-avatar-big { width: 60px; height: 60px; font-size: 1.5rem; }
+      .perfil-hero-info h3 { font-size: 1.15rem; }
+      .perfil-stats-grid { gap: 10px; }
+      .perfil-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .perfil-val { text-align: left; }
+      .perfil-edit-input { width: 100%; }
+    }
 
     /* ══ SUSCRIPCIÓN ══════════════════════════════════════════════════ */
+    /* MODIFICADO: fase 4.5 — hero VIP en verde profundo del sistema unificado (antes degradado
+       --verde→--verde-claro con una ⭐ gigante de fondo). Mismo #sus-vence dentro del badge. */
     .sus-hero {
-      background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
-      border-radius: 20px; padding: 32px; color: #fff; margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      border-radius: 16px; padding: 32px; color: #fff; margin-bottom: 20px;
       position: relative; overflow: hidden;
     }
     .sus-hero::before {
-      content: '⭐'; position: absolute; right: 20px; top: 50%;
-      transform: translateY(-50%); font-size: 7rem; opacity: .12;
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 180px; height: 180px; border-radius: 50%;
+      background: rgba(163,230,53,.08);
     }
+    .sus-hero__top { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+    .sus-hero__iconbox {
+      width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.24);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sus-hero__iconbox svg { width: 24px; height: 24px; fill: none; stroke: var(--honey); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
     .sus-hero h3 { font-size: 1.5rem; font-weight: 900; font-family: var(--font-display); margin-bottom: 6px; }
-    .sus-hero p { color: rgba(255,255,255,.75); font-size: .9rem; margin-bottom: 20px; }
-    .sus-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3); border-radius: 100px; padding: 6px 18px; font-size: .85rem; font-weight: 700; }
-    .sus-beneficios { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm); }
-    .sus-beneficios h4 { font-size: .9rem; font-weight: 800; font-family: var(--font-display); margin-bottom: 16px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-    .sus-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .sus-hero p { color: rgba(255,255,255,.7); font-size: .9rem; margin-bottom: 20px; position: relative; z-index: 1; }
+    .sus-badge { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); border-radius: 100px; padding: 6px 18px; font-size: .85rem; font-weight: 700; }
+    .sus-badge svg { width: 15px; height: 15px; fill: none; stroke: var(--honey); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .sus-beneficios { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm); }
+    .sus-beneficios h4 { font-size: .9rem; font-weight: 800; font-family: var(--font-display); margin-bottom: 16px; color: var(--muted-2); text-transform: uppercase; letter-spacing: .06em; }
+    .sus-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
     .sus-item:last-child { border-bottom: none; }
-    .sus-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .sus-item-text { font-size: .88rem; font-weight: 600; }
-    .sus-item-sub { font-size: .76rem; color: var(--muted); }
-    .sus-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-    .sus-info-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
-    .sus-info-label { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
-    .sus-info-val { font-size: 1rem; font-weight: 800; color: var(--text); font-family: var(--font-display); }
-    .sus-pagos-list { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
-    .sus-pago-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: .86rem; }
+    /* MODIFICADO: los emojis 🎬🔴📄💬🎁 pasan a íconos SVG del sprite en cuadros con los tintes del sistema */
+    .sus-icon { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sus-icon svg { width: 19px; height: 19px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sus-icon--verde { background: var(--green-t); } .sus-icon--verde svg { stroke: var(--field); }
+    .sus-icon--clay  { background: var(--clay-t);  } .sus-icon--clay  svg { stroke: var(--orange); }
+    .sus-icon--azul  { background: var(--blue-t);  } .sus-icon--azul  svg { stroke: var(--azul); }
+    .sus-icon--honey { background: var(--honey-t); } .sus-icon--honey svg { stroke: var(--honey); }
+    .sus-item-text { font-size: .88rem; font-weight: 700; }
+    .sus-item-sub { font-size: .76rem; color: var(--muted-2); }
+    .sus-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .sus-info-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
+    .sus-info-label { font-size: .72rem; font-weight: 700; color: var(--muted-2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+    .sus-info-label svg { width: 15px; height: 15px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sus-info-val { font-size: 1rem; font-weight: 800; color: var(--ink); font-family: var(--font-display); }
+    body.dark-mode .sus-info-val { color: var(--text); }
+    .sus-pagos-list { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+    .sus-pagos-list__header { padding: 16px 20px; border-bottom: 1px solid var(--line); font-size: .88rem; font-weight: 800; font-family: var(--font-display); display: flex; align-items: center; gap: 10px; }
+    .sus-pagos-list__header svg { width: 18px; height: 18px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sus-pago-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--line); font-size: .86rem; }
     .sus-pago-row:last-child { border-bottom: none; }
-    .sus-cancelar-card { background: #fff8f8; border: 1.5px solid #fecaca; border-radius: 16px; padding: 22px; margin-bottom: 20px; }
-    .sus-privacidad { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; font-size: .8rem; color: var(--muted); line-height: 1.7; }
+    /* Chip "Confirmado" del historial (antes ✅ con verde propio #dcfce7/#16a34a) */
+    .sus-pago-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--green-t); color: var(--field-d); font-size: .72rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
+    .sus-pago-chip svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    body.dark-mode .sus-pago-chip { color: var(--field-d); }
+    /* MODIFICADO: card de cancelar con la cabecera de ícono fuera de #sus-cancelar-titulo, porque
+       deshabilitarCardCancelar() reescribe ese id por innerHTML cuando ya está cancelada. */
+    .sus-cancelar-card { background: var(--clay-t); border: 1px solid #f3c7bd; border-radius: 16px; padding: 22px; margin-bottom: 20px; }
+    .sus-cancelar-card__head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .sus-cancelar-card__icon { width: 34px; height: 34px; border-radius: 10px; background: rgba(185,28,28,.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sus-cancelar-card__icon svg { width: 18px; height: 18px; fill: none; stroke: #b91c1c; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    body.dark-mode .sus-cancelar-card__icon { background: rgba(239,68,68,.15); }
+    body.dark-mode .sus-cancelar-card__icon svg { stroke: #fca5a5; }
+    /* Mismo id/onclick de siempre; si se cancela, deshabilitarCardCancelar() pisa esto con estilos
+       en línea !important y así debe ser. */
+    .btn-cancelar { background: var(--rojo); color: #fff; border: none; border-radius: 10px; padding: 11px 20px; font-size: .85rem; font-weight: 700; cursor: pointer; font-family: var(--font); display: inline-flex; align-items: center; gap: 8px; transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 12px rgba(239,68,68,.28); }
+    .btn-cancelar:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(239,68,68,.38); }
+    .sus-privacidad { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; font-size: .8rem; color: var(--muted-2); line-height: 1.7; }
+    .sus-privacidad__head { display: flex; align-items: center; gap: 10px; font-size: .85rem; font-weight: 800; color: var(--ink); margin-bottom: 12px; font-family: var(--font-display); }
+    .sus-privacidad__head svg { width: 17px; height: 17px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    body.dark-mode .sus-privacidad__head { color: var(--text); }
+    @media (max-width: 640px) {
+      .sus-hero { padding: 24px 20px; }
+      .sus-hero h3 { font-size: 1.25rem; }
+      .sus-info-grid { grid-template-columns: 1fr; }
+      .sus-hero-free { padding: 28px 20px; }
+      .sus-hero-free__title { font-size: 1.4rem; }
+      .sus-hero-free__desc { font-size: .9rem; }
+    }
 
     /* ══ RIGHT PANEL ══════════════════════════════════════════════════ */
     .right-panel {
@@ -6778,6 +6939,20 @@
   <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
   <symbol id="icon-credit-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></symbol>
   <symbol id="icon-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6"/></symbol>
+  <!-- MODIFICADO: fase 4.5 — íconos de línea nuevos para perfil / certificados / suscripción. Mismo estilo (sin fill, stroke por CSS). -->
+  <symbol id="icon-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M14 6l4 4"/></symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14.5v2.5"/></symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.5l3.5 2"/></symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></symbol>
+  <symbol id="icon-whatsapp" viewBox="0 0 24 24"><path d="M3.5 20.5 5 16.6A8.2 8.2 0 1 1 8.1 19.6z"/><path d="M9 9.2c.3 1 .8 1.9 1.5 2.6.7.7 1.6 1.2 2.5 1.5l.9-1.1 1.9.8c-.2 1-1.1 1.6-2.1 1.5a7.4 7.4 0 0 1-6-6c-.1-1 .5-1.9 1.5-2.1l.8 1.9z"/></symbol>
+  <symbol id="icon-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v11M12 14l-4-4M12 14l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+  <symbol id="icon-link" viewBox="0 0 24 24"><path d="M9.5 14.5 14.5 9.5"/><path d="M10 5.5 11.8 3.7a4 4 0 0 1 5.6 5.6L15.6 11"/><path d="M14 18.5l-1.8 1.8a4 4 0 0 1-5.6-5.6L8.4 13"/></symbol>
+  <symbol id="icon-gift" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M3 13h18M12 9v12"/><path d="M12 9C10.5 6 9.5 4.5 8 4.5A2 2 0 0 0 8 8.5zM12 9c1.5-3 2.5-4.5 4-4.5a2 2 0 0 1 0 4z"/></symbol>
+  <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v6c0 4.2-3 7.7-7.5 9-4.5-1.3-7.5-4.8-7.5-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="icon-alert" viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3z"/><path d="M12 10v4M12 17h.01"/></symbol>
+  <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></symbol>
 </svg>
 
 <!-- 🔒 BANNER PAYWALL (solo visible si es usuario FREE) -->
@@ -8980,6 +9155,8 @@
 
     <div class="page" id="page-certificados">
       <!-- HERO PREMIUM con trofeo dorado -->
+      <!-- MODIFICADO: fase 4.5 — mismos ids de stats (cert-count, cert-year, cert-ultimo) y mismo
+           contenedor #lista-certificados; solo cambian los estilos al sistema unificado. -->
       <div class="cert-hero">
         <div class="cert-hero__bg"></div>
         <div class="cert-hero__content">
@@ -10093,8 +10270,10 @@
       </div>
 
       <!-- 📱 FIX C: BANNER AMIGABLE SI WHATSAPP ESTÁ VACÍO -->
+      <!-- MODIFICADO: fase 4.5 — mismos onclick (editarCampo('wa') / dismissWaBanner) e id
+           #perfilWaBanner; solo cambia el markup del ícono (emoji → <svg><use>). -->
       <div class="perfil-wa-banner" id="perfilWaBanner" style="display:none;">
-        <div class="perfil-wa-banner__icon">📱</div>
+        <div class="perfil-wa-banner__icon"><svg><use href="#icon-whatsapp"/></svg></div>
         <div class="perfil-wa-banner__body">
           <strong>Agrega tu WhatsApp</strong>
           <p>Te enviaremos avisos del club, nuevos cursos y webinars directo a tu celular.</p>
@@ -10102,13 +10281,19 @@
         <button class="perfil-wa-banner__btn" onclick="editarCampo('wa'); document.getElementById('perfilWaBanner').style.display='none';">
           Agregar ahora →
         </button>
-        <button class="perfil-wa-banner__close" onclick="dismissWaBanner()" aria-label="Cerrar">✕</button>
+        <button class="perfil-wa-banner__close" onclick="dismissWaBanner()" aria-label="Cerrar"><svg><use href="#icon-x"/></svg></button>
       </div>
 
       <!-- TEMA CLARO/OSCURO -->
+      <!-- MODIFICADO: fase 4.5 — #tema-icon se conserva (actualizarUITema() le escribe 🌞/🌙 por
+           textContent) pero queda oculto; el ícono visible son dos SVG que alternan por CSS. -->
       <div class="tema-card">
         <div class="tema-card__left">
-          <div class="tema-card__icon" id="tema-icon">🌞</div>
+          <div class="tema-card__iconbox">
+            <svg class="tema-card__sun"><use href="#icon-sun"/></svg>
+            <svg class="tema-card__moon"><use href="#icon-moon"/></svg>
+          </div>
+          <div class="tema-card__icon" id="tema-icon" aria-hidden="true">🌞</div>
           <div class="tema-card__txt">
             <strong>Tema del portal</strong>
             <span id="tema-lbl">Modo claro</span>
@@ -10120,60 +10305,81 @@
       </div>
 
       <!-- ESTADÍSTICAS PERSONALES -->
+      <!-- MODIFICADO: fase 4.5 — mismos 3 datos/ids (pstat-cursos, pstat-clases, pstat-dias),
+           ahora con el patrón .dstat del dashboard: ícono en cuadro de color suave. -->
       <div class="perfil-stats-grid">
         <div class="perfil-stat-card">
+          <div class="perfil-stat-icon perfil-stat-icon--verde"><svg><use href="#icon-film"/></svg></div>
           <div class="perfil-stat-num" id="pstat-cursos">0</div>
           <div class="perfil-stat-label">Cursos</div>
         </div>
         <div class="perfil-stat-card">
+          <div class="perfil-stat-icon perfil-stat-icon--azul"><svg><use href="#icon-play"/></svg></div>
           <div class="perfil-stat-num" id="pstat-clases">0</div>
           <div class="perfil-stat-label">Clases vistas</div>
         </div>
         <div class="perfil-stat-card">
+          <div class="perfil-stat-icon perfil-stat-icon--honey"><svg><use href="#icon-calendar"/></svg></div>
           <div class="perfil-stat-num" id="pstat-dias">0</div>
           <div class="perfil-stat-label">Días en el club</div>
         </div>
       </div>
 
       <!-- DATOS EDITABLES -->
+      <!-- MODIFICADO: fase 4.5 — panel con cabecera "Datos de mi cuenta". Se conservan EXACTOS los
+           ids de fila (row-*-ver / row-*-edit), los de valor (perfil-nombre, perfil-wa, perfil-email,
+           perfil-fecha, perfil-plan, perfil-vence), los inputs (input-nombre / input-wa) y los onclick
+           editarCampo / guardarCampo / cancelarEdicion. Solo cambia el markup de presentación.
+           OJO: perfil-nombre y perfil-wa siguen conteniendo SOLO el valor, porque editarCampo() lee
+           su textContent para precargar el input. -->
       <div class="perfil-datos">
+        <div class="perfil-datos__header">
+          <svg><use href="#icon-user"/></svg>
+          Datos de mi cuenta
+        </div>
         <!-- Nombre -->
         <div class="perfil-row" id="row-nombre-ver">
-          <span class="perfil-label">Nombre completo</span>
+          <span class="perfil-label"><svg><use href="#icon-user"/></svg>Nombre completo</span>
           <div style="display:flex;align-items:center;gap:10px;">
             <span class="perfil-val" id="perfil-nombre">—</span>
-            <button class="btn-editar" onclick="editarCampo('nombre')">✏️ Editar</button>
+            <button class="btn-editar" onclick="editarCampo('nombre')"><svg><use href="#icon-edit"/></svg>Editar</button>
           </div>
         </div>
         <div class="perfil-row" id="row-nombre-edit" style="display:none;">
-          <span class="perfil-label">Nombre completo</span>
+          <span class="perfil-label"><svg><use href="#icon-user"/></svg>Nombre completo</span>
           <div style="display:flex;align-items:center;gap:8px;">
             <input class="perfil-edit-input" id="input-nombre" type="text" placeholder="Tu nombre">
-            <button class="btn-ver-curso" style="padding:7px 14px;font-size:.78rem;" onclick="guardarCampo('nombre')">Guardar</button>
-            <button class="btn-editar" onclick="cancelarEdicion('nombre')">✕</button>
+            <button class="btn-guardar-campo" onclick="guardarCampo('nombre')">Guardar</button>
+            <button class="btn-editar" onclick="cancelarEdicion('nombre')" aria-label="Cancelar"><svg><use href="#icon-x"/></svg></button>
           </div>
         </div>
         <!-- WhatsApp -->
         <div class="perfil-row" id="row-wa-ver">
-          <span class="perfil-label">WhatsApp</span>
+          <span class="perfil-label"><svg><use href="#icon-whatsapp"/></svg>WhatsApp</span>
           <div style="display:flex;align-items:center;gap:10px;">
             <span class="perfil-val" id="perfil-wa">—</span>
-            <button class="btn-editar" onclick="editarCampo('wa')">✏️ Editar</button>
+            <button class="btn-editar" onclick="editarCampo('wa')"><svg><use href="#icon-edit"/></svg>Editar</button>
           </div>
         </div>
         <div class="perfil-row" id="row-wa-edit" style="display:none;">
-          <span class="perfil-label">WhatsApp</span>
+          <span class="perfil-label"><svg><use href="#icon-whatsapp"/></svg>WhatsApp</span>
           <div style="display:flex;align-items:center;gap:8px;">
             <input class="perfil-edit-input" id="input-wa" type="tel" placeholder="+52 xxx xxx xxxx">
-            <button class="btn-ver-curso" style="padding:7px 14px;font-size:.78rem;" onclick="guardarCampo('wa')">Guardar</button>
-            <button class="btn-editar" onclick="cancelarEdicion('wa')">✕</button>
+            <button class="btn-guardar-campo" onclick="guardarCampo('wa')">Guardar</button>
+            <button class="btn-editar" onclick="cancelarEdicion('wa')" aria-label="Cancelar"><svg><use href="#icon-x"/></svg></button>
           </div>
         </div>
         <!-- Solo lectura -->
-        <div class="perfil-row"><span class="perfil-label">Email</span><span class="perfil-val" id="perfil-email">—</span></div>
-        <div class="perfil-row"><span class="perfil-label">Miembro desde</span><span class="perfil-val" id="perfil-fecha">—</span></div>
-        <div class="perfil-row"><span class="perfil-label">Plan activo</span><span class="perfil-val" id="perfil-plan">VIP</span></div>
-        <div class="perfil-row"><span class="perfil-label">Vence</span><span class="perfil-val" id="perfil-vence">—</span></div>
+        <div class="perfil-row">
+          <span class="perfil-label"><svg><use href="#icon-mail"/></svg>Correo</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="perfil-val" id="perfil-email">—</span>
+            <span class="perfil-row__ro"><svg><use href="#icon-lock"/></svg>Solo lectura</span>
+          </div>
+        </div>
+        <div class="perfil-row"><span class="perfil-label"><svg><use href="#icon-calendar"/></svg>Miembro desde</span><span class="perfil-val" id="perfil-fecha">—</span></div>
+        <div class="perfil-row"><span class="perfil-label"><svg><use href="#icon-award"/></svg>Plan activo</span><span class="perfil-val" id="perfil-plan">VIP</span></div>
+        <div class="perfil-row"><span class="perfil-label"><svg><use href="#icon-clock"/></svg>Vence</span><span class="perfil-val" id="perfil-vence">—</span></div>
       </div>
     </div>
 
@@ -10181,11 +10387,16 @@
     <div class="page" id="page-suscripcion">
 
       <!-- ════════ VISTA FREE (usuario sin pagar) ════════ -->
+      <!-- MODIFICADO: fase 4.5 — solo estilos y markup de presentación. Se conservan los dos
+           contenedores mutuamente excluyentes (#sus-view-free / #sus-view-vip, que showPage alterna
+           con display:'block' según esVIPActivo()), los precios ($200 / $1,920 / $160 al mes),
+           la insignia "Ahorra 20%", los beneficios 20% mensual y 30% anual, y los onclick
+           abrirStripeCheckout('mensual') / abrirStripeCheckout('anual') tal cual. -->
       <div id="sus-view-free" style="display:none;">
         <div class="sus-hero-free">
           <div class="sus-hero-free__bg"></div>
           <div style="position:relative;z-index:2;">
-            <div class="sus-hero-free__icon">🔒</div>
+            <div class="sus-hero-free__icon"><svg><use href="#icon-lock"/></svg></div>
             <h3 class="sus-hero-free__title">Aún no eres miembro VIP</h3>
             <p class="sus-hero-free__desc">Suscríbete y desbloquea todo el contenido del club: cursos completos, webinars en vivo, herramientas exclusivas y mucho más.</p>
             <div class="sus-hero-free__badge">
@@ -10205,20 +10416,20 @@
               <span class="sus-plan-card__per">MXN/mes</span>
             </div>
             <ul class="sus-plan-card__feats">
-              <li>✓ Videos exclusivos ilimitados</li>
-              <li>✓ PDFs descargables</li>
-              <li>✓ Sesiones en vivo</li>
-              <li>✓ Grupo WhatsApp VIP</li>
-              <li>✓ Certificado mensual</li>
-              <li>✓ 20% descuento en cursos</li>
+              <li><svg><use href="#icon-check"/></svg>Videos exclusivos ilimitados</li>
+              <li><svg><use href="#icon-check"/></svg>PDFs descargables</li>
+              <li><svg><use href="#icon-check"/></svg>Sesiones en vivo</li>
+              <li><svg><use href="#icon-check"/></svg>Grupo WhatsApp VIP</li>
+              <li><svg><use href="#icon-check"/></svg>Certificado mensual</li>
+              <li><svg><use href="#icon-check"/></svg>20% descuento en cursos</li>
             </ul>
             <button class="sus-plan-card__btn" onclick="abrirStripeCheckout('mensual')">
-              💳 Suscribirme mensual →
+              <svg><use href="#icon-credit-card"/></svg> Suscribirme mensual →
             </button>
           </div>
 
           <div class="sus-plan-card sus-plan-card--destacado">
-            <div class="sus-plan-card__badge">🌟 Más popular — Ahorra 20%</div>
+            <div class="sus-plan-card__badge">Más popular — Ahorra 20%</div>
             <div class="sus-plan-card__kicker">ANUAL</div>
             <div class="sus-plan-card__price">
               <span class="sus-plan-card__moneda">$</span>
@@ -10227,92 +10438,104 @@
             </div>
             <div class="sus-plan-card__equivale">Equivale a $160/mes</div>
             <ul class="sus-plan-card__feats">
-              <li>✓ Todo lo del plan mensual</li>
-              <li>✓ <strong>2 meses GRATIS</strong></li>
-              <li>✓ Acceso prioritario</li>
-              <li>✓ Sesión 1 a 1 con instructor</li>
-              <li>✓ Certificado anual especial</li>
-              <li>✓ 30% descuento en cursos</li>
+              <li><svg><use href="#icon-check"/></svg>Todo lo del plan mensual</li>
+              <li><svg><use href="#icon-check"/></svg><strong>2 meses GRATIS</strong></li>
+              <li><svg><use href="#icon-check"/></svg>Acceso prioritario</li>
+              <li><svg><use href="#icon-check"/></svg>Sesión 1 a 1 con instructor</li>
+              <li><svg><use href="#icon-check"/></svg>Certificado anual especial</li>
+              <li><svg><use href="#icon-check"/></svg>30% descuento en cursos</li>
             </ul>
             <button class="sus-plan-card__btn sus-plan-card__btn--pri" onclick="abrirStripeCheckout('anual')">
-              💳 Suscribirme anual →
+              <svg><use href="#icon-credit-card"/></svg> Suscribirme anual →
             </button>
           </div>
         </div>
 
         <div class="sus-free-nota">
-          🔒 Pago seguro · Cancela cuando quieras · Sin contratos
+          <svg><use href="#icon-lock"/></svg> Pago seguro · Cancela cuando quieras · Sin contratos
         </div>
       </div>
 
       <!-- ════════ VISTA VIP (usuario con pago activo) ════════ -->
+      <!-- MODIFICADO: fase 4.5 — restilado. #sus-vence sigue conteniendo SOLO la fecha porque
+           solicitarCancelacion() lee su textContent para calcular los días restantes. -->
       <div id="sus-view-vip">
         <!-- HERO -->
         <div class="sus-hero">
-          <h3>⭐ Membresía VIP Activa</h3>
+          <div class="sus-hero__top">
+            <div class="sus-hero__iconbox"><svg><use href="#icon-award"/></svg></div>
+            <h3>Membresía VIP Activa</h3>
+          </div>
           <p>Tienes acceso completo a todo el contenido de AgroClub MX</p>
-          <div class="sus-badge">✅ Activa · Vence: <span id="sus-vence">—</span></div>
+          <div class="sus-badge"><svg><use href="#icon-check"/></svg> Activa · Vence: <span id="sus-vence">—</span></div>
         </div>
 
         <!-- INFO RÁPIDA -->
         <div class="sus-info-grid">
           <div class="sus-info-card">
-            <div class="sus-info-label">📅 Próximo cobro</div>
+            <div class="sus-info-label"><svg><use href="#icon-calendar"/></svg>Próximo cobro</div>
             <div class="sus-info-val" id="sus-proximo-cobro">—</div>
           </div>
           <div class="sus-info-card">
-            <div class="sus-info-label">💳 Plan activo</div>
+            <div class="sus-info-label"><svg><use href="#icon-credit-card"/></svg>Plan activo</div>
             <div class="sus-info-val" id="sus-plan-info">VIP Mensual</div>
           </div>
         </div>
 
         <!-- BENEFICIOS -->
+        <!-- MODIFICADO: mismos 5 beneficios y mismos textos; emoji → ícono SVG del sprite -->
         <div class="sus-beneficios" style="margin-bottom:20px;">
           <h4>Tus beneficios incluyen</h4>
           <div class="sus-item">
-            <div class="sus-icon" style="background:rgba(82,201,122,.1)">🎬</div>
+            <div class="sus-icon sus-icon--verde"><svg><use href="#icon-film"/></svg></div>
             <div><div class="sus-item-text">Cursos en video ilimitados</div><div class="sus-item-sub">Acceso completo a todos los cursos de la biblioteca</div></div>
           </div>
           <div class="sus-item">
-            <div class="sus-icon" style="background:rgba(239,68,68,.1)">🔴</div>
+            <div class="sus-icon sus-icon--clay"><svg><use href="#icon-video"/></svg></div>
             <div><div class="sus-item-text">Sesiones en vivo con expertos</div><div class="sus-item-sub">Webinars y Q&A en tiempo real</div></div>
           </div>
           <div class="sus-item">
-            <div class="sus-icon" style="background:rgba(249,115,22,.1)">📄</div>
+            <div class="sus-icon sus-icon--azul"><svg><use href="#icon-file-text"/></svg></div>
             <div><div class="sus-item-text">Materiales descargables</div><div class="sus-item-sub">PDFs, guías y temarios exclusivos</div></div>
           </div>
           <div class="sus-item">
-            <div class="sus-icon" style="background:rgba(37,211,102,.1)">💬</div>
+            <div class="sus-icon sus-icon--verde"><svg><use href="#icon-whatsapp"/></svg></div>
             <div><div class="sus-item-text">Comunidad WhatsApp VIP</div><div class="sus-item-sub">Red de productores y técnicos activos</div></div>
           </div>
           <div class="sus-item">
-            <div class="sus-icon" style="background:rgba(251,191,36,.1)">🎁</div>
+            <div class="sus-icon sus-icon--honey"><svg><use href="#icon-gift"/></svg></div>
             <div><div class="sus-item-text">20% descuento en cursos</div><div class="sus-item-sub">En todos los próximos cursos de la plataforma</div></div>
           </div>
         </div>
 
         <!-- HISTORIAL DE PAGOS -->
         <div class="sus-pagos-list">
-          <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:.88rem;font-weight:800;font-family:var(--font-display);">💰 Historial de pagos</div>
+          <div class="sus-pagos-list__header"><svg><use href="#icon-coin"/></svg>Historial de pagos</div>
           <div id="sus-historial-pagos">
             <div class="sus-pago-row" style="color:var(--muted);">Cargando historial...</div>
           </div>
         </div>
 
         <!-- CANCELAR SUSCRIPCIÓN -->
+        <!-- MODIFICADO: el ícono va FUERA de #sus-cancelar-titulo y de #btn-cancelar-membresia,
+             porque deshabilitarCardCancelar() reescribe ambos por innerHTML/textContent cuando la
+             membresía ya está cancelada. Mismo id y mismo onclick="window.solicitarCancelacion()". -->
         <div class="sus-cancelar-card" id="sus-cancelar-card">
-          <div style="font-size:.9rem;font-weight:800;color:#b91c1c;margin-bottom:6px;font-family:var(--font-display);" id="sus-cancelar-titulo">⚠️ Cancelar membresía</div>
+          <div class="sus-cancelar-card__head">
+            <div class="sus-cancelar-card__icon"><svg><use href="#icon-alert"/></svg></div>
+            <div style="font-size:.9rem;font-weight:800;color:#b91c1c;font-family:var(--font-display);" id="sus-cancelar-titulo">Cancelar membresía</div>
+          </div>
           <p style="font-size:.82rem;color:#7f1d1d;line-height:1.6;margin-bottom:16px;" id="sus-cancelar-desc">Si deseas cancelar tu membresía, tu acceso se mantendrá activo hasta la fecha de vencimiento actual. No se realizan reembolsos parciales.</p>
-          <button id="btn-cancelar-membresia" onclick="window.solicitarCancelacion()"
-            style="background:#ef4444;color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;">
+          <button class="btn-cancelar" id="btn-cancelar-membresia" onclick="window.solicitarCancelacion()">
             Cancelar membresía
           </button>
         </div>
       </div>
 
       <!-- POLÍTICA DE PRIVACIDAD (visible siempre) -->
+      <!-- MODIFICADO: solo restilada. El texto de "Pagos" sigue diciendo Shopify, sin tocar. -->
       <div class="sus-privacidad">
-        <div style="font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:10px;font-family:var(--font-display);">🔒 Política de privacidad y términos</div>
+        <div class="sus-privacidad__head"><svg><use href="#icon-shield"/></svg>Política de privacidad y términos</div>
         <p><strong>Datos personales:</strong> AgroClub MX recopila únicamente tu nombre, email y WhatsApp para gestionar tu membresía y enviarte información relevante del club. No compartimos tus datos con terceros.</p>
         <br>
         <p><strong>Pagos:</strong> Los pagos se procesan de forma segura a través de Shopify. AgroClub MX no almacena datos de tarjetas de crédito.</p>
@@ -11569,7 +11792,7 @@ function renderCertificadosLista() {
     if (ultimoEl) ultimoEl.textContent = '—';
     cont.innerHTML = `
       <div class="cert-empty">
-        <div class="cert-empty__icon">🏆</div>
+        <div class="cert-empty__icon"><svg><use href="#icon-trophy"/></svg></div>
         <div class="cert-empty__title">Aún no tienes certificados</div>
         <div class="cert-empty__desc">Completa cualquier curso al 100% y obtén tu primera constancia oficial con folio único.</div>
       </div>`;
@@ -11585,6 +11808,10 @@ function renderCertificadosLista() {
     ultimoEl.textContent = fUlt.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
   }
 
+  /* MODIFICADO: fase 4.5 — solo el markup de presentación de la tarjeta (folio movido a la cabecera
+     verde profundo, meta con categoría/fecha/totalClases, íconos SVG del sprite en vez de los inline).
+     Mismos datos reales del doc (folio=id, cursoTitulo, categoria, fechaEmision, totalClases) y
+     mismos handlers: window.open('ver-certificado.html?folio=…') y copiarLinkVerificacion(folio). */
   cont.innerHTML = certs.map(c => {
     const fecha = new Date(c.fechaEmision).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
     const tituloSafe = (c.cursoTitulo || '—').replace(/[<>]/g, '');
@@ -11617,35 +11844,32 @@ function renderCertificadosLista() {
           </svg>
         </div>
         <div class="cert-card__info">
-          <span class="cert-card__badge-cat">${catSafe}</span>
+          <span class="cert-card__folio-chip"><svg><use href="#icon-shield"/></svg>${c.folio}</span>
           <div class="cert-card__title">${tituloSafe}</div>
         </div>
       </div>
       <div class="cert-card__body">
-        <div class="cert-card__folio-row">
-          <span class="cert-card__folio-lbl">Folio oficial</span>
-          <span class="cert-card__folio-val">${c.folio}</span>
-        </div>
-        <div class="cert-card__date">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:-2px;margin-right:4px;">
-            <rect x="2" y="3" width="10" height="9" rx="1.2" stroke="currentColor" stroke-width="1.4"/>
-            <line x1="2" y1="6" x2="12" y2="6" stroke="currentColor" stroke-width="1.4"/>
-            <line x1="5" y1="1.5" x2="5" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-            <line x1="9" y1="1.5" x2="9" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          Emitido el <strong>${fecha}</strong>
+        <div class="cert-card__meta">
+          <div class="cert-card__meta-row">
+            <svg><use href="#icon-film"/></svg>
+            <span class="cert-card__badge-cat">${catSafe}</span>
+          </div>
+          <div class="cert-card__meta-row">
+            <svg><use href="#icon-calendar"/></svg>
+            Emitido el <strong>${fecha}</strong>
+          </div>
+          <div class="cert-card__meta-row">
+            <svg><use href="#icon-check"/></svg>
+            <strong>${c.totalClases || 0}</strong> clases completadas
+          </div>
         </div>
         <div class="cert-card__actions">
           <button class="cert-btn cert-btn--primary" onclick="window.open('ver-certificado.html?folio=${encodeURIComponent(c.folio)}','_blank')">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
-              <path d="M7 1V9M7 9L4 6M7 9L10 6M2 11V12.5C2 12.7761 2.22386 13 2.5 13H11.5C11.7761 13 12 12.7761 12 12.5V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <svg><use href="#icon-download"/></svg>
             Ver / Descargar
           </button>
           <button class="cert-btn cert-btn--ghost" onclick="copiarLinkVerificacion('${c.folio}')">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
-              <path d="M5.5 8.5L8.5 5.5M6 3L7.5 1.5C8.6 0.4 10.4 0.4 11.5 1.5C12.6 2.6 12.6 4.4 11.5 5.5L10 7M8 11L6.5 12.5C5.4 13.6 3.6 13.6 2.5 12.5C1.4 11.4 1.4 9.6 2.5 8.5L4 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <svg><use href="#icon-link"/></svg>
             Link público
           </button>
         </div>
@@ -12177,6 +12401,8 @@ function cargarHistorialPagos(email) {
       return;
     }
     // Ordenar por fecha desc
+    /* MODIFICADO: fase 4.5 — solo el chip "Confirmado" pasa de emoji + verde propio a la clase
+       .sus-pago-chip del sistema unificado. Misma consulta y mismos campos (p.plan/p.fecha/p.monto). */
     const pagos = snap.docs.map(d => d.data()).sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
     histEl.innerHTML = pagos.map(p => {
       const fecha = p.fecha ? new Date(p.fecha).toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'}) : '—';
@@ -12187,7 +12413,7 @@ function cargarHistorialPagos(email) {
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
           <span style="font-weight:700;font-size:.9rem;">${p.monto || '—'}</span>
-          <span style="background:#dcfce7;color:#16a34a;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:100px;">✅ Confirmado</span>
+          <span class="sus-pago-chip"><svg><use href="#icon-check"/></svg>Confirmado</span>
         </div>
       </div>`;
     }).join('');
