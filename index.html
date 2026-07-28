@@ -204,10 +204,13 @@
     }
 
     /* Header "Notificaciones" — fondo amarillo/verde claro */
+    /* MODIFICADO: fase 4.6 — BUG DE CONTRASTE PREEXISTENTE. Esta regla forzaba texto casi negro
+       (#0d1813) en todo .notif-header dando por hecho un fondo claro, pero .notif-header nunca
+       tuvo fondo: en modo oscuro el título "Notificaciones" y el botón "Marcar todas como leídas"
+       quedaban negro sobre negro, invisibles. Se saca .notif-header de la lista para que siga los
+       colores del tema. .notif-hero se deja tal cual (es una clase sin markup en el portal). */
     body.dark-mode .notif-hero,
-    body.dark-mode .notif-hero *,
-    body.dark-mode .notif-header,
-    body.dark-mode .notif-header * {
+    body.dark-mode .notif-hero * {
       color: #0d1813 !important;
     }
 
@@ -415,22 +418,24 @@
     body.dark-mode .clase-item.active .clase-meta { color: #d1fae5 !important; opacity: 1; }
 
     /* ═══ FIX V6: Notificaciones no leídas en dark mode ═══ */
+    /* MODIFICADO: fase 4.6 — alineado al sistema unificado. Antes eran verdes esmeralda propios
+       (#065f46/#10b981) y pasteles ajenos que chocaban con los tintes nuevos. Las reglas de
+       .notif-mensaje/.notif-tiempo se retiran: esas clases no existen en este render (los campos
+       reales son .notif-titulo, .notif-descripcion y .notif-fecha). */
     body.dark-mode .notif-item.no-leida {
-      background: linear-gradient(135deg, rgba(6,95,70,.22) 0%, rgba(16,185,129,.10) 100%) !important;
-      border-color: rgba(82,201,122,.35) !important;
+      background: rgba(92,140,58,.12) !important;
+      border-color: var(--field) !important;
     }
-    body.dark-mode .notif-item.no-leida .notif-tipo { color: #6ee7a3 !important; }
-    body.dark-mode .notif-item.no-leida .notif-titulo,
-    body.dark-mode .notif-item.no-leida .notif-mensaje,
-    body.dark-mode .notif-item.no-leida .notif-tiempo { color: #f0f4ee !important; }
-    body.dark-mode .notif-item.no-leida .notif-mensaje { color: #d1d5db !important; }
-    body.dark-mode .notif-item.no-leida .notif-tiempo { color: #94a3a0 !important; }
-    /* Iconos coloridos sobre fondos pasteles → en dark, hacer fondos translúcidos del mismo tono */
-    body.dark-mode .notif-icon--curso    { background: linear-gradient(135deg, rgba(82,201,122,.22), rgba(34,197,94,.15)) !important; }
-    body.dark-mode .notif-icon--clase    { background: linear-gradient(135deg, rgba(96,165,250,.22), rgba(59,130,246,.15)) !important; }
-    body.dark-mode .notif-icon--webinar  { background: linear-gradient(135deg, rgba(248,113,113,.22), rgba(239,68,68,.15)) !important; }
-    body.dark-mode .notif-icon--material { background: linear-gradient(135deg, rgba(252,211,77,.22), rgba(251,191,36,.15)) !important; }
-    body.dark-mode .notif-icon--aviso    { background: linear-gradient(135deg, rgba(196,181,253,.22), rgba(168,85,247,.15)) !important; }
+    body.dark-mode .notif-item.no-leida .notif-tipo { color: #9dcc6b !important; }
+    body.dark-mode .notif-item.no-leida .notif-titulo { color: #f0f4ee !important; }
+    body.dark-mode .notif-item.no-leida .notif-descripcion { color: #c3ccbe !important; }
+    /* Los cuadros de ícono usan tintes pálidos fijos; en oscuro se vuelven translúcidos del
+       mismo tono del sistema para no perder el color del tipo. */
+    body.dark-mode .notif-icon--curso    { background: rgba(92,140,58,.20) !important; }
+    body.dark-mode .notif-icon--clase    { background: rgba(59,130,246,.20) !important; }
+    body.dark-mode .notif-icon--webinar  { background: rgba(229,133,47,.20) !important; }
+    body.dark-mode .notif-icon--material { background: rgba(217,164,60,.20) !important; }
+    body.dark-mode .notif-icon--aviso    { background: rgba(229,133,47,.20) !important; }
 
     /* Textos con muted = más claros en dark */
     body.dark-mode .muted,
@@ -2231,35 +2236,35 @@
     .logros-page-hero__desc { font-size: .84rem; line-height: 1.5; opacity: .85; max-width: 500px; }
 
     /* ══ 💬 FORO ═════════════════════════════════════════════════════════ */
+    /* MODIFICADO: fase 4.6 — verde profundo del sistema unificado (antes #0a3d1a→#2d8f42),
+       radio 16px y acento honey. Las reglas .foro-hero__stats/__stat se eliminan junto con las
+       3 estadísticas inventadas que vivían aquí. */
     .foro-hero {
       position: relative; overflow: hidden; margin-bottom: 18px;
-      background: linear-gradient(135deg, #0a3d1a 0%, #1a6b2f 50%, #2d8f42 100%);
-      border-radius: 24px; padding: 24px 26px;
-      box-shadow: 0 20px 50px rgba(10,61,26,.25);
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      border-radius: 16px; padding: 24px 26px;
+      box-shadow: var(--shadow-md);
       color: #fff; animation: cardIn .4s ease both;
     }
     .foro-hero__bg {
       position: absolute; inset: 0; pointer-events: none;
       background:
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,.12), transparent 50%),
-        radial-gradient(circle at 20% 90%, rgba(251,191,36,.1), transparent 50%);
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,.10), transparent 50%),
+        radial-gradient(circle at 20% 90%, rgba(217,164,60,.14), transparent 50%);
     }
     .foro-hero__content { position: relative; z-index: 2; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
     .foro-hero__icon {
-      width: 72px; height: 72px; border-radius: 18px;
-      background: rgba(255,255,255,.15); backdrop-filter: blur(10px);
+      width: 66px; height: 66px; border-radius: 18px;
+      background: rgba(255,255,255,.14);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.4rem; flex-shrink: 0;
-      border: 1px solid rgba(255,255,255,.2);
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,.22);
     }
+    .foro-hero__icon svg { width: 32px; height: 32px; fill: none; stroke: var(--honey); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
     .foro-hero__text { flex: 1; min-width: 220px; }
-    .foro-hero__kicker { font-size: .68rem; text-transform: uppercase; letter-spacing: .18em; color: #fbbf24; font-weight: 800; margin-bottom: 6px; }
-    .foro-hero__title { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-    .foro-hero__desc { font-size: .84rem; line-height: 1.5; opacity: .88; }
-    .foro-hero__stats { display: flex; gap: 18px; }
-    .foro-hero__stat { text-align: center; }
-    .foro-hero__stat strong { display: block; font-size: 1.1rem; font-weight: 800; color: #fbbf24; font-family: 'Playfair Display', Georgia, serif; }
-    .foro-hero__stat span { font-size: .6rem; text-transform: uppercase; letter-spacing: .1em; opacity: .8; font-weight: 700; }
+    .foro-hero__kicker { font-size: .68rem; text-transform: uppercase; letter-spacing: .18em; color: var(--honey); font-weight: 800; margin-bottom: 6px; }
+    .foro-hero__title { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; font-family: var(--font-display); }
+    .foro-hero__desc { font-size: .84rem; line-height: 1.5; opacity: .85; }
 
     .foro-coming-banner {
       display: flex; gap: 14px; align-items: center;
@@ -2273,24 +2278,36 @@
     .foro-coming-banner__text strong { color: #92400e; font-size: .92rem; font-weight: 800; }
     .foro-coming-banner__text span { font-size: .8rem; color: var(--muted); line-height: 1.4; }
 
+    /* MODIFICADO: fase 4.6 — tokens del sistema unificado y botón explícito "Crear post"
+       (sustituye a los dos íconos decorativos sin onclick del composer). */
     .foro-composer {
       display: flex; align-items: center; gap: 12px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 14px 18px; margin-bottom: 14px;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 14px 18px; margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
       cursor: pointer; transition: border-color .15s, box-shadow .15s;
     }
-    .foro-composer:hover { border-color: var(--verde,#1a6b2f); box-shadow: 0 4px 12px rgba(26,107,47,.08); }
+    .foro-composer:hover { border-color: var(--field); box-shadow: var(--shadow-md); }
     .foro-composer__avatar {
       width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, #1a6b2f, #2d8f42);
+      background: var(--field);
       color: #fff; display: flex; align-items: center; justify-content: center;
-      font-weight: 800; flex-shrink: 0;
+      font-weight: 800; flex-shrink: 0; font-family: var(--font-display);
     }
     .foro-composer__input {
       flex: 1; background: var(--bg); border-radius: 100px;
-      padding: 10px 16px; color: var(--muted); font-size: .88rem;
+      padding: 10px 16px; color: var(--muted-2); font-size: .88rem;
     }
-    .foro-composer__actions { display: flex; gap: 14px; font-size: 1.2rem; opacity: .6; }
+    .foro-composer__btn {
+      flex-shrink: 0; background: var(--field); color: #fff; border: none;
+      border-radius: 10px; padding: 10px 16px; font-size: .82rem; font-weight: 700;
+      font-family: var(--font); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(92,140,58,.3);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .foro-composer__btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .foro-composer__btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(92,140,58,.4); }
 
     .foro-filters {
       display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px;
@@ -2298,20 +2315,28 @@
     }
     .foro-filters::-webkit-scrollbar { display: none; }
     .foro-filter {
-      background: var(--card); border: 1px solid var(--border); border-radius: 100px;
-      padding: 8px 16px; font-size: .82rem; font-weight: 700; color: var(--text);
+      background: var(--card); border: 1px solid var(--line); border-radius: 100px;
+      padding: 8px 15px; font-size: .82rem; font-weight: 700; color: var(--text);
       cursor: pointer; white-space: nowrap; font-family: inherit;
-      transition: all .15s;
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: background .15s, color .15s, border-color .15s;
     }
-    .foro-filter:hover { border-color: var(--verde,#1a6b2f); }
-    .foro-filter--active { background: var(--verde,#1a6b2f); color: #fff; border-color: var(--verde,#1a6b2f); }
+    .foro-filter svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .foro-filter:hover { border-color: var(--field); }
+    .foro-filter--active { background: var(--field); color: #fff; border-color: var(--field); }
 
     .foro-feed { display: flex; flex-direction: column; gap: 14px; }
 
+    /* MODIFICADO: fase 4.6 — tarjeta de post con tokens del sistema unificado */
     .foro-post {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 18px 20px; animation: cardIn .4s ease both;
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 18px 20px; box-shadow: var(--shadow-sm);
+      animation: cardIn .4s ease both;
+      transition: transform .2s, box-shadow .2s;
     }
+    .foro-post:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .foro-post__pin { display: inline-flex; align-items: center; margin-right: 5px; }
+    .foro-post__pin svg { width: 14px; height: 14px; vertical-align: -2px; fill: none; stroke: var(--honey); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .foro-post:nth-child(1) { animation-delay: .05s; }
     .foro-post:nth-child(2) { animation-delay: .1s; }
     .foro-post:nth-child(3) { animation-delay: .15s; }
@@ -2322,104 +2347,141 @@
       width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
       background: linear-gradient(135deg, var(--a,#1a6b2f), var(--b,#2d8f42));
       color: #fff; display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 1rem;
+      font-weight: 800; font-size: 1rem; font-family: var(--font-display);
     }
     .foro-post__author { flex: 1; min-width: 0; }
     .foro-post__name {
       font-weight: 700; font-size: .92rem; color: var(--text);
       display: flex; align-items: center; gap: 6px;
     }
+    /* MODIFICADO: badge OFICIAL en honey del sistema (antes #fbbf24→#d97706) */
     .foro-post__badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff;
+      display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+      background: linear-gradient(135deg, var(--honey), var(--orange)); color: #422006;
       padding: 2px 8px; border-radius: 100px; font-size: .62rem; font-weight: 800;
       letter-spacing: .05em;
     }
-    .foro-post__meta { font-size: .74rem; color: var(--muted); margin-top: 1px; }
+    .foro-post__badge svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    body.dark-mode .foro-post__badge { color: #422006; }
+    .foro-post__meta { font-size: .74rem; color: var(--muted-2); margin-top: 1px; display: flex; align-items: center; gap: 5px; }
+    .foro-post__meta svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    /* MODIFICADO: chip de categoría con color propio por categoría (antes uno solo verde) */
     .foro-post__cat {
-      display: inline-block; background: rgba(26,107,47,.1); color: var(--verde,#1a6b2f);
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--green-t); color: var(--field-d);
       padding: 4px 10px; border-radius: 100px; font-size: .68rem; font-weight: 800;
       letter-spacing: .03em; margin-bottom: 8px;
     }
-    .foro-post__title { font-size: 1rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3; color: var(--text); }
-    .foro-post__body { font-size: .88rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .foro-post__cat svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .foro-post__cat--preguntas   { background: var(--blue-t);  color: #1d4e6b; }
+    .foro-post__cat--casos_exito { background: var(--honey-t); color: #7a5a12; }
+    .foro-post__cat--tips        { background: var(--green-t); color: var(--field-d); }
+    .foro-post__cat--mercado     { background: var(--clay-t);  color: #8a4b2a; }
+    body.dark-mode .foro-post__cat--preguntas   { color: #1d4e6b; }
+    body.dark-mode .foro-post__cat--casos_exito { color: #7a5a12; }
+    body.dark-mode .foro-post__cat--tips        { color: var(--field-d); }
+    body.dark-mode .foro-post__cat--mercado     { color: #8a4b2a; }
+    .foro-post__title { font-size: 1rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3; color: var(--text); font-family: var(--font-display); }
+    .foro-post__body { font-size: .88rem; color: var(--muted-2); line-height: 1.5; margin-bottom: 12px; }
     .foro-post__img {
       width: 100%; aspect-ratio: 16/9; border-radius: 10px; margin-bottom: 12px;
       background-size: cover; background-position: center;
       background-color: #e8f5e9;
     }
     .foro-post__actions {
-      display: flex; gap: 18px; padding-top: 10px;
-      border-top: 1px solid var(--border);
+      display: flex; gap: 18px; padding-top: 12px;
+      border-top: 1px solid var(--line);
     }
+    /* MODIFICADO: 🤍/❤️ 💬 🔗 🗑️ pasan a íconos de línea; el "like" activo se pinta rellenando
+       el corazón, no cambiando de emoji. */
     .foro-post__action {
       display: flex; align-items: center; gap: 6px;
-      font-size: .82rem; color: var(--muted); font-weight: 700;
+      font-size: .82rem; color: var(--muted-2); font-weight: 700;
       cursor: pointer; transition: color .15s;
+      background: none; border: none; font-family: var(--font); padding: 0;
     }
-    .foro-post__action:hover { color: var(--verde,#1a6b2f); }
-    .foro-post__action.liked { color: #dc2626; }
+    .foro-post__action svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transition: fill .15s, stroke .15s; }
+    .foro-post__action:hover { color: var(--field); }
+    .foro-post__action.liked { color: var(--rojo); }
+    .foro-post__action.liked .like-heart { fill: var(--rojo); stroke: var(--rojo); }
+    /* toggleLikePost()/toggleLikeComentario() escriben 🤍/❤️ en .like-icon por textContent.
+       Para NO tocar esas funciones, .like-icon se queda en el DOM pero oculto y el corazón
+       visible es .like-heart, que se rellena vía la clase .liked que el mismo JS ya alterna. */
+    .like-icon { display: none; }
 
     @media (max-width: 640px) {
       .logros-page-hero { padding: 20px; border-radius: 20px; }
       .logros-page-hero__content { gap: 14px; }
       .logros-page-hero__medal { width: 72px; height: 72px; }
       .logros-page-hero__title { font-size: 1.25rem; }
-      .foro-hero { padding: 20px; border-radius: 20px; }
+      .foro-hero { padding: 20px; border-radius: 16px; }
       .foro-hero__content { gap: 14px; }
-      .foro-hero__icon { width: 56px; height: 56px; font-size: 1.8rem; border-radius: 14px; }
+      .foro-hero__icon { width: 52px; height: 52px; border-radius: 14px; }
+      .foro-hero__icon svg { width: 26px; height: 26px; }
       .foro-hero__title { font-size: 1.2rem; }
       .foro-hero__desc { font-size: .78rem; }
-      .foro-hero__stats { width: 100%; justify-content: space-between; }
+      /* MODIFICADO: fase 4.6 — antes esta regla estiraba .foro-hero__stats (las 3 stats falsas,
+         ya eliminadas). Ahora el bloque de reputación real ocupa el ancho en móvil. */
+      .foro-mirep { width: 100%; min-width: 0; }
       .foro-post { padding: 14px; }
-      .foro-composer { padding: 12px; }
+      .foro-composer { padding: 12px; flex-wrap: wrap; }
       .foro-composer__input { font-size: .82rem; padding: 8px 14px; }
+      .foro-composer__btn { width: 100%; justify-content: center; }
     }
     /* ══ FIN FORO/LOGROS ═════════════════════════════════════════════════ */
 
     /* ══ FORO: EXTRAS (modal, reputación, sort, skeleton, solución) ══════ */
 
     /* Reputación del usuario */
+    /* MODIFICADO: fase 4.6 — ahora vive DENTRO del hero verde profundo, como cabecera del foro
+       (sustituye a las 3 stats inventadas). Pasa de tarjeta blanca a bloque de vidrio.
+       Sigue siendo display:flex porque cargarMiReputacion() lo enciende con style.display='flex'. */
     .foro-mirep {
-      display: flex; justify-content: space-between; align-items: center; gap: 14px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 14px 18px; margin-bottom: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+      background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.20);
+      border-radius: 14px; padding: 14px 16px; margin-bottom: 0;
+      min-width: 230px;
       animation: cardIn .4s ease both;
     }
     .foro-mirep__left { display: flex; align-items: center; gap: 12px; }
     .foro-mirep__avatar {
       width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, #1a6b2f, #2d8f42);
+      background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.28);
       color: #fff; display: flex; align-items: center; justify-content: center;
-      font-weight: 800; flex-shrink: 0;
+      font-weight: 800; flex-shrink: 0; font-family: var(--font-display);
     }
-    .foro-mirep__nombre { font-weight: 700; font-size: .92rem; color: var(--text); }
+    .foro-mirep__nombre { font-weight: 700; font-size: .92rem; color: #fff; }
     .foro-mirep__nivel {
-      font-size: .78rem; color: var(--verde, #1a6b2f); font-weight: 700;
+      font-size: .78rem; color: var(--honey); font-weight: 700;
       margin-top: 2px;
     }
-    .foro-mirep__badges { display: flex; gap: 4px; flex-wrap: wrap; max-width: 50%; justify-content: flex-end; }
+    body.dark-mode .foro-mirep__nombre { color: #fff; }
+    .foro-mirep__badges { display: flex; gap: 5px; flex-wrap: wrap; max-width: 100%; justify-content: flex-start; }
     .foro-badge-mini {
-      background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3);
-      border-radius: 100px; padding: 4px 10px; font-size: .7rem; font-weight: 700;
+      background: rgba(217,164,60,.18); border: 1px solid rgba(217,164,60,.4);
+      border-radius: 100px; padding: 4px 10px; font-size: .68rem; font-weight: 700;
       display: inline-flex; align-items: center; gap: 4px;
-      color: #92400e;
+      color: #fff;
     }
+    body.dark-mode .foro-badge-mini { color: #fff; }
 
     /* Ordenar */
     .foro-sort {
       display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap;
       font-size: .82rem;
     }
-    .foro-sort__label { color: var(--muted); font-weight: 600; }
+    .foro-sort__label { color: var(--muted-2); font-weight: 600; }
     .foro-sort__btn {
-      background: transparent; border: none; color: var(--muted);
+      background: transparent; border: none; color: var(--muted-2);
       font-weight: 700; font-family: inherit; cursor: pointer;
-      padding: 4px 10px; border-radius: 100px; transition: all .15s;
+      padding: 5px 11px; border-radius: 100px; transition: background .15s, color .15s;
       font-size: .82rem;
+      display: inline-flex; align-items: center; gap: 6px;
     }
+    .foro-sort__btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .foro-sort__btn:hover { background: var(--bg); color: var(--text); }
-    .foro-sort__btn--active { background: rgba(26,107,47,.12); color: var(--verde, #1a6b2f); }
+    .foro-sort__btn--active { background: var(--green-t); color: var(--field-d); }
+    body.dark-mode .foro-sort__btn--active { color: var(--field-d); }
 
     /* Skeleton loader */
     .foro-skeleton {
@@ -2438,13 +2500,15 @@
       width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px;
       margin-bottom: 12px; display: block; cursor: pointer;
     }
+    /* MODIFICADO: fase 4.6 — tokens verde del sistema (antes #d1fae5/#047857 propios) */
     .foro-post__estado {
       display: inline-flex; align-items: center; gap: 4px;
-      background: #d1fae5; color: #047857;
+      background: var(--green-t); color: var(--field-d);
       padding: 3px 10px; border-radius: 100px;
       font-size: .66rem; font-weight: 800; letter-spacing: .03em;
       margin-left: 6px;
     }
+    body.dark-mode .foro-post__estado { color: var(--field-d); }
     .foro-post__hashtags {
       display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
     }
@@ -2602,11 +2666,26 @@
       display: flex; gap: 12px; font-size: .74rem;
     }
     .foro-coment__acc-btn {
-      background: none; border: none; color: var(--muted); font-weight: 700; cursor: pointer;
+      background: none; border: none; color: var(--muted-2); font-weight: 700; cursor: pointer;
       font-family: inherit; font-size: .74rem;
+      display: inline-flex; align-items: center; gap: 5px;
     }
-    .foro-coment__acc-btn.liked { color: #dc2626; }
-    .foro-coment__acc-btn--sol { color: #10b981; }
+    /* MODIFICADO: fase 4.6 — íconos de línea; el like usa el mismo patrón .like-heart del feed */
+    .foro-coment__acc-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: fill .15s, stroke .15s; }
+    .foro-coment__acc-btn.liked { color: var(--rojo); }
+    .foro-coment__acc-btn.liked .like-heart { fill: var(--rojo); stroke: var(--rojo); }
+    .foro-coment__acc-btn--sol { color: var(--field); }
+    .foro-coment__sol-badge {
+      display: inline-flex; align-items: center; gap: 4px; margin-left: 6px;
+      color: var(--field-d); font-weight: 800; font-size: .68rem;
+    }
+    .foro-coment__sol-badge svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    body.dark-mode .foro-coment__sol-badge { color: #9dcc6b; }
+    .foro-detalle__coms-h svg { width: 17px; height: 17px; vertical-align: -3px; margin-right: 7px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .foro-solucion__icon svg { width: 20px; height: 20px; fill: none; stroke: var(--field); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .foro-post__estado svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .foro-post__ubicacion svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -2px; margin-right: 2px; }
+    .foro-empty__icon svg { width: 32px; height: 32px; fill: none; stroke: var(--field); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
     .foro-coment-nuevo {
       display: flex; gap: 8px; margin-top: 14px;
@@ -3966,64 +4045,96 @@
       gap: 10px;
     }
     .notif-header h3 {
-      font-size: 1rem;
-      font-weight: 800;
+      font-size: 1.15rem;
+      font-weight: 900;
       font-family: var(--font-display);
       letter-spacing: -.01em;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
     }
+    .notif-header h3 svg { width: 21px; height: 21px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    /* MODIFICADO: fase 4.6 — tokens del sistema unificado (antes --border/--verde viejos) */
     .notif-marcar-todo {
       background: transparent;
-      border: 1px solid var(--border, #e8ede5);
-      color: var(--muted, #6b7867);
+      border: 1px solid var(--line);
+      color: var(--muted-2);
       padding: 7px 14px;
       border-radius: 100px;
       font-size: 0.78rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       font-family: var(--font);
-      transition: all 0.15s ease;
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: background .15s, color .15s, border-color .15s;
     }
+    .notif-marcar-todo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
     .notif-marcar-todo:hover {
-      background: var(--bg, #f4f6f3);
-      color: var(--text, #14251a);
-      border-color: var(--verde, #1a6b2f);
+      background: var(--green-t);
+      color: var(--deep);
+      border-color: var(--field);
     }
     .notif-marcar-todo:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
+    /* En oscuro --muted-2 queda demasiado tenue sobre el fondo del portal */
+    body.dark-mode .notif-marcar-todo { color: var(--muted); border-color: var(--border); }
+    body.dark-mode .notif-marcar-todo:hover { color: var(--deep); }
 
     .notif-lista {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
+    /* MODIFICADO: fase 4.6 — grupos "Nuevas" / "Anteriores". Antes las leídas no se pintaban. */
+    .notif-group { display: flex; flex-direction: column; gap: 10px; }
+    .notif-group + .notif-group { margin-top: 26px; }
+    .notif-group__head {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .74rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--muted-2);
+      padding: 0 2px 2px;
+    }
+    .notif-group__head svg { width: 14px; height: 14px; fill: none; stroke: var(--field); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .notif-group__dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--rojo);
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+      animation: notifDotPulse 2s infinite;
+    }
+    .notif-group__count {
+      background: var(--green-t); color: var(--field-d);
+      border-radius: 100px; padding: 2px 9px;
+      font-size: .68rem; font-weight: 800; letter-spacing: .02em;
+    }
+    body.dark-mode .notif-group__count { color: var(--field-d); }
+
     .notif-item {
-      background: var(--card, #fff);
-      border: 1px solid var(--border, #e8ede5);
-      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
       padding: 16px;
       display: grid;
       grid-template-columns: 44px 1fr auto;
       gap: 14px;
       align-items: flex-start;
       cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, opacity .15s ease;
       position: relative;
       text-decoration: none;
       color: inherit;
     }
     .notif-item:hover {
       transform: translateY(-2px);
-      border-color: var(--verde, #1a6b2f);
-      box-shadow: 0 8px 20px -10px rgba(26, 107, 47, 0.2);
+      border-color: var(--field);
+      box-shadow: var(--shadow-md);
+      opacity: 1;
     }
     .notif-item.no-leida {
-      background: linear-gradient(135deg, #eaf3ec 0%, #f4f9f5 100%);
-      border-color: rgba(26, 107, 47, 0.25);
+      background: var(--card);
+      border-color: var(--field);
+      border-left: 3px solid var(--field);
     }
     .notif-item.no-leida::before {
       content: '';
@@ -4033,10 +4144,12 @@
       width: 9px;
       height: 9px;
       border-radius: 50%;
-      background: #ef4444;
+      background: var(--rojo);
       box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
       animation: notifDotPulse 2s infinite;
     }
+    /* Las ya leídas: mismas tarjetas, atenuadas */
+    .notif-item--leida { opacity: .62; box-shadow: none; }
     @keyframes notifDotPulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
       50%      { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
@@ -4048,15 +4161,18 @@
       border-radius: 12px;
       display: grid;
       place-items: center;
-      font-size: 1.3rem;
       flex-shrink: 0;
     }
-    .notif-icon--curso    { background: linear-gradient(135deg, #dbf4e2, #b5e4c1); }
-    .notif-icon--clase    { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
-    .notif-icon--webinar  { background: linear-gradient(135deg, #fee2e2, #fecaca); }
-    .notif-icon--material { background: linear-gradient(135deg, #fef3c7, #fde68a); }
-    .notif-icon--aviso    { background: linear-gradient(135deg, #e9d5ff, #ddd6fe); }
-    .notif-icon--default  { background: var(--bg, #f4f6f3); }
+    /* MODIFICADO: los 5 tipos reales pasan a ícono de línea sobre los tintes del sistema.
+       .notif-icon__emoji es el respaldo para el campo opcional n.emoji del documento. */
+    .notif-icon svg { width: 21px; height: 21px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .notif-icon__emoji { font-size: 1.3rem; line-height: 1; }
+    .notif-icon--curso    { background: var(--green-t); } .notif-icon--curso svg    { stroke: var(--field); }
+    .notif-icon--clase    { background: var(--blue-t);  } .notif-icon--clase svg    { stroke: var(--azul); }
+    .notif-icon--webinar  { background: var(--clay-t);  } .notif-icon--webinar svg  { stroke: var(--orange); }
+    .notif-icon--material { background: var(--honey-t); } .notif-icon--material svg { stroke: var(--honey); }
+    .notif-icon--aviso    { background: var(--honey-t); } .notif-icon--aviso svg    { stroke: var(--orange); }
+    .notif-icon--default  { background: var(--bg);      } .notif-icon--default svg  { stroke: var(--muted-2); }
 
     .notif-body { min-width: 0; padding-right: 18px; }
     .notif-tipo {
@@ -4064,9 +4180,10 @@
       font-weight: 800;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--verde, #1a6b2f);
+      color: var(--field-d);
       margin-bottom: 4px;
     }
+    body.dark-mode .notif-tipo { color: #9dcc6b; }
     .notif-titulo {
       font-size: 0.95rem;
       font-weight: 700;
@@ -4096,20 +4213,27 @@
     .notif-empty {
       text-align: center;
       padding: 60px 20px;
-      background: var(--card, #fff);
-      border: 1px dashed var(--border, #e8ede5);
-      border-radius: 18px;
-      color: var(--muted, #6b7867);
+      background: var(--card);
+      border: 1.5px dashed var(--line);
+      border-radius: 16px;
+      color: var(--muted-2);
     }
-    .notif-empty__icon { font-size: 3.5rem; opacity: 0.6; margin-bottom: 14px; }
-    .notif-empty strong { display: block; color: var(--text, #14251a); margin-bottom: 6px; font-size: 1rem; }
+    .notif-empty__icon {
+      width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 18px;
+      background: var(--green-t);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .notif-empty__icon svg { width: 30px; height: 30px; fill: none; stroke: var(--field); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .notif-empty strong { display: block; color: var(--ink); margin-bottom: 6px; font-size: 1rem; font-family: var(--font-display); }
+    body.dark-mode .notif-empty strong { color: var(--text); }
     .notif-empty p { font-size: 0.88rem; line-height: 1.5; }
 
     @media (max-width: 480px) {
       .notif-item { grid-template-columns: 40px 1fr; padding: 14px; gap: 12px; }
       .notif-fecha { grid-column: 2; padding-top: 0; margin-top: 2px; }
       .notif-body { padding-right: 20px; }
-      .notif-icon { width: 40px; height: 40px; font-size: 1.15rem; }
+      .notif-icon { width: 40px; height: 40px; }
+      .notif-icon svg { width: 19px; height: 19px; }
     }
 
     /* ══ BOTTOM NAV (ahora deshabilitado, reemplazado por drawer) ══ */
@@ -6043,11 +6167,13 @@
     .webinar-page-header__title {
       font-family: var(--font-display, var(--font)), sans-serif;
       font-size: 1.75rem;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--ink, #0d1813);
       margin: 0 0 6px;
       letter-spacing: -0.02em;
+      display: flex; align-items: center; gap: 10px;
     }
+    .webinar-page-header__title svg { width: 26px; height: 26px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .webinar-page-header__subtitle {
       font-size: 0.92rem;
       color: var(--muted, #5a6758);
@@ -6057,25 +6183,21 @@
     body.dark-mode .webinar-page-header__title { color: #f0f4ee; }
 
     /* === HERO destacado del próximo webinar === */
+    /* MODIFICADO: fase 4.6 — verde profundo del sistema unificado (antes #0d3d19→#0a2d12),
+       radio 16px y sombra de token. El estado "en vivo" conserva el rojo pero con --rojo. */
     .webinar-hero {
       position: relative;
-      background: linear-gradient(135deg, #0d3d19 0%, #1a6b2f 50%, #0a2d12 100%);
-      border-radius: 28px;
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
+      border-radius: 16px;
       padding: 32px 28px;
       margin-bottom: 28px;
       overflow: hidden;
       color: #fff;
-      box-shadow:
-        0 24px 60px rgba(13, 61, 25, 0.35),
-        0 0 0 1px rgba(82, 201, 122, 0.18),
-        0 0 100px rgba(82, 201, 122, 0.12);
+      box-shadow: var(--shadow-md);
     }
     .webinar-hero.is-live {
-      background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #7f1d1d 100%);
-      box-shadow:
-        0 24px 60px rgba(185, 28, 28, 0.35),
-        0 0 0 1px rgba(248, 113, 113, 0.25),
-        0 0 100px rgba(248, 113, 113, 0.18);
+      background: linear-gradient(135deg, #7f1d1d 0%, var(--rojo) 100%);
+      box-shadow: 0 20px 48px rgba(185, 28, 28, .3);
     }
     .webinar-hero__rays {
       position: absolute;
@@ -6093,6 +6215,8 @@
       from { transform: translate(-50%, -50%) rotate(0deg); }
       to   { transform: translate(-50%, -50%) rotate(360deg); }
     }
+    /* MODIFICADO: fase 4.6 — los ✨ eran 6 emojis flotando; ahora son puntos de luz en CSS,
+       sin emoji y sin tocar el número ni el ritmo de la animación. */
     .webinar-hero__sparkles {
       position: absolute;
       inset: 0;
@@ -6102,7 +6226,8 @@
     .webinar-hero__sparkles span {
       position: absolute;
       top: 20%;
-      font-size: 1rem;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255, 255, 255, .85);
       animation: webinarSparkle 4s ease-in-out infinite;
       filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
       opacity: 0.6;
@@ -6123,13 +6248,14 @@
       font-weight: 800;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: #fcd34d;
+      color: var(--honey); /* MODIFICADO: honey del sistema (antes #fcd34d) */
       background: rgba(0, 0, 0, 0.22);
       padding: 7px 14px;
       border-radius: 100px;
-      border: 1px solid rgba(252, 211, 77, 0.3);
+      border: 1px solid rgba(217, 164, 60, 0.35);
       margin-bottom: 16px;
     }
+    .webinar-hero__kicker svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .webinar-hero.is-live .webinar-hero__kicker {
       color: #fff;
       background: rgba(0, 0, 0, 0.35);
@@ -6151,7 +6277,7 @@
     .webinar-hero__title {
       font-family: var(--font-display, var(--font)), sans-serif;
       font-size: 2rem;
-      font-weight: 800;
+      font-weight: 900;
       margin: 0 0 14px;
       line-height: 1.15;
       letter-spacing: -0.02em;
@@ -6160,11 +6286,16 @@
     .webinar-hero__fecha {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       font-size: 0.94rem;
       color: rgba(255, 255, 255, 0.85);
       margin-bottom: 6px;
     }
+    /* MODIFICADO: fase 4.6 — 👤 y 📅 pasan a íconos de línea del sprite */
+    .webinar-hero__instructor svg,
+    .webinar-hero__fecha svg { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: var(--honey); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .webinar-hero.is-live .webinar-hero__instructor svg,
+    .webinar-hero.is-live .webinar-hero__fecha svg { stroke: rgba(255,255,255,.85); }
     .webinar-hero__instructor span {
       font-weight: 600;
       color: #fff;
@@ -6267,14 +6398,16 @@
       gap: 8px;
       letter-spacing: 0.01em;
     }
+    .webinar-hero__btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    /* MODIFICADO: CTA honey del sistema unificado (antes #fcd34d→#f59e0b) */
     .webinar-hero__btn--primary {
-      background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
+      background: linear-gradient(135deg, var(--honey), var(--orange));
       color: #422006;
-      box-shadow: 0 10px 28px rgba(252, 211, 77, 0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+      box-shadow: 0 10px 28px rgba(217, 164, 60, 0.4);
     }
     .webinar-hero__btn--primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 34px rgba(252, 211, 77, 0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+      box-shadow: 0 14px 34px rgba(217, 164, 60, 0.5);
     }
     .webinar-hero__btn--live {
       background: #fff;
@@ -6306,8 +6439,9 @@
       letter-spacing: -0.01em;
     }
     body.dark-mode .webinar-section__title { color: #f0f4ee; }
+    .webinar-section__title svg { width: 18px; height: 18px; vertical-align: -3px; margin-right: 7px; fill: none; stroke: var(--field); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .webinar-section__count {
-      background: var(--verde, #1a6b2f);
+      background: var(--field); /* MODIFICADO: verde campo del sistema (antes --verde viejo) */
       color: #fff;
       font-size: 0.72rem;
       font-weight: 800;
@@ -6322,47 +6456,44 @@
     }
 
     /* === Cards de webinar (próximas y pasadas) === */
+    /* MODIFICADO: fase 4.6 — var(--card-bg) NO existe en el portal (la tarjeta caía al #fff
+       de respaldo y no seguía el tema). Se pasa a --card / --line del sistema unificado. */
     .webinar-card {
       display: flex;
       align-items: center;
       gap: 14px;
-      background: var(--card-bg, #fff);
-      border: 1px solid var(--border, rgba(0,0,0,0.08));
+      background: var(--card);
+      border: 1px solid var(--line);
       border-radius: 16px;
       padding: 14px 16px;
-      transition: all 0.15s ease;
+      box-shadow: var(--shadow-sm);
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
     .webinar-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-      border-color: rgba(82, 201, 122, 0.4);
-    }
-    body.dark-mode .webinar-card {
-      background: rgba(255, 255, 255, 0.03);
-      border-color: rgba(255, 255, 255, 0.08);
-    }
-    body.dark-mode .webinar-card:hover {
-      background: rgba(82, 201, 122, 0.06);
-      border-color: rgba(82, 201, 122, 0.3);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--field);
     }
     .webinar-card__date {
       flex-shrink: 0;
       width: 56px;
       height: 60px;
-      background: linear-gradient(135deg, #1a6b2f, #0d3d19);
+      background: linear-gradient(135deg, var(--deep), var(--deep-2));
       border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #fff;
-      box-shadow: 0 4px 12px rgba(26, 107, 47, 0.25);
+      box-shadow: 0 4px 12px rgba(35, 64, 43, 0.28);
     }
     .webinar-card__date--off {
-      background: rgba(0, 0, 0, 0.08);
-      color: var(--muted, #5a6758);
+      background: var(--green-t);
+      color: var(--field-d);
       box-shadow: none;
     }
+    body.dark-mode .webinar-card__date--off { color: var(--field-d); }
+    .webinar-card__date-icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
     body.dark-mode .webinar-card__date--off {
       background: rgba(255, 255, 255, 0.05);
       color: rgba(255, 255, 255, 0.4);
@@ -6409,55 +6540,54 @@
       font-size: 0.78rem;
       color: var(--muted, #5a6758);
     }
-    .webinar-card__meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .webinar-card__meta span { display: inline-flex; align-items: center; gap: 5px; }
+    .webinar-card__meta svg { width: 14px; height: 14px; flex-shrink: 0; fill: none; stroke: var(--muted-2); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
     .webinar-card__btn {
       flex-shrink: 0;
-      background: linear-gradient(135deg, #1a6b2f, #0d3d19);
+      background: var(--field); /* MODIFICADO: verde campo (antes gradiente #1a6b2f→#0d3d19) */
       color: #fff;
       border: none;
       padding: 9px 16px;
-      border-radius: 100px;
+      border-radius: 10px;
       font-family: var(--font), sans-serif;
       font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
-      transition: transform 0.15s ease;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: transform 0.15s ease, box-shadow .15s ease;
       white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(92, 140, 58, .3);
     }
-    .webinar-card__btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26, 107, 47, 0.3); }
+    .webinar-card__btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .webinar-card__btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(92, 140, 58, 0.4); }
     .webinar-card__finalizada {
       flex-shrink: 0;
       font-size: 0.74rem;
       font-weight: 700;
-      color: var(--muted, #5a6758);
-      background: rgba(0, 0, 0, 0.05);
+      color: var(--muted-2);
+      background: var(--bg);
+      border: 1px solid var(--line);
       padding: 5px 12px;
       border-radius: 100px;
       letter-spacing: 0.02em;
     }
-    body.dark-mode .webinar-card__finalizada {
-      background: rgba(255, 255, 255, 0.06);
-      color: rgba(255, 255, 255, 0.55);
-    }
 
     /* === Empty state === */
+    /* MODIFICADO: fase 4.6 — mismo arreglo de --card-bg inexistente + icono SVG en cuadro */
     .webinar-empty {
       text-align: center;
       padding: 50px 24px;
-      background: var(--card-bg, #fff);
-      border-radius: 20px;
-      border: 1px dashed var(--border, rgba(0,0,0,0.12));
+      background: var(--card);
+      border-radius: 16px;
+      border: 1.5px dashed var(--line);
     }
     .webinar-empty--mini { padding: 30px 20px; margin-bottom: 16px; }
-    body.dark-mode .webinar-empty {
-      background: rgba(255, 255, 255, 0.03);
-      border-color: rgba(255, 255, 255, 0.08);
-    }
     .webinar-empty__icon {
-      font-size: 3rem;
-      margin-bottom: 12px;
-      opacity: 0.6;
+      width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 18px;
+      background: var(--green-t);
+      display: flex; align-items: center; justify-content: center;
     }
+    .webinar-empty__icon svg { width: 30px; height: 30px; fill: none; stroke: var(--field); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .webinar-empty__title {
       font-family: var(--font-display, var(--font)), sans-serif;
       font-size: 1.05rem;
@@ -6953,6 +7083,13 @@
   <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v6c0 4.2-3 7.7-7.5 9-4.5-1.3-7.5-4.8-7.5-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
   <symbol id="icon-alert" viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3z"/><path d="M12 10v4M12 17h.01"/></symbol>
   <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></symbol>
+  <!-- MODIFICADO: fase 4.6 — íconos de línea para webinars / foro / notificaciones -->
+  <symbol id="icon-heart" viewBox="0 0 24 24"><path d="M12 20.5 4.2 13a4.8 4.8 0 0 1 6.8-6.8l1 1 1-1A4.8 4.8 0 0 1 19.8 13z"/></symbol>
+  <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 4 3.5H6L10 9z"/><path d="M12 12.5V21"/></symbol>
+  <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 7V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/><path d="M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7"/><path d="M10 11v6M14 11v6"/></symbol>
+  <symbol id="icon-megaphone" viewBox="0 0 24 24"><path d="M4 10v4a1 1 0 0 0 1 1h3l8 4V5L8 9H5a1 1 0 0 0-1 1z"/><path d="M19 9.5a3.5 3.5 0 0 1 0 5"/><path d="M8 15v4h3"/></symbol>
+  <symbol id="icon-radio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none"/><path d="M8.4 8.4a5 5 0 0 0 0 7.2M15.6 15.6a5 5 0 0 0 0-7.2"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 18.4a9 9 0 0 0 0-12.8"/></symbol>
 </svg>
 
 <!-- 🔒 BANNER PAYWALL (solo visible si es usuario FREE) -->
@@ -9038,8 +9175,10 @@
 
     <!-- SESIONES EN VIVO -->
     <div class="page" id="page-sesiones">
+      <!-- MODIFICADO: fase 4.6 — mismo contenedor #lista-sesiones que llena loadSesiones();
+           solo cambia el markup de presentación (emoji 🎥 → ícono SVG del sprite). -->
       <div class="webinar-page-header">
-        <h2 class="webinar-page-header__title">🎥 Webinars VIP</h2>
+        <h2 class="webinar-page-header__title"><svg><use href="#icon-video"/></svg> Webinars VIP</h2>
         <p class="webinar-page-header__subtitle">Sesiones en vivo con expertos del agro mexicano</p>
       </div>
       <div id="lista-sesiones">
@@ -9140,14 +9279,16 @@
     </div>
 
     <!-- PERFIL -->
+    <!-- MODIFICADO: fase 4.6 — mismo id #btn-marcar-leidas y mismo onclick marcarTodasLeidas();
+         solo cambia el markup de presentación (emojis 🔔 ✓ → íconos SVG del sprite). -->
     <div class="page" id="page-notificaciones">
       <div class="notif-header">
-        <h3>🔔 Notificaciones</h3>
-        <button class="notif-marcar-todo" id="btn-marcar-leidas" onclick="marcarTodasLeidas()">✓ Marcar todas como leídas</button>
+        <h3><svg><use href="#icon-bell"/></svg> Notificaciones</h3>
+        <button class="notif-marcar-todo" id="btn-marcar-leidas" onclick="marcarTodasLeidas()"><svg><use href="#icon-check"/></svg>Marcar todas como leídas</button>
       </div>
       <div class="notif-lista" id="notif-lista">
         <div class="notif-empty">
-          <div class="notif-empty__icon">🔔</div>
+          <div class="notif-empty__icon"><svg><use href="#icon-bell"/></svg></div>
           <strong>Cargando notificaciones...</strong>
         </div>
       </div>
@@ -10144,60 +10285,62 @@
     <!-- ===================== FORO VIP ===================== -->
     <div class="page" id="page-foro">
       <!-- Hero -->
+      <!-- MODIFICADO: fase 4.6 — se ELIMINAN las 3 stats inventadas del hero (500+ Miembros /
+           1,200 Posts / 24/7 Activo) y la frase "Más de 500 miembros activos": eran texto fijo
+           sin ninguna fuente de datos. En su lugar va #foro-mirep con la reputación REAL del
+           socio, que ya calculaba cargarMiReputacion() desde la colección foro_reputacion.
+           Se conservan los mismos ids (foro-mirep, -avatar, -nombre, -nivel, -badges) y sigue
+           arrancando oculto porque es cargarMiReputacion() quien lo enciende con display:'flex'. -->
       <div class="foro-hero">
         <div class="foro-hero__bg"></div>
         <div class="foro-hero__content">
-          <div class="foro-hero__icon">💬</div>
+          <div class="foro-hero__icon"><svg><use href="#icon-chat"/></svg></div>
           <div class="foro-hero__text">
             <div class="foro-hero__kicker">Comunidad privada</div>
             <h3 class="foro-hero__title">Foro VIP AgroClub</h3>
-            <p class="foro-hero__desc">Comparte tus dudas, casos de éxito y aprende de otros productores del club. Más de <strong>500 miembros activos</strong> listos para ayudarte.</p>
+            <p class="foro-hero__desc">Comparte tus dudas, casos de éxito y aprende de otros productores del club.</p>
           </div>
-          <div class="foro-hero__stats">
-            <div class="foro-hero__stat"><strong>500+</strong><span>Miembros</span></div>
-            <div class="foro-hero__stat"><strong>1,200</strong><span>Posts</span></div>
-            <div class="foro-hero__stat"><strong>24/7</strong><span>Activo</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mi reputación (nivel + badges del usuario) -->
-      <div class="foro-mirep" id="foro-mirep" style="display:none;">
-        <div class="foro-mirep__left">
-          <div class="foro-mirep__avatar" id="foro-mirep-avatar">T</div>
-          <div class="foro-mirep__info">
-            <div class="foro-mirep__nombre" id="foro-mirep-nombre">—</div>
-            <div class="foro-mirep__nivel" id="foro-mirep-nivel">🌱 Nuevo · 0 puntos</div>
+          <div class="foro-mirep" id="foro-mirep" style="display:none;">
+            <div class="foro-mirep__left">
+              <div class="foro-mirep__avatar" id="foro-mirep-avatar">T</div>
+              <div class="foro-mirep__info">
+                <div class="foro-mirep__nombre" id="foro-mirep-nombre">—</div>
+                <div class="foro-mirep__nivel" id="foro-mirep-nivel">🌱 Nuevo · 0 puntos</div>
+              </div>
+            </div>
+            <div class="foro-mirep__badges" id="foro-mirep-badges"></div>
           </div>
         </div>
-        <div class="foro-mirep__badges" id="foro-mirep-badges"></div>
       </div>
 
       <!-- Crear post (abre modal) -->
+      <!-- MODIFICADO: mismo onclick abrirComposer() y mismo id #foro-composer-avatar. Se quitan
+           los dos íconos 📊 "Crear encuesta" y 💰 "Mercado": eran <span title> SIN onclick, no
+           hacían nada (el click lo capturaba el div padre y solo abría el composer normal).
+           En su lugar, un botón explícito "Crear post". -->
       <div class="foro-composer" onclick="abrirComposer()">
         <div class="foro-composer__avatar" id="foro-composer-avatar">T</div>
         <div class="foro-composer__input">¿Qué quieres compartir con la comunidad?</div>
-        <div class="foro-composer__actions">
-          <span title="Crear encuesta">📊</span>
-          <span title="Mercado">💰</span>
-        </div>
+        <button class="foro-composer__btn" type="button" onclick="event.stopPropagation(); abrirComposer();">
+          <svg><use href="#icon-plus"/></svg> Crear post
+        </button>
       </div>
 
-      <!-- Filtros -->
+      <!-- Filtros: las 4 categorías reales + Todo. Mismos data-cat y mismo cambiarFiltroForo. -->
       <div class="foro-filters">
-        <button class="foro-filter foro-filter--active" data-cat="todo" onclick="cambiarFiltroForo('todo', this)">🌟 Todo</button>
-        <button class="foro-filter" data-cat="preguntas" onclick="cambiarFiltroForo('preguntas', this)">❓ Preguntas</button>
-        <button class="foro-filter" data-cat="casos_exito" onclick="cambiarFiltroForo('casos_exito', this)">🏆 Casos de éxito</button>
-        <button class="foro-filter" data-cat="tips" onclick="cambiarFiltroForo('tips', this)">🌾 Tips del campo</button>
-        <button class="foro-filter" data-cat="mercado" onclick="cambiarFiltroForo('mercado', this)">💰 Mercado</button>
+        <button class="foro-filter foro-filter--active" data-cat="todo" onclick="cambiarFiltroForo('todo', this)"><svg><use href="#icon-chat"/></svg>Todo</button>
+        <button class="foro-filter" data-cat="preguntas" onclick="cambiarFiltroForo('preguntas', this)"><svg><use href="#icon-search"/></svg>Preguntas</button>
+        <button class="foro-filter" data-cat="casos_exito" onclick="cambiarFiltroForo('casos_exito', this)"><svg><use href="#icon-trophy"/></svg>Casos de éxito</button>
+        <button class="foro-filter" data-cat="tips" onclick="cambiarFiltroForo('tips', this)"><svg><use href="#icon-flask"/></svg>Tips del campo</button>
+        <button class="foro-filter" data-cat="mercado" onclick="cambiarFiltroForo('mercado', this)"><svg><use href="#icon-coin"/></svg>Mercado</button>
       </div>
 
       <!-- Ordenar -->
       <div class="foro-sort">
         <span class="foro-sort__label">Ordenar por:</span>
-        <button class="foro-sort__btn foro-sort__btn--active" data-sort="recientes" onclick="cambiarOrdenForo('recientes', this)">⏱️ Recientes</button>
-        <button class="foro-sort__btn" data-sort="populares" onclick="cambiarOrdenForo('populares', this)">🔥 Populares</button>
-        <button class="foro-sort__btn" data-sort="sin_responder" onclick="cambiarOrdenForo('sin_responder', this)">💭 Sin responder</button>
+        <button class="foro-sort__btn foro-sort__btn--active" data-sort="recientes" onclick="cambiarOrdenForo('recientes', this)"><svg><use href="#icon-clock"/></svg>Recientes</button>
+        <button class="foro-sort__btn" data-sort="populares" onclick="cambiarOrdenForo('populares', this)"><svg><use href="#icon-trending-up"/></svg>Populares</button>
+        <button class="foro-sort__btn" data-sort="sin_responder" onclick="cambiarOrdenForo('sin_responder', this)"><svg><use href="#icon-chat"/></svg>Sin responder</button>
       </div>
 
       <!-- Feed -->
@@ -12076,7 +12219,7 @@ function loadSesiones() {
     if (sesiones.length === 0) {
       lista.innerHTML = `
         <div class="webinar-empty">
-          <div class="webinar-empty__icon">🎥</div>
+          <div class="webinar-empty__icon"><svg><use href="#icon-video"/></svg></div>
           <div class="webinar-empty__title">No hay webinars programados aún</div>
           <div class="webinar-empty__desc">Te avisaremos en cuanto agendemos uno nuevo.</div>
         </div>`;
@@ -12122,27 +12265,31 @@ function loadSesiones() {
       const instrEsc = String(proximo.instructor || '').replace(/'/g, "\\'");
       const linkEsc = String(proximo.link || '').replace(/'/g, "\\'");
 
+      /* MODIFICADO: fase 4.6 — solo markup de presentación del hero (emojis 🎯👤📅🔴✨ → íconos
+         SVG del sprite). Mismos campos reales (titulo/instructor/fechaHora/descripcion/link),
+         mismo id #webinar-hero-countdown con su data-fecha, y los mismos disparadores:
+         agendarCalendario(...) cuando falta y <a href=link> cuando está en vivo. */
       html += `
         <div class="webinar-hero ${esVivo ? 'is-live' : ''}">
           <div class="webinar-hero__rays"></div>
           <div class="webinar-hero__sparkles">
-            ${Array.from({length:6}).map((_,i) => `<span style="left:${(15+i*15)}%;animation-delay:${(i*0.3).toFixed(1)}s;">✨</span>`).join('')}
+            ${Array.from({length:6}).map((_,i) => `<span style="left:${(15+i*15)}%;animation-delay:${(i*0.3).toFixed(1)}s;"></span>`).join('')}
           </div>
           <div class="webinar-hero__inner">
             <div class="webinar-hero__kicker">
               ${esVivo
                 ? '<span class="webinar-hero__live-dot"></span> EN VIVO AHORA'
-                : '🎯 PRÓXIMO WEBINAR'}
+                : '<svg><use href="#icon-radio"/></svg> PRÓXIMO WEBINAR'}
             </div>
             <h2 class="webinar-hero__title">${escHtml(proximo.titulo || 'Webinar')}</h2>
-            ${proximo.instructor ? `<div class="webinar-hero__instructor">👤 <span>${escHtml(proximo.instructor)}</span></div>` : ''}
-            <div class="webinar-hero__fecha">📅 ${fechaFmt}</div>
+            ${proximo.instructor ? `<div class="webinar-hero__instructor"><svg><use href="#icon-user"/></svg> <span>${escHtml(proximo.instructor)}</span></div>` : ''}
+            <div class="webinar-hero__fecha"><svg><use href="#icon-calendar"/></svg> ${fechaFmt}</div>
             ${proximo.descripcion ? `<div class="webinar-hero__desc">${escHtml(proximo.descripcion)}</div>` : ''}
             <div class="webinar-hero__cd" id="webinar-hero-countdown" data-fecha="${escHtml(proximo.fechaHora)}"></div>
             <div class="webinar-hero__actions">
               ${esVivo
-                ? `<a href="${escHtml(proximo.link||'#')}" target="_blank" class="webinar-hero__btn webinar-hero__btn--live">🔴 Unirme ahora</a>`
-                : `<button class="webinar-hero__btn webinar-hero__btn--primary" onclick="agendarCalendario('${tituloEsc}','${fechaEsc}','${instrEsc}','${linkEsc}')">📅 Agendar en mi calendario</button>`}
+                ? `<a href="${escHtml(proximo.link||'#')}" target="_blank" class="webinar-hero__btn webinar-hero__btn--live"><svg><use href="#icon-radio"/></svg> Unirme ahora</a>`
+                : `<button class="webinar-hero__btn webinar-hero__btn--primary" onclick="agendarCalendario('${tituloEsc}','${fechaEsc}','${instrEsc}','${linkEsc}')"><svg><use href="#icon-calendar"/></svg> Agendar en mi calendario</button>`}
             </div>
           </div>
         </div>`;
@@ -12160,7 +12307,7 @@ function loadSesiones() {
       html += `
         <div class="webinar-section">
           <div class="webinar-section__header">
-            <h3 class="webinar-section__title">📅 Próximas sesiones</h3>
+            <h3 class="webinar-section__title"><svg><use href="#icon-calendar"/></svg>Próximas sesiones</h3>
             <span class="webinar-section__count">${restoFuturas.length}</span>
           </div>
           <div class="webinar-section__list">
@@ -12174,7 +12321,7 @@ function loadSesiones() {
       html += `
         <div class="webinar-section">
           <div class="webinar-section__header">
-            <h3 class="webinar-section__title">🎬 Sesiones pasadas</h3>
+            <h3 class="webinar-section__title"><svg><use href="#icon-film"/></svg>Sesiones pasadas</h3>
             <span class="webinar-section__count">${pasadas.length}</span>
           </div>
           <div class="webinar-section__list">
@@ -12187,7 +12334,7 @@ function loadSesiones() {
     if (!proximo && pasadas.length > 0) {
       html = `
         <div class="webinar-empty webinar-empty--mini">
-          <div class="webinar-empty__icon">📅</div>
+          <div class="webinar-empty__icon"><svg><use href="#icon-calendar"/></svg></div>
           <div class="webinar-empty__title">No hay webinars próximos</div>
           <div class="webinar-empty__desc">Te avisaremos cuando se programe el siguiente.</div>
         </div>` + html;
@@ -12221,11 +12368,11 @@ function renderWebinarCardFutura(s) {
       <div class="webinar-card__info">
         <div class="webinar-card__title">${escHtml(s.titulo || 'Webinar')}</div>
         <div class="webinar-card__meta">
-          ${s.instructor ? `<span>👤 ${escHtml(s.instructor)}</span>` : ''}
-          <span>🕒 ${horaStr}</span>
+          ${s.instructor ? `<span><svg><use href="#icon-user"/></svg>${escHtml(s.instructor)}</span>` : ''}
+          <span><svg><use href="#icon-clock"/></svg>${horaStr}</span>
         </div>
       </div>
-      <button class="webinar-card__btn" onclick="agendarCalendario('${tituloEsc}','${fechaEsc}','${instrEsc}','${linkEsc}')">📅 Agendar</button>
+      <button class="webinar-card__btn" onclick="agendarCalendario('${tituloEsc}','${fechaEsc}','${instrEsc}','${linkEsc}')"><svg><use href="#icon-calendar"/></svg>Agendar</button>
     </div>`;
 }
 
@@ -12236,13 +12383,13 @@ function renderWebinarCardPasada(s) {
   return `
     <div class="webinar-card webinar-card--pasada">
       <div class="webinar-card__date webinar-card__date--off">
-        <div class="webinar-card__date-icon">✓</div>
+        <div class="webinar-card__date-icon"><svg><use href="#icon-check"/></svg></div>
       </div>
       <div class="webinar-card__info">
         <div class="webinar-card__title">${escHtml(s.titulo || 'Webinar')}</div>
         <div class="webinar-card__meta">
-          ${s.instructor ? `<span>👤 ${escHtml(s.instructor)}</span>` : ''}
-          <span>📅 ${fechaStr}</span>
+          ${s.instructor ? `<span><svg><use href="#icon-user"/></svg>${escHtml(s.instructor)}</span>` : ''}
+          <span><svg><use href="#icon-calendar"/></svg>${fechaStr}</span>
         </div>
       </div>
       <span class="webinar-card__finalizada">Finalizada</span>
@@ -12767,15 +12914,18 @@ function actualizarBadgeNotif() {
   });
 }
 
+/* MODIFICADO: fase 4.6 — se añade `icon` (símbolo del sprite) a cada uno de los 5 tipos reales.
+   Se CONSERVAN cls, emoji y label tal cual: el campo opcional n.emoji del documento sigue
+   teniendo prioridad y `emoji` se mantiene como respaldo. */
 function iconoPorTipo(tipo) {
   const mapa = {
-    curso:    { cls: 'notif-icon--curso',    emoji: '📚', label: 'Curso nuevo' },
-    clase:    { cls: 'notif-icon--clase',    emoji: '🎬', label: 'Clase nueva' },
-    webinar:  { cls: 'notif-icon--webinar',  emoji: '🎥', label: 'Webinar' },
-    material: { cls: 'notif-icon--material', emoji: '📄', label: 'Material nuevo' },
-    aviso:    { cls: 'notif-icon--aviso',    emoji: '📣', label: 'Aviso' }
+    curso:    { cls: 'notif-icon--curso',    emoji: '📚', icon: 'icon-notebook',  label: 'Curso nuevo' },
+    clase:    { cls: 'notif-icon--clase',    emoji: '🎬', icon: 'icon-play',      label: 'Clase nueva' },
+    webinar:  { cls: 'notif-icon--webinar',  emoji: '🎥', icon: 'icon-video',     label: 'Webinar' },
+    material: { cls: 'notif-icon--material', emoji: '📄', icon: 'icon-file-text', label: 'Material nuevo' },
+    aviso:    { cls: 'notif-icon--aviso',    emoji: '📣', icon: 'icon-megaphone', label: 'Aviso' }
   };
-  return mapa[tipo] || { cls: 'notif-icon--default', emoji: '🔔', label: 'Notificación' };
+  return mapa[tipo] || { cls: 'notif-icon--default', emoji: '🔔', icon: 'icon-bell', label: 'Notificación' };
 }
 
 function formatearFechaNotif(fecha) {
@@ -12793,40 +12943,60 @@ function formatearFechaNotif(fecha) {
   return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
 }
 
+/* MODIFICADO: fase 4.6 — CAMBIO DE COMPORTAMIENTO pedido por Jorge.
+   Antes esta función pintaba SOLO las no leídas: al marcarlas, desaparecían para siempre y no
+   había forma de volver a consultarlas. Ahora se pintan los dos grupos: "Nuevas" arriba y
+   "Anteriores" (ya leídas) abajo, atenuadas.
+   Lo que NO cambia: la fuente de datos (loadNotificaciones y su onSnapshot), el cálculo de
+   lastRead con localStorage (getLastReadTs), marcarTodasLeidas y actualizarBadgeNotif. Aquí
+   solo cambia QUÉ se pinta. El botón "Marcar todas como leídas" se sigue mostrando únicamente
+   cuando hay nuevas, igual que antes. */
 function renderNotificaciones(items) {
   const lista = document.getElementById('notif-lista');
   const btnLeidas = document.getElementById('btn-marcar-leidas');
   if (!lista) return;
 
-  // Filtrar: solo mostrar no-leídas (las leídas se ocultan de su vista)
   const lastRead = getLastReadTs();
-  const noLeidas = (items || []).filter(n => {
+  const todas = items || [];
+  const esNueva = n => {
     const fechaTs = n.fecha ? new Date(n.fecha).getTime() : 0;
     return fechaTs > lastRead;
-  });
+  };
+  const nuevas     = todas.filter(esNueva);
+  const anteriores = todas.filter(n => !esNueva(n));
 
-  if (noLeidas.length === 0) {
+  // Vacío real: no hay ninguna notificación, ni nueva ni leída
+  if (todas.length === 0) {
     lista.innerHTML = `
       <div class="notif-empty">
-        <div class="notif-empty__icon">🔕</div>
+        <div class="notif-empty__icon"><svg><use href="#icon-bell"/></svg></div>
         <strong>Todo al día</strong>
-        <p>No tienes notificaciones nuevas. Cuando subamos un curso, clase, webinar o aviso, lo verás aquí 🌱</p>
+        <p>Todavía no hay notificaciones. Cuando subamos un curso, clase, webinar o aviso, lo verás aquí.</p>
       </div>`;
     if (btnLeidas) { btnLeidas.disabled = true; btnLeidas.style.display = 'none'; }
     return;
   }
 
-  if (btnLeidas) { btnLeidas.disabled = false; btnLeidas.style.display = ''; }
+  // El botón solo tiene sentido si hay algo nuevo que marcar
+  if (btnLeidas) {
+    const hayNuevas = nuevas.length > 0;
+    btnLeidas.disabled = !hayNuevas;
+    btnLeidas.style.display = hayNuevas ? '' : 'none';
+  }
 
-  lista.innerHTML = noLeidas.map(n => {
+  const htmlItem = (n, leida) => {
     const info = iconoPorTipo(n.tipo);
     const fechaTxt = formatearFechaNotif(n.fecha);
     const clickHandler = n.link
       ? `onclick="window.open('${(n.link || '').replace(/'/g, "\\'")}','_blank')"`
       : '';
+    // n.emoji es un campo opcional del documento: si viene, manda sobre el ícono del tipo
+    const icono = n.emoji
+      ? `<span class="notif-icon__emoji">${n.emoji}</span>`
+      : `<svg><use href="#${info.icon}"/></svg>`;
     return `
-      <div class="notif-item no-leida" ${clickHandler}>
-        <div class="notif-icon ${info.cls}">${n.emoji || info.emoji}</div>
+      <div class="notif-item ${leida ? 'notif-item--leida' : 'no-leida'}" ${clickHandler}>
+        <div class="notif-icon ${info.cls}">${icono}</div>
         <div class="notif-body">
           <div class="notif-tipo">${info.label}</div>
           <div class="notif-titulo">${n.titulo || 'Sin título'}</div>
@@ -12834,7 +13004,28 @@ function renderNotificaciones(items) {
         </div>
         <div class="notif-fecha">${fechaTxt}</div>
       </div>`;
-  }).join('');
+  };
+
+  let html = '';
+  if (nuevas.length > 0) {
+    html += `<div class="notif-group">
+      <div class="notif-group__head">
+        <span class="notif-group__dot"></span>Nuevas
+        <span class="notif-group__count">${nuevas.length}</span>
+      </div>
+      ${nuevas.map(n => htmlItem(n, false)).join('')}
+    </div>`;
+  }
+  if (anteriores.length > 0) {
+    html += `<div class="notif-group notif-group--leidas">
+      <div class="notif-group__head">
+        <svg><use href="#icon-check"/></svg>Anteriores
+        <span class="notif-group__count">${anteriores.length}</span>
+      </div>
+      ${anteriores.map(n => htmlItem(n, true)).join('')}
+    </div>`;
+  }
+  lista.innerHTML = html;
 }
 
 // Listener real-time a Firestore
@@ -13066,7 +13257,7 @@ async function renderForo() {
 
     if (posts.length === 0) {
       feed.innerHTML = `<div class="foro-empty">
-        <div class="foro-empty__icon">🌱</div>
+        <div class="foro-empty__icon"><svg><use href="#icon-chat"/></svg></div>
         <div class="foro-empty__txt">${FORO_HASHTAG_ACTIVO ? 'Nadie ha usado #' + FORO_HASHTAG_ACTIVO + ' aún.' : 'Aún no hay posts en esta categoría.'} ¡Sé el primero en romper el hielo!</div>
       </div>`;
       return;
@@ -13077,30 +13268,39 @@ async function renderForo() {
   } catch (e) {
     console.error('[Foro] Error cargando:', e);
     feed.innerHTML = `<div class="foro-empty">
-      <div class="foro-empty__icon">⚠️</div>
+      <div class="foro-empty__icon"><svg><use href="#icon-alert"/></svg></div>
       <div class="foro-empty__txt">Error cargando posts. ${escHtml(e.message || '')}</div>
     </div>`;
   }
 }
 
+/* MODIFICADO: fase 4.6 — solo el markup de presentación de la tarjeta (emojis ❓🏆🌾💰🌟✅📌📍
+   🤍❤️💬🔗 → íconos SVG del sprite, chip de categoría con color propio). Mismos campos reales
+   (autor, categoria, titulo, body, hashtags, likes_count, comentarios_count, fecha_creacion,
+   estado, fijado, uid) y mismos handlers: abrirPost, toggleLikePost, compartirPost,
+   filtrarPorHashtag. El "like" activo ahora se marca rellenando el corazón. */
 function foroHtmlPost(p) {
   const [gA, gB] = foroGradiente(p.uid);
   const catMap = {
-    preguntas: '❓ Preguntas', casos_exito: '🏆 Casos de éxito',
-    tips: '🌾 Tips del campo', mercado: '💰 Mercado', general: '🌟 General'
+    preguntas:   { txt: 'Preguntas',      icon: 'icon-search' },
+    casos_exito: { txt: 'Casos de éxito', icon: 'icon-trophy' },
+    tips:        { txt: 'Tips del campo', icon: 'icon-flask'  },
+    mercado:     { txt: 'Mercado',        icon: 'icon-coin'   },
+    general:     { txt: 'General',        icon: 'icon-chat'   }
   };
+  const cat = catMap[p.categoria] || catMap.general;
+  const catCls = catMap[p.categoria] ? ' foro-post__cat--' + p.categoria : '';
   const esEquipo = p.uid === 'equipo_agroclub';
-  const badge = esEquipo ? '<span class="foro-post__badge">✅ OFICIAL</span>' : '';
-  const estado = p.estado === 'resuelto' ? '<span class="foro-post__estado">✓ Resuelto</span>' : '';
-  const fijado = p.fijado ? '📌 ' : '';
+  const badge = esEquipo ? '<span class="foro-post__badge"><svg><use href="#icon-check"/></svg>OFICIAL</span>' : '';
+  const estado = p.estado === 'resuelto' ? '<span class="foro-post__estado"><svg><use href="#icon-check"/></svg>Resuelto</span>' : '';
+  const fijado = p.fijado ? '<span class="foro-post__pin"><svg><use href="#icon-pin"/></svg></span>' : '';
   const hashtagsHtml = (p.hashtags || []).map(h =>
     `<span class="foro-post__hashtag" onclick="filtrarPorHashtag('${escAttr(h)}', event)">#${escHtml(h)}</span>`
   ).join('');
   const bodyRecortado = (p.body || '').length > 280 ? p.body.substring(0, 280) + '...' : (p.body || '');
-  const ubicacion = p.ubicacion ? `<span class="foro-post__ubicacion">📍 ${escHtml(p.ubicacion)}</span>` : '';
+  const ubicacion = p.ubicacion ? `<span class="foro-post__ubicacion"><svg><use href="#icon-pin"/></svg>${escHtml(p.ubicacion)}</span>` : '';
   const uidActual = window.currentUser?.uid || '';
   const yoDiLike = (p.likes_by || []).includes(uidActual);
-  const likeIcon = yoDiLike ? '❤️' : '🤍';
   const likeClass = yoDiLike ? ' liked' : '';
 
   return `
@@ -13113,7 +13313,7 @@ function foroHtmlPost(p) {
       </div>
     </div>
     <div>
-      <span class="foro-post__cat">${catMap[p.categoria] || '🌟 General'}</span>
+      <span class="foro-post__cat${catCls}"><svg><use href="#${cat.icon}"/></svg>${cat.txt}</span>
       ${estado}
     </div>
     <div class="foro-post__title" onclick="abrirPost('${p.id}')" style="cursor:pointer;">${fijado}${escHtml(p.titulo)}</div>
@@ -13121,13 +13321,13 @@ function foroHtmlPost(p) {
     ${hashtagsHtml ? `<div class="foro-post__hashtags">${hashtagsHtml}</div>` : ''}
     <div class="foro-post__actions">
       <div class="foro-post__action${likeClass}" onclick="toggleLikePost('${p.id}', '${escAttr(p.uid)}', '${escAttr(p.autor)}', this)">
-        <span class="like-icon">${likeIcon}</span> <span class="like-count">${p.likes_count || 0}</span>
+        <span class="like-icon" aria-hidden="true"></span><svg class="like-heart"><use href="#icon-heart"/></svg> <span class="like-count">${p.likes_count || 0}</span>
       </div>
       <div class="foro-post__action" onclick="abrirPost('${p.id}')">
-        <span>💬</span> <span>${p.comentarios_count || 0} ${p.comentarios_count === 1 ? 'comentario' : 'comentarios'}</span>
+        <svg><use href="#icon-chat"/></svg> <span>${p.comentarios_count || 0} ${p.comentarios_count === 1 ? 'comentario' : 'comentarios'}</span>
       </div>
       <div class="foro-post__action" onclick="compartirPost('${p.id}', event)">
-        <span>🔗</span> <span>Compartir</span>
+        <svg><use href="#icon-link"/></svg> <span>Compartir</span>
       </div>
     </div>
   </div>`;
@@ -13377,7 +13577,7 @@ window.abrirPost = async function(postId) {
     const ref = doc(db, FORO_COLECCION, postId);
     const snap = await getDoc(ref);
     if (!snap.exists()) {
-      body.innerHTML = '<div class="foro-empty">❌ Post no encontrado o ya fue borrado</div>';
+      body.innerHTML = '<div class="foro-empty">Post no encontrado o ya fue borrado</div>';
       return;
     }
     const p = { id: snap.id, ...snap.data() };
@@ -13399,13 +13599,21 @@ window.abrirPost = async function(postId) {
     });
 
     const [gA, gB] = foroGradiente(p.uid);
-    const catMap = { preguntas: '❓ Preguntas', casos_exito: '🏆 Casos de éxito', tips: '🌾 Tips del campo', mercado: '💰 Mercado', general: '🌟 General' };
+    /* MODIFICADO: fase 4.6 — mismo markup de presentación que el feed (íconos SVG del sprite) */
+    const catMap = {
+      preguntas:   { txt: 'Preguntas',      icon: 'icon-search' },
+      casos_exito: { txt: 'Casos de éxito', icon: 'icon-trophy' },
+      tips:        { txt: 'Tips del campo', icon: 'icon-flask'  },
+      mercado:     { txt: 'Mercado',        icon: 'icon-coin'   },
+      general:     { txt: 'General',        icon: 'icon-chat'   }
+    };
+    const cat = catMap[p.categoria] || catMap.general;
+    const catCls = catMap[p.categoria] ? ' foro-post__cat--' + p.categoria : '';
     const hashtagsHtml = (p.hashtags || []).map(h =>
       `<span class="foro-post__hashtag">#${escHtml(h)}</span>`).join('');
-    const ubicacion = p.ubicacion ? `<span class="foro-post__ubicacion">📍 ${escHtml(p.ubicacion)}</span>` : '';
+    const ubicacion = p.ubicacion ? `<span class="foro-post__ubicacion"><svg><use href="#icon-pin"/></svg>${escHtml(p.ubicacion)}</span>` : '';
     const uid = window.currentUser?.uid || '';
     const yoDiLike = (p.likes_by || []).includes(uid);
-    const likeIcon = yoDiLike ? '❤️' : '🤍';
     const likeClass = yoDiLike ? ' liked' : '';
     const esAutor = uid && uid === p.uid;
 
@@ -13416,7 +13624,7 @@ window.abrirPost = async function(postId) {
       if (sol) {
         solucionHtml = `
           <div class="foro-solucion">
-            <span class="foro-solucion__icon">✅</span>
+            <span class="foro-solucion__icon"><svg><use href="#icon-check"/></svg></span>
             <div class="foro-solucion__txt">
               <div class="foro-solucion__lbl">Solución aceptada</div>
               <div class="foro-solucion__autor">por ${escHtml(sol.autor)}</div>
@@ -13426,7 +13634,7 @@ window.abrirPost = async function(postId) {
     }
 
     const comentariosHtml = comentarios.length === 0
-      ? '<div style="color:var(--muted);font-size:.88rem;text-align:center;padding:20px;">Aún no hay comentarios. Sé el primero 💬</div>'
+      ? '<div style="color:var(--muted);font-size:.88rem;text-align:center;padding:20px;">Aún no hay comentarios. Sé el primero</div>'
       : comentarios.map(c => foroHtmlComentario(c, postId, esAutor, p.estado !== 'resuelto')).join('');
 
     body.innerHTML = `
@@ -13438,23 +13646,23 @@ window.abrirPost = async function(postId) {
         </div>
       </div>
       <div>
-        <span class="foro-post__cat">${catMap[p.categoria] || '🌟'}</span>
-        ${p.estado === 'resuelto' ? '<span class="foro-post__estado">✓ Resuelto</span>' : ''}
+        <span class="foro-post__cat${catCls}"><svg><use href="#${cat.icon}"/></svg>${cat.txt}</span>
+        ${p.estado === 'resuelto' ? '<span class="foro-post__estado"><svg><use href="#icon-check"/></svg>Resuelto</span>' : ''}
       </div>
-      <h2 style="font-size:1.3rem;font-weight:800;margin:10px 0;color:var(--text);">${escHtml(p.titulo)}</h2>
+      <h2 style="font-size:1.3rem;font-weight:800;margin:10px 0;color:var(--text);font-family:var(--font-display);">${escHtml(p.titulo)}</h2>
       ${solucionHtml}
       <div style="font-size:.95rem;color:var(--text);line-height:1.6;white-space:pre-wrap;margin-bottom:14px;">${escHtml(p.body)}</div>
       ${hashtagsHtml ? `<div class="foro-post__hashtags">${hashtagsHtml}</div>` : ''}
       <div class="foro-post__actions">
         <div class="foro-post__action${likeClass}" onclick="toggleLikePost('${p.id}', '${escAttr(p.uid)}', '${escAttr(p.autor)}', this)">
-          <span class="like-icon">${likeIcon}</span> <span class="like-count">${p.likes_count || 0}</span>
+          <span class="like-icon" aria-hidden="true"></span><svg class="like-heart"><use href="#icon-heart"/></svg> <span class="like-count">${p.likes_count || 0}</span>
         </div>
-        <div class="foro-post__action"><span>💬</span> <span>${comentarios.length} coments</span></div>
-        ${esAutor ? `<div class="foro-post__action" onclick="eliminarMiPost('${p.id}')"><span>🗑️</span> <span>Eliminar</span></div>` : ''}
+        <div class="foro-post__action"><svg><use href="#icon-chat"/></svg> <span>${comentarios.length} coments</span></div>
+        ${esAutor ? `<div class="foro-post__action" onclick="eliminarMiPost('${p.id}')"><svg><use href="#icon-trash"/></svg> <span>Eliminar</span></div>` : ''}
       </div>
 
       <div class="foro-detalle__coms">
-        <div class="foro-detalle__coms-h">💬 Comentarios (${comentarios.length})</div>
+        <div class="foro-detalle__coms-h"><svg><use href="#icon-chat"/></svg>Comentarios (${comentarios.length})</div>
         <div id="foro-coms-lista">${comentariosHtml}</div>
         <div class="foro-coment-nuevo">
           <textarea id="foro-com-input" placeholder="Escribe tu comentario..."></textarea>
@@ -13464,7 +13672,7 @@ window.abrirPost = async function(postId) {
     `;
   } catch (e) {
     console.error('[Foro] Abrir post:', e);
-    body.innerHTML = `<div class="foro-empty">⚠️ Error: ${escHtml(e.message || '')}</div>`;
+    body.innerHTML = `<div class="foro-empty">Error: ${escHtml(e.message || '')}</div>`;
   }
 };
 
@@ -13475,10 +13683,10 @@ function foroHtmlComentario(c, postId, esAutorPost, puedeMarcarSolucion) {
   const likeIcon = yoDiLike ? '❤️' : '🤍';
   const likeClass = yoDiLike ? ' liked' : '';
   const solBtn = (esAutorPost && puedeMarcarSolucion && !c.es_solucion)
-    ? `<button class="foro-coment__acc-btn foro-coment__acc-btn--sol" onclick="marcarSolucion('${postId}', '${c.id}')">✅ Marcar solución</button>`
+    ? `<button class="foro-coment__acc-btn foro-coment__acc-btn--sol" onclick="marcarSolucion('${postId}', '${c.id}')"><svg><use href="#icon-check"/></svg>Marcar solución</button>`
     : '';
   const solClass = c.es_solucion ? ' foro-coment--solucion' : '';
-  const solBadge = c.es_solucion ? '<span style="color:#10b981;font-weight:800;font-size:.72rem;margin-left:6px;">✅ SOLUCIÓN</span>' : '';
+  const solBadge = c.es_solucion ? '<span class="foro-coment__sol-badge"><svg><use href="#icon-check"/></svg>SOLUCIÓN</span>' : '';
   return `
     <div class="foro-coment${solClass}">
       <div class="foro-coment__head">
@@ -13491,7 +13699,7 @@ function foroHtmlComentario(c, postId, esAutorPost, puedeMarcarSolucion) {
       <div class="foro-coment__texto">${escHtml(c.texto)}</div>
       <div class="foro-coment__acc">
         <button class="foro-coment__acc-btn${likeClass}" onclick="toggleLikeComentario('${postId}', '${c.id}', '${escAttr(c.uid)}', '${escAttr(c.autor)}', this)">
-          <span class="like-icon">${likeIcon}</span> <span class="like-count">${c.likes_count || 0}</span>
+          <span class="like-icon" aria-hidden="true"></span><svg class="like-heart"><use href="#icon-heart"/></svg> <span class="like-count">${c.likes_count || 0}</span>
         </button>
         ${solBtn}
       </div>
@@ -16910,24 +17118,11 @@ async function desbloquearLogroExamen(correctas, total) {
         });
       }
     }
-    if (id === 'notificaciones') {
-      // 3 segundos: suficiente para leer lo nuevo antes de que desaparezcan
-      setTimeout(() => {
-        // Animar fade-out antes de re-renderizar vacío
-        const items = document.querySelectorAll('#notif-lista .notif-item');
-        items.forEach((el, i) => {
-          el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-          setTimeout(() => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateX(30px)';
-          }, i * 80); // cascada de 80ms entre cada una
-        });
-        // Después del fade, marcar leídas → re-renderiza con empty state
-        setTimeout(() => {
-          marcarTodasLeidas();
-        }, 700 + items.length * 80);
-      }, 3000);
-    }
+    /* MODIFICADO: fase 4.6 — ELIMINADO el auto-marcado a 3 segundos (aprobado por Jorge).
+       Antes, con solo entrar a la vista, un setTimeout de 3s desvanecía las notificaciones en
+       cascada y llamaba a marcarTodasLeidas(), así que se marcaban solas y desaparecían aunque
+       el socio no hubiera hecho nada. Ahora solo se marcan con el botón "Marcar todas como
+       leídas" (#btn-marcar-leidas → marcarTodasLeidas), que sigue intacto. */
     return ret;
   };
 })();
