@@ -7744,6 +7744,88 @@
   .mercado-tab { padding: 10px 16px; background: var(--card, #fff); border: 1px solid var(--border, #e8ede5); border-radius: 100px; font-family: var(--font), sans-serif; font-weight: 600; font-size: 0.85rem; color: var(--text, #1a2010); cursor: pointer; transition: all 0.15s ease; white-space: nowrap; }
   .mercado-tab:hover { border-color: #1a6b2f; color: #1a6b2f; }
   .mercado-tab--active { background: linear-gradient(135deg, #1a6b2f, #0d3d19); color: #fff; border-color: #1a6b2f; box-shadow: 0 4px 12px rgba(26,107,47,0.25); }
+  /* ═══ MODIFICADO: fase 4.7 — Mercado honesto ═══════════════════════════════
+     Aviso de referencia + grid de tarjetas de producto. Usa los tokens del
+     sistema (--honey/--honey-t, --font-display Bricolage) y responde a modo
+     oscuro con las mismas variables que el resto del portal. */
+
+  /* Aviso: son precios de referencia */
+  .mercado-aviso {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--honey-t, #F6E7CE);
+    border: 1px solid rgba(217,164,60,.45);
+    border-radius: 14px; padding: 14px 16px; margin: 16px 0 4px;
+  }
+  .mercado-aviso__icon { flex-shrink: 0; color: #9a6b12; margin-top: 1px; }
+  .mercado-aviso__title {
+    font-family: var(--font-display, var(--font)), sans-serif;
+    font-weight: 800; font-size: .95rem; color: #7a5410; margin-bottom: 3px; line-height: 1.25;
+  }
+  .mercado-aviso__desc { font-size: .84rem; line-height: 1.5; color: #6b4d15; margin: 0; }
+  body.dark-mode .mercado-aviso { background: rgba(217,164,60,.12); border-color: rgba(217,164,60,.35); }
+  body.dark-mode .mercado-aviso__icon { color: #e8c169; }
+  body.dark-mode .mercado-aviso__title { color: #f0d59a; }
+  body.dark-mode .mercado-aviso__desc { color: #d8c49a; }
+
+  /* Nota bajo el título de un grupo de filtros */
+  .mercado-filtros-section__nota { font-size: .76rem; color: var(--muted, #6B6A5C); margin: -4px 0 10px; line-height: 1.4; }
+
+  /* Grid de tarjetas de producto */
+  .mercado-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 12px; padding: 14px;
+  }
+  .mercado-pcard {
+    display: flex; flex-direction: column; gap: 2px; text-align: left;
+    background: var(--card, #fff); border: 1px solid var(--border, #e8ede5);
+    border-radius: 14px; padding: 14px; cursor: pointer; width: 100%;
+    font-family: var(--font), sans-serif;
+    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  }
+  .mercado-pcard:hover { transform: translateY(-2px); border-color: #1a6b2f; box-shadow: 0 10px 24px -12px rgba(26,107,47,.35); }
+  .mercado-pcard:focus-visible { outline: 2px solid #1a6b2f; outline-offset: 2px; }
+  .mercado-pcard__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .mercado-pcard__emoji { font-size: 1.7rem; line-height: 1; }
+  .mercado-pcard__nombre { font-weight: 700; font-size: .95rem; color: var(--text, #1a2010); line-height: 1.2; }
+  .mercado-pcard__variedad { font-size: .76rem; color: var(--muted, #6B6A5C); line-height: 1.35; margin-bottom: 9px; }
+  .mercado-pcard__precio-wrap { margin-top: auto; }
+  .mercado-pcard__precio {
+    font-family: var(--font-display, var(--font)), sans-serif;
+    font-weight: 800; font-size: 1.6rem; line-height: 1; color: #1a6b2f;
+  }
+  body.dark-mode .mercado-pcard__precio { color: #7fd18f; }
+  .mercado-pcard__unidad { font-size: .72rem; color: var(--muted, #6B6A5C); font-weight: 600; margin-top: 3px; }
+  .mercado-pcard__bloqueado {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: .82rem; font-weight: 700; color: var(--muted, #6B6A5C);
+    background: rgba(120,120,120,.08); border-radius: 8px; padding: 7px 10px;
+  }
+
+  /* Chip de tendencia — usa el campo `direccion` real del producto */
+  .mercado-tend {
+    display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+    font-size: .7rem; font-weight: 700; padding: 4px 9px; border-radius: 100px;
+  }
+  .mercado-tend--up   { background: rgba(22,163,74,.12);  color: #15803d; }
+  .mercado-tend--down { background: rgba(220,38,38,.12);  color: #b91c1c; }
+  .mercado-tend--flat { background: rgba(120,130,125,.14); color: #5a6758; }
+  /* Override explícito en oscuro: mismo patrón que ya usan .mercado-tabla-wrap y
+     .mercado-tab en este archivo — sin él, el borde de la tarjeta se queda con el
+     valor claro y se ve un contorno pálido sobre fondo oscuro. */
+  body.dark-mode .mercado-pcard { background: var(--card); border-color: var(--border); }
+  body.dark-mode .mercado-pcard__nombre { color: var(--text); }
+  body.dark-mode .mercado-pcard__bloqueado { background: rgba(255,255,255,.07); color: var(--muted); }
+
+  body.dark-mode .mercado-tend--up   { background: rgba(34,197,94,.18);  color: #86efac; }
+  body.dark-mode .mercado-tend--down { background: rgba(248,113,113,.18); color: #fca5a5; }
+  body.dark-mode .mercado-tend--flat { background: rgba(160,170,165,.16); color: #b8c4bd; }
+
+  @media (max-width: 420px) {
+    .mercado-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 10px; }
+    .mercado-pcard { padding: 12px; }
+    .mercado-pcard__precio { font-size: 1.35rem; }
+  }
+
   .mercado-tabla-wrap { background: var(--card, #fff); border: 1px solid var(--border, #e8ede5); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px -8px rgba(0,0,0,0.08); position: relative; }
   .mercado-tabla { width: 100%; border-collapse: collapse; font-family: var(--font), sans-serif; }
   .mercado-tabla thead { background: rgba(26,107,47,0.04); border-bottom: 1px solid var(--border, #e8ede5); }
@@ -9809,7 +9891,7 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════
-         💹 MERCADO VIP — Precios del agro en tiempo real
+         💹 MERCADO VIP — Precios de referencia del agro
          ═══════════════════════════════════════════════════════════════ -->
     <div class="page" id="page-mercado">
       <!-- Hero -->
@@ -9832,10 +9914,13 @@
               <circle cx="27" cy="29" r="3" fill="url(#mercado-grad)"/>
             </svg>
           </div>
+          <!-- MODIFICADO: fase 4.7 — "Mercado en tiempo real" era falso: no hay ninguna
+               fuente de datos conectada, los precios salen de MERCADO_PRODUCTOS_FALLBACK.
+               Ahora el titular y la bajada dicen lo que la vista realmente es. -->
           <div class="mercado-hero__text">
             <div class="mercado-hero__kicker">PRECIOS DEL AGRO</div>
-            <h2 class="mercado-hero__title">Mercado en tiempo real</h2>
-            <p class="mercado-hero__desc">Precios actualizados de frutas, verduras y granos en centrales de abasto nacionales, con tendencias y datos de importación/exportación.</p>
+            <h2 class="mercado-hero__title">Precios de referencia</h2>
+            <p class="mercado-hero__desc">Valores orientativos de frutas, verduras y granos para ubicarte antes de negociar, con comparativa por central de abasto.</p>
           </div>
         </div>
 
@@ -9877,9 +9962,23 @@
           </div>
         </div>
 
-        <div class="mercado-hero__updated">
-          <span class="mercado-hero__updated-dot"></span>
-          <span id="mercado-updated-txt">Actualizado: <strong>Hoy 06:00 AM</strong></span>
+        <!-- MODIFICADO: fase 4.7 — ELIMINADO el sello "Actualizado: Hoy 06:00 AM".
+             Ese texto se rellenaba con el reloj del propio usuario (actualizarStatsMercado,
+             rama "datos demo"), así que fingía una actualización que nunca ocurre. -->
+      </div>
+
+      <!-- MODIFICADO: fase 4.7 — aviso honesto. La vista no consume SNIIM/SADER ni bolsa;
+           el socio debe saberlo ANTES de tomar una decisión de venta. -->
+      <div class="mercado-aviso">
+        <div class="mercado-aviso__icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8.2" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M10 6v4.6M10 13.6h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="mercado-aviso__txt">
+          <div class="mercado-aviso__title">Son precios de referencia, no cotización oficial</div>
+          <p class="mercado-aviso__desc">Estos valores son estimados orientativos del sector, no datos oficiales de SNIIM/SADER ni de bolsa. Antes de vender, confirma el precio con tu central de abasto o comprador local.</p>
         </div>
       </div>
 
@@ -9958,24 +10057,14 @@
         </div>
       </div>
 
-      <!-- Tabla principal de productos (DESKTOP) -->
+      <!-- MODIFICADO: fase 4.7 — fuera la tabla con la columna "Tendencia 30d" (era una
+           sparkline generada con Math.random() que cambiaba en cada recarga). Ahora un solo
+           grid de tarjetas para todos los anchos: emoji, nombre, variedad, precio de
+           referencia y chip de tendencia con el campo `direccion` REAL del producto.
+           Se conserva .mercado-tabla-wrap porque es el contenedor donde se monta el
+           paywall VIP (.mercado-paywall-overlay) y su CSS. -->
       <div class="mercado-tabla-wrap">
-        <table class="mercado-tabla" id="mercado-tabla">
-          <thead>
-            <tr>
-              <th class="mercado-tabla__th--prod">Producto</th>
-              <th class="mercado-tabla__th--num">Nacional</th>
-              <th class="mercado-tabla__th--num mercado-tabla__th--hide-sm">Importación</th>
-              <th class="mercado-tabla__th--trend">Tendencia 30d</th>
-              <th class="mercado-tabla__th--cambio">Cambio</th>
-            </tr>
-          </thead>
-          <tbody id="mercado-tabla-body">
-            <!-- Renderizado por JS -->
-          </tbody>
-        </table>
-        <!-- Cards (MÓVIL) -->
-        <div class="mercado-cards" id="mercado-cards">
+        <div class="mercado-grid" id="mercado-grid">
           <!-- Renderizado por JS -->
         </div>
         <div class="mercado-empty" id="mercado-empty" style="display:none;">
@@ -9994,13 +10083,16 @@
         </div>
       </div>
 
-      <!-- Disclaimer -->
+      <!-- MODIFICADO: fase 4.7 — ELIMINADO el disclaimer que atribuía los datos a
+           "SNIIM (SADER), SIAP, USDA Market News, CME (Bolsa de Chicago) y Hortomallas".
+           El portal nunca consultó ninguna de esas fuentes: los precios son el array
+           hardcodeado MERCADO_PRODUCTOS_FALLBACK. Lo sustituye el aviso honesto de arriba. -->
       <div class="mercado-disclaimer">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.4"/>
           <path d="M7 4V7.5M7 10H7.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        Datos consolidados de <strong>SNIIM (SADER), SIAP, USDA Market News, CME (Bolsa de Chicago) y Hortomallas</strong>. Predicción basada en tendencias multi-fuente. Los precios pueden variar por región, calidad y temporada. Consulta con tu central de abasto local antes de cerrar operaciones comerciales.
+        Los precios varían por región, calidad y temporada. Confirma siempre con tu central de abasto o comprador local antes de cerrar una operación.
       </div>
     </div>
 
@@ -10031,9 +10123,11 @@
         <!-- Precio principal -->
         <div class="mercado-detalle-precio-main">
           <div class="mercado-detalle-precio-num" id="mercado-detalle-precio-num">—</div>
+          <!-- MODIFICADO: fase 4.7 — fuera "Última actualización: hoy 06:00 AM" (fija en el
+               HTML, no correspondía a ninguna actualización real). -->
           <div class="mercado-detalle-precio-meta">
             <span class="mercado-detalle-precio-cambio" id="mercado-detalle-cambio">—</span>
-            <span class="mercado-detalle-precio-actualizado">Última actualización: hoy 06:00 AM</span>
+            <span class="mercado-detalle-precio-actualizado">Precio de referencia</span>
           </div>
         </div>
 
@@ -10042,42 +10136,24 @@
           <div class="mercado-detalle-precio-card">
             <div class="mercado-detalle-precio-card__lbl">🇲🇽 NACIONAL</div>
             <div class="mercado-detalle-precio-card__val" id="mercado-detalle-nac">—</div>
-            <div class="mercado-detalle-precio-card__sub">MXN/kg</div>
+            <div class="mercado-detalle-precio-card__sub">MXN/kg ref.</div>
           </div>
           <div class="mercado-detalle-precio-card">
             <div class="mercado-detalle-precio-card__lbl">📥 IMPORTACIÓN</div>
             <div class="mercado-detalle-precio-card__val" id="mercado-detalle-imp">—</div>
-            <div class="mercado-detalle-precio-card__sub">USD/kg</div>
+            <div class="mercado-detalle-precio-card__sub">USD/kg ref.</div>
           </div>
           <div class="mercado-detalle-precio-card">
             <div class="mercado-detalle-precio-card__lbl">📤 EXPORTACIÓN</div>
             <div class="mercado-detalle-precio-card__val" id="mercado-detalle-exp">—</div>
-            <div class="mercado-detalle-precio-card__sub">USD/kg</div>
+            <div class="mercado-detalle-precio-card__sub">USD/kg ref.</div>
           </div>
         </div>
 
-        <!-- Fuentes consultadas -->
-        <div class="mercado-detalle-fuentes">
-          <div class="mercado-detalle-fuentes__head">
-            <div class="mercado-detalle-fuentes__title">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:-2px;margin-right:5px;">
-                <path d="M7 1L9 5L13 5.5L10 8.5L11 13L7 11L3 13L4 8.5L1 5.5L5 5L7 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="currentColor" fill-opacity="0.15"/>
-              </svg>
-              Fuentes consultadas
-            </div>
-            <div class="mercado-detalle-fuentes__confianza" id="mercado-detalle-confianza">
-              <span class="mercado-detalle-fuentes__dot"></span>
-              <span>Alta confianza</span>
-            </div>
-          </div>
-          <div class="mercado-detalle-fuentes__lista" id="mercado-detalle-fuentes-lista">
-            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="sniim">🏛️ SNIIM</span>
-            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="siap">📊 SIAP</span>
-            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="usda">🇺🇸 USDA</span>
-            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="cme">💰 CME</span>
-            <span class="mercado-fuente-chip mercado-fuente-chip--active" data-fuente="hortomallas">🌱 Hortomallas</span>
-          </div>
-        </div>
+        <!-- MODIFICADO: fase 4.7 — ELIMINADO el bloque "Fuentes consultadas" completo:
+             los 5 chips (SNIIM, SIAP, USDA, CME, Hortomallas) estaban fijos en el HTML con
+             la clase --active puesta a mano, y el badge "Alta confianza" también. Ninguna
+             de esas fuentes se consulta en ningún punto del código. -->
 
         <!-- Centrales de abasto -->
         <div class="mercado-detalle-section">
@@ -10093,19 +10169,10 @@
           </div>
         </div>
 
-        <!-- Gráfica 30 días -->
-        <div class="mercado-detalle-section">
-          <div class="mercado-detalle-section__title">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-right:6px;vertical-align:-2px;">
-              <polyline points="2 10 5 7 8 9 12 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <line x1="2" y1="12" x2="12" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            Tendencia últimos 30 días
-          </div>
-          <div class="mercado-detalle-chart" id="mercado-detalle-chart">
-            <!-- SVG sparkline renderizado por JS -->
-          </div>
-        </div>
+        <!-- MODIFICADO: fase 4.7 — ELIMINADA la sección "Tendencia últimos 30 días".
+             El historial venía de genHist30(), un random-walk con Math.random() que se
+             regeneraba en cada carga: la misma gráfica salía distinta al recargar. No se
+             sustituye por otra gráfica porque no existe ningún histórico real que graficar. -->
 
         <!-- Estacionalidad -->
         <div class="mercado-detalle-estacional" id="mercado-detalle-estacional">
@@ -10152,58 +10219,34 @@
           </div>
         </div>
 
-        <!-- Filtro: Variedad/región -->
+        <!-- MODIFICADO: fase 4.7 — el filtro ofrecía los 32 estados y el botón "+ Ver los
+             32 estados", pero filtra buscando el nombre del estado dentro de `variedad`, y
+             solo 16 estados aparecen ahí: los otros 16 devolvían siempre "Sin resultados".
+             Ahora se listan únicamente los estados que sí tienen producto en el catálogo,
+             y el subtítulo dice de cuántos se trata. Sin promesa de cobertura nacional. -->
         <div class="mercado-filtros-section">
           <div class="mercado-filtros-section__title">🌎 Estado productor</div>
+          <div class="mercado-filtros-section__nota">Solo los 16 estados con producto en este catálogo de referencia.</div>
 
-          <!-- Top productores agrícolas (siempre visibles) -->
           <div class="mercado-filtros-options">
             <button class="mercado-filtro-opt mercado-filtro-opt--active" data-filtro="estado" data-val="todos">Todos</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Sinaloa">Sinaloa</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Veracruz">Veracruz</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Michoacán">Michoacán</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Jalisco">Jalisco</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Guanajuato">Guanajuato</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Chihuahua">Chihuahua</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Sonora">Sonora</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Chiapas">Chiapas</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Tabasco">Tabasco</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Tamaulipas">Tamaulipas</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Zacatecas">Zacatecas</button>
-          </div>
-
-          <!-- Estados restantes (ocultos por defecto, se expanden con el botón) -->
-          <div class="mercado-filtros-options mercado-filtros-options--mas" id="estados-mas" style="display:none;">
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Aguascalientes">Aguascalientes</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Baja California">Baja California</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Baja California Sur">Baja California Sur</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Campeche">Campeche</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Chihuahua">Chihuahua</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Coahuila">Coahuila</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Colima">Colima</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Ciudad de México">Ciudad de México</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Durango">Durango</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Estado de México">Estado de México</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Guerrero">Guerrero</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Hidalgo">Hidalgo</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Morelos">Morelos</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Nayarit">Nayarit</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Nuevo León">Nuevo León</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Oaxaca">Oaxaca</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Guanajuato">Guanajuato</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Jalisco">Jalisco</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Michoacán">Michoacán</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Puebla">Puebla</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Querétaro">Querétaro</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Quintana Roo">Quintana Roo</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="San Luis Potosí">San Luis Potosí</button>
-            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Tlaxcala">Tlaxcala</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Sinaloa">Sinaloa</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Sonora">Sonora</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Tabasco">Tabasco</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Tamaulipas">Tamaulipas</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Veracruz">Veracruz</button>
             <button class="mercado-filtro-opt" data-filtro="estado" data-val="Yucatán">Yucatán</button>
+            <button class="mercado-filtro-opt" data-filtro="estado" data-val="Zacatecas">Zacatecas</button>
           </div>
-
-          <!-- Botón expandir/contraer -->
-          <button type="button" class="mercado-estados-mas-btn" id="btn-estados-mas" onclick="toggleEstadosMas()">
-            <span id="btn-estados-mas-txt">+ Ver los 32 estados</span>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" id="btn-estados-mas-icon" style="transition: transform 0.25s ease;">
-              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
         </div>
 
         <div class="mercado-filtros-modal__footer">
@@ -18228,23 +18271,10 @@ setInterval(() => {
 // 💹 MERCADO VIP — Precios del agro (estilo Bloomberg)
 // ═══════════════════════════════════════════════════════════════
 
-// Helper: generar historial 30 días con tendencia (subida/bajada/estable)
-function genHist30(precioBase, direccion) {
-  const arr = [];
-  let actual = precioBase * (direccion === 'subida' ? 0.92 : direccion === 'bajada' ? 1.08 : 0.98);
-  for (let i = 0; i < 30; i++) {
-    // Variación diaria suave + tendencia
-    const noise = (Math.random() - 0.5) * (precioBase * 0.04);
-    const trend = direccion === 'subida' ? (precioBase * 0.0035) :
-                  direccion === 'bajada' ? -(precioBase * 0.0035) : 0;
-    actual += noise + trend;
-    actual = Math.max(precioBase * 0.7, Math.min(precioBase * 1.3, actual));
-    arr.push(Math.round(actual * 100) / 100);
-  }
-  // Forzar que el último valor sea cercano al precio base
-  arr[29] = precioBase;
-  return arr;
-}
+/* MODIFICADO: fase 4.7 — ELIMINADAS genHist30(), generarSparkline() y
+   generarSparklineGrande(). Las tres existían solo para dibujar la tendencia de 30 días
+   del mercado, que se fabricaba con Math.random(). Sin datos históricos reales no hay
+   nada honesto que graficar, así que se va el render y también el generador. */
 
 // 15 productos AgroTec América con datos demo realistas (basados en SNIIM 2025-2026)
 // 🔄 FALLBACK: Productos hardcoded por si Firestore falla o está vacío
@@ -18672,10 +18702,11 @@ const MERCADO_PRODUCTOS_FALLBACK = [
   }
 ];
 
-// Generar historiales 30 días para cada producto del fallback
-MERCADO_PRODUCTOS_FALLBACK.forEach(p => {
-  p.historial = genHist30(p.precio_nacional, p.direccion);
-});
+/* MODIFICADO: fase 4.7 — ELIMINADA la generación de historiales de 30 días. Se creaban
+   con genHist30() (random-walk con Math.random()) y se regeneraban en cada carga, así que
+   la "tendencia" de un producto salía distinta al recargar la página. No existe ningún
+   histórico real, así que no se sustituye por nada: la vista solo muestra el precio
+   actual y la dirección (`direccion`), que sí es un dato del catálogo. */
 
 // 💹 MERCADO_PRODUCTOS: array activo que muestra el portal
 // Arranca con el fallback. Si Firestore tiene datos → se reemplaza con esos.
@@ -18725,10 +18756,8 @@ async function cargarMercadoFirestore() {
         cambio_pct: data.cambio_pct || 0,
         direccion: data.direccion || 'estable',
         centrales: Array.isArray(data.centrales) ? data.centrales : [],
-        estacional: data.estacional || 'Información de estacionalidad no disponible.',
-        historial: Array.isArray(data.historial_30d) && data.historial_30d.length > 0
-          ? data.historial_30d
-          : genHist30(data.precio_nacional, data.direccion || 'estable')
+        estacional: data.estacional || 'Información de estacionalidad no disponible.'
+        /* MODIFICADO: fase 4.7 — quitado el campo `historial`: ya no se grafica nada. */
       };
 
       productos.push(producto);
@@ -18846,118 +18875,22 @@ function actualizarStatsMercado() {
   if (elDown)  elDown.textContent = bajando;
   if (elFlat)  elFlat.textContent = estables;
 
-  // Actualizar fecha "Actualizado" - usa Firestore si hay, si no la hora actual
-  const updEl = document.getElementById('mercado-updated-txt');
-  if (updEl) {
-    if (_mercadoFuente === 'firestore' && _mercadoUpdatedAt) {
-      // Fecha real del scraper SNIIM
-      const fecha = _mercadoUpdatedAt.toDate ? _mercadoUpdatedAt.toDate() : new Date(_mercadoUpdatedAt.seconds * 1000);
-      const ahora = new Date();
-      const diffMs = ahora - fecha;
-      const diffHoras = Math.floor(diffMs / (1000 * 60 * 60));
-      const diffMin = Math.floor(diffMs / (1000 * 60));
-
-      let textoFecha;
-      if (diffMin < 60) textoFecha = `hace ${diffMin} min`;
-      else if (diffHoras < 24) textoFecha = `hace ${diffHoras}h`;
-      else {
-        const horas = fecha.getHours();
-        const minutos = String(fecha.getMinutes()).padStart(2, '0');
-        const ampm = horas >= 12 ? 'PM' : 'AM';
-        const horas12 = ((horas + 11) % 12) + 1;
-        const dia = fecha.getDate();
-        const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-        textoFecha = `${dia} ${meses[fecha.getMonth()]} · ${horas12}:${minutos} ${ampm}`;
-      }
-      updEl.innerHTML = `Datos SNIIM oficiales · <strong>${textoFecha}</strong>`;
-    } else {
-      // Fallback: hora del usuario (datos demo)
-      const hoy = new Date();
-      const horas = hoy.getHours();
-      const minutos = String(hoy.getMinutes()).padStart(2, '0');
-      const ampm = horas >= 12 ? 'PM' : 'AM';
-      const horas12 = ((horas + 11) % 12) + 1;
-      updEl.innerHTML = `Actualizado: <strong>Hoy ${horas12}:${minutos} ${ampm}</strong>`;
-    }
-  }
+  /* MODIFICADO: fase 4.7 — ELIMINADO el sello "Actualizado". La rama de Firestore nunca
+     corre (el cargador sale por el guard de SDK compat) y la rama de fallback escribía la
+     hora del reloj del propio usuario, simulando una actualización que no ocurre. El
+     elemento #mercado-updated-txt tampoco existe ya en el HTML. */
 }
 
-// Generar SVG sparkline (línea simple con color según tendencia)
-function generarSparkline(historial, direccion, ancho, alto) {
-  const w = ancho || 110;
-  const h = alto || 36;
-  const padY = 3;
-  const min = Math.min(...historial);
-  const max = Math.max(...historial);
-  const rango = max - min || 1;
 
-  // Construir puntos
-  const points = historial.map((v, i) => {
-    const x = (i / (historial.length - 1)) * w;
-    const y = h - padY - ((v - min) / rango) * (h - padY * 2);
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
-
-  const color = direccion === 'subida' ? '#16a34a' :
-                direccion === 'bajada' ? '#dc2626' : '#94a3a0';
-  const colorFill = direccion === 'subida' ? 'rgba(22,163,74,0.12)' :
-                    direccion === 'bajada' ? 'rgba(220,38,38,0.12)' : 'rgba(148,163,160,0.10)';
-
-  // Path para área (con relleno sutil)
-  const areaPath = `M0,${h} L${points.join(' L')} L${w},${h} Z`;
-  // Path para línea
-  const linePath = `M${points.join(' L')}`;
-
-  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" class="mercado-row__spark-svg" preserveAspectRatio="none">
-    <path d="${areaPath}" fill="${colorFill}" stroke="none"/>
-    <path d="${linePath}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`;
-}
-
-// Generar SVG sparkline GRANDE para el modal detalle (con ejes y info)
-function generarSparklineGrande(historial, direccion) {
-  const w = 500;
-  const h = 110;
-  const padX = 10;
-  const padY = 12;
-  const min = Math.min(...historial);
-  const max = Math.max(...historial);
-  const rango = max - min || 1;
-
-  const points = historial.map((v, i) => {
-    const x = padX + (i / (historial.length - 1)) * (w - padX * 2);
-    const y = h - padY - ((v - min) / rango) * (h - padY * 2);
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
-
-  const color = direccion === 'subida' ? '#16a34a' :
-                direccion === 'bajada' ? '#dc2626' : '#94a3a0';
-  const colorFill = direccion === 'subida' ? 'rgba(22,163,74,0.10)' :
-                    direccion === 'bajada' ? 'rgba(220,38,38,0.10)' : 'rgba(148,163,160,0.08)';
-
-  const areaPath = `M${padX},${h - padY} L${points.join(' L')} L${w - padX},${h - padY} Z`;
-  const linePath = `M${points.join(' L')}`;
-
-  // Punto inicial y final
-  const pInicio = points[0].split(',');
-  const pFinal = points[points.length - 1].split(',');
-
-  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-    <path d="${areaPath}" fill="${colorFill}" stroke="none"/>
-    <path d="${linePath}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="${pInicio[0]}" cy="${pInicio[1]}" r="3" fill="${color}" opacity="0.5"/>
-    <circle cx="${pFinal[0]}" cy="${pFinal[1]}" r="4" fill="${color}"/>
-    <circle cx="${pFinal[0]}" cy="${pFinal[1]}" r="7" fill="${color}" opacity="0.2"/>
-  </svg>`;
-}
 
 // Renderizar tabla de productos
+/* MODIFICADO: fase 4.7 — un solo render en tarjetas (antes tabla desktop + cards móvil,
+   ambas con sparkline aleatoria). Misma lógica de filtrado y mismo gate VIP. */
 function renderMercado() {
-  const tbody = document.getElementById('mercado-tabla-body');
-  const cardsEl = document.getElementById('mercado-cards');
+  const grid = document.getElementById('mercado-grid');
   const tablaWrap = document.querySelector('#page-mercado .mercado-tabla-wrap');
   const empty = document.getElementById('mercado-empty');
-  if (!tbody) return;
+  if (!grid) return;
 
   // Actualizar stats globales (se calcula sobre TODOS los productos, no filtrados)
   actualizarStatsMercado();
@@ -18998,8 +18931,7 @@ function renderMercado() {
   }
 
   if (lista.length === 0) {
-    tbody.innerHTML = '';
-    if (cardsEl) cardsEl.innerHTML = '';
+    grid.innerHTML = '';
     if (empty) empty.style.display = 'block';
   } else {
     if (empty) empty.style.display = 'none';
@@ -19007,82 +18939,41 @@ function renderMercado() {
     // Determinar si es VIP usando la función oficial del portal
     const esVIP = typeof esVIPActivo === 'function' ? esVIPActivo() : false;
 
-    // Render tabla DESKTOP
-    tbody.innerHTML = lista.map(p => {
+    grid.innerHTML = lista.map(p => {
       const dir = p.direccion;
-      const cambioCls = dir === 'subida' ? 'mercado-row__cambio--up' :
-                        dir === 'bajada' ? 'mercado-row__cambio--down' : 'mercado-row__cambio--flat';
-      const arrow = dir === 'subida' ? '▲' : dir === 'bajada' ? '▼' : '─';
+      const tendCls = dir === 'subida' ? 'mercado-tend--up' :
+                      dir === 'bajada' ? 'mercado-tend--down' : 'mercado-tend--flat';
+      const arrow   = dir === 'subida' ? '▲' : dir === 'bajada' ? '▼' : '─';
+      const tendTxt = dir === 'subida' ? 'Sube' : dir === 'bajada' ? 'Baja' : 'Estable';
       const cambioStr = (p.cambio_pct > 0 ? '+' : '') + p.cambio_pct.toFixed(1) + '%';
 
-      const precioCelda = esVIP
-        ? `<div class="mercado-row__precio">$${p.precio_nacional}</div><div class="mercado-row__precio-sub">MXN/kg</div>`
-        : `<div class="mercado-row__precio-bloqueado">
-            <svg class="mercado-row__precio-bloqueado-icon" viewBox="0 0 16 16" fill="none">
-              <rect x="3" y="7" width="10" height="7" rx="1.4" stroke="currentColor" stroke-width="1.4"/>
-              <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-            </svg>
-            $ ─ ─</div>`;
+      // Gate VIP intacto: sin VIP el precio va con candado, nunca en claro.
+      const precioBlock = esVIP
+        ? `<div class="mercado-pcard__precio">$${p.precio_nacional}</div>
+           <div class="mercado-pcard__unidad">MXN/kg ref.</div>`
+        : `<div class="mercado-pcard__bloqueado">
+             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+               <rect x="3" y="7" width="10" height="7" rx="1.4" stroke="currentColor" stroke-width="1.4"/>
+               <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+             </svg>
+             <span>Solo VIP</span>
+           </div>`;
 
-      const importCelda = esVIP
-        ? `<div class="mercado-row__precio">$${p.precio_import.toFixed(2)}</div><div class="mercado-row__precio-sub">USD/kg</div>`
-        : `<div class="mercado-row__precio-bloqueado">$ ─ ─</div>`;
-
-      const cambioCelda = esVIP
-        ? `<span class="mercado-row__cambio ${cambioCls}"><span>${arrow}</span>${cambioStr}</span>`
-        : `<span class="mercado-row__precio-bloqueado">─</span>`;
+      const tendBlock = esVIP
+        ? `<span class="mercado-tend ${tendCls}"><span aria-hidden="true">${arrow}</span> ${tendTxt} · ${cambioStr}</span>`
+        : `<span class="mercado-tend mercado-tend--flat"><span aria-hidden="true">${arrow}</span> ${tendTxt}</span>`;
 
       return `
-      <tr class="mercado-row" onclick="abrirMercadoDetalle('${p.id}')">
-        <td>
-          <div class="mercado-row__prod">
-            <div class="mercado-row__emoji">${p.emoji}</div>
-            <div class="mercado-row__nombre-wrap">
-              <div class="mercado-row__nombre">${p.nombre}</div>
-              <div class="mercado-row__variedad">${p.variedad}</div>
-            </div>
+        <button type="button" class="mercado-pcard" onclick="abrirMercadoDetalle('${p.id}')">
+          <div class="mercado-pcard__head">
+            <span class="mercado-pcard__emoji" aria-hidden="true">${p.emoji}</span>
+            ${tendBlock}
           </div>
-        </td>
-        <td class="mercado-row__nacional">${precioCelda}</td>
-        <td class="mercado-row__import mercado-row__hide-sm">${importCelda}</td>
-        <td class="mercado-row__spark">${generarSparkline(p.historial, p.direccion)}</td>
-        <td class="mercado-row__cambio-cell">${cambioCelda}</td>
-      </tr>`;
+          <div class="mercado-pcard__nombre">${p.nombre}</div>
+          <div class="mercado-pcard__variedad">${p.variedad}</div>
+          <div class="mercado-pcard__precio-wrap">${precioBlock}</div>
+        </button>`;
     }).join('');
-
-    // Render cards MÓVIL
-    if (cardsEl) {
-      cardsEl.innerHTML = lista.map(p => {
-        const dir = p.direccion;
-        const cambioCls = dir === 'subida' ? 'mercado-card__cambio--up' :
-                          dir === 'bajada' ? 'mercado-card__cambio--down' : 'mercado-card__cambio--flat';
-        const arrow = dir === 'subida' ? '▲' : dir === 'bajada' ? '▼' : '─';
-        const cambioStr = (p.cambio_pct > 0 ? '+' : '') + p.cambio_pct.toFixed(1) + '%';
-
-        const precioBlock = esVIP
-          ? `<div class="mercado-card__precio">$${p.precio_nacional}</div>
-             <div class="mercado-card__precio-sub">MXN/kg</div>
-             <span class="mercado-card__cambio ${cambioCls}">${arrow} ${cambioStr}</span>`
-          : `<div class="mercado-card__precio-bloqueado">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="vertical-align:-2px;margin-right:3px;">
-                <rect x="3" y="7" width="10" height="7" rx="1.4" stroke="currentColor" stroke-width="1.4"/>
-                <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-              </svg>VIP</div>`;
-
-        return `
-        <div class="mercado-card" onclick="abrirMercadoDetalle('${p.id}')">
-          <div class="mercado-card__emoji">${p.emoji}</div>
-          <div class="mercado-card__body">
-            <div class="mercado-card__nombre">${p.nombre}</div>
-            <div class="mercado-card__variedad">${p.variedad}</div>
-            <div class="mercado-card__spark">${generarSparkline(p.historial, p.direccion, 200, 22)}</div>
-          </div>
-          <div class="mercado-card__right">
-            ${precioBlock}
-          </div>
-        </div>`;
-      }).join('');
-    }
   }
 
   // Si es FREE, mostrar paywall sobre la tabla
@@ -19103,7 +18994,9 @@ function renderMercado() {
         </svg>
       </div>
       <div class="mercado-paywall-overlay__title">Precios disponibles solo para VIP</div>
-      <div class="mercado-paywall-overlay__desc">Suscríbete para ver precios reales actualizados, tendencias 30 días y datos por central de abasto.</div>
+      <!-- MODIFICADO: fase 4.7 — prometía "precios reales actualizados" y "tendencias 30
+           días": ninguna de las dos existe. Ahora ofrece lo que de verdad se desbloquea. -->
+      <div class="mercado-paywall-overlay__desc">Suscríbete para ver los precios de referencia, el comparativo por central de abasto y las notas de estacionalidad.</div>
       <button class="mercado-paywall-overlay__btn" onclick="if(typeof abrirSelectorPlan==='function'){abrirSelectorPlan()}else{showPage('suscripcion')}">
         Suscribirme — desde $200 MXN/mes
       </button>
@@ -19196,17 +19089,8 @@ function abrirMercadoDetalle(id) {
     `);
   }
 
-  // Gráfica grande
-  const chartEl = document.getElementById('mercado-detalle-chart');
-  const minHist = Math.min(...p.historial);
-  const maxHist = Math.max(...p.historial);
-  chartEl.innerHTML = `
-    ${generarSparklineGrande(p.historial, p.direccion)}
-    <div class="mercado-detalle-chart-info">
-      <span>Hace 30d · $${minHist}</span>
-      <span>Hoy · <strong style="color:#1a6b2f;">$${p.precio_nacional}</strong></span>
-    </div>
-  `;
+  /* MODIFICADO: fase 4.7 — ELIMINADO el render de la gráfica de 30 días (usaba p.historial,
+     que era aleatorio). Su contenedor #mercado-detalle-chart también se quitó del HTML. */
 
   // Estacionalidad
   document.getElementById('mercado-detalle-estacional').innerHTML = `
