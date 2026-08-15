@@ -1,6 +1,7 @@
-const CACHE = 'agroclub-v1';
+const CACHE = 'agroclub-v2-colibri';
 const SHELL = ['./', './index.html', './login.html', './manifest.json',
-  './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
+  './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png',
+  './pwa-logo.png', './assets/agroclub-colibri-v5.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL).catch(() => {})));
