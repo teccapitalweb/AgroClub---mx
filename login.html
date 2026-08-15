@@ -283,6 +283,15 @@ body{
 .ac-story__fact{padding:13px 12px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(255,255,255,.1);backdrop-filter:blur(10px)}
 .ac-story__fact b{display:block;font-family:'Bricolage Grotesque',sans-serif;color:#fff;font-size:1.2rem;line-height:1}
 .ac-story__fact span{display:block;margin-top:5px;color:rgba(255,255,255,.72);font-size:.7rem;line-height:1.2}
+.ac-course-stack{position:absolute;top:34px;right:30px;display:flex;align-items:center;filter:drop-shadow(0 12px 22px rgba(16,34,21,.24))}
+.ac-course-stack__item{width:52px;height:52px;margin-left:-10px;border:3px solid rgba(255,255,255,.94);border-radius:14px;overflow:hidden;background:#fff;transform:rotate(-5deg)}
+.ac-course-stack__item:nth-child(2){transform:translateY(4px) rotate(4deg)}
+.ac-course-stack__item:nth-child(3){transform:translateY(-2px) rotate(-2deg)}
+.ac-course-stack__item img{display:block;width:100%;height:100%;object-fit:cover}
+.ac-course-stack__more{display:grid;place-items:center;width:52px;height:52px;margin-left:-9px;border:3px solid rgba(255,255,255,.94);border-radius:14px;background:var(--orange);color:#fff;font-weight:800;font-size:.72rem;transform:rotate(4deg)}
+.ac-story__promise{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:18px;color:rgba(255,255,255,.82);font-size:.74rem;font-weight:600}
+.ac-story__promise span{display:inline-flex;align-items:center;gap:6px}
+.ac-story__promise span::before{content:"✓";display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:rgba(234,240,220,.18);color:#dff3bf;font-size:.66rem}
 
 .ac-split .login-card{
   max-width:none;border-radius:0;box-shadow:none;padding:44px clamp(34px,5vw,64px);
@@ -300,6 +309,8 @@ body{
 .auth-tab{padding:10px;border-radius:9px;font-family:inherit;font-size:.84rem;color:var(--muted-new)}
 .auth-tab.active{background:var(--card-new);color:var(--deep);box-shadow:0 2px 10px rgba(35,64,43,.1)}
 .auth-view h3{font-family:'Bricolage Grotesque',sans-serif;font-size:1.65rem;line-height:1.08;letter-spacing:-.035em;margin-bottom:7px;color:var(--ink)}
+.auth-kicker{display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;color:var(--field-dark);font-size:.69rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.auth-kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 4px rgba(229,133,47,.13)}
 .sub{font-size:.88rem;color:var(--muted-new);margin-bottom:23px;line-height:1.5}
 .form-group{margin-bottom:14px}
 label{font-size:.76rem;font-weight:700;color:var(--deep);margin-bottom:6px}
@@ -311,8 +322,16 @@ input{
 input::placeholder{color:#aaa89c}
 input:hover{border-color:#cfc7af}
 input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
+.password-field{position:relative}
+.password-field input{padding-right:48px}
+.password-toggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:35px;height:35px;border:0;border-radius:9px;background:transparent;color:var(--muted-new);cursor:pointer;display:grid;place-items:center;transition:background .18s,color .18s}
+.password-toggle:hover{background:var(--green-tint);color:var(--deep)}
+.password-toggle:focus-visible{outline:3px solid rgba(229,133,47,.28);outline-offset:1px}
+.password-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .btn-login{margin-top:7px;padding:13px 16px;border-radius:11px;background:var(--field);font-family:inherit;font-size:.93rem;font-weight:700;box-shadow:0 10px 22px rgba(92,140,58,.2);transition:transform .2s,background .2s,box-shadow .2s}
 .btn-login:hover{background:var(--field-dark);transform:translateY(-1px);box-shadow:0 13px 28px rgba(92,140,58,.26)}
+#btnRegistro{background:var(--orange);box-shadow:0 10px 24px rgba(229,133,47,.24)}
+#btnRegistro:hover{background:#d97722;box-shadow:0 13px 30px rgba(229,133,47,.3)}
 .btn-login:focus-visible,.btn-google:focus-visible,.auth-tab:focus-visible,.back-site:focus-visible{outline:3px solid rgba(229,133,47,.32);outline-offset:2px}
 .auth-divider{margin:17px 0;color:#989588;font-size:.7rem}
 .auth-divider::before,.auth-divider::after{background:var(--line-new)}
@@ -322,6 +341,13 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
 .small-note a{color:var(--field-dark)}
 .free-banner{display:flex;align-items:center;gap:9px;text-align:left;margin-bottom:16px;padding:10px 12px;border:1px solid #d8e4bf;border-radius:11px;background:var(--green-tint);color:var(--deep);font-size:.76rem;font-weight:700}
 .free-banner::before{content:"✓";display:grid;place-items:center;width:22px;height:22px;flex:none;border-radius:50%;background:var(--field);color:#fff;font-size:.72rem}
+.signup-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:-5px 0 17px;padding:0;list-style:none}
+.signup-benefits li{min-width:0;padding:9px 8px;border:1px solid var(--line-new);border-radius:10px;background:#fff;color:var(--muted-new);font-size:.67rem;line-height:1.3;text-align:center}
+.signup-benefits b{display:block;margin-bottom:2px;color:var(--deep);font-size:.7rem}
+.auth-assurance{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:13px;color:#858273;font-size:.7rem;text-align:center}
+.auth-assurance svg{width:14px;height:14px;fill:none;stroke:var(--field);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.auth-view.active{animation:authIn .32s ease both}
+@keyframes authIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 .error-msg,.success-msg{margin-bottom:15px;padding:11px 13px;border-radius:11px;font-size:.8rem;line-height:1.4}
 .error-msg{background:#fff1ef;border-color:#efc7c0;color:#a93226}
 .success-msg{background:#eef7e5;border-color:#cfe3ba;color:#315d27}
@@ -350,9 +376,14 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
   .ac-story__brand{padding:6px 9px 6px 6px}
   .ac-story__brand img{width:36px;height:36px}
   .ac-story__brand span{display:none}
+  .ac-course-stack{top:18px;right:14px;transform:scale(.82);transform-origin:top right}
+  .ac-story__promise{display:none}
   .login-logo{align-items:flex-start}
   .back-site{font-size:.71rem;margin-top:4px}
   .auth-view h3{font-size:1.48rem}
+  .signup-benefits{grid-template-columns:1fr}
+  .signup-benefits li{text-align:left;padding:8px 10px}
+  .signup-benefits b{display:inline;margin-right:3px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
@@ -365,14 +396,23 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
         <img src="assets/agrotec-logo-v2.jpg" alt="AgroTec America" width="42" height="42">
         <div><b>AgroClub MX</b><span>por AgroTec America</span></div>
       </div>
+      <div class="ac-course-stack" aria-hidden="true">
+        <span class="ac-course-stack__item"><img src="cursos-mini/curso-01.webp" alt=""></span>
+        <span class="ac-course-stack__item"><img src="cursos-mini/curso-07.webp" alt=""></span>
+        <span class="ac-course-stack__item"><img src="cursos-mini/curso-12.webp" alt=""></span>
+        <span class="ac-course-stack__more">+25</span>
+      </div>
       <div class="ac-story__copy">
-        <span class="ac-story__tag">Tu espacio de aprendizaje</span>
-        <h1>Aprende hoy.<br>Aplica en campo.</h1>
-        <p class="ac-story__lead">Cursos especializados, herramientas prácticas y una comunidad que te acompaña para tomar mejores decisiones en tu producción.</p>
+        <span class="ac-story__tag">Crece con conocimiento aplicado</span>
+        <h1>Tu próxima gran cosecha empieza aquí.</h1>
+        <p class="ac-story__lead">Convierte dudas del campo en decisiones más claras con capacitación especializada, herramientas prácticas y acompañamiento para seguir avanzando.</p>
         <div class="ac-story__facts" aria-label="Beneficios del Club">
-          <div class="ac-story__fact"><b>28</b><span>cursos especializados</span></div>
-          <div class="ac-story__fact"><b>En vivo</b><span>sesiones con expertos</span></div>
-          <div class="ac-story__fact"><b>24/7</b><span>acceso a tus materiales</span></div>
+          <div class="ac-story__fact"><b>28</b><span>rutas de aprendizaje</span></div>
+          <div class="ac-story__fact"><b>En vivo</b><span>aprende con expertos</span></div>
+          <div class="ac-story__fact"><b>Práctico</b><span>herramientas de campo</span></div>
+        </div>
+        <div class="ac-story__promise" aria-label="Cómo funciona">
+          <span>Aprende a tu ritmo</span><span>Aplica con materiales</span><span>Acredita tus avances</span>
         </div>
       </div>
     </div>
@@ -438,13 +478,14 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
       <button class="auth-tab" id="tabRegistro" onclick="cambiarTab('registro')">Crear cuenta</button>
     </div>
 
-    <div class="error-msg" id="errorMsg"></div>
-    <div class="success-msg" id="successMsg"></div>
+    <div class="error-msg" id="errorMsg" role="alert" aria-live="assertive"></div>
+    <div class="success-msg" id="successMsg" role="status" aria-live="polite"></div>
 
     <!-- VIEW LOGIN -->
     <div class="auth-view active" id="viewLogin">
+      <span class="auth-kicker">Acceso para miembros</span>
       <h3>Qué gusto verte de nuevo</h3>
-      <p class="sub">Inicia sesión para continuar donde te quedaste.</p>
+      <p class="sub">Tu aprendizaje, progreso y herramientas están listos para continuar.</p>
 
       <div class="form-group">
         <label for="loginEmail">Correo electrónico</label>
@@ -452,7 +493,12 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
       </div>
       <div class="form-group">
         <label for="loginPassword">Contraseña</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" name="current-password" onkeydown="if(event.key==='Enter')iniciarSesion()">
+        <div class="password-field">
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" name="current-password" onkeydown="if(event.key==='Enter')iniciarSesion()">
+          <button type="button" class="password-toggle" onclick="togglePassword('loginPassword',this)" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
       </div>
       <button class="btn-login" id="btnLogin" onclick="iniciarSesion()">Entrar a mi Club</button>
 
@@ -471,30 +517,42 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
       <div class="small-note">
         ¿Olvidaste tu contraseña? <a href="#" onclick="recuperarPassword();return false;">Recuperar</a>
       </div>
+      <div class="auth-assurance"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>Acceso protegido · Tus datos permanecen seguros</span></div>
     </div>
 
     <!-- VIEW REGISTRO -->
     <div class="auth-view" id="viewRegistro">
-      <h3>Empieza a aprender</h3>
-      <p class="sub">Crea tu cuenta gratuita y conoce el portal antes de elegir una membresía.</p>
+      <span class="auth-kicker">Empieza sin costo</span>
+      <h3>Da el primer paso hoy</h3>
+      <p class="sub">Crea tu cuenta gratuita, conoce la experiencia y decide cuándo quieres desbloquear todo.</p>
 
-      <div class="free-banner">Cuenta gratuita para explorar el portal</div>
+      <div class="free-banner">Cuenta gratuita · no necesitas tarjeta</div>
+      <ul class="signup-benefits" aria-label="Ventajas de crear tu cuenta">
+        <li><b>Explora</b> el portal</li>
+        <li><b>Conoce</b> la biblioteca</li>
+        <li><b>Elige</b> cuándo avanzar</li>
+      </ul>
 
       <div class="form-group">
         <label for="regNombre">Nombre completo</label>
-        <input type="text" id="regNombre" placeholder="Juan Pérez">
+        <input type="text" id="regNombre" placeholder="Juan Pérez" autocomplete="name">
       </div>
       <div class="form-group">
         <label for="regEmail">Correo electrónico</label>
-        <input type="email" id="regEmail" placeholder="tu@correo.com">
+        <input type="email" id="regEmail" placeholder="tu@correo.com" autocomplete="email">
       </div>
       <div class="form-group">
         <label for="regWhatsapp">WhatsApp <span style="opacity:.6;font-weight:400;font-size:.85em;">(opcional)</span></label>
-        <input type="tel" id="regWhatsapp" placeholder="2381234567" maxlength="15">
+        <input type="tel" id="regWhatsapp" placeholder="2381234567" maxlength="15" autocomplete="tel" inputmode="tel">
       </div>
       <div class="form-group">
         <label for="regPassword">Contraseña (mín. 6 caracteres)</label>
-        <input type="password" id="regPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')crearCuenta()">
+        <div class="password-field">
+          <input type="password" id="regPassword" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')crearCuenta()">
+          <button type="button" class="password-toggle" onclick="togglePassword('regPassword',this)" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
       </div>
       <button class="btn-login" id="btnRegistro" onclick="crearCuenta()">Crear mi cuenta gratis</button>
 
@@ -513,6 +571,7 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
       <div class="small-note">
         Al registrarte aceptas los <a href="https://agrotecamerican.com/privacidad.html" target="_blank">términos y privacidad</a>
       </div>
+      <div class="auth-assurance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span>Acceso inmediato al crear tu cuenta</span></div>
     </div>
   </div>
 </div>
@@ -629,6 +688,17 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
       }
     })();
 
+    // Mostrar u ocultar contraseña sin alterar el valor del campo.
+    window.togglePassword = function(inputId, button) {
+      const input = document.getElementById(inputId);
+      if (!input || !button) return;
+      const mostrar = input.type === 'password';
+      input.type = mostrar ? 'text' : 'password';
+      button.classList.toggle('is-visible', mostrar);
+      button.setAttribute('aria-pressed', mostrar ? 'true' : 'false');
+      button.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    };
+
     // Cambiar entre login / registro
     window.cambiarTab = function(tab) {
       const tl = document.getElementById('tabLogin');
@@ -640,9 +710,11 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
       if (tab === 'login') {
         tl.classList.add('active'); tr.classList.remove('active');
         vl.classList.add('active'); vr.classList.remove('active');
+        document.body.dataset.authMode = 'login';
       } else {
         tr.classList.add('active'); tl.classList.remove('active');
         vr.classList.add('active'); vl.classList.remove('active');
+        document.body.dataset.authMode = 'registro';
       }
     };
 
