@@ -386,6 +386,107 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
   .signup-benefits b{display:inline;margin-right:3px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Login premium v3: portada editorial y formulario enfocado. */
+body{
+  background:
+    radial-gradient(circle at 9% 12%,rgba(229,133,47,.2),transparent 30%),
+    radial-gradient(circle at 92% 88%,rgba(92,140,58,.18),transparent 34%),
+    #f1ecdf;
+  padding:22px;
+}
+.ac-split{
+  grid-template-columns:minmax(0,1.18fr) minmax(420px,.82fr);
+  width:min(1280px,100%);min-height:min(820px,calc(100vh - 44px));
+  border:1px solid rgba(35,64,43,.12);border-radius:34px;
+  background:#fffdf8;box-shadow:0 34px 90px rgba(30,54,35,.2),0 4px 18px rgba(30,54,35,.08);
+}
+.ac-hero{background:#173622}
+.ac-hero::before{
+  background-image:url('assets/login-agronomo-pro-v3.webp');
+  background-position:56% center;transform:scale(1.008);
+}
+.ac-hero::after{
+  background:
+    linear-gradient(90deg,rgba(10,32,20,.88) 0%,rgba(10,32,20,.58) 38%,rgba(10,32,20,.12) 78%),
+    linear-gradient(180deg,rgba(9,29,18,.08) 22%,rgba(9,29,18,.25) 58%,rgba(9,29,18,.9) 100%);
+}
+.ac-story{padding:32px 38px 38px}
+.ac-story__brand{
+  padding:7px 13px 7px 7px;border-color:rgba(255,255,255,.2);border-radius:16px;
+  background:rgba(12,37,23,.58);box-shadow:0 14px 34px rgba(9,27,17,.22);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+}
+.ac-story__brand img{width:44px;height:44px;border:1px solid rgba(255,255,255,.2);border-radius:12px}
+.ac-story__brand b{color:#fff;font-size:1rem}
+.ac-story__brand span{color:rgba(255,255,255,.68);font-size:.64rem}
+.ac-story__copy{max-width:600px;padding-top:190px}
+.ac-story__tag{
+  padding:7px 12px;border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.14);color:#fff;backdrop-filter:blur(12px);
+}
+.ac-story__tag::before{background:#f6a24d;box-shadow:0 0 0 4px rgba(246,162,77,.18)}
+.ac-story h1{max-width:590px;font-size:clamp(2.8rem,4.4vw,4.25rem);line-height:.94;letter-spacing:-.055em;margin-bottom:18px;text-shadow:0 3px 26px rgba(6,22,13,.18)}
+.ac-story__lead{max-width:520px;color:rgba(255,255,255,.84);font-size:1.02rem;line-height:1.62}
+.ac-story__facts{gap:10px;margin-top:26px}
+.ac-story__fact{padding:13px 14px;border-color:rgba(255,255,255,.16);background:rgba(12,37,23,.43);backdrop-filter:blur(14px)}
+.ac-story__fact b{font-size:.92rem;letter-spacing:-.01em}
+.ac-story__fact span{font-size:.68rem;line-height:1.35}
+.ac-story__promise{margin-top:18px;color:rgba(255,255,255,.78)}
+.ac-course-stack{display:none}
+
+.ac-split .login-card{
+  position:relative;padding:48px clamp(38px,4.5vw,68px);background:#fffdf8;
+}
+.ac-split .login-card::before{
+  content:"";position:absolute;top:0;right:0;width:96px;height:6px;
+  border-radius:0 0 0 999px;background:linear-gradient(90deg,var(--field),var(--orange));
+}
+.login-logo{margin-bottom:30px}
+.logo-icon{width:48px;height:48px;border-radius:14px;box-shadow:0 8px 22px rgba(35,64,43,.16)}
+.logo-text h2{font-size:1.2rem}
+.logo-text p{font-size:.72rem}
+.back-site{padding:8px 10px;border:1px solid var(--line-new);border-radius:999px;background:#fff;font-size:.72rem;text-decoration:none!important;transition:border-color .2s,transform .2s}
+.back-site:hover{border-color:#b8c99e;transform:translateY(-1px)}
+.auth-tabs{margin-bottom:28px;padding:5px;border-radius:15px;background:#edf2e4}
+.auth-tab{padding:11px;border-radius:10px}
+.auth-view h3{font-size:clamp(1.75rem,2.3vw,2.15rem);margin-bottom:8px}
+.auth-kicker{margin-bottom:12px}
+.sub{margin-bottom:25px;font-size:.9rem}
+label{font-size:.78rem}
+input{min-height:49px;padding:13px 15px;border-radius:12px;background:#fff}
+.password-field input{padding-right:50px}
+.btn-login{min-height:50px;margin-top:9px;border-radius:13px;background:linear-gradient(135deg,#5c8c3a,#3f7429);box-shadow:0 12px 26px rgba(63,116,41,.23)}
+.btn-login:hover{background:linear-gradient(135deg,#507f32,#326521)}
+#btnRegistro{background:linear-gradient(135deg,#ee963e,#d97923)}
+.btn-google{min-height:48px;border-radius:13px}
+.auth-assurance{margin-top:16px}
+
+@media(max-width:900px){
+  body{padding:0!important}
+  .ac-split{grid-template-columns:1fr;min-height:100dvh;border:0;border-radius:0}
+  .ac-hero{min-height:460px}
+  .ac-hero::before{background-position:61% center}
+  .ac-hero::after{background:linear-gradient(180deg,rgba(10,32,20,.14) 8%,rgba(10,32,20,.3) 45%,rgba(10,32,20,.94) 100%)}
+  .ac-story{min-height:460px;padding:24px}
+  .ac-story__copy{padding-top:150px}
+  .ac-story h1{max-width:620px;font-size:clamp(2.6rem,9vw,4rem)}
+  .ac-story__lead{max-width:580px}
+  .ac-split .login-card{padding:38px max(22px,calc((100vw - 560px)/2)) 54px}
+}
+@media(max-width:520px){
+  .ac-hero{min-height:400px}
+  .ac-story{min-height:400px;padding:18px}
+  .ac-story__copy{padding-top:118px}
+  .ac-story h1{font-size:2.55rem;margin-bottom:13px}
+  .ac-story__lead{font-size:.88rem}
+  .ac-story__facts{display:none}
+  .ac-story__promise{display:flex;margin-top:14px;gap:7px 11px;font-size:.68rem}
+  .ac-story__brand img{width:38px;height:38px}
+  .ac-story__brand span{display:block}
+  .login-logo{margin-bottom:25px}
+  .back-site{padding:7px 9px}
+}
 </style>
 </head>
 <body>
@@ -396,23 +497,17 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
         <img src="assets/agrotec-logo-v2.jpg" alt="AgroTec America" width="42" height="42">
         <div><b>AgroClub MX</b><span>por AgroTec America</span></div>
       </div>
-      <div class="ac-course-stack" aria-hidden="true">
-        <span class="ac-course-stack__item"><img src="cursos-mini/curso-01.webp" alt=""></span>
-        <span class="ac-course-stack__item"><img src="cursos-mini/curso-07.webp" alt=""></span>
-        <span class="ac-course-stack__item"><img src="cursos-mini/curso-12.webp" alt=""></span>
-        <span class="ac-course-stack__more">+25</span>
-      </div>
       <div class="ac-story__copy">
-        <span class="ac-story__tag">Crece con conocimiento aplicado</span>
-        <h1>Tu próxima gran cosecha empieza aquí.</h1>
-        <p class="ac-story__lead">Convierte dudas del campo en decisiones más claras con capacitación especializada, herramientas prácticas y acompañamiento para seguir avanzando.</p>
+        <span class="ac-story__tag">Tu campo. Tu siguiente nivel.</span>
+        <h1>Conocimiento que se nota en cada cosecha.</h1>
+        <p class="ac-story__lead">Aprende con especialistas, fortalece tus decisiones y lleva nuevas ideas del aula directamente al campo.</p>
         <div class="ac-story__facts" aria-label="Beneficios del Club">
-          <div class="ac-story__fact"><b>28</b><span>rutas de aprendizaje</span></div>
-          <div class="ac-story__fact"><b>En vivo</b><span>aprende con expertos</span></div>
-          <div class="ac-story__fact"><b>Práctico</b><span>herramientas de campo</span></div>
+          <div class="ac-story__fact"><b>Cursos</b><span>enfocados en producción</span></div>
+          <div class="ac-story__fact"><b>Expertos</b><span>que conocen el campo</span></div>
+          <div class="ac-story__fact"><b>A tu ritmo</b><span>desde cualquier lugar</span></div>
         </div>
         <div class="ac-story__promise" aria-label="Cómo funciona">
-          <span>Aprende a tu ritmo</span><span>Aplica con materiales</span><span>Acredita tus avances</span>
+          <span>Aprende</span><span>Aplica</span><span>Evoluciona</span>
         </div>
       </div>
     </div>
@@ -466,7 +561,7 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
         <div class="logo-icon"><img src="assets/agrotec-logo-v2.jpg" alt="" width="46" height="46"></div>
         <div class="logo-text">
           <h2>AgroClub MX</h2>
-          <p>Portal de aprendizaje</p>
+          <p>La comunidad de AgroTec America</p>
         </div>
       </div>
       <a class="back-site" href="https://agrotecamerican.com">← Volver al sitio</a>
@@ -483,9 +578,9 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
 
     <!-- VIEW LOGIN -->
     <div class="auth-view active" id="viewLogin">
-      <span class="auth-kicker">Acceso para miembros</span>
-      <h3>Qué gusto verte de nuevo</h3>
-      <p class="sub">Tu aprendizaje, progreso y herramientas están listos para continuar.</p>
+      <span class="auth-kicker">Bienvenido a AgroClub</span>
+      <h3>Continúa donde lo dejaste</h3>
+      <p class="sub">Ingresa a tu espacio de aprendizaje y sigue avanzando a tu ritmo.</p>
 
       <div class="form-group">
         <label for="loginEmail">Correo electrónico</label>
@@ -522,9 +617,9 @@ input:focus{border-color:var(--field);box-shadow:0 0 0 4px rgba(92,140,58,.12)}
 
     <!-- VIEW REGISTRO -->
     <div class="auth-view" id="viewRegistro">
-      <span class="auth-kicker">Empieza sin costo</span>
-      <h3>Da el primer paso hoy</h3>
-      <p class="sub">Crea tu cuenta gratuita, conoce la experiencia y decide cuándo quieres desbloquear todo.</p>
+      <span class="auth-kicker">Únete a AgroClub</span>
+      <h3>Tu campo también puede avanzar</h3>
+      <p class="sub">Crea tu cuenta gratuita y descubre una forma más práctica de seguir aprendiendo.</p>
 
       <div class="free-banner">Cuenta gratuita · no necesitas tarjeta</div>
       <ul class="signup-benefits" aria-label="Ventajas de crear tu cuenta">
