@@ -1160,6 +1160,13 @@
       0%,100% { transform: scale(1); box-shadow: 0 4px 12px rgba(35,64,43,.45), 0 0 0 3px #fff; }
       50%     { transform: scale(1.08); box-shadow: 0 6px 18px rgba(35,64,43,.65), 0 0 0 3px #fff; }
     }
+    /* NUEVO: el primer curso lleva muestra gratis — badge verde en vez del candado VIP */
+    body.is-free .course-card--muestra::after {
+      content: '🎁 1 CLASE GRATIS';
+      background: linear-gradient(135deg, #15803d, #16a34a);
+      box-shadow: 0 4px 12px rgba(21,128,61,.45), 0 0 0 3px #fff;
+      animation: none;
+    }
     @keyframes lockPulse {
       0%,100% { transform: scale(1); box-shadow: 0 4px 12px rgba(251,191,36,.55), 0 0 0 3px #fff; }
       50%     { transform: scale(1.08); box-shadow: 0 6px 18px rgba(251,191,36,.75), 0 0 0 3px #fff; }
@@ -14214,9 +14221,10 @@ window.cerrarPaywallBg = function(e) {
         e.preventDefault();
         e.stopPropagation();
         cerrarPaywallModal();
-        // Abrir selector de plan (mensual o anual) antes de Stripe
-        if (typeof abrirSelectorPlan === 'function') {
-          abrirSelectorPlan();
+        // MODIFICADO: llevar a la pestaña Suscripción (planes + pago), como ICADEM
+        const sbSus = document.querySelector(".sidebar-item[onclick*='suscripcion']");
+        if (typeof showPage === 'function') {
+          showPage('suscripcion', sbSus || null);
         } else if (typeof abrirStripeCheckout === 'function') {
           abrirStripeCheckout('mensual');
         }
@@ -14680,18 +14688,106 @@ window.vipEnterClub = function() {
 
 // 2) Abrir curso (verDetalleCurso) — SE PERMITE VER, se bloquean las acciones dentro
 
-// 2a) Reproducir clase del curso — bloquear si free
+// 2a) Reproducir clase — bloquear si free EXCEPTO la clase muestra gratis
+// (lógica ICADEM: la primera clase del primer curso es gratis para todo el que entra)
+window.esClaseMuestraGratis = function(cursoId, numClase) {
+  try {
+    const lista = (CURSOS || []).slice()
+      .filter(c => Array.isArray(c.clases) && c.clases.length && c.activo !== false)
+      .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
+    if (!lista.length) return false;
+    if (String(lista[0].id) !== String(cursoId)) return false;
+    const nums = lista[0].clases.map(c => Number(c.num)).filter(n => !isNaN(n));
+    if (!nums.length) return false;
+    return Number(numClase) === Math.min.apply(null, nums);
+  } catch(e) { return false; }
+};
 (function() {
   const esperar = () => {
     const orig = window.reproducirClase;
     if (typeof orig !== 'function') { setTimeout(esperar, 300); return; }
-    window.reproducirClase = function(...args) {
-      if (!esVIPActivo()) { mostrarPaywallModal('curso'); return; }
-      return orig.apply(this, args);
+    window.reproducirClase = function(cursoId, numClase, ...rest) {
+      if (!esVIPActivo() && !window.esClaseMuestraGratis(cursoId, numClase)) {
+        // Auto-play al abrir el curso: NO aventar modal, pintar candado en el player
+        if (window.__autoplayCursoId != null && String(window.__autoplayCursoId) === String(cursoId)) {
+          const player = document.getElementById('video-player');
+          if (player) player.innerHTML = '<div style="min-height:360px;display:grid;place-items:center;padding:28px;text-align:center;background:#071a2f;border-radius:12px;color:#e2e8f0;"><div><div style="font-size:2.4rem;margin-bottom:10px;">\ud83d\udd12</div><strong>Contenido exclusivo VIP</strong><div style="margin-top:8px;font-size:.85rem;color:#94a3b8;">Suscr\u00edbete para reproducir todas las clases y materiales del club.</div><button onclick="mostrarPaywallModal(&quot;curso&quot;)" style="margin-top:16px;background:linear-gradient(135deg,#1a6b2f,#15803d);color:#fff;border:none;padding:11px 22px;border-radius:100px;font-weight:800;font-size:.85rem;cursor:pointer;">\u2728 Hazte miembro VIP</button></div></div>';
+          return;
+        }
+        mostrarPaywallModal('curso');
+        return;
+      }
+      return orig.apply(this, [cursoId, numClase, ...rest]);
     };
   };
   esperar();
 })();
+
+// 2a-bis) verCurso — al abrir un curso siendo FREE: autoplay silencioso +
+// candados en la lista de clases (badge GRATIS en la muestra) + bloquear
+// descarga de materiales. El temario queda libre (igual que ICADEM).
+(function() {
+  const esperar = () => {
+    const orig = window.verCurso;
+    if (typeof orig !== 'function') { setTimeout(esperar, 300); return; }
+    window.verCurso = function(cursoId, ...rest) {
+      window.__autoplayCursoId = cursoId;
+      const r = orig.apply(this, [cursoId, ...rest]);
+      window.__autoplayCursoId = null;
+      if (!esVIPActivo()) { try { decorarCursoFree(cursoId); } catch(e) { console.warn('decorarCursoFree:', e); } }
+      return r;
+    };
+  };
+  esperar();
+
+  function decorarCursoFree(cursoId) {
+    const curso = (CURSOS || []).find(c => String(c.id) === String(cursoId));
+    if (!curso) return;
+    (curso.clases || []).forEach(cl => {
+      const row = document.getElementById('clase-' + cl.num);
+      if (!row) return;
+      if (window.esClaseMuestraGratis(cursoId, cl.num)) {
+        const meta = row.querySelector('.clase-meta');
+        if (meta && !row.querySelector('.badge-clase-gratis')) {
+          const b = document.createElement('span');
+          b.className = 'badge-clase-gratis';
+          b.textContent = 'GRATIS';
+          b.style.cssText = 'display:inline-block;margin-left:8px;background:#dcfce7;color:#15803d;font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:100px;letter-spacing:.04em;';
+          meta.appendChild(b);
+        }
+      } else {
+        const num = row.querySelector('.clase-num');
+        if (num) num.textContent = '\ud83d\udd12';
+      }
+    });
+    document.querySelectorAll('#lista-materiales-curso .material-item a').forEach(a => {
+      const btn = a.querySelector('button');
+      if (btn) { btn.innerHTML = '\ud83d\udd12 Solo VIP'; btn.style.background = '#9ca3af'; btn.style.cursor = 'pointer'; }
+      a.removeAttribute('href');
+      a.removeAttribute('target');
+      a.addEventListener('click', ev => { ev.preventDefault(); mostrarPaywallModal('curso'); });
+    });
+  }
+})();
+
+// 2a-ter) Card del primer curso en Inicio/Biblioteca: cambiar el candado
+// "VIP" por "1 CLASE GRATIS" (solo usuarios free)
+const __origRenderCursos = renderCursos;
+renderCursos = function() {
+  __origRenderCursos.apply(this, arguments);
+  if (esVIPActivo()) return;
+  try {
+    const lista = (CURSOS || []).slice()
+      .filter(c => Array.isArray(c.clases) && c.clases.length && c.activo !== false)
+      .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
+    if (!lista.length) return;
+    const idGratis = String(lista[0].id);
+    document.querySelectorAll('.course-card').forEach(card => {
+      const oc = card.getAttribute('onclick') || '';
+      card.classList.toggle('course-card--muestra', oc.indexOf("'" + idGratis + "'") !== -1);
+    });
+  } catch(e) {}
+};
 
 // 2b) Marcar clase como completada — bloquear si free
 (function() {
