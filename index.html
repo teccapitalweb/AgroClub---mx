@@ -1215,30 +1215,22 @@
     }
     .free-cta-section__btn:hover { transform: translateY(-1px); }
 
-    /* INPUTS BLOQUEADOS para usuarios FREE en herramientas y apoyos */
+    /* USUARIO FREE: los campos quedan ABIERTOS a propósito.
+       Puede llenar la calculadora, elegir cultivo, escribir lo que quiera…
+       y el cobro sale hasta que aprieta el botón que le entregaría el
+       resultado (calcular / diagnosticar / guardar). Nada de campos muertos. */
     body.is-free #page-herramientas input,
     body.is-free #page-herramientas select,
     body.is-free #page-herramientas textarea,
-    body.is-free #page-apoyos select,
-    body.is-free #foro-modal input,
-    body.is-free #foro-modal textarea,
-    body.is-free #modal-parcela input,
-    body.is-free #modal-parcela select,
-    body.is-free #modal-evento input,
-    body.is-free #modal-evento textarea {
-      pointer-events: none;
-      opacity: .65;
-      cursor: not-allowed;
-      /* MODIFICADO: tono honey del sistema unificado (antes rgba(251,191,36,.2)) */
-      background-image: linear-gradient(45deg, transparent 48%, rgba(217,164,60,.22) 48%, rgba(217,164,60,.22) 52%, transparent 52%);
-      background-size: 10px 10px;
+    body.is-free #page-apoyos select {
+      pointer-events: auto;
+      opacity: 1;
+      cursor: auto;
     }
     body.is-free #page-herramientas .herr-btn-pri,
-    body.is-free #page-herramientas .herr-chip {
-      pointer-events: auto; /* Sí permitir click para disparar paywall */
-    }
+    body.is-free #page-herramientas .herr-chip,
     body.is-free #page-herramientas .herr-tab {
-      pointer-events: auto; /* que pueda cambiar tabs para ver */
+      pointer-events: auto;
       opacity: 1;
     }
 
@@ -11410,43 +11402,92 @@ function loadCursosFirebase() {
 // ── RENDER CURSOS ──
 
 // ═══════════════════════════════════════════════════════════════════════
-// SISTEMA DE DESBLOQUEO ESCALONADO POR USUARIO
+// SISTEMA DE DESBLOQUEO SECUENCIAL POR AVANCE
 // ═══════════════════════════════════════════════════════════════════════
-// Cada curso se desbloquea individualmente según la fechaRegistro del socio.
-// - Curso con orden 1 → disponible desde día 0 (día que pagó)
-// - Curso con orden 2 → +15 días desde fechaRegistro
-// - Curso con orden N → +(N-1)*15 días desde fechaRegistro
-// - Si el curso tiene fechaDesbloqueo (fecha manual global), esa prevalece.
+// Ya NO se desbloquea por días transcurridos. El socio avanza a su ritmo:
+// - El primer curso de la secuencia (menor "orden") siempre está abierto.
+// - El curso N se abre en cuanto queda 100% completado todo lo anterior.
+// - Sin fechas de por medio: si lo terminas hoy, se desbloquea hoy.
 // ═══════════════════════════════════════════════════════════════════════
-const DIAS_ENTRE_CURSOS = 8;
 
-// Calcula la fecha de desbloqueo de un curso para el usuario actual
-// Retorna: Date | null  (null = disponible desde siempre)
-function calcularFechaDesbloqueo(curso) {
-  // Prioridad 1: fecha manual global (override para casos especiales)
-  if (curso.fechaDesbloqueo) {
-    return new Date(curso.fechaDesbloqueo + 'T00:00:00');
+// Secuencia oficial de cursos (única fuente de verdad del orden)
+function cursosEnOrden() {
+  const base = (typeof CURSOS !== 'undefined' && Array.isArray(CURSOS)) ? CURSOS : [];
+  return base.slice()
+    .filter(c => c && c.activo !== false)
+    .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
+}
+window.cursosEnOrden = cursosEnOrden;
+
+// Clases marcadas como vistas en un curso
+function clasesVistasDe(curso) {
+  if (!curso) return 0;
+  try { return (progreso[curso.id] || []).length; } catch(e) { return 0; }
+}
+
+// ¿El curso quedó 100% completado?
+function cursoCompletado(curso) {
+  const total = (curso && curso.clases) ? curso.clases.length : 0;
+  if (total === 0) return false;
+  return clasesVistasDe(curso) >= total;
+}
+window.cursoCompletado = cursoCompletado;
+
+// Curso siguiente dentro de la secuencia (null si es el último)
+function cursoSiguienteDe(curso) {
+  if (!curso) return null;
+  const lista = cursosEnOrden();
+  const i = lista.findIndex(c => String(c.id) === String(curso.id));
+  if (i < 0 || i + 1 >= lista.length) return null;
+  return lista[i + 1];
+}
+window.cursoSiguienteDe = cursoSiguienteDe;
+
+// Primer curso sin terminar que está ANTES de este en la secuencia.
+// null = no le falta nada pendiente → el curso está abierto.
+function primerPendienteAntesDe(curso) {
+  if (!curso) return null;
+  const lista = cursosEnOrden();
+  const i = lista.findIndex(c => String(c.id) === String(curso.id));
+  if (i <= 0) return null;                        // primer curso → siempre disponible
+  for (let k = 0; k < i; k++) {
+    if (!cursoCompletado(lista[k])) return lista[k];
   }
-  // Prioridad 2: orden + fechaRegistro del usuario
-  const usuario = window.currentUser;
-  if (!usuario || !usuario.fechaRegistro) return null; // sin usuario → no bloquear
-  if (!curso.orden || curso.orden <= 1) return null;   // orden 1 o sin orden → disponible ya
-
-  const base = new Date(usuario.fechaRegistro);
-  base.setHours(0,0,0,0);
-  const diasAEsperar = (curso.orden - 1) * DIAS_ENTRE_CURSOS;
-  const fechaDesbloqueo = new Date(base);
-  fechaDesbloqueo.setDate(fechaDesbloqueo.getDate() + diasAEsperar);
-  return fechaDesbloqueo;
+  return null;
 }
+window.primerPendienteAntesDe = primerPendienteAntesDe;
 
-// ¿El curso está bloqueado para el usuario actual HOY?
+// ¿El curso está bloqueado para el usuario actual?
 function estaCursoBloqueadoParaUsuario(curso) {
-  const fd = calcularFechaDesbloqueo(curso);
-  if (!fd) return false;
-  const hoy = new Date(); hoy.setHours(0,0,0,0);
-  return fd > hoy;
+  if (!curso) return false;
+  return !!primerPendienteAntesDe(curso);
 }
+window.estaCursoBloqueadoParaUsuario = estaCursoBloqueadoParaUsuario;
+
+// Qué le falta al socio para abrir este curso (para candados y modales)
+function requisitoDesbloqueo(curso) {
+  const pendiente = primerPendienteAntesDe(curso);
+  if (!pendiente) return null;
+  const total  = (pendiente.clases || []).length;
+  const vistas = clasesVistasDe(pendiente);
+  return {
+    curso: pendiente,
+    titulo: pendiente.titulo || 'el curso anterior',
+    total: total,
+    vistas: vistas,
+    faltan: Math.max(0, total - vistas)
+  };
+}
+window.requisitoDesbloqueo = requisitoDesbloqueo;
+
+// Helper tolerante: esVIPActivo se define más abajo en el archivo
+function _esVIP() {
+  return (typeof esVIPActivo === 'function') ? !!esVIPActivo() : false;
+}
+
+// Compat: código viejo todavía pregunta por la fecha de desbloqueo.
+// Ya no existen fechas; se conserva el nombre devolviendo null.
+function calcularFechaDesbloqueo(curso) { return null; }
 
 function renderCursos() {
   const hoy = new Date();
@@ -11461,15 +11502,15 @@ function renderCursos() {
     const totalClases  = (c.clases || []).length;
     const pct = totalClases > 0 ? Math.round(clasesVistas / totalClases * 100) : 0;
 
-    let bloqueado = false;
-    let fechaTexto = '';
-    const fdPersonal = calcularFechaDesbloqueo(c);
-    if (fdPersonal) {
-      if (fdPersonal > hoy) {
-        bloqueado = true;
-        fechaTexto = fdPersonal.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
-      }
-    }
+    // Bloqueo secuencial (ya no hay fechas). El motivo del candado depende
+    // de quién mira: al VIP le falta terminar el curso previo; al free, pagar.
+    const bloqueado = estaBloqueado(c);
+    const esVIPUser = _esVIP();
+    const req = bloqueado ? requisitoDesbloqueo(c) : null;
+    const motivoCorto = !bloqueado ? '' : (esVIPUser ? 'Termina el curso anterior' : 'Hazte VIP para continuar');
+    const motivoLargo = !bloqueado ? '' : ((esVIPUser && req)
+      ? `Completa «${req.titulo}» (${req.vistas}/${req.total})`
+      : 'Suscríbete para desbloquear');
 
     const imgTag = c.foto
       ? `<img src="${c.foto}" alt="${c.titulo}" loading="lazy">`
@@ -11479,16 +11520,16 @@ function renderCursos() {
 
     /* MODIFICADO: markup de presentación de la tarjeta (chip de categoría en la cabecera,
        candado de calendario con círculo). Ningún dato ni cálculo cambia: mismos c.categoria,
-       c.titulo, c.descripcion, totalClases, pct, bloqueado, fechaTexto de siempre. */
+       c.titulo, c.descripcion, totalClases, pct y el estado de bloqueo. */
     return `
-    <div class="course-card" onclick="${bloqueado ? '' : `verCurso('${c.id}')`}" style="${bloqueado ? 'cursor:default;' : ''}">
+    <div class="course-card" onclick="verCurso('${c.id}')">
       <div class="course-thumb" style="${thumbBg}">
         ${imgTag}
         ${c.categoria ? `<span class="course-thumb-chip">${c.categoria}</span>` : ''}
         ${bloqueado ? `
           <div class="course-locked-overlay">
             <span class="lock-circle">🔒</span>
-            <span class="lock-date">Disponible el ${fechaTexto}</span>
+            <span class="lock-date">${motivoCorto}</span>
           </div>
         ` : `
           <span class="course-badge">${totalClases} clases</span>
@@ -11502,8 +11543,8 @@ function renderCursos() {
         <div class="course-desc">${c.descripcion || ''}</div>
         <div class="course-meta">
           ${bloqueado
-            ? `<span class="course-clases" style="color:#b91c1c;">🔒 Próximamente</span>
-               <button class="btn-ver-curso" style="background:#9ca3af;cursor:default;" disabled>Bloqueado</button>`
+            ? `<span class="course-clases" style="color:#b45309;">🔒 ${motivoLargo}</span>
+               <button class="btn-ver-curso" style="background:#9ca3af;">🔒 Bloqueado</button>`
             : `<span class="course-clases">📹 ${totalClases} clases${pct > 0 ? ' · '+pct+'% completado' : ''}</span>
                <button class="btn-ver-curso">▶ Ver curso</button>`
           }
@@ -11512,8 +11553,12 @@ function renderCursos() {
     </div>`;
   };
 
-  // INICIO: solo cursos desbloqueados (lo que puede consumir ya), máx 4 + botón ver más
-  const cursosDesbloqueados = CURSOS.filter(c => !estaBloqueado(c));
+  // INICIO: lo que ya puede consumir + el siguiente paso de la ruta como
+  // anzuelo. Ese candado es justo donde el usuario free se topa con el cobro.
+  const secuencia = cursosEnOrden();
+  const cursosDesbloqueados = secuencia.filter(c => !estaBloqueado(c));
+  const siguientePaso = secuencia.find(c => estaBloqueado(c));
+  const cursosInicio = siguientePaso ? cursosDesbloqueados.concat([siguientePaso]) : cursosDesbloqueados;
   const inicioCursos = document.getElementById("inicio-cursos");
   if (inicioCursos) {
     if (cursosDesbloqueados.length === 0) {
@@ -11524,8 +11569,8 @@ function renderCursos() {
           <div style="color:var(--muted);font-size:.88rem;">Revisa la <a href="#" onclick="showPage('cursos',document.querySelector('[onclick*=cursos]'));return false;" style="color:var(--verde);font-weight:600;text-decoration:underline;">Biblioteca de cursos</a> para ver lo que viene próximamente.</div>
         </div>`;
     } else {
-      const primeros4 = cursosDesbloqueados.slice(0, 4);
-      const restantes = cursosDesbloqueados.length - 4;
+      const primeros4 = cursosInicio.slice(0, 4);
+      const restantes = CURSOS.length - primeros4.length;
       let html = primeros4.map(renderCard).join("");
       if (restantes > 0) {
         html += `
@@ -11541,8 +11586,8 @@ function renderCursos() {
     }
   }
 
-  // BIBLIOTECA: todos los cursos (desbloqueados primero, luego bloqueados por fecha)
-  // 🚨 FIX BUG 2: ordenar por desbloqueo + fecha
+  // BIBLIOTECA: todos los cursos (disponibles primero, luego los que faltan por completar)
+  // Orden: desbloqueados arriba y, dentro de cada grupo, la secuencia del temario
   const listaCursos = document.getElementById("lista-cursos");
   if (listaCursos) {
     const cursosOrdenados = [...CURSOS].sort((a, b) => {
@@ -11550,13 +11595,8 @@ function renderCursos() {
       const bBloq = estaBloqueado(b);
       // 1. Desbloqueados primero
       if (aBloq !== bBloq) return aBloq ? 1 : -1;
-      // 2. Dentro del mismo grupo, ordenar por fecha de desbloqueo (más cercana primero)
-      const fa = calcularFechaDesbloqueo(a);
-      const fb = calcularFechaDesbloqueo(b);
-      if (fa && fb) return fa - fb;
-      if (fa) return -1;
-      if (fb) return 1;
-      return 0;
+      // 2. Dentro del mismo grupo, respetar la secuencia del temario
+      return (Number(a.orden) || 9999) - (Number(b.orden) || 9999);
     });
     listaCursos.innerHTML = cursosOrdenados.map(renderCard).join("");
   }
@@ -11646,9 +11686,10 @@ window.verCurso = function(cursoId) {
   // 🚨 FIX BUG 4: validar que el curso NO esté bloqueado (seguridad)
   // Esto previene que alguien manipule el DOM o llame verCurso() desde consola
   if (typeof estaCursoBloqueadoParaUsuario === 'function' && estaCursoBloqueadoParaUsuario(curso)) {
-    const fd = calcularFechaDesbloqueo(curso);
-    const fechaTexto = fd ? fd.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : 'próximamente';
-    mostrarCursoBloqueadoModal(curso, fechaTexto);
+    // Free: lo que le falta es la suscripción → paywall en el momento del click.
+    // VIP: lo que le falta es terminar el curso previo → modal de secuencia.
+    if (!_esVIP()) { mostrarPaywallModal('curso'); return; }
+    mostrarCursoBloqueadoModal(curso);
     return;
   }
 
@@ -11827,9 +11868,10 @@ window.reproducirClase = async function(cursoId, numClase) {
 
   // 🚨 FIX BUG 4: validar bloqueo antes de reproducir
   if (curso && typeof estaCursoBloqueadoParaUsuario === 'function' && estaCursoBloqueadoParaUsuario(curso)) {
-    const fd = calcularFechaDesbloqueo(curso);
-    const fechaTexto = fd ? fd.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : 'próximamente';
-    mostrarCursoBloqueadoModal(curso, fechaTexto);
+    // Free: lo que le falta es la suscripción → paywall en el momento del click.
+    // VIP: lo que le falta es terminar el curso previo → modal de secuencia.
+    if (!_esVIP()) { mostrarPaywallModal('curso'); return; }
+    mostrarCursoBloqueadoModal(curso);
     return;
   }
 
@@ -11890,6 +11932,9 @@ window.reproducirClase = async function(cursoId, numClase) {
     btn.dataset.cursoId  = cursoId;
     btn.dataset.numClase = numClase;
   }
+
+  // La clase se marca sola si se queda viéndola (ver programarMarcadoAuto)
+  programarMarcadoAuto(cursoId, numClase);
 };
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -12141,6 +12186,30 @@ function actualizarBtnCompletar(cursoId, numClase, completada) {
   btn.dataset.numClase = numClase;
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// MARCADO AUTOMÁTICO DE CLASES
+// ═══════════════════════════════════════════════════════════════════════
+// La ruta avanza al completar cursos, así que no puede depender de que el
+// socio se acuerde de palomear cada clase. Se marca sola cuando lleva un
+// rato con la clase abierta; el margen evita que se "pase" la ruta a puros
+// clicks. Bájalo a 0 si prefieres que cuente en cuanto le da play.
+const SEG_MARCADO_AUTO = 45;
+let _timerMarcadoAuto = null;
+
+function programarMarcadoAuto(cursoId, numClase) {
+  clearTimeout(_timerMarcadoAuto);           // cambiar de clase cancela la anterior
+  if (!currentUser) return;
+  // El usuario free solo ve la clase muestra: esa no cuenta como avance.
+  if (typeof esVIPActivo === 'function' && !esVIPActivo()) return;
+  if ((progreso[cursoId] || []).includes(numClase)) return;   // ya estaba vista
+
+  _timerMarcadoAuto = setTimeout(function() {
+    // Revalidar: pudo palomearla a mano mientras corría el tiempo
+    if ((progreso[cursoId] || []).includes(numClase)) return;
+    marcarClase(cursoId, numClase);
+  }, SEG_MARCADO_AUTO * 1000);
+}
+
 function marcarClase(cursoId, numClase) {
   if (!currentUser) return;
   if (!progreso[cursoId]) progreso[cursoId] = [];
@@ -12161,6 +12230,9 @@ function marcarClase(cursoId, numClase) {
 
   setDoc(doc(db, "progreso", currentUser.uid), progreso);
   updateProgreso();
+  // Desbloqueo secuencial: repintar las tarjetas para que el siguiente curso
+  // se abra (o se cierre, si se desmarcó una clase) en el momento.
+  if (typeof renderCursos === 'function') { try { renderCursos(); } catch(e) {} }
   actualizarEstadisticasPerfil();
   actualizarBtnCompletar(cursoId, numClase, completada);
   if (typeof actualizarStatsCurso === 'function') actualizarStatsCurso(cursoId);
@@ -12172,6 +12244,13 @@ function marcarClase(cursoId, numClase) {
   // 🎉 FIESTA si llegó al 100%
   if (llegaAl100) {
     setTimeout(() => celebrarCurso100(cursoId), 300);
+    // 🔓 Avisar que la secuencia avanzó: el siguiente curso ya quedó abierto
+    try {
+      const siguiente = (typeof cursoSiguienteDe === 'function') ? cursoSiguienteDe(curso) : null;
+      if (siguiente && typeof foroToast === 'function') {
+        setTimeout(() => foroToast('🔓 Desbloqueaste «' + siguiente.titulo + '»'), 2600);
+      }
+    } catch(e) {}
   } else if (completada) {
     // Mini confetti al marcar cualquier clase
     miniConfetti();
@@ -14692,7 +14771,7 @@ window.vipEnterClub = function() {
 // (lógica ICADEM: la primera clase del primer curso es gratis para todo el que entra)
 window.esClaseMuestraGratis = function(cursoId, numClase) {
   try {
-    const lista = (CURSOS || []).slice()
+    const lista = (typeof cursosEnOrden === 'function' ? cursosEnOrden() : (CURSOS || []).slice())
       .filter(c => Array.isArray(c.clases) && c.clases.length && c.activo !== false)
       .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
     if (!lista.length) return false;
@@ -14777,7 +14856,7 @@ renderCursos = function() {
   __origRenderCursos.apply(this, arguments);
   if (esVIPActivo()) return;
   try {
-    const lista = (CURSOS || []).slice()
+    const lista = (typeof cursosEnOrden === 'function' ? cursosEnOrden() : (CURSOS || []).slice())
       .filter(c => Array.isArray(c.clases) && c.clases.length && c.activo !== false)
       .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
     if (!lista.length) return;
@@ -14886,6 +14965,7 @@ renderCursos = function() {
       if (!esVIPActivo()) {
         const res = document.getElementById('conv-resultados');
         if (res) res.innerHTML = '<div style="text-align:center;padding:30px 20px;color:#92400e;"><div style="font-size:2.5rem;margin-bottom:10px;">🔒</div><div style="font-weight:800;margin-bottom:4px;">Conversor bloqueado</div><div style="font-size:.85rem;">Suscríbete para calcular conversiones ilimitadas</div></div>';
+        mostrarPaywallModal('herramientas');
         return;
       }
       return orig.apply(this, args);
@@ -14927,15 +15007,8 @@ renderCursos = function() {
   }, true);
 })();
 
-// 12) Bloquear los filtros/selects de Apoyos también
-(function() {
-  document.addEventListener('change', (e) => {
-    if ((e.target.id === 'apoyo-filtro-estado' || e.target.id === 'apoyo-filtro-tipo') && !esVIPActivo()) {
-      e.target.value = ''; // resetear
-      mostrarPaywallModal('apoyos');
-    }
-  }, true);
-})();
+// 12) Apoyos: los filtros quedan libres (explorar no cuesta). El cobro se
+//     dispara en el punto 11, al intentar abrir la ficha oficial del apoyo.
 
 // 13) Calcular costos
 (function() {
@@ -16190,6 +16263,9 @@ window.ejecutarDiagnostico = function() {
 
   const sintoma = sintomaBtn.dataset.val;
   const zona = zonaBtn.dataset.val;
+
+  // Ya llenó todo y está a un paso del diagnóstico: aquí sí aparece el cobro.
+  if (typeof esVIPActivo === 'function' && !esVIPActivo()) return mostrarPaywallModal('herramientas');
 
   // Buscar coincidencia exacta → parcial → genérica
   let match = DIAG_DB.find(d => d.cultivo === cultivo && d.sintoma === sintoma && (d.zona === zona || d.zona === '*'));
@@ -17630,7 +17706,7 @@ function renderLogros() {
 }
 
 // 🔒 Modal bonito cuando el usuario intenta abrir un curso bloqueado
-window.mostrarCursoBloqueadoModal = function(curso, fechaTexto) {
+window.mostrarCursoBloqueadoModal = function(curso) {
   // Eliminar viejo si existe
   const old = document.getElementById('_curso-bloqueado-modal');
   if (old) old.remove();
@@ -17638,6 +17714,7 @@ window.mostrarCursoBloqueadoModal = function(curso, fechaTexto) {
   const tituloCurso = (curso && curso.titulo) ? curso.titulo : 'Este curso';
   const emojiCurso = (curso && curso.emoji) ? curso.emoji : '📚';
   const categoriaCurso = (curso && curso.categoria) ? curso.categoria : '';
+  const req = (typeof requisitoDesbloqueo === 'function') ? requisitoDesbloqueo(curso) : null;
 
   const modal = document.createElement('div');
   modal.id = '_curso-bloqueado-modal';
@@ -17648,15 +17725,19 @@ window.mostrarCursoBloqueadoModal = function(curso, fechaTexto) {
       <div class="curso-bloq-icon-wrap">
         <div class="curso-bloq-icon">🔒</div>
       </div>
-      <div class="curso-bloq-kicker">PRÓXIMAMENTE</div>
+      <div class="curso-bloq-kicker">SIGUIENTE EN TU RUTA</div>
       <h3 class="curso-bloq-titulo">${escHtml(tituloCurso)}</h3>
       ${categoriaCurso ? `<div class="curso-bloq-categoria">${emojiCurso} ${escHtml(categoriaCurso)}</div>` : ''}
+      ${req ? `
       <div class="curso-bloq-fecha-card">
-        <div class="curso-bloq-fecha-label">📅 SE DESBLOQUEARÁ EL</div>
-        <div class="curso-bloq-fecha">${escHtml(fechaTexto)}</div>
-      </div>
-      <p class="curso-bloq-desc">Estamos preparando este curso para ti. Te avisaremos cuando esté disponible.</p>
-      <button class="curso-bloq-btn" onclick="cerrarCursoBloqueadoModal()">Entendido</button>
+        <div class="curso-bloq-fecha-label">🔓 SE ABRE AL TERMINAR</div>
+        <div class="curso-bloq-fecha" style="font-size:1.05rem;line-height:1.35;">${escHtml(req.titulo)}</div>
+        <div style="margin-top:6px;font-size:.82rem;font-weight:700;opacity:.85;">Llevas ${req.vistas} de ${req.total} clases · te faltan ${req.faltan}</div>
+      </div>` : ''}
+      <p class="curso-bloq-desc">Avanza a tu ritmo: en cuanto completes lo anterior, este curso se desbloquea al instante.</p>
+      ${req
+        ? `<button class="curso-bloq-btn" onclick="cerrarCursoBloqueadoModal(); verCurso('${String(req.curso.id).replace(/'/g, "\\'")}')">▶ Ir a ese curso</button>`
+        : `<button class="curso-bloq-btn" onclick="cerrarCursoBloqueadoModal()">Entendido</button>`}
     </div>
   `;
   document.body.appendChild(modal);

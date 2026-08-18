@@ -690,18 +690,15 @@ onSnapshot(collection(db, "cursos"), (snap) => {
     return;
   }
 
-  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  // Los cursos se abren en secuencia: el socio termina uno y se le abre el
+  // siguiente. Aquí se listan en ese mismo orden para verlo como lo ve él.
+  cursos.sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
 
   lista.innerHTML = cursos.map(c => {
-    let estado = '✅ Disponible';
-    let estadoColor = 'var(--verde)';
-    if (c.fechaDesbloqueo) {
-      const fd = new Date(c.fechaDesbloqueo + 'T00:00:00');
-      if (fd > hoy) {
-        estado = '🔒 Bloqueado hasta ' + fd.toLocaleDateString('es-MX', {day:'numeric',month:'short',year:'numeric'});
-        estadoColor = '#b91c1c';
-      }
-    }
+    const paso = Number(c.orden) || null;
+    let estado = paso ? ('🔢 Paso ' + paso + ' de la ruta') : '⚠️ Sin orden asignado (queda al final)';
+    let estadoColor = paso ? 'var(--verde)' : '#b45309';
+    if (paso === 1) estado = '🎁 Paso 1 · abierto para todos (1ª clase gratis)';
     return `
     <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);">
       <div style="width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#e8f5e9;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">
@@ -754,9 +751,9 @@ window.abrirModalCurso = function(curso = null) {
           <textarea id="_c-desc" placeholder="Aprende a producir biofertilizantes de alta calidad..." style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;resize:vertical;min-height:70px;">${curso?.descripcion||''}</textarea>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;">
-          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">🔒 Fecha de desbloqueo</label>
-          <input id="_c-fecha" type="date" value="${curso?.fechaDesbloqueo||''}" style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;">
-          <span style="font-size:.72rem;color:#9aaa94;">Dejar vacío = disponible ya</span>
+          <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">🔢 Orden en la ruta</label>
+          <input id="_c-orden" type="number" min="1" step="1" value="${curso?.orden||''}" placeholder="1, 2, 3..." style="padding:10px 14px;border:1.5px solid #e2e8dc;border-radius:10px;font-size:.9rem;outline:none;">
+          <span style="font-size:.72rem;color:#9aaa94;">El 1 se abre para todos. Cada curso se desbloquea al terminar el anterior.</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;">
           <label style="font-size:.78rem;font-weight:600;color:#6b7a65;">Color de fondo (si no hay foto)</label>
@@ -790,7 +787,8 @@ window.guardarCurso = async function() {
     emoji:           document.getElementById('_c-emoji').value.trim(),
     foto:            document.getElementById('_c-foto').value.trim(),
     descripcion:     document.getElementById('_c-desc').value.trim(),
-    fechaDesbloqueo: document.getElementById('_c-fecha').value || null,
+    orden:           parseInt(document.getElementById('_c-orden').value, 10) || null,
+    fechaDesbloqueo: null, // jubilado: el desbloqueo ya no depende de fechas
     color:           document.getElementById('_c-color').value,
     clases:          _cursoEditId ? undefined : [],
     updatedAt:       new Date().toISOString()
