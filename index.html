@@ -11813,7 +11813,7 @@ function actualizarStatsCurso(cursoId) {
 window.actualizarStatsCurso = actualizarStatsCurso;
 
 // ── REPRODUCIR CLASE ──
-window.reproducirClase = function(cursoId, numClase) {
+window.reproducirClase = async function(cursoId, numClase) {
   const curso = CURSOS.find(c => c.id === cursoId);
   const clase = curso?.clases.find(c => c.num === numClase);
   if (!clase) return;
@@ -11831,11 +11831,46 @@ window.reproducirClase = function(cursoId, numClase) {
   const claseEl = document.getElementById(`clase-${numClase}`);
   if (claseEl) claseEl.classList.add("active");
 
-  // Embed Google Drive video
-  const embedUrl = `https://drive.google.com/file/d/${clase.driveId}/preview`;
-  document.getElementById("video-player").innerHTML = `
-    <iframe src="${embedUrl}" allow="autoplay" allowfullscreen></iframe>
-  `;
+  // Reproductor Bunny protegido. Los cursos antiguos conservan Drive como respaldo.
+  const player = document.getElementById("video-player");
+  if (!player) return;
+
+  if (clase.videoId) {
+    player.innerHTML = '<div style="min-height:360px;display:grid;place-items:center;color:#64748b;background:#071a2f;border-radius:12px;">⏳ Preparando clase segura...</div>';
+    try {
+      const usuarioAuth = auth.currentUser;
+      if (!usuarioAuth) throw new Error('Tu sesión expiró. Vuelve a iniciar sesión.');
+      const idToken = await usuarioAuth.getIdToken();
+      const respuesta = await fetch(`${WEBHOOK_URL}/api/bunny/embed-token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`
+        },
+        body: JSON.stringify({ videoId: clase.videoId })
+      });
+      const data = await respuesta.json().catch(() => ({}));
+      if (respuesta.status === 403) {
+        player.innerHTML = '';
+        mostrarPaywallModal('curso');
+        return;
+      }
+      if (!respuesta.ok || !data.embedUrl) {
+        throw new Error(data.error || `No se pudo abrir la clase (HTTP ${respuesta.status})`);
+      }
+      player.innerHTML = `<iframe src="${data.embedUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    } catch (error) {
+      console.error('[Bunny player]', error);
+      player.innerHTML = `<div style="min-height:360px;display:grid;place-items:center;padding:28px;text-align:center;color:#fecaca;background:#071a2f;border-radius:12px;"><div><div style="font-size:2rem;margin-bottom:10px;">⚠️</div><strong>No pudimos abrir esta clase</strong><div style="margin-top:8px;font-size:.85rem;">${String(error.message || error).replace(/[<>&]/g, '')}</div></div></div>`;
+      return;
+    }
+  } else if (clase.driveId) {
+    const embedUrl = `https://drive.google.com/file/d/${clase.driveId}/preview`;
+    player.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  } else {
+    player.innerHTML = '<div style="min-height:360px;display:grid;place-items:center;color:#fecaca;background:#071a2f;border-radius:12px;">⚠️ Esta clase aún no tiene video configurado.</div>';
+    return;
+  }
 
   // Mostrar botón marcar completada con estado actual
   const wrap = document.getElementById("btn-completar-wrap");
