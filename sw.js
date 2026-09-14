@@ -1,5 +1,5 @@
-const CACHE = 'agroclub-v2-colibri';
-const SHELL = ['./', './index.html', './login.html', './manifest.json',
+const CACHE = 'agroclub-v3-curso-bienvenida';
+const SHELL = ['./membership-tour.js', './membership-tour.css', './lesson-access.js', './', './index.html', './login.html', './manifest.json',
   './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png',
   './pwa-logo.png', './assets/agroclub-colibri-v5.png'];
 
