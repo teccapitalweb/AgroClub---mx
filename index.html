@@ -986,6 +986,11 @@
       transition: transform .15s;
     }
     .paywall-banner__btn:hover { transform: translateY(-1px) scale(1.03); }
+    @media(max-width:600px) {
+      .paywall-banner {padding:9px 12px;gap:8px;font-size:.75rem;flex-wrap:nowrap;text-align:left;line-height:1.45;}
+      .paywall-banner__icon {display:none;}
+      .paywall-banner__btn {flex-shrink:0;padding:8px 11px;font-size:.73rem;}
+    }
 
     /* Modal paywall cuando intenta hacer algo bloqueado */
     .paywall-modal {
@@ -1162,7 +1167,7 @@
     }
     /* NUEVO: el primer curso lleva muestra gratis — badge verde en vez del candado VIP */
     body.is-free .course-card--muestra::after {
-      content: '🎁 1 CLASE GRATIS';
+      content: '🎁 CURSO GRATIS*';
       background: linear-gradient(135deg, #15803d, #16a34a);
       box-shadow: 0 4px 12px rgba(21,128,61,.45), 0 0 0 3px #fff;
       animation: none;
@@ -7041,6 +7046,9 @@
     <!-- Canvas-confetti para celebración al 100% -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
+<link rel="stylesheet" href="membership-tour.css">
+<script src="lesson-access.js"></script>
+<script src="membership-tour.js"></script>
 </head>
 <body>
 
@@ -7093,8 +7101,8 @@
 <!-- 🔒 BANNER PAYWALL (solo visible si es usuario FREE) -->
 <div class="paywall-banner" id="paywallBanner">
   <span class="paywall-banner__icon">🔒</span>
-  <span>Tu cuenta está en modo gratuito · <strong>Suscríbete para desbloquear todo</strong></span>
-  <button class="paywall-banner__btn" onclick="mostrarPaywallModal('banner')">✨ Suscribirme</button>
+  <span id="bienvenida-banner-text">Explora los beneficios de tu club y aprende a tu ritmo.</span>
+  <button class="paywall-banner__btn" onclick="showPage('suscripcion')">Ver membresía</button>
 </div>
 
 <!-- 💳 MODAL STRIPE EMBEDDED CHECKOUT -->
@@ -9016,6 +9024,7 @@
           <div class="hero-text">
             <h2 id="hero-greeting">¡Bienvenido! 🌱</h2>
             <p id="hero-bienvenida">Tienes acceso completo a todos los cursos y materiales</p>
+            <p id="bienvenida-curso-gratis" hidden style="margin-top:12px;max-width:680px;line-height:1.6;font-size:.9rem;"></p>
           </div>
         </div>
       </div>
@@ -11369,8 +11378,11 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // Cargar progreso por UID
-  const progDoc = await getDoc(doc(db, "progreso", user.uid));
-  if (progDoc.exists()) progreso = progDoc.data();
+  progreso = {};
+  try {
+    const progDoc = await getDoc(doc(db, "progreso", user.uid));
+    if (progDoc.exists()) progreso = progDoc.data();
+  } catch (_) { /* Free progress can be restored locally even with private Firestore rules. */ }
 
   loadCursosFirebase();
   loadSesiones();
@@ -11382,7 +11394,8 @@ onAuthStateChanged(auth, async (user) => {
 // ── CARGAR CURSOS DESDE FIREBASE ──
 function loadCursosFirebase() {
   onSnapshot(collection(db, "cursos"), (snap) => {
-    CURSOS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    CURSOS = snap.docs.map(d => ({ ...d.data(), id: d.id })).map(c => ({ ...c, clases: AgroLessonAccess.orderedLessons(c) }));
+    restaurarAvanceGratuito();
     
     // Update stats
     const heroStat = document.querySelector(".hero-stat-num");
@@ -11396,6 +11409,8 @@ function loadCursosFirebase() {
     updateProgreso();
   actualizarEstadisticasPerfil();
   if (typeof actualizarBadgeCursos === 'function') actualizarBadgeCursos();
+  actualizarBienvenidaGratis();
+  iniciarRecorridoAgro();
   });
 }
 
@@ -11412,10 +11427,7 @@ function loadCursosFirebase() {
 
 // Secuencia oficial de cursos (única fuente de verdad del orden)
 function cursosEnOrden() {
-  const base = (typeof CURSOS !== 'undefined' && Array.isArray(CURSOS)) ? CURSOS : [];
-  return base.slice()
-    .filter(c => c && c.activo !== false)
-    .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
+  return AgroLessonAccess.orderedCourses(CURSOS);
 }
 window.cursosEnOrden = cursosEnOrden;
 
@@ -11658,7 +11670,7 @@ window.actualizarHeroPlan = function() {
     card.classList.add('hero-stat--cta-free');
     num.innerHTML = '🔓';
     lbl.textContent = 'Únete VIP';
-    card.title = 'Únete VIP por $200/mes';
+    card.title = 'Conoce los beneficios de la membresía VIP';
   }
 };
 
@@ -11757,7 +11769,9 @@ window.verCurso = function(cursoId) {
   }
 
   // Auto-play primera clase
-  reproducirClase(cursoId, 1);
+  const primeraClase = (curso.clases || [])[0];
+  if (primeraClase) reproducirClase(cursoId, primeraClase.num);
+  else document.getElementById('video-player').textContent = 'Este curso todavía no tiene clases disponibles.';
   actualizarStatsCurso(cursoId);
   showPage("detalle-curso", null);
 };
@@ -11863,7 +11877,7 @@ window.actualizarStatsCurso = actualizarStatsCurso;
 // ── REPRODUCIR CLASE ──
 window.reproducirClase = async function(cursoId, numClase) {
   const curso = CURSOS.find(c => c.id === cursoId);
-  const clase = curso?.clases.find(c => c.num === numClase);
+  const clase = curso?.clases.find(c => Number(c.num) === Number(numClase));
   if (!clase) return;
 
   // 🚨 FIX BUG 4: validar bloqueo antes de reproducir
@@ -11896,7 +11910,7 @@ window.reproducirClase = async function(cursoId, numClase) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${idToken}`
         },
-        body: JSON.stringify({ videoId: clase.videoId })
+        body: JSON.stringify({ videoId: clase.videoId, courseId: cursoId, lessonNumber: numClase })
       });
       const data = await respuesta.json().catch(() => ({}));
       if (respuesta.status === 403) {
@@ -11914,8 +11928,26 @@ window.reproducirClase = async function(cursoId, numClase) {
       return;
     }
   } else if (clase.driveId) {
-    const embedUrl = `https://drive.google.com/file/d/${clase.driveId}/preview`;
-    player.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    player.textContent = 'Preparando tu clase...';
+    try {
+      const usuarioAuth = auth.currentUser;
+      if (!usuarioAuth) throw new Error('Tu sesión expiró. Vuelve a iniciar sesión.');
+      const idToken = await usuarioAuth.getIdToken();
+      const respuesta = await fetch(`${WEBHOOK_URL}/api/lesson-playback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+        body: JSON.stringify({ courseId: cursoId, lessonNumber: numClase })
+      });
+      const data = await respuesta.json().catch(() => ({}));
+      if (respuesta.status === 403) { player.textContent = ''; mostrarPaywallModal('curso'); return; }
+      if (!respuesta.ok || !data.embedUrl) throw new Error(data.error || 'No se pudo abrir esta clase.');
+      const iframe = document.createElement('iframe');
+      iframe.src = data.embedUrl; iframe.allow = 'autoplay; fullscreen'; iframe.allowFullscreen = true;
+      player.replaceChildren(iframe);
+    } catch (error) {
+      player.textContent = error.message || 'No se pudo abrir esta clase. Vuelve a intentarlo.';
+      return;
+    }
   } else {
     player.innerHTML = '<div style="min-height:360px;display:grid;place-items:center;color:#fecaca;background:#071a2f;border-radius:12px;">⚠️ Esta clase aún no tiene video configurado.</div>';
     return;
@@ -12199,8 +12231,7 @@ let _timerMarcadoAuto = null;
 function programarMarcadoAuto(cursoId, numClase) {
   clearTimeout(_timerMarcadoAuto);           // cambiar de clase cancela la anterior
   if (!currentUser) return;
-  // El usuario free solo ve la clase muestra: esa no cuenta como avance.
-  if (typeof esVIPActivo === 'function' && !esVIPActivo()) return;
+  if (!esVIPActivo() && !window.esClaseMuestraGratis(cursoId, numClase)) return;
   if ((progreso[cursoId] || []).includes(numClase)) return;   // ya estaba vista
 
   _timerMarcadoAuto = setTimeout(function() {
@@ -12212,6 +12243,7 @@ function programarMarcadoAuto(cursoId, numClase) {
 
 function marcarClase(cursoId, numClase) {
   if (!currentUser) return;
+  if (!esVIPActivo() && !window.esClaseMuestraGratis(cursoId, numClase)) { mostrarPaywallModal('curso'); return; }
   if (!progreso[cursoId]) progreso[cursoId] = [];
   const idx = progreso[cursoId].indexOf(numClase);
   const completada = idx === -1;
@@ -12228,7 +12260,8 @@ function marcarClase(cursoId, numClase) {
   // Detectar logros por horario al marcar
   if (completada && typeof detectarLogrosHorario === 'function') detectarLogrosHorario();
 
-  setDoc(doc(db, "progreso", currentUser.uid), progreso);
+  if (esVIPActivo()) setDoc(doc(db, "progreso", currentUser.uid), progreso).catch(() => {});
+  else guardarAvanceGratuito();
   updateProgreso();
   // Desbloqueo secuencial: repintar las tarjetas para que el siguiente curso
   // se abra (o se cierre, si se desmarcó una clase) en el momento.
@@ -12252,6 +12285,11 @@ function marcarClase(cursoId, numClase) {
       }
     } catch(e) {}
   } else if (completada) {
+    if (!esVIPActivo()) {
+      const freeTotal = (curso.clases || []).filter(cl => window.esClaseMuestraGratis(cursoId, cl.num)).length;
+      const freeDone = (progreso[cursoId] || []).filter(num => window.esClaseMuestraGratis(cursoId, num)).length;
+      foroToast(freeDone >= freeTotal ? '¡Felicidades! Terminaste las clases gratuitas. La última clase se desbloquea con tu membresía.' : '¡Muy bien! Sigue disfrutando tu curso gratis. Avance guardado en este dispositivo.');
+    }
     // Mini confetti al marcar cualquier clase
     miniConfetti();
   }
@@ -14245,7 +14283,7 @@ window.mostrarPaywallModal = function(origen, titulo, desc) {
     banner: '✨ Desbloquea todo AgroClub'
   };
   const descs = {
-    curso: 'Para reproducir las clases y descargar materiales necesitas ser miembro VIP. Puedes ver el temario completo gratis.',
+    curso: '¡Sigue aprendiendo! Todas las clases del primer curso son gratis excepto la última. La última clase, los demás cursos, materiales y certificados requieren una membresía activa. Consulta los planes en Suscripción.',
     webinar: 'Únete al club y participa en webinars en vivo + accede a las grabaciones.',
     foro: 'Para publicar, comentar y dar like en el foro necesitas ser miembro VIP.',
     herramientas: 'Las calculadoras y bitácora son exclusivas para suscriptores VIP. Suscríbete y empieza a usarlas.',
@@ -14510,6 +14548,7 @@ document.addEventListener('click', function(e) {
 (function detectarPagoExitoso() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('pago_exitoso') === '1') {
+    window.__agroPaymentWelcome = true;
     // Limpia la URL
     const url = new URL(window.location.href);
     url.searchParams.delete('pago_exitoso');
@@ -14768,18 +14807,9 @@ window.vipEnterClub = function() {
 // 2) Abrir curso (verDetalleCurso) — SE PERMITE VER, se bloquean las acciones dentro
 
 // 2a) Reproducir clase — bloquear si free EXCEPTO la clase muestra gratis
-// (lógica ICADEM: la primera clase del primer curso es gratis para todo el que entra)
+// Primera oferta: todas las clases del primer curso excepto la última.
 window.esClaseMuestraGratis = function(cursoId, numClase) {
-  try {
-    const lista = (typeof cursosEnOrden === 'function' ? cursosEnOrden() : (CURSOS || []).slice())
-      .filter(c => Array.isArray(c.clases) && c.clases.length && c.activo !== false)
-      .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
-    if (!lista.length) return false;
-    if (String(lista[0].id) !== String(cursoId)) return false;
-    const nums = lista[0].clases.map(c => Number(c.num)).filter(n => !isNaN(n));
-    if (!nums.length) return false;
-    return Number(numClase) === Math.min.apply(null, nums);
-  } catch(e) { return false; }
+  return AgroLessonAccess.isFreeLesson(CURSOS, cursoId, numClase);
 };
 (function() {
   const esperar = () => {
@@ -14822,6 +14852,13 @@ window.esClaseMuestraGratis = function(cursoId, numClase) {
   function decorarCursoFree(cursoId) {
     const curso = (CURSOS || []).find(c => String(c.id) === String(cursoId));
     if (!curso) return;
+    const header = document.getElementById('detalle-header');
+    if (header) {
+      const note = document.createElement('p'); note.className = 'welcome-course-note';
+      const freeCount = (curso.clases || []).filter(cl => window.esClaseMuestraGratis(cursoId, cl.num)).length;
+      note.textContent = freeCount ? '¡Disfruta tu curso gratis! Tienes ' + freeCount + ' clases gratuitas de ' + curso.clases.length + '. La última clase requiere membresía, al igual que los demás cursos. Tu avance gratuito se guarda en este dispositivo.' : 'Este curso requiere membresía. Consulta los beneficios y planes en Suscripción.';
+      header.appendChild(note);
+    }
     (curso.clases || []).forEach(cl => {
       const row = document.getElementById('clase-' + cl.num);
       if (!row) return;
@@ -14830,11 +14867,14 @@ window.esClaseMuestraGratis = function(cursoId, numClase) {
         if (meta && !row.querySelector('.badge-clase-gratis')) {
           const b = document.createElement('span');
           b.className = 'badge-clase-gratis';
-          b.textContent = 'GRATIS';
+          b.textContent = 'Incluida en tu curso gratis';
           b.style.cssText = 'display:inline-block;margin-left:8px;background:#dcfce7;color:#15803d;font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:100px;letter-spacing:.04em;';
           meta.appendChild(b);
         }
       } else {
+        row.title = 'Clase con membresía';
+        const meta = row.querySelector('.clase-meta');
+        if (meta) meta.appendChild(document.createTextNode(' · Requiere membresía'));
         const num = row.querySelector('.clase-num');
         if (num) num.textContent = '\ud83d\udd12';
       }
@@ -14850,23 +14890,80 @@ window.esClaseMuestraGratis = function(cursoId, numClase) {
 })();
 
 // 2a-ter) Card del primer curso en Inicio/Biblioteca: cambiar el candado
-// "VIP" por "1 CLASE GRATIS" (solo usuarios free)
+// "VIP" por "CURSO GRATIS*" (solo usuarios free)
 const __origRenderCursos = renderCursos;
 renderCursos = function() {
   __origRenderCursos.apply(this, arguments);
   if (esVIPActivo()) return;
   try {
-    const lista = (typeof cursosEnOrden === 'function' ? cursosEnOrden() : (CURSOS || []).slice())
-      .filter(c => Array.isArray(c.clases) && c.clases.length && c.activo !== false)
-      .sort((a, b) => (Number(a.orden) || 9999) - (Number(b.orden) || 9999));
-    if (!lista.length) return;
+    const first = AgroLessonAccess.firstCourse(CURSOS);
+    if (!first || !(first.clases || []).some(cl => window.esClaseMuestraGratis(first.id, cl.num))) return;
+    const lista = [first];
     const idGratis = String(lista[0].id);
     document.querySelectorAll('.course-card').forEach(card => {
       const oc = card.getAttribute('onclick') || '';
-      card.classList.toggle('course-card--muestra', oc.indexOf("'" + idGratis + "'") !== -1);
+      const isWelcome = oc.indexOf("'" + idGratis + "'") !== -1;
+      card.classList.toggle('course-card--muestra', isWelcome);
+      if (isWelcome && !card.querySelector('.welcome-course-note')) { const note = document.createElement('p'); note.className='welcome-course-note'; note.textContent='*Todas sus clases gratis excepto la última, con membresía.'; note.style.cssText='padding:0 16px 16px;font-size:.78rem;line-height:1.45;'; card.appendChild(note); }
     });
   } catch(e) {}
 };
+
+function claveAvanceGratuito() {
+  return 'agroclub-welcome-progress-v1:' + (currentUser && currentUser.uid || 'guest');
+}
+function restaurarAvanceGratuito() {
+  if (!currentUser) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem(claveAvanceGratuito()) || '{}');
+    for (const c of CURSOS) {
+      const local = Array.isArray(saved[c.id]) ? saved[c.id].filter(num => AgroLessonAccess.isFreeLesson(CURSOS, c.id, num)) : [];
+      const existing = Array.isArray(progreso[c.id]) ? progreso[c.id] : [];
+      progreso[c.id] = [...new Set([...existing, ...local])].filter(num => esVIPActivo() || AgroLessonAccess.isFreeLesson(CURSOS, c.id, num));
+    }
+  } catch (_) {}
+}
+function guardarAvanceGratuito() {
+  const safe = {};
+  for (const c of CURSOS) safe[c.id] = (progreso[c.id] || []).filter(num => AgroLessonAccess.isFreeLesson(CURSOS, c.id, num));
+  try { localStorage.setItem(claveAvanceGratuito(), JSON.stringify(safe)); } catch (_) {}
+}
+function actualizarBienvenidaGratis() {
+  const note = document.getElementById('bienvenida-curso-gratis');
+  if (!note) return;
+  note.hidden = esVIPActivo();
+  if (esVIPActivo()) return;
+  const c = AgroLessonAccess.firstCourse(CURSOS);
+  const count = c ? (c.clases || []).filter(cl => AgroLessonAccess.isFreeLesson(CURSOS, c.id, cl.num)).length : 0;
+  const banner = document.getElementById('bienvenida-banner-text');
+  if (banner) banner.textContent = count ? '¡Disfruta tu curso gratis! Última clase con membresía.' : 'Explora los beneficios del club. Clases con membresía.';
+  const welcome = document.getElementById('hero-bienvenida');
+  if (welcome) welcome.textContent = 'Bienvenido a tu espacio para aprender y crecer en el campo.';
+  note.textContent = count ? '¡Disfruta tu curso gratis! Tienes ' + count + ' de ' + c.clases.length + ' clases del primer curso. La última clase y los demás cursos requieren membresía. Tu avance gratuito se guarda en este dispositivo.' : 'Explora los beneficios del club. Las clases disponibles requieren membresía; consulta los planes en Suscripción.';
+}
+let _agroTourUid = null;
+function iniciarRecorridoAgro() {
+  if (!window.MembershipTour || !currentUser || _agroTourUid === currentUser.uid) return;
+  _agroTourUid = currentUser.uid;
+  const first = AgroLessonAccess.firstCourse(CURSOS);
+  const free = first && (first.clases || []).some(cl => AgroLessonAccess.isFreeLesson(CURSOS, first.id, cl.num));
+  const paid = esVIPActivo();
+  const visit = page => () => showPage(page);
+  window._agroTour = MembershipTour.mount({
+    brand: 'AgroClub MX', userId: currentUser.uid,
+    autoStart: !window.__agroPaymentWelcome && !new URLSearchParams(location.search).has('plan'),
+    steps: [
+      {title:'¡Bienvenido a AgroClub MX!', body:'Aquí reúnes capacitación, comunidad y herramientas para tomar mejores decisiones en el campo. Puedes saltar esta guía y repetirla con el botón Recorrido.', onEnter:visit('inicio')},
+      {title:paid ? 'Tu ruta de aprendizaje' : (free ? 'Disfruta tu curso gratis' : 'Tu biblioteca de aprendizaje'), body:paid ? 'Tu membresía incluye todas las clases. Completa cada curso a tu ritmo para avanzar al siguiente y aprovechar tu formación.' : (free ? 'Todas las clases del primer curso son gratuitas excepto la última. La última clase y los demás cursos requieren membresía. Marca tu avance y retómalo en este dispositivo.' : 'Explora los cursos y sus beneficios. Consulta Suscripción para acceder a las clases disponibles.'), target:'#lista-cursos', onEnter:visit('cursos')},
+      {title:'Aprende con especialistas', body:'En Sesiones encuentras los webinars del club. La membresía abre las sesiones y las grabaciones disponibles para seguir aprendiendo con especialistas.', target:'#page-sesiones', onEnter:visit('sesiones')},
+      {title:'Lleva lo aprendido al campo', body:'Explora el material del club. La membresía incluye recursos descargables; los certificados requieren completar el curso y sus requisitos como miembro.', target:'#page-materiales', onEnter:visit('materiales')},
+      {title:'Herramientas para tu día a día', body:'Conoce las calculadoras, el clima, la bitácora y las referencias del mercado. Cada sección explica los beneficios y qué funciones se habilitan con membresía.', target:'#page-herramientas', onEnter:visit('herramientas')},
+      {title:'Una comunidad para acompañarte', body:'El foro permite a los miembros compartir experiencias y resolver dudas. También encontrarás tus avisos y perfil para mantener al día tus datos.', target:'#page-foro', onEnter:visit('foro')},
+      {title:paid ? 'Administra tu membresía' : 'Elige cuándo dar el siguiente paso', body:paid ? 'En Suscripción puedes consultar y administrar tu plan. Tu membresía ya incluye la última clase y los demás cursos. ¡Nos alegra acompañar tu aprendizaje!' : 'En Suscripción están los planes, precios y el pago. La última clase del curso inicial y el resto del catálogo se desbloquean con membresía. ¡Nos alegra acompañar tu aprendizaje!', target:'#page-suscripcion', onEnter:visit('suscripcion')}
+    ],
+    onStartCourse: first && first.clases.length ? () => verCurso(first.id) : undefined
+  });
+}
 
 // 2b) Marcar clase como completada — bloquear si free
 (function() {
@@ -14874,7 +14971,7 @@ renderCursos = function() {
     const orig = window.marcarClase;
     if (typeof orig !== 'function') { setTimeout(esperar, 300); return; }
     window.marcarClase = function(...args) {
-      if (!esVIPActivo()) { mostrarPaywallModal('curso'); return; }
+      if (!esVIPActivo() && !window.esClaseMuestraGratis(args[0], args[1])) { mostrarPaywallModal('curso'); return; }
       return orig.apply(this, args);
     };
   };
@@ -19223,7 +19320,7 @@ function renderMercado() {
            días": ninguna de las dos existe. Ahora ofrece lo que de verdad se desbloquea. -->
       <div class="mercado-paywall-overlay__desc">Suscríbete para ver los precios de referencia, el comparativo por central de abasto y las notas de estacionalidad.</div>
       <button class="mercado-paywall-overlay__btn" onclick="if(typeof abrirSelectorPlan==='function'){abrirSelectorPlan()}else{showPage('suscripcion')}">
-        Suscribirme — desde $200 MXN/mes
+        Ver planes en Suscripción
       </button>
     `;
     tablaWrap.appendChild(overlay);
